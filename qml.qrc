@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/qmldir</file>
+        <file>qml/AppStyle.qml</file>
+        <file>qml/main.qml</file>
+        <file>qml/custom_controls/HamburgerIcon.qml</file>
+        <file>qml/custom_controls/HamburgerMenuBackIcon.qml</file>
+        <file>qml/pages/PageAbout.qml</file>
+        <file>qml/pages/PageAddCharacter.qml</file>
+        <file>qml/pages/PageCharacterMain.qml</file>
+        <file>qml/pages/PageHome.qml</file>
+        <file>qml/custom_controls/TextKeyValue.qml</file>
+    </qresource>
+</RCC>
