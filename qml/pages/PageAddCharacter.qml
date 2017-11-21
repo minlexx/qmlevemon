@@ -3,14 +3,11 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import "../"
 
-Rectangle {
+Item {
     id: container
     //anchors.fill: parent // not needed in a StackView
     anchors.margins: AppStyle.marginNormal
     clip: true
-
-    border.color: "blue"
-    border.width: 1
 
     signal loginWithEveOnline()
     signal loginCancel()
