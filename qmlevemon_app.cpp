@@ -97,7 +97,13 @@ void EM::QmlEvemonApp::initStorageDirectory()
     //       i.e., it may need to be created by the system or the user.
     QDir appdata_dir(appdata_dirname);
     if (!appdata_dir.exists()) {
-        appdata_dir.mkdir(".");
+        if (!appdata_dir.mkdir(".")) {
+            // retry using mkpath(); fix for Linux
+            if (!appdata_dir.mkpath(".")) {
+                qCWarning(logApp) << "Failed to create app storage directory:"
+                                  << appdata_dirname;
+            }
+        }
     }
 }
 
