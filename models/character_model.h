@@ -52,7 +52,7 @@ public:
     QList<Character *> getCharacters() const;
     // emit signal to model clients that some character has changed data
     void markCharacterAsUpdated(Character *character);
-    Character *findCharacterById(int char_id);
+    Character *findCharacterById(quint64 char_id);
 
 public:  // reimplmented interface
     QHash<int, QByteArray> roleNames() const;

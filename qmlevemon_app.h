@@ -38,7 +38,7 @@ public:
 
 public Q_SLOTS:
     // called from QML when selcting character page
-    void setCurrentCharacter(int char_id);
+    void setCurrentCharacter(quint64 char_id);
 
 private:
     void initStorageDirectory();

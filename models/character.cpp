@@ -209,7 +209,7 @@ void EM::Character::setBirthday(const QDateTime& dt) {
 float EM::Character::securityStatus() const { return m_securityStatus; }
 
 QString EM::Character::securityStatusStr() const {
-    return QString::number(m_securityStatus, 'f', 1);
+    return QString::number(static_cast<double>(m_securityStatus), 'f', 1);
 }
 
 void EM::Character::setSecurityStatus(float ss) {
@@ -259,11 +259,11 @@ void EM::Character::setCurrentSolarSystemName(const QString& name) {
 float EM::Character::currentSolarSystemSecurity() const { return m_currentSolarSystemSecurity; }
 
 QString EM::Character::currentSolarSystemSecurityStr() const {
-    return QString::number(m_currentSolarSystemSecurity, 'f', 2);
+    return QString::number(static_cast<double>(m_currentSolarSystemSecurity), 'f', 2);
 }
 
 void EM::Character::setCurrentSolarSystemSecurity(float ss) {
-    if (m_currentSolarSystemSecurity == ss) return;
+    if (qFuzzyCompare(m_currentSolarSystemSecurity, ss)) return;
     m_currentSolarSystemSecurity = ss;
     emit currentSolarSystemSecurityChanged();
 }

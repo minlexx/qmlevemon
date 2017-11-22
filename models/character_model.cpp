@@ -166,7 +166,7 @@ void EM::CharacterModel::markCharacterAsUpdated(EM::Character *character)
 }
 
 
-EM::Character *EM::CharacterModel::findCharacterById(int char_id)
+EM::Character *EM::CharacterModel::findCharacterById(quint64 char_id)
 {
     EM::Character *ret = nullptr;
     m_mutex.lock();

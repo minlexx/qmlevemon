@@ -109,7 +109,7 @@ void EM::QmlEvemonApp::initStorageDirectory()
 
 
 // called from QML when selcting character page
-void EM::QmlEvemonApp::setCurrentCharacter(int char_id)
+void EM::QmlEvemonApp::setCurrentCharacter(quint64 char_id)
 {
     EM::Character *ch = EM::ModelManager::instance()->characterModel()->findCharacterById(char_id);
     if (ch == nullptr) {

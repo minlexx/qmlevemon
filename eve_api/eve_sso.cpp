@@ -92,7 +92,7 @@ public:
 
     bool startSsoHandlerHttpServer() {
         if (m_server.isListening()) return true;
-        bool ok = m_server.listen(QHostAddress::LocalHost, m_listenPort);
+        bool ok = m_server.listen(QHostAddress::LocalHost, static_cast<quint16>(m_listenPort));
         if (ok) {
             // generate random state hash
             m_sso_state = "st";
