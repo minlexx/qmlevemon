@@ -33,3 +33,4 @@
 
 CMakeLists.txt.user
 build/
+.directory
