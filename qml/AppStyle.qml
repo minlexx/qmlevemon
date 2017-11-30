@@ -2,8 +2,9 @@ pragma Singleton
 import QtQuick 2.7
 
 QtObject {
-    property int marginNormal: 10
     property int marginSmall: 5
+    property int marginNormal: 10
+    property int marginBig: 15
     property int marginDrag: 20
 
     property color bgColor: "white"
