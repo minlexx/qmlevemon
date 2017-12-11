@@ -29,13 +29,16 @@ Rectangle {
     property string fontFamily: AppStyle.fontFamily
     property int fontSize: AppStyle.textSizeH4
 
+    property color levelIndicatorColor: "black"
+
     // private part
     color: useAltBackColor ? backColorAlt : backColor
 
     Rectangle {
+        id: rcLevelIndicator
         width: 100
         height: 30
-        border { width: 1; color: "black" }
+        border { width: 1; color: levelIndicatorColor }
         anchors {
             top: parent.top
             right: parent.right
