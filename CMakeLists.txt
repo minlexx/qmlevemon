@@ -86,3 +86,8 @@ if (BUILD_TESTING)
     message(STATUS "BUILD_TESTING is ON: Will build tests")
     add_subdirectory(tests)
 endif()
+
+install(
+    TARGETS ${PROJECT_NAME}
+    RUNTIME DESTINATION bin
+)
