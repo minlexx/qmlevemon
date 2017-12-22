@@ -220,7 +220,7 @@ ApplicationWindow {
             // console.log("Select character: " + characterId);
             evemonapp.setCurrentCharacter(characterId);
             mainStack.push(pageCharacterMain);
-            nav_title = qsTr("Character")
+            nav_title = qsTr("Char: ") + curChar.characterName
             handled = true;
         } else if (page === "about") {
             nav_title = qsTr("About...")
