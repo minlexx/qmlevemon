@@ -8,6 +8,7 @@ import "./pages"
 
 ApplicationWindow {
     id: mainWindow
+    objectName: "mainWindow"
     visible: true
     width: 1024
     height: 768

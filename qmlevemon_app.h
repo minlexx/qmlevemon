@@ -5,12 +5,12 @@
 #include <QQmlApplicationEngine>
 #include <QLoggingCategory>
 
+class QQuickWindow;
 
 Q_DECLARE_LOGGING_CATEGORY(logApp)
 
 
 namespace EM {
-
 
 class PortraitCache;
 class Db;
@@ -36,6 +36,9 @@ public:
     // returns pointer to PortraitCache storage
     PortraitCache *portraitCache() const;
 
+    // returns a pointer to app main window
+    QQuickWindow *mainWindow() const;
+
 public Q_SLOTS:
     // called from QML when selcting character page
     void setCurrentCharacter(quint64 char_id);
@@ -45,6 +48,7 @@ private:
 
 protected:
     QQmlApplicationEngine m_engine;
+    QQuickWindow *m_mainWindow;
     PortraitCache *m_portraitCache;
     PeriodicalRefresher *m_refresher;
 };

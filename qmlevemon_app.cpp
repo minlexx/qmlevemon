@@ -1,6 +1,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QQuickWindow>
 #include <QStandardPaths>
 #include <QDir>
 #include <QDebug>
@@ -19,7 +20,10 @@ Q_LOGGING_CATEGORY(logApp, "evemon.app")
 
 
 EM::QmlEvemonApp::QmlEvemonApp(int& argc, char **argv):
-    QGuiApplication(argc, argv)
+    QGuiApplication(argc, argv),
+    m_mainWindow(nullptr),
+    m_portraitCache(nullptr),
+    m_refresher(nullptr)
 {
     setApplicationName("qmlevemon");
     setApplicationDisplayName("QML EVEMon");
@@ -68,6 +72,12 @@ bool EM::QmlEvemonApp::initQmlEngine()
         return false;
     }
 
+    QObject *firstRootObject = m_engine.rootObjects().first();
+    m_mainWindow = qobject_cast<QQuickWindow *>(firstRootObject);
+    if (!m_mainWindow) {
+        qCWarning(logApp) << "  Could not find mainWindow! Something is wrong with main QML?";
+    }
+
     return true;
 }
 
@@ -87,6 +97,12 @@ QString EM::QmlEvemonApp::storageDirectory() const
 EM::PortraitCache *EM::QmlEvemonApp::portraitCache() const
 {
     return m_portraitCache;
+}
+
+
+QQuickWindow *EM::QmlEvemonApp::mainWindow() const
+{
+    return m_mainWindow;
 }
 
 
