@@ -335,7 +335,6 @@ protected:
         }
 
         // get current ship
-
         if (!m_api->get_character_ship(reply, ch->characterId(), ch->getAuthTokens().access_token)) {
             // req failed
             return 0;
