@@ -180,7 +180,7 @@ public:
     int attributeWillpower() const;
     void setAttributeCharisma(int a);
     void setAttributeIntelligence(int a);
-    void setAattributeMemory(int a);
+    void setAttributeMemory(int a);
     void setAttributePerception(int a);
     void setAttributeWillpower(int a);
 

@@ -1,6 +1,11 @@
 #include <QDataStream>
 #include <QLocale>
+#include <QLoggingCategory>
+#include <QDebug>
 #include "character.h"
+
+
+Q_LOGGING_CATEGORY(logCharacter, "evemon.character")
 
 
 EM::Character::Character():
@@ -371,7 +376,7 @@ void EM::Character::setAttributeIntelligence(int a) {
     }
 }
 
-void EM::Character::setAattributeMemory(int a) {
+void EM::Character::setAttributeMemory(int a) {
     if (m_attributeMemory != a) {
         m_attributeMemory = a;
         emit attributeMemoryChanged();
@@ -407,7 +412,7 @@ void EM::Character::setUpdateTimestamp(UpdateTimestamps::UTST kind)
 
 
 // increase version number when savedata format changes
-static const int SAVEDATA_VERSION = 5;
+static const int SAVEDATA_VERSION = 6;
 
 
 QDataStream& operator<<(QDataStream& stream, const EM::Character& character)
@@ -450,6 +455,12 @@ QDataStream& operator<<(QDataStream& stream, const EM::Character& character)
     stream << character.currentShipTypeId();
     stream << character.currentShipTypeName();
     stream << character.currentShipFriendlyName();
+    // skills and related
+    stream << character.attributeCharisma();
+    stream << character.attributeIntelligence();
+    stream << character.attributeMemory();
+    stream << character.attributePerception();
+    stream << character.attributeWillpower();
     // auth tokens
     stream << character.getAuthTokens();
     // update timestamps
@@ -475,6 +486,8 @@ QDataStream& operator>>(QDataStream& stream, EM::Character& character)
         // old versions not supported :(
         character.setCharacterId(0);
         character.setCharacterName(QLatin1String("Not loaded"));
+        qCDebug(logCharacter) << "Notice: skipped loading of old savedata version:"
+                              << savedata_version;
         return stream;
     }
     //
@@ -512,6 +525,12 @@ QDataStream& operator>>(QDataStream& stream, EM::Character& character)
     stream >> ui64;   character.setCurrentShipTypeId(ui64);
     stream >> s;      character.setCurrentShipTypeName(s);
     stream >> s;      character.setCurrentShipFriendlyName(s);
+    // skills and related
+    stream >> i;      character.setAttributeCharisma(i);
+    stream >> i;      character.setAttributeIntelligence(i);
+    stream >> i;      character.setAttributeMemory(i);
+    stream >> i;      character.setAttributePerception(i);
+    stream >> i;      character.setAttributeWillpower(i);
     // auth tokens
     stream >> tokens; character.setAuthTokens(tokens);
     // update timestamps
