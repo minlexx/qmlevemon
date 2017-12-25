@@ -25,7 +25,13 @@ EM::Character::Character():
     m_currentRegionId(0),
     m_currentStationId(0),
     m_currentStructureId(0),
-    m_currentShipTypeId(0)
+    m_currentShipTypeId(0),
+    m_attributeCharisma(0),
+    m_attributeIntelligence(0),
+    m_attributeMemory(0),
+    m_attributePerception(0),
+    m_attributeWillpower(0),
+    m_numBonusRemaps(0)
 {
     //
 }
@@ -361,6 +367,9 @@ int EM::Character::attributeIntelligence() const { return m_attributeIntelligenc
 int EM::Character::attributeMemory() const { return m_attributeMemory; }
 int EM::Character::attributePerception() const { return m_attributePerception; }
 int EM::Character::attributeWillpower() const { return m_attributeWillpower; }
+int EM::Character::numBonusRemaps() const { return m_numBonusRemaps; }
+QDateTime EM::Character::lastRemapDate() const { return m_lastRemapDate; }
+QDateTime EM::Character::remapCooldownDate() const { return m_remapCooldownDate; }
 
 void EM::Character::setAttributeCharisma(int a) {
     if (m_attributeCharisma != a) {
@@ -397,6 +406,27 @@ void EM::Character::setAttributeWillpower(int a) {
     }
 }
 
+void EM::Character::setNumBonusRemaps(int n) {
+    if (m_numBonusRemaps != n) {
+        m_numBonusRemaps = n;
+        emit numBonusRemapsChanged();
+    }
+}
+
+void EM::Character::setLastRemapDate(const QDateTime& dt) {
+    if (m_lastRemapDate != dt) {
+        m_lastRemapDate = dt;
+        emit lastRemapDateChanged();
+    }
+}
+
+void EM::Character::setRemapCooldownDate(const QDateTime& dt) {
+    if (m_remapCooldownDate != dt) {
+        m_remapCooldownDate = dt;
+        emit remapCooldownDateChanged();
+    }
+}
+
 // auth info
 EM::EveOAuthTokens EM::Character::getAuthTokens() const { return m_tokens; }
 void EM::Character::setAuthTokens(const EveOAuthTokens& tokens) { m_tokens = tokens; }
@@ -412,7 +442,7 @@ void EM::Character::setUpdateTimestamp(UpdateTimestamps::UTST kind)
 
 
 // increase version number when savedata format changes
-static const int SAVEDATA_VERSION = 6;
+static const int SAVEDATA_VERSION = 7;
 
 
 QDataStream& operator<<(QDataStream& stream, const EM::Character& character)
@@ -461,6 +491,9 @@ QDataStream& operator<<(QDataStream& stream, const EM::Character& character)
     stream << character.attributeMemory();
     stream << character.attributePerception();
     stream << character.attributeWillpower();
+    stream << character.numBonusRemaps();
+    stream << character.lastRemapDate();
+    stream << character.remapCooldownDate();
     // auth tokens
     stream << character.getAuthTokens();
     // update timestamps
@@ -531,6 +564,9 @@ QDataStream& operator>>(QDataStream& stream, EM::Character& character)
     stream >> i;      character.setAttributeMemory(i);
     stream >> i;      character.setAttributePerception(i);
     stream >> i;      character.setAttributeWillpower(i);
+    stream >> i;      character.setNumBonusRemaps(i);
+    stream >> dt;     character.setLastRemapDate(dt);
+    stream >> dt;     character.setRemapCooldownDate(dt);
     // auth tokens
     stream >> tokens; character.setAuthTokens(tokens);
     // update timestamps

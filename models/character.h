@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QObject>
+#include <QDateTime>
 #include "eve_api/eve_api_tokens.h"
 #include "update_timestamps.h"
 
@@ -59,6 +60,9 @@ class Character: public QObject
     Q_PROPERTY(int       attributeMemory        READ attributeMemory        NOTIFY attributeMemoryChanged)
     Q_PROPERTY(int       attributePerception    READ attributePerception    NOTIFY attributePerceptionChanged)
     Q_PROPERTY(int       attributeWillpower     READ attributeWillpower     NOTIFY attributeWillpowerChanged)
+    Q_PROPERTY(int       numBonusRemaps         READ numBonusRemaps         NOTIFY numBonusRemapsChanged)
+    Q_PROPERTY(QDateTime lastRemapDate          READ lastRemapDate          NOTIFY lastRemapDateChanged)
+    Q_PROPERTY(QDateTime remapCooldownDate      READ remapCooldownDate      NOTIFY remapCooldownDateChanged)
 
 public:
     Character();
@@ -178,11 +182,17 @@ public:
     int attributeMemory() const;
     int attributePerception() const;
     int attributeWillpower() const;
+    int numBonusRemaps() const;
+    QDateTime lastRemapDate() const;
+    QDateTime remapCooldownDate() const;
     void setAttributeCharisma(int a);
     void setAttributeIntelligence(int a);
     void setAttributeMemory(int a);
     void setAttributePerception(int a);
     void setAttributeWillpower(int a);
+    void setNumBonusRemaps(int n);
+    void setLastRemapDate(const QDateTime& dt);
+    void setRemapCooldownDate(const QDateTime& dt);
 
     // auth info
     EveOAuthTokens getAuthTokens() const;
@@ -224,6 +234,9 @@ Q_SIGNALS:
     void attributeMemoryChanged();
     void attributePerceptionChanged();
     void attributeWillpowerChanged();
+    void numBonusRemapsChanged();
+    void lastRemapDateChanged();
+    void remapCooldownDateChanged();
 
 protected:
     // general info
@@ -274,6 +287,9 @@ protected:
     int m_attributeMemory;
     int m_attributePerception;
     int m_attributeWillpower;
+    int m_numBonusRemaps;
+    QDateTime m_lastRemapDate;
+    QDateTime m_remapCooldownDate;
 
     // auth info
     EveOAuthTokens m_tokens;
