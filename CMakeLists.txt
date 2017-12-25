@@ -33,6 +33,7 @@ set(qmlevemon_srcs
     "models/model_manager.cpp"
     "models/character.cpp"
     "models/character_model.cpp"
+    "models/formulas.cpp"
     "models/update_timestamps.cpp"
     "qml.qrc"
     "img.qrc"
