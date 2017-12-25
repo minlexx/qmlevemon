@@ -370,8 +370,39 @@ protected:
     }
 
     int refresh_skills(Character *ch) {
-        Q_UNUSED(ch)
-        return 0;
+        if (!ch->updateTimestamps().isUpdateNeeded(UpdateTimestamps::UTST::SKILLS)) {
+            qCDebug(logRefresher) << " no need to refresh skills for" << ch->toString();
+            return 0;  // no update needed, too early
+        }
+        // check if tokens needs refresing
+        if (!this->check_refresh_token(ch)) {
+            return 0;
+        }
+
+        int num_updates = 0;
+        QJsonObject reply;
+
+        // refresh character attributes
+        if (m_api->get_character_attributes(reply, ch->characterId(), ch->getAuthTokens().access_token)) {
+            num_updates++;
+            /* { // example reply
+              "charisma": 29,
+              "intelligence": 31,
+              "memory": 30,
+              "perception": 39,
+              "willpower": 38,
+              "bonus_remaps": 1,
+              "last_remap_date": "2015-04-18T14:35:25Z",
+              "accrued_remap_cooldown_date": "2016-04-17T14:35:25Z"
+            } */
+            // TODO:
+        }
+
+        // refresh character skills
+        // refresh character skillqueue
+
+        ch->setUpdateTimestamp(UpdateTimestamps::UTST::SKILLS);
+        return num_updates;
     }
 
     int refresh_wallet(Character *ch) {
