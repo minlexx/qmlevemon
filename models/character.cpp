@@ -350,6 +350,48 @@ void EM::Character::setCurrentShipFriendlyName(const QString& name) {
     emit currentShipChanged();
 }
 
+// skills and related
+int EM::Character::attributeCharisma() const { return m_attributeCharisma; }
+int EM::Character::attributeIntelligence() const { return m_attributeIntelligence; }
+int EM::Character::attributeMemory() const { return m_attributeMemory; }
+int EM::Character::attributePerception() const { return m_attributePerception; }
+int EM::Character::attributeWillpower() const { return m_attributeWillpower; }
+
+void EM::Character::setAttributeCharisma(int a) {
+    if (m_attributeCharisma != a) {
+        m_attributeCharisma = a;
+        emit attributeCharismaChanged();
+    }
+}
+
+void EM::Character::setAttributeIntelligence(int a) {
+    if (m_attributeIntelligence != a) {
+        m_attributeIntelligence = a;
+        emit attributeIntelligenceChanged();
+    }
+}
+
+void EM::Character::setAattributeMemory(int a) {
+    if (m_attributeMemory != a) {
+        m_attributeMemory = a;
+        emit attributeMemoryChanged();
+    }
+}
+
+void EM::Character::setAttributePerception(int a) {
+    if (m_attributePerception != a) {
+        m_attributePerception = a;
+        emit attributePerceptionChanged();
+    }
+}
+
+void EM::Character::setAttributeWillpower(int a) {
+    if (m_attributeWillpower != a) {
+        m_attributeWillpower = a;
+        emit attributeWillpowerChanged();
+    }
+}
+
 // auth info
 EM::EveOAuthTokens EM::Character::getAuthTokens() const { return m_tokens; }
 void EM::Character::setAuthTokens(const EveOAuthTokens& tokens) { m_tokens = tokens; }

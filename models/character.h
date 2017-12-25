@@ -53,6 +53,12 @@ class Character: public QObject
     Q_PROPERTY(quint64   currentShipTypeId          READ currentShipTypeId          NOTIFY currentShipChanged)
     Q_PROPERTY(QString   currentShipTypeName        READ currentShipTypeName        NOTIFY currentShipChanged)
     Q_PROPERTY(QString   currentShipFriendlyName    READ currentShipFriendlyName    NOTIFY currentShipChanged)
+    // skills and related
+    Q_PROPERTY(int       attributeCharisma      READ attributeCharisma      NOTIFY attributeCharismaChanged)
+    Q_PROPERTY(int       attributeIntelligence  READ attributeIntelligence  NOTIFY attributeIntelligenceChanged)
+    Q_PROPERTY(int       attributeMemory        READ attributeMemory        NOTIFY attributeMemoryChanged)
+    Q_PROPERTY(int       attributePerception    READ attributePerception    NOTIFY attributePerceptionChanged)
+    Q_PROPERTY(int       attributeWillpower     READ attributeWillpower     NOTIFY attributeWillpowerChanged)
 
 public:
     Character();
@@ -166,6 +172,18 @@ public:
     QString currentShipFriendlyName() const;
     void setCurrentShipFriendlyName(const QString& name);
 
+    // skills and related
+    int attributeCharisma() const;
+    int attributeIntelligence() const;
+    int attributeMemory() const;
+    int attributePerception() const;
+    int attributeWillpower() const;
+    void setAttributeCharisma(int a);
+    void setAttributeIntelligence(int a);
+    void setAattributeMemory(int a);
+    void setAttributePerception(int a);
+    void setAttributeWillpower(int a);
+
     // auth info
     EveOAuthTokens getAuthTokens() const;
     void setAuthTokens(const EveOAuthTokens& tokens);
@@ -200,6 +218,12 @@ Q_SIGNALS:
     void currentRegionChanged();
     void isDockedChanged();
     void currentShipChanged();
+    // skills and related
+    void attributeCharismaChanged();
+    void attributeIntelligenceChanged();
+    void attributeMemoryChanged();
+    void attributePerceptionChanged();
+    void attributeWillpowerChanged();
 
 protected:
     // general info
@@ -242,6 +266,14 @@ protected:
     quint64   m_currentShipTypeId;
     QString   m_currentShipTypeName;
     QString   m_currentShipFriendlyName;
+
+    // skills and related
+    // attributes
+    int m_attributeCharisma;
+    int m_attributeIntelligence;
+    int m_attributeMemory;
+    int m_attributePerception;
+    int m_attributeWillpower;
 
     // auth info
     EveOAuthTokens m_tokens;
