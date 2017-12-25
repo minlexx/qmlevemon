@@ -22,6 +22,12 @@ Rectangle {
         //source: "../../tests/92181726_128.jpg"
         sourceSize.width: 128
         sourceSize.height: 128
+
+        MouseArea {
+            id: profilePicMA
+            anchors.fill: parent
+            cursorShape: Qt.PointingHandCursor
+        }
     }
 
     Text {
