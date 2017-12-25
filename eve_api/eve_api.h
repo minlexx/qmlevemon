@@ -41,10 +41,15 @@ public:
     virtual ~EveApi();
 
 public:
+    // character
+    bool get_character_attributes(QJsonObject& reply, quint64 char_id, const QByteArray& access_token);
     bool get_character_public_info(QJsonObject& reply, quint64 char_id);
     bool get_character_location(QJsonObject& reply, quint64 char_id, const QByteArray& access_token);
     bool get_character_ship(QJsonObject& reply, quint64 char_id, const QByteArray& access_token);
+    bool get_character_skillqueue(QJsonArray& reply, quint64 char_id, const QByteArray& access_token);
+    bool get_character_skills(QJsonObject& reply, quint64 char_id, const QByteArray& access_token);
     bool get_character_wallet(float& reply, quint64 char_id, const QByteArray& access_token);
+    // corporation, alliance
     bool get_corporation_public_data(QJsonObject& reply, quint64 corp_id);
     bool get_alliance_public_data(QJsonObject& reply, quint64 ally_id);
     // common

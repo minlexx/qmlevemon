@@ -370,6 +370,21 @@ bool EveApi::get_server_status(QJsonObject& reply)
 }
 
 
+bool EveApi::get_character_attributes(QJsonObject& reply, quint64 char_id, const QByteArray& access_token)
+{
+    QJsonDocument replyJson;
+    int reply_http_status = 0;
+    QString url = QString("/characters/%1/attributes/").arg(char_id);
+    bool req_ok = this->send_general_esi_request_json(
+                EsiReqType::GET, url, QByteArray(), 15, access_token,
+                reply_http_status, replyJson);
+    if (!req_ok || (reply_http_status != 200)) return false;
+    if (!replyJson.isObject()) return false;
+    reply = replyJson.object();
+    return true;
+}
+
+
 bool EveApi::get_character_public_info(QJsonObject& reply, quint64 char_id)
 {
     QJsonDocument replyJson;
@@ -405,6 +420,36 @@ bool EveApi::get_character_ship(QJsonObject& reply, quint64 char_id, const QByte
     QJsonDocument replyJson;
     int reply_http_status = 0;
     QString url = QString("/characters/%1/ship/").arg(char_id);
+    bool req_ok = this->send_general_esi_request_json(
+                EsiReqType::GET, url, QByteArray(), 15, access_token,
+                reply_http_status, replyJson);
+    if (!req_ok || (reply_http_status != 200)) return false;
+    if (!replyJson.isObject()) return false;
+    reply = replyJson.object();
+    return true;
+}
+
+
+bool EveApi::get_character_skillqueue(QJsonArray& reply, quint64 char_id, const QByteArray& access_token)
+{
+    QJsonDocument replyJson;
+    int reply_http_status = 0;
+    QString url = QString("/characters/%1/skillqueue/").arg(char_id);
+    bool req_ok = this->send_general_esi_request_json(
+                EsiReqType::GET, url, QByteArray(), 15, access_token,
+                reply_http_status, replyJson);
+    if (!req_ok || (reply_http_status != 200)) return false;
+    if (!replyJson.isArray()) return false;
+    reply = replyJson.array();
+    return true;
+}
+
+
+bool EveApi::get_character_skills(QJsonObject& reply, quint64 char_id, const QByteArray& access_token)
+{
+    QJsonDocument replyJson;
+    int reply_http_status = 0;
+    QString url = QString("/characters/%1/skills/").arg(char_id);
     bool req_ok = this->send_general_esi_request_json(
                 EsiReqType::GET, url, QByteArray(), 15, access_token,
                 reply_http_status, replyJson);
