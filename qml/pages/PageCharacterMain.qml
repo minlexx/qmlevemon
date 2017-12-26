@@ -27,6 +27,36 @@ Rectangle {
             id: profilePicMA
             anchors.fill: parent
             cursorShape: Qt.PointingHandCursor
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
+
+            onClicked: {
+                if (mouse.button === Qt.RightButton) {
+                    contextMenu.popup(mouse.x, mouse.y);
+                }
+            }
+
+            onPressAndHold: {
+                contextMenu.popup(mouse.x, mouse.y);
+            }
+
+            Menu {
+                id: contextMenu
+
+                // Menu.popup() function was introduced in Qt 5.10,
+                // for 5.7 compatibility we can emulate it somehow
+                function popup(x, y) {
+                    this.x = x;
+                    this.y = y;
+                    this.open();
+                }
+
+                MenuItem {
+                    text: qsTr("Update portrait")
+                    onTriggered: {
+                        console.log("Update portrait");
+                    }
+                }
+            }
         }
     }
 
