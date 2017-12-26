@@ -171,4 +171,12 @@ Rectangle {
         //valueText: "Jita IV - Moon IV - Caldari Navy Assembly Plant"
         valueText: curChar.isDocked ? curChar.currentStructureName : ""
     }
+
+    TabBar {
+        anchors.top: charDockedInText.bottom
+        width: parent.width
+        TabButton { text: qsTr("Tab 1"); }
+        TabButton { text: qsTr("Tab 2"); }
+        TabButton { text: qsTr("Tab 3"); }
+    }
 }
