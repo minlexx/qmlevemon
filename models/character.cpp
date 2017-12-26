@@ -439,6 +439,17 @@ void EM::Character::setUpdateTimestamp(UpdateTimestamps::UTST kind)
     m_update_timestamps.updateTs(kind);
 }
 
+void EM::Character::resetUpdateTimestamp(UpdateTimestamps::UTST kind) {
+    m_update_timestamps.resetTs(kind);
+}
+
+void EM::Character::forceRefreshPublicInfo() { resetUpdateTimestamp(UpdateTimestamps::UTST::PUBLIC); }
+void EM::Character::forceRefreshSkills() { resetUpdateTimestamp(UpdateTimestamps::UTST::SKILLS); }
+void EM::Character::forceRefreshWallet() { resetUpdateTimestamp(UpdateTimestamps::UTST::WALLET); }
+void EM::Character::forceRefreshLocation() { resetUpdateTimestamp(UpdateTimestamps::UTST::LOCATION); }
+void EM::Character::forceRefreshClones() { resetUpdateTimestamp(UpdateTimestamps::UTST::CLONES); }
+void EM::Character::forceRefreshAssets() { resetUpdateTimestamp(UpdateTimestamps::UTST::ASSETS); }
+
 
 
 // increase version number when savedata format changes

@@ -201,6 +201,16 @@ public:
     UpdateTimestamps updateTimestamps() const;
     void setUpdateTimestamps(const UpdateTimestamps& ts);
     void setUpdateTimestamp(UpdateTimestamps::UTST kind);
+    void resetUpdateTimestamp(UpdateTimestamps::UTST kind);
+
+public Q_SLOTS:
+    void forceRefreshPublicInfo();
+    void forceRefreshSkills();
+    void forceRefreshWallet();
+    void forceRefreshLocation();
+    void forceRefreshClones();
+    void forceRefreshAssets();
+    // ^^ add more, if needed
 
 Q_SIGNALS:
     // general info
