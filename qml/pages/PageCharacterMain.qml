@@ -53,7 +53,14 @@ Rectangle {
                 MenuItem {
                     text: qsTr("Update portrait")
                     onTriggered: {
-                        console.log("Update portrait");
+                        console.log("Update portrait for: " + curChar.characterId);
+                        evemonapp.requestRefreshCharacterPortrait(curChar.characterId);
+                        // change image source to force update:
+                        // change to "default" image
+                        profilePic.source = "qrc:///img/character_icon_128.jpg";
+                        // change again to new URL with timestamp, to force reload
+                        var curTimeStamp = new Date().getTime();
+                        profilePic.source = "image://portrait/" + curChar.characterId + "/tm" + curTimeStamp;
                     }
                 }
             }
