@@ -17,6 +17,13 @@ UpdateTimestamps::UpdateTimestamps(const UpdateTimestamps& other)
 }
 
 
+void UpdateTimestamps::resetTs(UTST kind)
+{
+    QDateTime& dt_ref = p_get_ts(kind);
+    dt_ref = QDateTime(); // zero out, assign empty QDateTime
+}
+
+
 void UpdateTimestamps::updateTs(UTST kind)
 {
     QDateTime& dt_ref = p_get_ts(kind);

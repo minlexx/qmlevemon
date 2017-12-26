@@ -22,6 +22,7 @@ public:
     UpdateTimestamps(const UpdateTimestamps& other);
     UpdateTimestamps& operator=(const UpdateTimestamps& other);
 
+    void resetTs(UTST kind);
     void updateTs(UTST kind);
     bool isUpdateNeeded(UTST kind);
 
