@@ -3,6 +3,7 @@
 #include <QHash>
 #include <QList>
 #include <QUrl>
+#include <QDateTime>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
@@ -382,6 +383,7 @@ protected:
         QJsonObject reply;
 
         // refresh character attributes
+        qCDebug(logRefresher) << " refreshing attributes for" << ch->toString();
         if (m_api->get_character_attributes(reply, ch->characterId(), ch->getAuthTokens().access_token)) {
             num_updates++;
             /* { // example reply
@@ -394,7 +396,40 @@ protected:
               "last_remap_date": "2015-04-18T14:35:25Z",
               "accrued_remap_cooldown_date": "2016-04-17T14:35:25Z"
             } */
-            // TODO:
+            int charisma = reply.value("charisma").toInt();
+            int intelligence = reply.value("intelligence").toInt();
+            int memory = reply.value("memory").toInt();
+            int perception = reply.value("perception").toInt();
+            int willpower = reply.value("willpower").toInt();
+            int bonus_remaps = reply.value("bonus_remaps").toInt();
+            QString slast_remap_date = reply.value("last_remap_date").toString();
+            QString sremap_cooldown_date = reply.value("accrued_remap_cooldown_date").toString();
+            QDateTime last_remap_date = QDateTime::fromString(slast_remap_date, Qt::ISODate);
+            QDateTime remap_cooldown_date = QDateTime::fromString(sremap_cooldown_date, Qt::ISODate);
+            if (ch->attributeCharisma() != charisma) {
+                ch->setAttributeCharisma(charisma);
+            }
+            if (ch->attributeIntelligence() != intelligence) {
+                ch->setAttributeIntelligence(intelligence);
+            }
+            if (ch->attributeMemory() != memory) {
+                ch->setAttributeMemory(memory);
+            }
+            if (ch->attributePerception() != perception) {
+                ch->setAttributePerception(perception);
+            }
+            if (ch->attributeWillpower() != willpower) {
+                ch->setAttributeWillpower(willpower);
+            }
+            if (ch->numBonusRemaps() != bonus_remaps) {
+                ch->setNumBonusRemaps(bonus_remaps);
+            }
+            if (ch->lastRemapDate() != last_remap_date) {
+                ch->setLastRemapDate(last_remap_date);
+            }
+            if (ch->remapCooldownDate() != remap_cooldown_date) {
+                ch->setRemapCooldownDate(remap_cooldown_date);
+            }
         }
 
         // refresh character skills
