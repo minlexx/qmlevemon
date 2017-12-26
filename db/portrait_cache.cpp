@@ -40,7 +40,7 @@ public:
 
     virtual ~PortraitCacheAsyncImageResponse()
     {
-        //qCDebug(logPcache) << "~PortraitCacheAsyncImageResponse()";
+        //qCDebug(logPcache) << Q_FUNC_INFO;
     }
 
     virtual QQuickTextureFactory *textureFactory() const override
@@ -53,7 +53,19 @@ public:
         qCDebug(logPcache) << "Requested portrait:" << m_id <<
                               "of size:" << m_requestedSize;
 
-        quint64 char_id = m_id.toULongLong();
+        // get char_id from requested image id
+        quint64 char_id = 0;
+        // m_id can be in format:
+        // 1) "91205062"
+        // 2) "91205062/tm1514278421702"
+        if (m_id.contains(QLatin1Char('/'), Qt::CaseSensitive)) {
+            // 2) "91205062/tm1514278421702"
+            QStringList sl = m_id.split(QLatin1Char('/'));
+            char_id = sl.first().toULongLong();
+        } else {
+            // 1) simple id
+            char_id = m_id.toULongLong();
+        }
 
         // try to load portrait from cache
         Db *db = EM::globalAppInstance()->database();
@@ -152,6 +164,14 @@ QQuickImageResponse *PortraitCache::requestImageResponse(
                 id, requestedSize);
     m_threadPool.start(imgResponse);
     return imgResponse;
+}
+
+
+// specific hack to clear cached image for character
+void PortraitCache::removeCachedImageForCharacter(quint64 char_id)
+{
+    Db *db = EM::globalAppInstance()->database();
+    db->deletePortrait(char_id);
 }
 
 

@@ -17,6 +17,9 @@ public:
     virtual QQuickImageResponse *requestImageResponse(const QString &id,
                                                       const QSize &requestedSize) override;
 
+    // specific hack to clear cached image for character
+    void removeCachedImageForCharacter(quint64 char_id);
+
 protected:
     QThreadPool m_threadPool;
 };
