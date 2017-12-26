@@ -138,6 +138,13 @@ void EM::QmlEvemonApp::setCurrentCharacter(quint64 char_id)
 }
 
 
+// called from QML to request update character portrait
+void EM::QmlEvemonApp::requestRefreshCharacterPortrait(quint64 char_id)
+{
+    m_portraitCache->removeCachedImageForCharacter(char_id);
+}
+
+
 
 EM::QmlEvemonApp *EM::globalAppInstance()
 {

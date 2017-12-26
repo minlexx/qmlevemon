@@ -43,6 +43,9 @@ public Q_SLOTS:
     // called from QML when selcting character page
     void setCurrentCharacter(quint64 char_id);
 
+    // called from QML to request update character portrait
+    void requestRefreshCharacterPortrait(quint64 char_id);
+
 private:
     void initStorageDirectory();
 
