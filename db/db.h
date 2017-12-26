@@ -29,6 +29,7 @@ public:
 
     virtual bool loadPortrait(quint64 char_id, QImage& img) = 0;
     virtual bool savePortrait(quint64 char_id, const QImage& img) = 0;
+    virtual bool deletePortrait(quint64 char_id) = 0;
 
 protected:
     Db(const Db &other);

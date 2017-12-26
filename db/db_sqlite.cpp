@@ -192,3 +192,14 @@ bool EM::DbSqlite::savePortrait(quint64 char_id, const QImage& img)
     return false;
 }
 
+
+bool EM::DbSqlite::deletePortrait(quint64 char_id)
+{
+    if (!m_chars_db.isOpen()) {
+        return false;
+    }
+    QSqlQuery q(m_chars_db);
+    q.prepare("DELETE FROM portraits WHERE char_id = ?");
+    q.addBindValue(char_id, QSql::In);
+    return q.exec();
+}

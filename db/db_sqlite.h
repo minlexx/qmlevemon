@@ -22,6 +22,7 @@ public:
 
     virtual bool loadPortrait(quint64 char_id, QImage& img) override;
     virtual bool savePortrait(quint64 char_id, const QImage& img) override;
+    virtual bool deletePortrait(quint64 char_id) override;
 
 protected:
     bool open(const QString& db_filename);
