@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+import QtGraphicalEffects 1.0
 import "../"
 import "../custom_controls"
 
@@ -52,6 +53,20 @@ Rectangle {
 
                 MenuItem {
                     text: qsTr("Update portrait")
+                    onTriggered: {
+                        console.log("Update portrait for: " + curChar.characterId);
+                        evemonapp.requestRefreshCharacterPortrait(curChar.characterId);
+                        // change image source to force update:
+                        // change to "default" image
+                        profilePic.source = "qrc:///img/character_icon_128.jpg";
+                        // change again to new URL with timestamp, to force reload
+                        var curTimeStamp = new Date().getTime();
+                        profilePic.source = "image://portrait/" + curChar.characterId + "/tm" + curTimeStamp;
+                    }
+                }
+
+                EMPopupMenuItem {
+                    text: qsTr("Update portrait v2")
                     onTriggered: {
                         console.log("Update portrait for: " + curChar.characterId);
                         evemonapp.requestRefreshCharacterPortrait(curChar.characterId);
@@ -172,9 +187,132 @@ Rectangle {
         valueText: curChar.isDocked ? curChar.currentStructureName : ""
     }
 
+//    Rectangle {
+//        id: rcRefresh
+//        anchors.right: parent.right
+//        anchors.top: parent.top
+//        anchors.margins: 2
+//        width: 48
+//        height: 48
+//        radius: 10
+//        //border {
+//        //    width: 5
+//        //    color: AppStyle.rectHighlightColor
+//        //}
+//        color: AppStyle.rectHighlightColor
+//        //visible: maRefresh.containsMouse
+//    }
+
+    Image {
+        id: imgRefresh
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.margins: 2
+        sourceSize.width: 48
+        sourceSize.height: 48
+        source: "qrc:///img/refresh_48.png"
+
+        MouseArea {
+            id: maRefresh
+            anchors.fill: parent
+            hoverEnabled: true
+            cursorShape: Qt.PointingHandCursor
+
+            onClicked: {
+                if (mouse.button === Qt.LeftButton) {
+                    refreshMenu.popup(mouse.x, mouse.y);
+                }
+            }
+
+            onPressAndHold: {
+                refreshMenu.popup(mouse.x, mouse.y);
+            }
+        }
+
+        Menu {
+            id: refreshMenu
+            y: imgRefresh.y
+
+//            background: Rectangle {
+//                implicitWidth: 200
+//                implicitHeight: 200
+//                color: "#ffff00"
+//                border.color: "#353637"
+//                border.width: 2
+//            }
+            EMPopupMenuItem {
+                text: qsTr("Refresh public information");
+                y: parent.y + 1
+                onTriggered: { curChar.forceRefreshPublicInfo(); evemonapp.forceRefresh(); }
+            }
+            EMPopupMenuItem {
+                text: qsTr("Refresh location");
+                onTriggered: { curChar.forceRefreshLocation(); evemonapp.forceRefresh(); }
+            }
+
+//            MenuItem {
+//                text: qsTr("Refresh public information");
+//                hoverEnabled: true
+//                background: Rectangle {
+//                    x: parent.x + 1
+//                    y: parent.y + 1
+//                    width: parent.width - 2
+//                    implicitHeight: 30
+//                    color: parent.hovered ? AppStyle.rectBgHighlightColor : AppStyle.bgColor
+//                }
+//                onTriggered: { curChar.forceRefreshPublicInfo(); evemonapp.forceRefresh(); }
+//            }
+//            MenuItem {
+//                text: qsTr("Refresh location");
+//                hoverEnabled: true
+//                background: Rectangle {
+//                    x: parent.x + 1
+//                    width: parent.width - 2
+//                    implicitHeight: 30
+//                    color: parent.hovered ? AppStyle.rectBgHighlightColor : AppStyle.bgColor
+//                }
+//                onTriggered: { curChar.forceRefreshLocation(); evemonapp.forceRefresh(); }
+//            }
+            MenuItem {
+                text: qsTr("Refresh clones");
+                onTriggered: { curChar.forceRefreshClones(); evemonapp.forceRefresh(); }
+            }
+            MenuItem {
+                text: qsTr("Refresh skills");
+                onTriggered: { curChar.forceRefreshSkills(); evemonapp.forceRefresh(); }
+            }
+            MenuItem {
+                text: qsTr("Refresh wallet");
+                onTriggered: { curChar.forceRefreshWallet(); evemonapp.forceRefresh(); }
+            }
+            MenuItem {
+                text: qsTr("Refresh assets");
+                onTriggered: { curChar.forceRefreshAssets(); evemonapp.forceRefresh(); }
+            }
+
+            function popup(x, y) {
+                this.x = x;
+                this.y = y;
+                this.open();
+            }
+        }
+    }
+
+    Glow {
+        anchors.fill: imgRefresh
+        source: imgRefresh
+        radius: 8
+        samples: 17
+        spread: 0.5
+        color: AppStyle.rectBgHighlightColor
+        cached: true
+        visible: maRefresh.containsMouse
+    }
+
     TabBar {
         anchors.top: charDockedInText.bottom
         width: parent.width
+        anchors.topMargin: AppStyle.marginNormal
         TabButton { text: qsTr("Tab 1"); }
         TabButton { text: qsTr("Tab 2"); }
         TabButton { text: qsTr("Tab 3"); }
