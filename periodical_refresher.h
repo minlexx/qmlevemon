@@ -25,6 +25,7 @@ public:
 public Q_SLOTS:
     bool networkActivity() const;
     int serverPlayersOnline() const;
+    void forceRefreshNow();
 
 Q_SIGNALS:
     void networkActivityChanged();

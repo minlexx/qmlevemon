@@ -559,6 +559,12 @@ int PeriodicalRefresher::serverPlayersOnline() const
 }
 
 
+void PeriodicalRefresher::forceRefreshNow()
+{
+    Q_EMIT refresh();
+}
+
+
 } // namespace
 
 
