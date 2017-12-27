@@ -31,7 +31,7 @@ Rectangle {
             acceptedButtons: Qt.LeftButton | Qt.RightButton
 
             onClicked: {
-                if (mouse.button === Qt.RightButton) {
+                if (mouse.button === Qt.LeftButton || mouse.button === Qt.RightButton) {
                     contextMenu.popup(mouse.x, mouse.y);
                 }
             }
@@ -51,22 +51,8 @@ Rectangle {
                     this.open();
                 }
 
-                MenuItem {
-                    text: qsTr("Update portrait")
-                    onTriggered: {
-                        console.log("Update portrait for: " + curChar.characterId);
-                        evemonapp.requestRefreshCharacterPortrait(curChar.characterId);
-                        // change image source to force update:
-                        // change to "default" image
-                        profilePic.source = "qrc:///img/character_icon_128.jpg";
-                        // change again to new URL with timestamp, to force reload
-                        var curTimeStamp = new Date().getTime();
-                        profilePic.source = "image://portrait/" + curChar.characterId + "/tm" + curTimeStamp;
-                    }
-                }
-
                 EMPopupMenuItem {
-                    text: qsTr("Update portrait v2")
+                    text: qsTr("Update portrait from web")
                     onTriggered: {
                         console.log("Update portrait for: " + curChar.characterId);
                         evemonapp.requestRefreshCharacterPortrait(curChar.characterId);
@@ -187,22 +173,6 @@ Rectangle {
         valueText: curChar.isDocked ? curChar.currentStructureName : ""
     }
 
-//    Rectangle {
-//        id: rcRefresh
-//        anchors.right: parent.right
-//        anchors.top: parent.top
-//        anchors.margins: 2
-//        width: 48
-//        height: 48
-//        radius: 10
-//        //border {
-//        //    width: 5
-//        //    color: AppStyle.rectHighlightColor
-//        //}
-//        color: AppStyle.rectHighlightColor
-//        //visible: maRefresh.containsMouse
-//    }
-
     Image {
         id: imgRefresh
         anchors.right: parent.right
@@ -233,13 +203,6 @@ Rectangle {
             id: refreshMenu
             y: imgRefresh.y
 
-//            background: Rectangle {
-//                implicitWidth: 200
-//                implicitHeight: 200
-//                color: "#ffff00"
-//                border.color: "#353637"
-//                border.width: 2
-//            }
             EMPopupMenuItem {
                 text: qsTr("Refresh public information");
                 y: parent.y + 1
@@ -249,43 +212,19 @@ Rectangle {
                 text: qsTr("Refresh location");
                 onTriggered: { curChar.forceRefreshLocation(); evemonapp.forceRefresh(); }
             }
-
-//            MenuItem {
-//                text: qsTr("Refresh public information");
-//                hoverEnabled: true
-//                background: Rectangle {
-//                    x: parent.x + 1
-//                    y: parent.y + 1
-//                    width: parent.width - 2
-//                    implicitHeight: 30
-//                    color: parent.hovered ? AppStyle.rectBgHighlightColor : AppStyle.bgColor
-//                }
-//                onTriggered: { curChar.forceRefreshPublicInfo(); evemonapp.forceRefresh(); }
-//            }
-//            MenuItem {
-//                text: qsTr("Refresh location");
-//                hoverEnabled: true
-//                background: Rectangle {
-//                    x: parent.x + 1
-//                    width: parent.width - 2
-//                    implicitHeight: 30
-//                    color: parent.hovered ? AppStyle.rectBgHighlightColor : AppStyle.bgColor
-//                }
-//                onTriggered: { curChar.forceRefreshLocation(); evemonapp.forceRefresh(); }
-//            }
-            MenuItem {
+            EMPopupMenuItem {
                 text: qsTr("Refresh clones");
                 onTriggered: { curChar.forceRefreshClones(); evemonapp.forceRefresh(); }
             }
-            MenuItem {
+            EMPopupMenuItem {
                 text: qsTr("Refresh skills");
                 onTriggered: { curChar.forceRefreshSkills(); evemonapp.forceRefresh(); }
             }
-            MenuItem {
+            EMPopupMenuItem {
                 text: qsTr("Refresh wallet");
                 onTriggered: { curChar.forceRefreshWallet(); evemonapp.forceRefresh(); }
             }
-            MenuItem {
+            EMPopupMenuItem {
                 text: qsTr("Refresh assets");
                 onTriggered: { curChar.forceRefreshAssets(); evemonapp.forceRefresh(); }
             }
@@ -309,12 +248,12 @@ Rectangle {
         visible: maRefresh.containsMouse
     }
 
-    TabBar {
+    /*TabBar {
         anchors.top: charDockedInText.bottom
         width: parent.width
         anchors.topMargin: AppStyle.marginNormal
         TabButton { text: qsTr("Tab 1"); }
         TabButton { text: qsTr("Tab 2"); }
         TabButton { text: qsTr("Tab 3"); }
-    }
+    }*/
 }
