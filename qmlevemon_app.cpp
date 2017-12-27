@@ -145,6 +145,13 @@ void EM::QmlEvemonApp::requestRefreshCharacterPortrait(quint64 char_id)
 }
 
 
+// called from QML to force refresh all characters
+void EM::QmlEvemonApp::forceRefresh()
+{
+    m_refresher->forceRefreshNow();
+}
+
+
 
 EM::QmlEvemonApp *EM::globalAppInstance()
 {

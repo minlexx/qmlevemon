@@ -46,6 +46,9 @@ public Q_SLOTS:
     // called from QML to request update character portrait
     void requestRefreshCharacterPortrait(quint64 char_id);
 
+    // called from QML to force refresh all characters
+    void forceRefresh();
+
 private:
     void initStorageDirectory();
 
