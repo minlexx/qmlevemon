@@ -5,5 +5,6 @@
         <file>img/eve-sso/EVE_SSO_Login_Buttons_Small_Black.png</file>
         <file>img/eve-sso/EVE_SSO_Login_Buttons_Small_White.png</file>
         <file>img/character_icon_128.jpg</file>
+        <file>img/refresh_48.png</file>
     </qresource>
 </RCC>
