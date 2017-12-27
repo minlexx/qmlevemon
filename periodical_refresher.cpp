@@ -233,7 +233,12 @@ protected:
         QJsonObject corpReply;
         if (m_api->get_corporation_public_data(corpReply, ch->corporationId())) {
             QString corp_name, corp_ticker;
-            corp_name = corpReply.value("corporation_name").toString();
+            // ESI had changed corporation_name => name
+            if (corpReply.contains(QLatin1String("corporation_name"))) {
+                corp_name = corpReply.value("corporation_name").toString();
+            } else if (corpReply.contains(QLatin1String("name"))) {
+                corp_name = corpReply.value(QLatin1String("name")).toString();
+            }
             corp_ticker = corpReply.value("ticker").toString();
             if (corpReply.contains("alliance_id")) {
                 ally_id = corpReply.value("alliance_id").toVariant().toULongLong();
