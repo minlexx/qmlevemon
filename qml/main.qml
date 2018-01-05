@@ -73,6 +73,8 @@ ApplicationWindow {
         height: mainWindow.height
         edge: Qt.LeftEdge
         dragMargin: AppStyle.marginDrag
+        // disable Drawer reacting to swipes on desktop platform
+        interactive: !evemonapp.isDesktopPlatform
 
         onClosed: {
             // mainHamburger.iconState = "menu";
