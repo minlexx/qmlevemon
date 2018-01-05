@@ -23,7 +23,8 @@ EM::QmlEvemonApp::QmlEvemonApp(int& argc, char **argv):
     QGuiApplication(argc, argv),
     m_mainWindow(nullptr),
     m_portraitCache(nullptr),
-    m_refresher(nullptr)
+    m_refresher(nullptr),
+    m_curCharId(0)
 {
     setApplicationName("qmlevemon");
     setApplicationDisplayName("QML EVEMon");
@@ -124,9 +125,19 @@ void EM::QmlEvemonApp::initStorageDirectory()
 }
 
 
+quint64 EM::QmlEvemonApp::curCharId() const
+{
+    return m_curCharId;
+}
+
+
 // called from QML when selcting character page
 void EM::QmlEvemonApp::setCurrentCharacter(quint64 char_id)
 {
+    if (m_curCharId == char_id) {
+        qCDebug(logApp) << " already current char:" << char_id;
+        return;
+    }
     EM::Character *ch = EM::ModelManager::instance()->characterModel()->findCharacterById(char_id);
     if (ch == nullptr) {
         // something goes completely wrong
@@ -134,6 +145,8 @@ void EM::QmlEvemonApp::setCurrentCharacter(quint64 char_id)
         return;
     }
     qCDebug(logApp) << "setting current displayed character as:" << ch->toString();
+    m_curCharId = ch->characterId();
+    emit curCharIdChanged();
     m_engine.rootContext()->setContextProperty("curChar", ch);
 }
 

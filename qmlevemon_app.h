@@ -20,6 +20,7 @@ class PeriodicalRefresher;
 class QmlEvemonApp: public QGuiApplication
 {
     Q_OBJECT
+    Q_PROPERTY(quint64 cruCharId READ curCharId NOTIFY curCharIdChanged)
 
 public:
     QmlEvemonApp(int& argc, char **argv);
@@ -40,6 +41,7 @@ public:
     QQuickWindow *mainWindow() const;
 
 public Q_SLOTS:
+    quint64 curCharId() const;
     // called from QML when selcting character page
     void setCurrentCharacter(quint64 char_id);
 
@@ -49,6 +51,9 @@ public Q_SLOTS:
     // called from QML to force refresh all characters
     void forceRefresh();
 
+Q_SIGNALS:
+    void curCharIdChanged();
+
 private:
     void initStorageDirectory();
 
@@ -57,6 +62,7 @@ protected:
     QQuickWindow *m_mainWindow;
     PortraitCache *m_portraitCache;
     PeriodicalRefresher *m_refresher;
+    int m_curCharId;
 };
 
 
