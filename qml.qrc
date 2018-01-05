@@ -12,5 +12,6 @@
         <file>qml/pages/PageCharacterMain.qml</file>
         <file>qml/pages/PageHome.qml</file>
         <file>qml/custom_controls/EMPopupMenuItem.qml</file>
+        <file>qml/custom_controls/CharacterPickerSidebar.qml</file>
     </qresource>
 </RCC>
