@@ -21,10 +21,12 @@ class QmlEvemonApp: public QGuiApplication
 {
     Q_OBJECT
     Q_PROPERTY(quint64 cruCharId READ curCharId NOTIFY curCharIdChanged)
+    Q_PROPERTY(bool isDesktopPlatform READ isDesktopPlatform CONSTANT)
 
 public:
     QmlEvemonApp(int& argc, char **argv);
     virtual ~QmlEvemonApp();
+    bool isDesktopPlatform() const;
 
     bool initQmlEngine();
 

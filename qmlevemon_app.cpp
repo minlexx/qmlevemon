@@ -47,6 +47,15 @@ EM::QmlEvemonApp::~QmlEvemonApp()
 }
 
 
+bool EM::QmlEvemonApp::isDesktopPlatform() const
+{
+#if defined(Q_OS_ANDROID)
+    return false;
+#endif
+    return true;
+}
+
+
 bool EM::QmlEvemonApp::initQmlEngine()
 {
     QQmlContext *rootContext = m_engine.rootContext();
