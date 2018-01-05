@@ -13,9 +13,22 @@ Rectangle {
     border.color: "blue"
     border.width: 0
 
+    signal selectCharacterRequest(int characterId)
+
+    CharacterPickerSidebar {
+        id: charPickSidebar
+        anchors.top: parent.top
+        anchors.left: parent.left
+        width: 48
+
+        onCharacterSelected: {
+            container.selectCharacterRequest(char_id);
+        }
+    }
+
     Image {
         id: profilePic
-        anchors.left: parent.left
+        anchors.left: charPickSidebar.right
         anchors.leftMargin: AppStyle.marginNormal
         anchors.top: parent.top
         anchors.topMargin: AppStyle.marginNormal
