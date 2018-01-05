@@ -111,12 +111,10 @@ ApplicationWindow {
 
     Component {
         id: pageHome
-
         PageHome {
             onAddCharacterRequest: {
                 menuAction("add_character")
             }
-
             onSelectCharacterRequest: {
                 nav_to("select_character", characterId);
             }
@@ -125,7 +123,6 @@ ApplicationWindow {
 
     Component {
         id: pageAddCharacter
-
         PageAddCharacter {
             onLoginWithEveOnline: {
                 eveSsoLoginManager.slotStartSsoAuth();
@@ -142,17 +139,15 @@ ApplicationWindow {
 
     Component {
         id: pageAbout
-
-        PageAbout {
-            //
-        }
+        PageAbout { }
     }
 
     Component {
         id: pageCharacterMain
-
         PageCharacterMain {
-            //
+            onSelectCharacterRequest: {
+                nav_to("select_character", characterId);
+            }
         }
     }
 
@@ -219,6 +214,14 @@ ApplicationWindow {
         } else if (page === "select_character") {
             var characterId = p1;
             // console.log("Select character: " + characterId);
+            // already selected as current - do nothing
+            if (evemonapp.curCharId() == characterId) {
+                return;
+            }
+            // current page is viewing other character - navigate back first
+            if (navState == "select_character") {
+                nav_back();
+            }
             evemonapp.setCurrentCharacter(characterId);
             mainStack.push(pageCharacterMain);
             nav_title = qsTr("Char: ") + curChar.characterName
