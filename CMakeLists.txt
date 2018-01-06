@@ -37,6 +37,7 @@ set(qmlevemon_srcs
     "models/update_timestamps.cpp"
     "qml.qrc"
     "img.qrc"
+    "sql.qrc"
 )
 
 set(qtwebserver_srcs
