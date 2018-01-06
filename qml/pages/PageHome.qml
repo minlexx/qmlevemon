@@ -99,7 +99,7 @@ Rectangle {
                     font.bold: true
                 }
                 Text {
-                    text: model.isk
+                    text: model.iskAmountStr
                     color: AppStyle.textSecondaryColor
                     font.pointSize: AppStyle.textSizeH3
                     font.family: AppStyle.fontFamily

@@ -37,6 +37,7 @@ class CharacterModel: public QAbstractListModel
         Bio,
         // wallet info
         ISK,
+        ISKAmountStr,
         // skills info
         TrainingSkill,
         TrainingSkillTimeLeft,

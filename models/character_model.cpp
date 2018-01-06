@@ -33,6 +33,7 @@ EM::CharacterModel::CharacterModel(QObject *parent):
     m_roles.insert(Roles::Bio, "bio");
     // wallet info
     m_roles.insert(Roles::ISK, "isk");
+    m_roles.insert(Roles::ISKAmountStr, "iskAmountStr");
     // skills info
     m_roles.insert(Roles::TrainingSkill, "trainingSkill");
     m_roles.insert(Roles::TrainingSkillTimeLeft, "trainingSkillTimeLeft");
@@ -102,10 +103,10 @@ QVariant EM::CharacterModel::data(const QModelIndex &index, int role) const
     case Bio: ret = ch->bio(); break;
         // wallet info
     case ISK: {
-            //ret = QString::number(static_cast<double>(ch->iskAmount()), 'f', 2);
             QLocale loc;
             ret = loc.toCurrencyString(ch->iskAmount(), QStringLiteral("ISK"), 2);
         } break;
+    case ISKAmountStr: ret = ch->iskAmountStr(); break;
         // skills info
     case TrainingSkill: ret = QLatin1String("-"); break;
     case TrainingSkillTimeLeft: ret = QLatin1String("-"); break;
