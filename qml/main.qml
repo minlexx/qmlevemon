@@ -202,6 +202,7 @@ ApplicationWindow {
             navTitle.text = navTitleStack[navTitleStack.length - 1]
             if (mainStack.depth == 1) {
                 mainHamburger.iconState = "menu";
+                evemonapp.setCurrentCharacter(0);
             }
         }
     }

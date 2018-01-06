@@ -147,6 +147,13 @@ void EM::QmlEvemonApp::setCurrentCharacter(quint64 char_id)
         qCDebug(logApp) << " already current char:" << char_id;
         return;
     }
+    // specia value - overview page, no character selected
+    if (char_id == 0) {
+        m_curCharId = 0;
+        emit curCharIdChanged();
+        return;
+    }
+    // character should exist
     EM::Character *ch = EM::ModelManager::instance()->characterModel()->findCharacterById(char_id);
     if (ch == nullptr) {
         // something goes completely wrong
