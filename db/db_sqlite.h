@@ -24,12 +24,17 @@ public:
     virtual bool savePortrait(quint64 char_id, const QImage& img) override;
     virtual bool deletePortrait(quint64 char_id) override;
 
+    virtual QString typeName(quint64 type_id) override;
+
 protected:
     bool open(const QString& db_filename);
+    bool open_sde(const QString& db_filename);
     void close();
+    bool execSqlFile(QSqlDatabase *db, const QString& filename);
 
 protected:
     QSqlDatabase m_chars_db;
+    QSqlDatabase m_eve_sde_db;
 };
 
 

@@ -3,6 +3,8 @@
 #include <QSqlQuery>
 #include <QDataStream>
 #include <QBuffer>
+#include <QFile>
+#include <QTextStream>
 #include <QLoggingCategory>
 #include <QDebug>
 
@@ -19,7 +21,9 @@ EM::DbSqlite::DbSqlite()
 {
     QString appdata_dirname = globalAppInstance()->storageDirectory();
     QString db_filename = appdata_dirname + QLatin1String("/characters.db");
+    QString sde_db_filename = appdata_dirname + QLatin1String("/eve_sde.db");
     this->open(db_filename);
+    this->open_sde(sde_db_filename);
 }
 
 
@@ -51,7 +55,7 @@ bool EM::DbSqlite::open(const QString& db_filename)
         qCWarning(logDb) << "cannot open DB: failed to open file:" << db_filename;
         return false;
     }
-    qCDebug(logDb) << "Opened database:" << db_filename;
+    qCDebug(logDb) << "Opened chars database:" << db_filename;
 
     // check for missing tables
     QStringList existing_tables;
@@ -83,11 +87,85 @@ bool EM::DbSqlite::open(const QString& db_filename)
 }
 
 
+bool EM::DbSqlite::open_sde(const QString& db_filename)
+{
+    if (m_eve_sde_db.isOpen()) {
+        qCWarning(logDb) << "cannot open SDE DB: already opened!";
+        return false;
+    }
+    m_eve_sde_db = QSqlDatabase::addDatabase("QSQLITE", "evesde");
+    if (!m_eve_sde_db.isValid()) {
+        qCWarning(logDb) << "cannot open SDE DB: failed to load sqlite driver?!";
+        return false;
+    }
+    m_eve_sde_db.setDatabaseName(db_filename);
+    if (!m_eve_sde_db.open()) {
+        qCWarning(logDb) << "cannot open SDE DB: failed to open file:" << db_filename;
+        return false;
+    }
+    qCDebug(logDb) << "Opened SDE database:" << db_filename;
+
+    // check for missing tables
+    QStringList existing_tables;
+    QSqlQuery q(m_eve_sde_db);
+    if (q.exec("SELECT name FROM sqlite_master WHERE type='table'")) {
+        while(q.next()) {
+            existing_tables << q.value(0).toString();
+        }
+    }
+    q.clear();
+
+    bool ok = true;
+    if (!existing_tables.contains("invTypes")) {
+        qCDebug(logDb) << "  SDE: Importing table invTypes...";
+        ok &= this->execSqlFile(&m_eve_sde_db, QLatin1String(":/sql/invTypes.sql"));
+    }
+
+    return ok;
+}
+
+
 void EM::DbSqlite::close()
 {
-    if (!m_chars_db.isOpen()) return;
-    m_chars_db.close();
-    qCDebug(logDb) << "Closed database.";
+    if (m_chars_db.isOpen()) {
+        m_chars_db.close();
+        qCDebug(logDb) << "Closed chars database.";
+    }
+    if (m_eve_sde_db.isOpen()) {
+        m_eve_sde_db.close();
+        qCDebug(logDb) << "Closed SDE database.";
+    }
+}
+
+
+bool EM::DbSqlite::execSqlFile(QSqlDatabase *db, const QString& filename)
+{
+    QFile f(filename);
+    if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qCWarning(logDb) << "Failed to open imput SQL file for reading:" << filename;
+        return false;
+    }
+    QSqlQuery q(*db);
+    QTextStream ts(&f);
+    QString line;
+    int nLines = 0;
+    int nErrors = 0;
+    while (ts.readLineInto(&line)) {
+        nLines++;
+        if (line.startsWith(QLatin1String("--"))) {
+            // skip SQL comments
+            continue;
+        }
+        if (!q.exec(line)) {
+            qCWarning(logDb) << filename << " line " << nLines << "; SQL Error:"
+                             << q.lastError().text();
+            nErrors++;
+        }
+    }
+    f.close();
+    qCDebug(logDb) << filename << "executed, " << nErrors << "errors, "
+                   << nLines << "lines total.";
+    return (nErrors == 0);
 }
 
 
@@ -202,4 +280,22 @@ bool EM::DbSqlite::deletePortrait(quint64 char_id)
     q.prepare("DELETE FROM portraits WHERE char_id = ?");
     q.addBindValue(char_id, QSql::In);
     return q.exec();
+}
+
+
+QString EM::DbSqlite::typeName(quint64 type_id)
+{
+    QString ret;
+    if (!m_eve_sde_db.isOpen()) {
+        return ret;
+    }
+    QSqlQuery q(m_eve_sde_db);
+    q.prepare("SELECT typeName FROM invTypes WHERE typeID = ?");
+    q.addBindValue(type_id, QSql::In);
+    if (q.exec()) {
+        if (q.next()) {
+            ret = q.value(0).toString();
+        }
+    }
+    return ret;
 }
