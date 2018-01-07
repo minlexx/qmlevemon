@@ -120,6 +120,10 @@ bool EM::DbSqlite::open_sde(const QString& db_filename)
         qCDebug(logDb) << "  SDE: Importing table invTypes...";
         ok &= this->execSqlFile(&m_eve_sde_db, QLatin1String(":/sql/invTypes.sql"));
     }
+    if (!existing_tables.contains("invGroups")) {
+        qCDebug(logDb) << "  SDE: Importing table invGroups...";
+        ok &= this->execSqlFile(&m_eve_sde_db, QLatin1String(":/sql/invGroups.sql"));
+    }
 
     return ok;
 }
@@ -155,6 +159,14 @@ bool EM::DbSqlite::execSqlFile(QSqlDatabase *db, const QString& filename)
         if (line.startsWith(QLatin1String("--"))) {
             // skip SQL comments
             continue;
+        }
+        if (!line.endsWith(QLatin1String(");"))) {
+            QString line2;
+            while (!line.endsWith(QLatin1String(");"))) {
+                if (!ts.readLineInto(&line2)) break;
+                nLines++;
+                line.append(line2);
+            }
         }
         if (!q.exec(line)) {
             qCWarning(logDb) << filename << " line " << nLines << "; SQL Error:"
