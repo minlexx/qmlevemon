@@ -6,7 +6,7 @@
 -- sqlite> .schema invTypes
 -- sqlite> select typeId,groupId,typeName,iconId,graphicId from invtypes;
 -- sqlite> .exit
-CREATE TABLE IF NOT EXISTS "invTypes" ( "typeID" INTEGER NOT NULL, "groupID" INTEGER, "typeName" VARCHAR(100), "iconID" INTEGER, "soundID" INTEGER, "graphicID" INTEGER, PRIMARY KEY ("typeID"), CHECK (published IN (0, 1)));
+CREATE TABLE IF NOT EXISTS "invTypes" ( "typeID" INTEGER NOT NULL, "groupID" INTEGER, "typeName" VARCHAR(100), "iconID" INTEGER, "graphicID" INTEGER, PRIMARY KEY ("typeID"));
 CREATE INDEX "ix_invTypes_groupID" ON "invTypes" ("groupID");
 INSERT INTO invTypes VALUES(0,0,'#System',NULL,0);
 INSERT INTO invTypes VALUES(2,2,'Corporation',NULL,0);
@@ -22120,7 +22120,7 @@ INSERT INTO invTypes VALUES(37154,1824,'Standup M-Set Basic Small Ship Manufactu
 INSERT INTO invTypes VALUES(37155,1824,'Standup M-Set Basic Small Ship Manufacturing Material Efficiency II',21729,0);
 INSERT INTO invTypes VALUES(37156,1822,'Standup M-Set Drone and Fighter Manufacturing Material Efficiency I',21729,0);
 INSERT INTO invTypes VALUES(37157,1822,'Standup M-Set Drone and Fighter Manufacturing Material Efficiency II',21729,0);
-INSERT INTO invTypes VALUES(37158,1820,'Standup M-Set Ammunition Manufacturing Material Efficiency I',21729,0);
+INSERT INTO invTypes VALUES(37158,1820,'Standup M-Set Ammunition Manufacturing Material Efficiency I',21729,0);
 INSERT INTO invTypes VALUES(37159,1820,'Standup M-Set Ammunition Manufacturing Material Efficiency II',21729,0);
 INSERT INTO invTypes VALUES(37160,1819,'Standup M-Set Equipment Manufacturing Time Efficiency I',21729,0);
 INSERT INTO invTypes VALUES(37161,1819,'Standup M-Set Equipment Manufacturing Time Efficiency II',21729,0);
