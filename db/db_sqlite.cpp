@@ -124,6 +124,10 @@ bool EM::DbSqlite::open_sde(const QString& db_filename)
         qCDebug(logDb) << "  SDE: Importing table invGroups...";
         ok &= this->execSqlFile(&m_eve_sde_db, QLatin1String(":/sql/invGroups.sql"));
     }
+    if (!existing_tables.contains("invCategories")) {
+        qCDebug(logDb) << "  SDE: Importing table invCategories...";
+        ok &= this->execSqlFile(&m_eve_sde_db, QLatin1String(":/sql/invCategories.sql"));
+    }
 
     return ok;
 }
