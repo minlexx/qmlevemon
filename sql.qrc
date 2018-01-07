@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>sql/invTypes.sql</file>
+        <file>sql/invGroups.sql</file>
     </qresource>
 </RCC>
