@@ -66,7 +66,7 @@ public:
      */
     NetworkServiceThreadState state();
 
-private slots:
+private Q_SLOTS:
     /** Handles a new incoming connection. */
     void handleNewConnection(int socketHandle);
 
@@ -92,7 +92,7 @@ private slots:
     /** Handles the information when encrypted bytes have been written. */
     void encryptedBytesWritten(qint64 bytes);
 
-signals:
+Q_SIGNALS:
     /** Will be emitted whenever the state of this thread changes. */
     void stateChanged(NetworkServiceThreadState state);
 
