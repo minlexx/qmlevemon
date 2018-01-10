@@ -36,11 +36,11 @@ Document::Document(QString documentTypeDeclaration)
     : QDomDocument() {
     setContent(documentTypeDeclaration);
 
-    _html = createElement("html");
-    _head = createElement("head");
-    _body = createElement("body");
-    QDomElement titleElement = createElement("title");
-    _title = createTextNode("Page title");
+    _html = createElement(QLatin1String("html"));
+    _head = createElement(QLatin1String("head"));
+    _body = createElement(QLatin1String("body"));
+    QDomElement titleElement = createElement(QLatin1String("title"));
+    _title = createTextNode(QLatin1String("Page title"));
     titleElement.appendChild(_title);
 
     _html.appendChild(_head);
@@ -76,7 +76,7 @@ bool Document::appendPartial(QDomElement domElement, QString resourceName) {
     QFile partialFile(resourceName);
     partialFile.open(QFile::ReadOnly);
     if(partialFile.isOpen()) {
-        bool success = appendHtml(domElement, partialFile.readAll());
+        bool success = appendHtml(domElement, QString::fromUtf8(partialFile.readAll()));
         partialFile.close();
         return success;
     }
@@ -97,11 +97,11 @@ bool Document::appendHtml(QDomElement domElement, QString html) {
 }
 
 QList<QDomElement> Document::elementsByClass(QString className) const {
-    return elementsByAttribute("class", className);
+    return elementsByAttribute(QLatin1String("class"), className);
 }
 
 QList<QDomElement> Document::elementsByClass(QDomElement domElement, QString className) const {
-    return elementsByAttribute(domElement, "class", className);
+    return elementsByAttribute(domElement, QLatin1String("class"), className);
 }
 
 QDomElement Document::elementById(QString idName) const {
@@ -113,11 +113,11 @@ QDomElement Document::elementById(QString idName) const {
 }
 
 QList<QDomElement> Document::elementsById(QString idName) const {
-    return elementsByAttribute("id", idName);
+    return elementsByAttribute(QLatin1String("id"), idName);
 }
 
 QList<QDomElement> Document::elementsById(QDomElement domElement, QString idName) const {
-    return elementsByAttribute(domElement, "id", idName);
+    return elementsByAttribute(domElement, QLatin1String("id"), idName);
 }
 
 QList<QDomElement> Document::elementsByAttribute(QString attributeName,
@@ -137,10 +137,10 @@ QList<QDomElement> Document::elementsByAttribute(QDomElement domElement,
     QList<QDomElement> elementList;
 
     if(domElement.hasAttribute(attributeName)) {
-        QString elementAttributeValue = domElement.attribute(attributeName, "");
+        QString elementAttributeValue = domElement.attribute(attributeName, QLatin1String(""));
 
         if(allowMultipleValues) {
-            QStringList elementAttributeValues = elementAttributeValue.split("\\s+", QString::SkipEmptyParts);
+            QStringList elementAttributeValues = elementAttributeValue.split(QLatin1String("\\s+"), QString::SkipEmptyParts);
             if(elementAttributeValues.contains(attributeValue)) {
                 elementList.append(domElement);
             }

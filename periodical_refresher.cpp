@@ -121,10 +121,15 @@ protected:
             QString server_version;
             QDateTime server_start_dt;
             //
-            if (jobj.contains("players")) server_players = jobj.value("players").toVariant().toInt();
-            if (jobj.contains("server_version")) server_version = jobj.value("server_version").toString();
-            if (jobj.contains("start_time")) {
-                server_start_dt = QDateTime::fromString(jobj.value("start_time").toString(), Qt::ISODate);
+            if (jobj.contains(QLatin1String("players"))) {
+                server_players = jobj.value(QLatin1String("players")).toVariant().toInt();
+            }
+            if (jobj.contains(QLatin1String("server_version"))) {
+                server_version = jobj.value(QLatin1String("server_version")).toString();
+            }
+            if (jobj.contains(QLatin1String("start_time"))) {
+                server_start_dt = QDateTime::fromString(
+                            jobj.value(QLatin1String("start_time")).toString(), Qt::ISODate);
             }
             qCDebug(logRefresher) << "Server status:" << server_players
                                   << server_version << server_start_dt;
@@ -190,20 +195,20 @@ protected:
         quint64 corp_id = 0, ally_id = 0, race_id = 0, bloodline_id = 0, ancestry_id = 0;
         float sec_status = 0.0f;
 
-        name = obj.value("name").toString();
-        QString sgender = obj.value("gender").toString();
+        name = obj.value(QLatin1String("name")).toString();
+        QString sgender = obj.value(QLatin1String("gender")).toString();
         gender = 1;
         if (sgender == QLatin1String("male")) gender = 0;
-        birthday = QDateTime::fromString(obj.value("birthday").toString(), Qt::ISODate);
-        corp_id = obj.value("corporation_id").toVariant().toULongLong();
-        if (obj.contains("alliance_id")) {
-            ally_id = obj.value("alliance_id").toVariant().toULongLong();
+        birthday = QDateTime::fromString(obj.value(QLatin1String("birthday")).toString(), Qt::ISODate);
+        corp_id = obj.value(QLatin1String("corporation_id")).toVariant().toULongLong();
+        if (obj.contains(QLatin1String("alliance_id"))) {
+            ally_id = obj.value(QLatin1String("alliance_id")).toVariant().toULongLong();
         }
-        race_id = obj.value("race_id").toVariant().toULongLong();
-        bloodline_id = obj.value("bloodline_id").toVariant().toULongLong();
-        ancestry_id = obj.value("ancestry_id").toVariant().toULongLong();
-        sec_status = obj.value("security_status").toVariant().toFloat();
-        bio = obj.value("description").toString();
+        race_id = obj.value(QLatin1String("race_id")).toVariant().toULongLong();
+        bloodline_id = obj.value(QLatin1String("bloodline_id")).toVariant().toULongLong();
+        ancestry_id = obj.value(QLatin1String("ancestry_id")).toVariant().toULongLong();
+        sec_status = obj.value(QLatin1String("security_status")).toVariant().toFloat();
+        bio = obj.value(QLatin1String("description")).toString();
 
         ch->setCharacterName(name);
         ch->setBio(bio);
@@ -226,7 +231,7 @@ protected:
         if (m_eve_ancestries.contains(ch->ancestryId())) {
             ch->setAncestryName(m_eve_ancestries[ch->ancestryId()]);
         } else {
-            ch->setAncestryName(QString("Ancestry ID: %1").arg(ch->ancestryId()));
+            ch->setAncestryName(QString(QLatin1String("Ancestry ID: %1")).arg(ch->ancestryId()));
         }
 
         // fetch corpporation name
@@ -235,13 +240,13 @@ protected:
             QString corp_name, corp_ticker;
             // ESI had changed corporation_name => name
             if (corpReply.contains(QLatin1String("corporation_name"))) {
-                corp_name = corpReply.value("corporation_name").toString();
+                corp_name = corpReply.value(QLatin1String("corporation_name")).toString();
             } else if (corpReply.contains(QLatin1String("name"))) {
                 corp_name = corpReply.value(QLatin1String("name")).toString();
             }
-            corp_ticker = corpReply.value("ticker").toString();
-            if (corpReply.contains("alliance_id")) {
-                ally_id = corpReply.value("alliance_id").toVariant().toULongLong();
+            corp_ticker = corpReply.value(QLatin1String("ticker")).toString();
+            if (corpReply.contains(QLatin1String("alliance_id"))) {
+                ally_id = corpReply.value(QLatin1String("alliance_id")).toVariant().toULongLong();
                 ch->setAllianceId(ally_id);
             }
             //
@@ -253,8 +258,8 @@ protected:
                 QJsonObject allyReply;
                 if (m_api->get_alliance_public_data(allyReply, ch->allianceId())) {
                     QString ally_name, ally_ticker;
-                    ally_name = allyReply.value("alliance_name").toString();
-                    ally_ticker = allyReply.value("ticker").toString();
+                    ally_name = allyReply.value(QLatin1String("alliance_name")).toString();
+                    ally_ticker = allyReply.value(QLatin1String("ticker")).toString();
                     ch->setAllianceName(ally_name);
                     ch->setAllianceTicker(ally_ticker);
                 }
@@ -283,12 +288,12 @@ protected:
             return 0; // req failed
         }
         quint64 ss_id = 0, station_id = 0, structure_id = 0, prev_station_id = 0, prev_structure_id = 0;
-        ss_id = reply.value("solar_system_id").toVariant().toULongLong();
-        if (reply.contains("structure_id")) {
-            structure_id = reply.value("structure_id").toVariant().toULongLong();
+        ss_id = reply.value(QLatin1String("solar_system_id")).toVariant().toULongLong();
+        if (reply.contains(QLatin1String("structure_id"))) {
+            structure_id = reply.value(QLatin1String("structure_id")).toVariant().toULongLong();
         }
-        if (reply.contains("station_id")) {
-            station_id = reply.value("station_id").toVariant().toULongLong();
+        if (reply.contains(QLatin1String("station_id"))) {
+            station_id = reply.value(QLatin1String("station_id")).toVariant().toULongLong();
         }
 
         prev_station_id = ch->currentStationId();
@@ -299,13 +304,13 @@ protected:
         if ((structure_id > 0) && (prev_structure_id != structure_id)) {
             // resolve structure name
             if (m_api->get_universe_structure(reply, structure_id, ch->getAuthTokens().access_token)) {
-                QString structure_name = reply.value("name").toString();
+                QString structure_name = reply.value(QLatin1String("name")).toString();
                 ch->setCurrentStructureName(structure_name);
             }
         } else if ((station_id > 0) && (prev_station_id != station_id)) {
             // resolve station name
             if (m_api->get_universe_station(reply, station_id)) {
-                QString station_name = reply.value("name").toString();
+                QString station_name = reply.value(QLatin1String("name")).toString();
                 ch->setCurrentStructureName(station_name);
             }
         }
@@ -316,23 +321,23 @@ protected:
             ch->setCurrentSolarSystemId(ss_id);
             // get solarsystem info (name, constellation_id, security)
             if (m_api->get_universe_system(reply, ss_id)) {
-                QString ss_name = reply.value("name").toString();
-                quint64 constellation_id = reply.value("constellation_id").toVariant().toULongLong();
-                float ss_security = reply.value("security_status").toVariant().toFloat();
+                QString ss_name = reply.value(QLatin1String("name")).toString();
+                quint64 constellation_id = reply.value(QLatin1String("constellation_id")).toVariant().toULongLong();
+                float ss_security = reply.value(QLatin1String("security_status")).toVariant().toFloat();
                 ch->setCurrentSolarSystemName(ss_name);
                 ch->setCurrentSolarSystemSecurity(ss_security);
                 // get constellation name, if changed
                 if (constellation_id != ch->currentConstellationId()) {
                     ch->setCurrentConstellationId(constellation_id);
                     if (m_api->get_universe_constellation(reply, constellation_id)) {
-                        QString const_name = reply.value("name").toString();
-                        quint64 region_id = reply.value("region_id").toVariant().toULongLong();
+                        QString const_name = reply.value(QLatin1String("name")).toString();
+                        quint64 region_id = reply.value(QLatin1String("region_id")).toVariant().toULongLong();
                         ch->setCurrentConstellationName(const_name);
                         // get region name, if changed
                         if (region_id != ch->currentRegionId()) {
                             ch->setCurrentRegionId(region_id);
                             if (m_api->get_universe_region(reply, region_id)) {
-                                ch->setCurrentRegionName(reply.value("name").toString());
+                                ch->setCurrentRegionName(reply.value(QLatin1String("name")).toString());
                             }
                         }
                     }
@@ -347,8 +352,8 @@ protected:
         }
 
         quint64 ship_type_id = 0;
-        QString ship_friendly_name = reply.value("ship_name").toString();
-        ship_type_id = reply.value("ship_type_id").toVariant().toULongLong();
+        QString ship_friendly_name = reply.value(QLatin1String("ship_name")).toString();
+        ship_type_id = reply.value(QLatin1String("ship_type_id")).toVariant().toULongLong();
         // if ship really changed
         if (ch->currentShipFriendlyName() != ship_friendly_name) {
             ch->setCurrentShipFriendlyName(ship_friendly_name);
@@ -361,7 +366,7 @@ protected:
             } else {
                 // make a request :(
                 if (m_api->get_universe_typeid(reply, ship_type_id)) {
-                    QString ship_type_name = reply.value("name").toString();
+                    QString ship_type_name = reply.value(QLatin1String("name")).toString();
                     if (!ship_type_name.isEmpty()) {
                         m_eve_typeids[ship_type_id] = ship_type_name;
                         ch->setCurrentShipTypeName(ship_type_name);
@@ -401,14 +406,14 @@ protected:
               "last_remap_date": "2015-04-18T14:35:25Z",
               "accrued_remap_cooldown_date": "2016-04-17T14:35:25Z"
             } */
-            int charisma = reply.value("charisma").toInt();
-            int intelligence = reply.value("intelligence").toInt();
-            int memory = reply.value("memory").toInt();
-            int perception = reply.value("perception").toInt();
-            int willpower = reply.value("willpower").toInt();
-            int bonus_remaps = reply.value("bonus_remaps").toInt();
-            QString slast_remap_date = reply.value("last_remap_date").toString();
-            QString sremap_cooldown_date = reply.value("accrued_remap_cooldown_date").toString();
+            int charisma = reply.value(QLatin1String("charisma")).toInt();
+            int intelligence = reply.value(QLatin1String("intelligence")).toInt();
+            int memory = reply.value(QLatin1String("memory")).toInt();
+            int perception = reply.value(QLatin1String("perception")).toInt();
+            int willpower = reply.value(QLatin1String("willpower")).toInt();
+            int bonus_remaps = reply.value(QLatin1String("bonus_remaps")).toInt();
+            QString slast_remap_date = reply.value(QLatin1String("last_remap_date")).toString();
+            QString sremap_cooldown_date = reply.value(QLatin1String("accrued_remap_cooldown_date")).toString();
             QDateTime last_remap_date = QDateTime::fromString(slast_remap_date, Qt::ISODate);
             QDateTime remap_cooldown_date = QDateTime::fromString(sremap_cooldown_date, Qt::ISODate);
             if (ch->attributeCharisma() != charisma) {
@@ -473,8 +478,8 @@ protected:
             for (const QJsonValueRef race_info: jarr) {
                 if (race_info.isObject()) {
                     QJsonObject jobj = race_info.toObject();
-                    quint64 race_id = jobj.value("race_id").toVariant().toULongLong();
-                    QString name = jobj.value("name").toString();
+                    quint64 race_id = jobj.value(QLatin1String("race_id")).toVariant().toULongLong();
+                    QString name = jobj.value(QLatin1String("name")).toString();
                     if ((race_id > 0) && (!name.isEmpty())) {
                         m_eve_races.insert(race_id, name);
                         qCDebug(logRefresher) << "  added race" << race_id << name;
@@ -488,8 +493,8 @@ protected:
             for (const QJsonValueRef bloodline_info: jarr) {
                 if (bloodline_info.isObject()) {
                     QJsonObject jobj = bloodline_info.toObject();
-                    quint64 bloodline_id = jobj.value("bloodline_id").toVariant().toULongLong();
-                    QString name = jobj.value("name").toString();
+                    quint64 bloodline_id = jobj.value(QLatin1String("bloodline_id")).toVariant().toULongLong();
+                    QString name = jobj.value(QLatin1String("name")).toString();
                     if ((bloodline_id > 0) && (!name.isEmpty())) {
                         m_eve_bloodlines.insert(bloodline_id, name);
                         qCDebug(logRefresher) << "  added bloodline" << bloodline_id << name;

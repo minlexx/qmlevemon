@@ -32,7 +32,7 @@ namespace QtWebServer {
 namespace Css {
 
 RuleSet::RuleSet() :
-    _element("*") {
+    _element(QLatin1String("*")) {
 }
 
 RuleSet::RuleSet(QString block,
@@ -86,11 +86,11 @@ void RuleSet::addDeclaration(QString property,
 }
 
 void RuleSet::addDeclarations(QString declarations) {
-    QStringList splitDeclarations = declarations.split(";", QString::SkipEmptyParts);
+    QStringList splitDeclarations = declarations.split(QLatin1String(";"), QString::SkipEmptyParts);
     foreach(QString declaration, splitDeclarations) {
-        if(declaration.contains(':')) {
+        if(declaration.contains(QLatin1Char(':'))) {
             declaration = declaration.trimmed();
-            int colonPosition = declaration.indexOf(':');
+            int colonPosition = declaration.indexOf(QLatin1Char(':'));
 
             _declarations.insert(declaration.left(colonPosition),
                                  declaration.right(declaration.length()
@@ -104,33 +104,33 @@ void RuleSet::addChild(RuleSet ruleSet) {
 }
 
 QString RuleSet::toString(QString parentSelector,
-                          int indent) {
-
-    QString cssSelector = QString("%1.%2%3%4%5")
+                          int indent) const
+{
+    QString cssSelector = QString(QLatin1String("%1.%2%3%4%5"))
             .arg(parentSelector)
-            .arg(_block.isEmpty() ? "" : QString("%1__").arg(_block))
-            .arg(_isWrapper ? "wrap__" : "")
+            .arg(_block.isEmpty() ? QLatin1String("") : QString(QLatin1String("%1__")).arg(_block))
+            .arg(_isWrapper ? QLatin1String("wrap__") : QLatin1String(""))
             .arg(_element)
-            .arg(_modifier.isEmpty() ? "" : QString("--%1").arg(_modifier));
+            .arg(_modifier.isEmpty() ? QLatin1String("") : QString(QLatin1String("--%1")).arg(_modifier));
 
     QString indentString;
-    indentString.fill(' ', indent);
+    indentString.fill(QLatin1Char(' '), indent);
 
-    QString result = cssSelector + " {\n";
+    QString result = cssSelector + QLatin1String(" {\n");
 
     QStringList properties = _declarations.keys();
     properties.sort();
-    foreach(QString property, properties) {
-        result += QString("%1%2: %3;\n")
+    for(const QString& property: properties) {
+        result += QString(QLatin1String("%1%2: %3;\n"))
             .arg(indentString)
             .arg(property)
             .arg(_declarations.value(property));
     }
 
-    result += QString("}\n");
+    result += QLatin1String("}\n");
 
-    foreach(RuleSet ruleSet, _children) {
-        result += "\n";
+    for(const RuleSet& ruleSet: _children) {
+        result += QLatin1String("\n");
         result += ruleSet.toString(cssSelector,
                                    indent);
     }

@@ -53,27 +53,27 @@ QByteArray DataUrlCodec::encodeDataUrl(DataUrlContents dataUrlContents) {
     QString encodingParamter;
     QByteArray encodedData;
     if(dataUrlContents.base64Encoded) {
-        encodingParamter = ";base64";
+        encodingParamter = QLatin1String(";base64");
         encodedData = dataUrlContents.data.toBase64();
     } else {
-        encodingParamter = "";
+        encodingParamter.clear();
         encodedData = dataUrlContents.data.toPercentEncoding();
     }
 
     QString charsetString;
-    if(dataUrlContents.charset.toLower() == "utf-8") {
-        charsetString = ";charset=utf-8";
+    if(dataUrlContents.charset.toLower() == QStringLiteral("utf-8")) {
+        charsetString = QLatin1String(";charset=utf-8");
     } else {
-        charsetString = "";
+        charsetString.clear();
     }
 
-    QString dataUrlString = QString("data:%1%2%3,%4")
+    QString dataUrlString = QString(QLatin1String("data:%1%2%3,%4"))
             .arg(dataUrlContents.mimeTypeName)
             .arg(charsetString)
             .arg(encodingParamter)
             .arg(QString::fromUtf8(encodedData));
 
-    if(dataUrlContents.charset.toLower() == "utf-8") {
+    if(dataUrlContents.charset.toLower() == QStringLiteral("utf-8")) {
         return dataUrlString.toUtf8();
     } else {
         return dataUrlString.toLatin1();
@@ -145,7 +145,7 @@ QByteArray DataUrlCodec::dataUrlFromImage(QImage image,
 QImage DataUrlCodec::imageFromDataUrl(QByteArray dataUrl) {
     DataUrlContents dataUrlContents = decodeDataUrl(dataUrl);
 
-    if(!dataUrlContents.mimeTypeName.startsWith("image/")) {
+    if(!dataUrlContents.mimeTypeName.startsWith(QLatin1String("image/"))) {
         return QImage();
     }
 
@@ -169,7 +169,7 @@ QByteArray DataUrlCodec::dataUrlFromPixmap(QPixmap pixmap,
 QPixmap DataUrlCodec::pixmapFromDataUrl(QByteArray dataUrl) {
     DataUrlContents dataUrlContents = decodeDataUrl(dataUrl);
 
-    if(!dataUrlContents.mimeTypeName.startsWith("image/")) {
+    if(!dataUrlContents.mimeTypeName.startsWith(QLatin1String("image/"))) {
         return QPixmap();
     }
 

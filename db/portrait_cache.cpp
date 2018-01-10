@@ -83,8 +83,8 @@ public:
                 QObject::connect(&nam, &QNetworkAccessManager::finished,
                                  &evtloop, &QEventLoop::quit);
 
-                QString url = QString("https://imageserver.eveonline.com/"
-                                      "Character/%1_128.jpg").arg(char_id);
+                QString url = QString(QLatin1String("https://imageserver.eveonline.com/"
+                                      "Character/%1_128.jpg")).arg(char_id);
                 req.setUrl(QUrl(url));
                 req.setHeader(QNetworkRequest::UserAgentHeader, evesso_user_agent());
 
@@ -118,7 +118,7 @@ public:
 
             if (m_image.isNull()) {
                 // download failed for some reason,  use default picture
-                m_image.load(":/img/character_icon_128.jpg", "JPG");
+                m_image.load(QLatin1String(":/img/character_icon_128.jpg"), "JPG");
             } else {
                 // store downloaded image in the cache
                 db->savePortrait(char_id, m_image);

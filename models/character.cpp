@@ -95,11 +95,11 @@ bool EM::Character::operator==(const Character& other)
 
 QString EM::Character::toString() const
 {
-    QString ret("<EM::Character ");
+    QString ret(QLatin1String("<EM::Character "));
     ret.append(m_characterName);
-    ret.append("; id=");
+    ret.append(QLatin1String("; id="));
     ret.append(QString::number(m_characterId));
-    ret.append(">");
+    ret.append(QLatin1String(">"));
     return ret;
 }
 
@@ -241,7 +241,7 @@ void EM::Character::setBio(const QString& s) {
 float EM::Character::iskAmount() const { return m_isk; }
 
 QString EM::Character::iskAmountStr() const{
-    return QLocale::system().toCurrencyString(m_isk, " ISK", 2);
+    return QLocale::system().toCurrencyString(m_isk, QLatin1String(" ISK"), 2);
 }
 
 void EM::Character::setIskAmount(float isk) {

@@ -32,14 +32,14 @@ public:
     HttpSsoCallbackResource(QObject *parent = 0):
         QtWebServer::Http::Resource(QLatin1String("/evesso"), parent)
     {
-        setContentType("text/plain");
+        setContentType(QLatin1String("text/plain"));
     }
 
     /** Defines the resource's response behaviour. */
     virtual void deliver(const QtWebServer::Http::Request& request,
                          QtWebServer::Http::Response& response)
     {
-        if (request.method() == "get") {
+        if (request.method() == QStringLiteral("get")) {
             // after successful auth you get request like:
             // params: QMap(("code", "IVoJ4rao...UM4Pm_mT0")
             //              ("state", "stf7d8....60e"))
@@ -53,9 +53,9 @@ public:
             qCDebug(logSso) << "Web callback: params:" << params;
 #endif
             // ^^ QMap(("code", "nnpvVow_L0i7.....0Eytw_IJvGOLEvN0"))
-            if (params.contains("code") && params.contains("state")) {
-                QString code = params["code"];
-                QString state = params["state"];
+            if (params.contains(QLatin1String("code")) && params.contains(QLatin1String("state"))) {
+                QString code = QString::fromUtf8(params[QLatin1String("code")]);
+                QString state = QString::fromUtf8(params[QLatin1String("state")]);
                 emit codeReceived(code, state);
             }
         }
@@ -95,11 +95,11 @@ public:
         bool ok = m_server.listen(QHostAddress::LocalHost, static_cast<quint16>(m_listenPort));
         if (ok) {
             // generate random state hash
-            m_sso_state = "st";
+            m_sso_state = QStringLiteral("st");
             QCryptographicHash hasher(QCryptographicHash::Sha256);
             int rnd = qrand();
             hasher.addData(reinterpret_cast<const char *>(&rnd), sizeof(rnd));
-            m_sso_state.append(hasher.result().toHex());
+            m_sso_state.append(QString::fromUtf8(hasher.result().toHex()));
             qCDebug(logSso) << "Started handler webserver";
         } else {
             qCWarning(logSso) << "Failed to start sso handler webserver! Port busy?";
@@ -187,7 +187,7 @@ EM::EveSsoLoginManager::~EveSsoLoginManager()
 
 void EM::EveSsoLoginManager::registerAsContextProperty(QQmlContext *ctx)
 {
-    ctx->setContextProperty("eveSsoLoginManager", this);
+    ctx->setContextProperty(QLatin1String("eveSsoLoginManager"), this);
 }
 
 
@@ -214,9 +214,9 @@ void EM::EveSsoLoginManager::slotStartSsoAuth()
     QString loginUrl(QStringLiteral("https://login.eveonline.com/oauth/authorize"));
     loginUrl += QStringLiteral("?response_type=code");
     loginUrl += QStringLiteral("&redirect_uri=");
-    loginUrl += QString("http://localhost:%1/evesso").arg(d->listenPort());
+    loginUrl += QString(QLatin1String("http://localhost:%1/evesso")).arg(d->listenPort());
     loginUrl += QStringLiteral("&client_id=");
-    loginUrl += EM::evesso_client_id();
+    loginUrl += QString::fromUtf8(EM::evesso_client_id());
     loginUrl += QStringLiteral("&scope=");
     loginUrl += QStringLiteral("esi-calendar.read_calendar_events.v1 "
                                "esi-location.read_location.v1 "

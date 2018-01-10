@@ -38,7 +38,7 @@ namespace Html {
 class Document :
     public QDomDocument {
 public:
-    Document(QString documentTypeDeclaration = "<!DOCTYPE html>");
+    Document(QString documentTypeDeclaration = QLatin1String("<!DOCTYPE html>"));
     ~Document();
 
     /** Sets the title element's value. */

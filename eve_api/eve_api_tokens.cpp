@@ -36,14 +36,14 @@ bool EM::EveOAuthTokens::operator==(const EveOAuthTokens& other)
 
 QString EM::EveOAuthTokens::toString() const
 {
-    QString ret("<EM::EveEveOAuthTokens ");
-    ret.append("access_token=");
-    ret.append(access_token);
-    ret.append("; refresh_token=");
-    ret.append(refresh_token);
-    ret.append("; expire_dt=");
+    QString ret(QLatin1String("<EM::EveEveOAuthTokens "));
+    ret.append(QLatin1String("access_token="));
+    ret.append(QString::fromUtf8(access_token));
+    ret.append(QLatin1String("; refresh_token="));
+    ret.append(QString::fromUtf8(refresh_token));
+    ret.append(QLatin1String("; expire_dt="));
     ret.append(expire_dt.toString(Qt::ISODate));
-    ret.append(">");
+    ret.append(QLatin1String(">"));
     return ret;
 }
 

@@ -44,7 +44,7 @@ QByteArray FormUrlCodec::encodeFormUrl(QMap<QString, QByteArray> formData) {
         if(!formUrl.isEmpty()) {
             formUrl.append('&');
         }
-        formUrl.append(QString("%1=%2")
+        formUrl.append(QString(QLatin1String("%1=%2"))
             .arg(key)
             .arg(QString::fromUtf8(formData.value(key).toPercentEncoding())).toUtf8());
     }

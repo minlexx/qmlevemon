@@ -33,7 +33,7 @@ namespace QtWebServer {
 namespace Util {
 
 AssetsResource::AssetsResource(QObject *parent) :
-    Http::Resource("/asset/{id}", parent) {
+    Http::Resource(QLatin1String("/asset/{id}"), parent) {
 }
 
 AssetsResource::~AssetsResource() {
@@ -49,7 +49,7 @@ void AssetsResource::removeAsset(QString id) {
 
 void AssetsResource::deliver(const Http::Request& request,
                     Http::Response& response) {
-    QString id = uriParameters(request.uniqueResourceIdentifier()).value("id");
+    QString id = uriParameters(request.uniqueResourceIdentifier()).value(QLatin1String("id"));
 
     if(_assetsPathMap.contains(id)) {
         QFile assetFile(_assetsPathMap.value(id));
@@ -62,11 +62,11 @@ void AssetsResource::deliver(const Http::Request& request,
             assetFile.close();
         } else {
             response.setStatusCode(Http::Forbidden);
-            response.setHeader(Http::ContentType, "text/plain");
+            response.setHeader(Http::ContentType, QLatin1String("text/plain"));
         }
     } else {
         response.setStatusCode(Http::NotFound);
-        response.setHeader(Http::ContentType, "text/plain");
+        response.setHeader(Http::ContentType, QLatin1String("text/plain"));
     }
 }
 

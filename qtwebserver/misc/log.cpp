@@ -71,16 +71,16 @@ void Log::log(QString name, QString message, EntryType entryType) {
 
     switch (entryType) {
     case Verbose:
-        logMessage = "V: ["+name+"] "+message;
+        logMessage = QLatin1String("V: [") + name + QLatin1String("] ") + message;
         break;
     case Information:
-        logMessage = "I: ["+name+"] "+message;
+        logMessage = QLatin1String("I: [") + name + QLatin1String("] ") + message;
         break;
     case Warning:
-        logMessage = "W: ["+name+"] "+message;
+        logMessage = QLatin1String("W: [") + name + QLatin1String("] ") + message;
         break;
     case Error:
-        logMessage = "E: ["+name+"] "+message;
+        logMessage = QLatin1String("E: [") + name + QLatin1String("] ") + message;
         break;
     }
 

@@ -90,10 +90,10 @@ HeaderNamePair headerNameMap[HEADER_COUNT] = {
 QString headerName(Http::Header header) {
     for(int i = 0; i < HEADER_COUNT; i++) {
         if(headerNameMap[i].header == header) {
-            return headerNameMap[i].headerName;
+            return QString::fromUtf8(headerNameMap[i].headerName);
         }
     }
-    return "";
+    return QString();
 }
 
 } // namespace Http

@@ -47,21 +47,21 @@ QString WebLayout::renderHtml(const Http::Request& request) {
     document.setTitle(title());
 
     foreach(QString resource, _cssResources) {
-        QDomElement linkNode = document.createElement("link");
-        linkNode.setAttribute("href", resource);
-        linkNode.setAttribute("rel", "stylesheet");
-        linkNode.setAttribute("type", "text/css");
+        QDomElement linkNode = document.createElement(QLatin1String("link"));
+        linkNode.setAttribute(QLatin1String("href"), resource);
+        linkNode.setAttribute(QLatin1String("rel"), QLatin1String("stylesheet"));
+        linkNode.setAttribute(QLatin1String("type"), QLatin1String("text/css"));
         document.head().appendChild(linkNode);
     }
 
     foreach(QString resource, _jsResources) {
-        QDomElement scriptNode = document.createElement("script");
-        scriptNode.setAttribute("src", resource);
-        scriptNode.setAttribute("type", "text/javascript");
+        QDomElement scriptNode = document.createElement(QLatin1String("script"));
+        scriptNode.setAttribute(QLatin1String("src"), resource);
+        scriptNode.setAttribute(QLatin1String("type"), QLatin1String("text/javascript"));
 
         // We have to put in this hack because self-closing script
         // tags are not allowed in HTML
-        QDomText dummyText = document.createTextNode("");
+        QDomText dummyText = document.createTextNode(QLatin1String(""));
         scriptNode.appendChild(dummyText);
 
         document.body().appendChild(scriptNode);

@@ -38,14 +38,14 @@ ConnectionPool::ConnectionPool(QObject *parent) :
     _count = 32;
 
     _open = false;
-    _hostName = "localhost";
+    _hostName = QLatin1String("localhost");
     _port = 3306;
-    _driverName = drivers.count() ? drivers.at(0) : "";
-    _connectOptions = "";
+    _driverName = drivers.count() ? drivers.at(0) : QString();
+    _connectOptions = QString();
 
-    _databaseName = "";
-    _userName = "";
-    _password = "";
+    _databaseName = QString();
+    _userName = QString();
+    _password = QString();
 }
 
 ConnectionPool::~ConnectionPool() {
@@ -68,7 +68,7 @@ bool ConnectionPool::open() {
     close();
     int c = count();
     for(int i = 0; i < c; i++) {
-        QSqlDatabase db = QSqlDatabase::addDatabase(driverName(), QString("sql%1").arg(i));
+        QSqlDatabase db = QSqlDatabase::addDatabase(driverName(), QString(QLatin1String("sql%1")).arg(i));
         db.setHostName(hostName());
         db.setPort(port());
         db.setConnectOptions(connectOptions());
@@ -177,7 +177,7 @@ QString ConnectionPool::nextConnectionName() {
     if(_next >= count()) {
         _next = 0;
     }
-    QString connectionName = QString("sql%1").arg(_next);
+    QString connectionName = QString(QLatin1String("sql%1")).arg(_next);
     _nextConnectionNameMutex.unlock();
     return connectionName;
 }

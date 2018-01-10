@@ -39,8 +39,8 @@ public:
     struct DataUrlContents {
         DataUrlContents() {
             data = "";
-            mimeTypeName = "";
-            charset = "";
+            mimeTypeName.clear();
+            charset.clear();
             base64Encoded = false;
         }
 

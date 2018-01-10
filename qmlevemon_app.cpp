@@ -26,9 +26,9 @@ EM::QmlEvemonApp::QmlEvemonApp(int& argc, char **argv):
     m_refresher(nullptr),
     m_curCharId(0)
 {
-    setApplicationName("qmlevemon");
-    setApplicationDisplayName("QML EVEMon");
-    setApplicationVersion(QMLEVEMON_VERSION);
+    setApplicationName(QLatin1String("qmlevemon"));
+    setApplicationDisplayName(QLatin1String("QML EVEMon"));
+    setApplicationVersion(QLatin1String(QMLEVEMON_VERSION));
 
     m_portraitCache = new EM::PortraitCache();
     m_refresher = new EM::PeriodicalRefresher(this);
@@ -61,7 +61,7 @@ bool EM::QmlEvemonApp::initQmlEngine()
     QQmlContext *rootContext = m_engine.rootContext();
 
     // set myself as context property
-    rootContext->setContextProperty("evemonapp", this);
+    rootContext->setContextProperty(QLatin1String("evemonapp"), this);
 
     EM::ModelManager::instance()->registerModelsAsContextProperties(rootContext);
     EM::EveSsoLoginManager::instance()->registerAsContextProperty(rootContext);
@@ -69,7 +69,7 @@ bool EM::QmlEvemonApp::initQmlEngine()
     EM::DbSqlite::instance();  // init database
     // engine takes ownership of the image provider!
     // so we should not and cannot delete m_portraitCache
-    m_engine.addImageProvider("portrait", m_portraitCache);
+    m_engine.addImageProvider(QLatin1String("portrait"), m_portraitCache);
 
     QObject::connect(EM::ModelManager::instance()->characterModel(),
                      &EM::CharacterModel::newCharacterAdded,
@@ -123,9 +123,9 @@ void EM::QmlEvemonApp::initStorageDirectory()
     //       i.e., it may need to be created by the system or the user.
     QDir appdata_dir(appdata_dirname);
     if (!appdata_dir.exists()) {
-        if (!appdata_dir.mkdir(".")) {
+        if (!appdata_dir.mkdir(QLatin1String("."))) {
             // retry using mkpath(); fix for Linux
-            if (!appdata_dir.mkpath(".")) {
+            if (!appdata_dir.mkpath(QLatin1String("."))) {
                 qCWarning(logApp) << "Failed to create app storage directory:"
                                   << appdata_dirname;
             }
@@ -163,7 +163,7 @@ void EM::QmlEvemonApp::setCurrentCharacter(quint64 char_id)
     qCDebug(logApp) << "setting current displayed character as:" << ch->toString();
     m_curCharId = ch->characterId();
     emit curCharIdChanged();
-    m_engine.rootContext()->setContextProperty("curChar", ch);
+    m_engine.rootContext()->setContextProperty(QLatin1String("curChar"), ch);
 }
 
 

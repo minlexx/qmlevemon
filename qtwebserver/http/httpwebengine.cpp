@@ -72,7 +72,7 @@ void WebEngine::respond(QSslSocket* sslSocket) {
             } else {
                 // if the 404 page was not set, generate simple HTML response
                 httpResponse.setBody(QByteArray("<h1>404 Not found</h1>"));
-                httpResponse.setHeader(ContentType, "text/html");
+                httpResponse.setHeader(ContentType, QLatin1String("text/html"));
             }
             httpResponse.setStatusCode(NotFound);
         }

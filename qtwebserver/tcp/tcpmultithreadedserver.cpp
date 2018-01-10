@@ -37,7 +37,7 @@ namespace Tcp {
 
 MultithreadedServer::MultithreadedServer()
     : QTcpServer(),
-      Logger("WebServer::WebService") {
+      Logger(QLatin1String("WebServer::WebService")) {
     setDefaultSslConfiguration();
     _serverTimeoutSeconds = 60;
 }

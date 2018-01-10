@@ -45,7 +45,7 @@ bool EM::DbSqlite::open(const QString& db_filename)
         qCWarning(logDb) << "cannot open DB: already opened!";
         return false;
     }
-    m_chars_db = QSqlDatabase::addDatabase("QSQLITE", "characters");
+    m_chars_db = QSqlDatabase::addDatabase(QLatin1String("QSQLITE"), QLatin1String("characters"));
     if (!m_chars_db.isValid()) {
         qCWarning(logDb) << "cannot open DB: failed to load sqlite driver?!";
         return false;
@@ -60,26 +60,26 @@ bool EM::DbSqlite::open(const QString& db_filename)
     // check for missing tables
     QStringList existing_tables;
     QSqlQuery q(m_chars_db);
-    if (q.exec("SELECT name FROM sqlite_master WHERE type='table'")) {
+    if (q.exec(QLatin1String("SELECT name FROM sqlite_master WHERE type='table'"))) {
         while(q.next()) {
             existing_tables << q.value(0).toString();
         }
     }
     q.clear();
 
-    if (!existing_tables.contains("characters")) {
+    if (!existing_tables.contains(QLatin1String("characters"))) {
         qCDebug(logDb) << "Creating table characters...";
-        q.exec("CREATE TABLE characters("
+        q.exec(QLatin1String("CREATE TABLE characters("
                "    char_id INTEGER PRIMARY KEY NOT NULL,"
-               "    char_data BLOB)");
+               "    char_data BLOB)"));
         q.clear();
     }
 
-    if (!existing_tables.contains("portraits")) {
+    if (!existing_tables.contains(QLatin1String("portraits"))) {
         qCDebug(logDb) << "Creating table portraits...";
-        q.exec("CREATE TABLE portraits("
+        q.exec(QLatin1String("CREATE TABLE portraits("
                "    char_id INTEGER PRIMARY KEY NOT NULL,"
-               "    picture BLOB)");
+               "    picture BLOB)"));
         q.clear();
     }
 
@@ -93,7 +93,7 @@ bool EM::DbSqlite::open_sde(const QString& db_filename)
         qCWarning(logDb) << "cannot open SDE DB: already opened!";
         return false;
     }
-    m_eve_sde_db = QSqlDatabase::addDatabase("QSQLITE", "evesde");
+    m_eve_sde_db = QSqlDatabase::addDatabase(QLatin1String("QSQLITE"), QLatin1String("evesde"));
     if (!m_eve_sde_db.isValid()) {
         qCWarning(logDb) << "cannot open SDE DB: failed to load sqlite driver?!";
         return false;
@@ -108,7 +108,7 @@ bool EM::DbSqlite::open_sde(const QString& db_filename)
     // check for missing tables
     QStringList existing_tables;
     QSqlQuery q(m_eve_sde_db);
-    if (q.exec("SELECT name FROM sqlite_master WHERE type='table'")) {
+    if (q.exec(QLatin1String("SELECT name FROM sqlite_master WHERE type='table'"))) {
         while(q.next()) {
             existing_tables << q.value(0).toString();
         }
@@ -116,19 +116,18 @@ bool EM::DbSqlite::open_sde(const QString& db_filename)
     q.clear();
 
     bool ok = true;
-    if (!existing_tables.contains("invTypes")) {
-        qCDebug(logDb) << "  SDE: Importing table invTypes...";
-        ok &= this->execSqlFile(&m_eve_sde_db, QLatin1String(":/sql/invTypes.sql"));
+    QStringList needed_tables({
+        QStringLiteral("invTypes"),
+        QStringLiteral("invGroups"),
+        QStringLiteral("invCategories")
+    });
+    for (const QString& needed_table: needed_tables) {
+        if (!existing_tables.contains(needed_table)) {
+            qCDebug(logDb) << "  SDE: Importing table: " << needed_table << "...";
+            QString sql_file = QString(QLatin1String(":/sql/%1.sql")).arg(needed_table);
+            ok &= this->execSqlFile(&m_eve_sde_db, sql_file);
+        }
     }
-    if (!existing_tables.contains("invGroups")) {
-        qCDebug(logDb) << "  SDE: Importing table invGroups...";
-        ok &= this->execSqlFile(&m_eve_sde_db, QLatin1String(":/sql/invGroups.sql"));
-    }
-    if (!existing_tables.contains("invCategories")) {
-        qCDebug(logDb) << "  SDE: Importing table invCategories...";
-        ok &= this->execSqlFile(&m_eve_sde_db, QLatin1String(":/sql/invCategories.sql"));
-    }
-
     return ok;
 }
 
@@ -189,7 +188,7 @@ bool EM::DbSqlite::loadCharacters(QList<Character *>& charList)
 {
     if (!m_chars_db.isOpen()) return false;
     QSqlQuery q(m_chars_db);
-    if (!q.exec("SELECT char_id, char_data FROM characters")) {
+    if (!q.exec(QLatin1String("SELECT char_id, char_data FROM characters"))) {
         return false;
     }
     while (q.next()) {
@@ -215,13 +214,13 @@ bool EM::DbSqlite::saveCharacters(const QList<Character *>& charList)
 {
     if (!m_chars_db.isOpen()) return false;
     QSqlQuery q(m_chars_db);
-    q.exec("DELETE FROM characters");
+    q.exec(QLatin1String("DELETE FROM characters"));
     q.clear();
     for (const EM::Character *character: charList) {
         QByteArray char_data;
         QDataStream stream(&char_data, QIODevice::WriteOnly);
         stream << (*character);
-        q.prepare("INSERT OR REPLACE INTO characters(char_id, char_data) VALUES (?, ?)");
+        q.prepare(QLatin1String("INSERT OR REPLACE INTO characters(char_id, char_data) VALUES (?, ?)"));
         q.addBindValue(character->characterId(), QSql::In);
         q.addBindValue(char_data, QSql::In | QSql::Binary);
         q.exec();
@@ -241,7 +240,7 @@ bool EM::DbSqlite::saveCharacter(const Character *character)
     stream << (*character);
     // save into DB
     QSqlQuery q(m_chars_db);
-    q.prepare("INSERT OR REPLACE INTO characters(char_id, char_data) VALUES (?, ?)");
+    q.prepare(QLatin1String("INSERT OR REPLACE INTO characters(char_id, char_data) VALUES (?, ?)"));
     q.addBindValue(character->characterId(), QSql::In);
     q.addBindValue(char_data, QSql::In | QSql::Binary);
     return q.exec();
@@ -254,7 +253,7 @@ bool EM::DbSqlite::loadPortrait(quint64 char_id, QImage& img)
         return false;
     }
     QSqlQuery q(m_chars_db);
-    q.prepare("SELECT char_id, picture FROM portraits WHERE char_id=?");
+    q.prepare(QLatin1String("SELECT char_id, picture FROM portraits WHERE char_id=?"));
     q.addBindValue(char_id, QSql::In);
     if (q.exec()) {
         if (q.next()) {
@@ -278,7 +277,7 @@ bool EM::DbSqlite::savePortrait(quint64 char_id, const QImage& img)
     QBuffer buf;
     buf.open(QIODevice::WriteOnly);
     if (img.save(&buf, "JPG")) {
-        q.prepare("INSERT OR REPLACE INTO portraits(char_id, picture) VALUES (?, ?)");
+        q.prepare(QLatin1String("INSERT OR REPLACE INTO portraits(char_id, picture) VALUES (?, ?)"));
         q.addBindValue(char_id, QSql::In);
         q.addBindValue(buf.buffer(), QSql::In | QSql::Binary);
         return q.exec();
@@ -293,7 +292,7 @@ bool EM::DbSqlite::deletePortrait(quint64 char_id)
         return false;
     }
     QSqlQuery q(m_chars_db);
-    q.prepare("DELETE FROM portraits WHERE char_id = ?");
+    q.prepare(QLatin1String("DELETE FROM portraits WHERE char_id = ?"));
     q.addBindValue(char_id, QSql::In);
     return q.exec();
 }
@@ -306,7 +305,7 @@ QString EM::DbSqlite::typeName(quint64 type_id)
         return ret;
     }
     QSqlQuery q(m_eve_sde_db);
-    q.prepare("SELECT typeName FROM invTypes WHERE typeID = ?");
+    q.prepare(QLatin1String("SELECT typeName FROM invTypes WHERE typeID = ?"));
     q.addBindValue(type_id, QSql::In);
     if (q.exec()) {
         if (q.next()) {

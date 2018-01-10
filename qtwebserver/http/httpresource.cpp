@@ -40,8 +40,8 @@ Resource::Resource(QString uniqueIdentifier,
 bool Resource::match(QString uniqueIdentifier) {
     // Split both the unique identifier of this resource the one in question,
     // so we can compare those.
-    QStringList splittedReferenceUri = this->uniqueIdentifier().split("/", QString::SkipEmptyParts);
-    QStringList splittedRequestedUri = uniqueIdentifier.split("/", QString::SkipEmptyParts);
+    QStringList splittedReferenceUri = this->uniqueIdentifier().split(QLatin1String("/"), QString::SkipEmptyParts);
+    QStringList splittedRequestedUri = uniqueIdentifier.split(QLatin1String("/"), QString::SkipEmptyParts);
 
     int count = splittedRequestedUri.count();
 
@@ -53,7 +53,8 @@ bool Resource::match(QString uniqueIdentifier) {
     // Compare each part of the passed unique identifier.
     for(int depth = 0; depth < count; depth++) {
         // In case we have a variable, we do not need an exact match.
-        if(splittedReferenceUri.at(depth).startsWith("{") && splittedReferenceUri.at(depth).endsWith("}")) {
+        if(splittedReferenceUri.at(depth).startsWith(QLatin1String("{"))
+                && splittedReferenceUri.at(depth).endsWith(QLatin1String("}"))) {
             continue;
         }
 
@@ -69,8 +70,8 @@ bool Resource::match(QString uniqueIdentifier) {
 QMap<QString, QString> Resource::uriParameters(QString uniqueIdentifier) {
     // Split both the unique identifier of this resource the one in question,
     // so we can compare those.
-    QStringList splittedReferenceUri = this->uniqueIdentifier().split("/", QString::SkipEmptyParts);
-    QStringList splittedRequestedUri = uniqueIdentifier.split("/", QString::SkipEmptyParts);
+    QStringList splittedReferenceUri = this->uniqueIdentifier().split(QLatin1String("/"), QString::SkipEmptyParts);
+    QStringList splittedRequestedUri = uniqueIdentifier.split(QLatin1String("/"), QString::SkipEmptyParts);
 
     // Create a parameter map.
     QMap<QString, QString> uriParameterMap;
@@ -85,7 +86,8 @@ QMap<QString, QString> Resource::uriParameters(QString uniqueIdentifier) {
     // Compare each part of the passed unique identifier.
     for(int depth = 0; depth < count; depth++) {
         QString uriSegment = splittedReferenceUri.at(depth);
-        if(uriSegment.startsWith("{") && uriSegment.endsWith("}")) {
+        if(uriSegment.startsWith(QLatin1String("{"))
+                && uriSegment.endsWith(QLatin1String("}"))) {
             // Truncate the { and }
             uriSegment = uriSegment.mid(1, uriSegment.count() - 2);
             QString key = uriSegment;

@@ -37,7 +37,7 @@ IODeviceResource::IODeviceResource(QString uniqueIdentifier,
         _ioDevice->setParent(this);
     }
 
-    setContentType("text/plain");
+    setContentType(QLatin1String("text/plain"));
 }
 
 IODeviceResource::~IODeviceResource() {
@@ -48,7 +48,7 @@ void IODeviceResource::deliver(const Http::Request& request, Response& response)
         return;
     }
 
-    if(request.method() == "get") {
+    if(request.method() == QStringLiteral("get")) {
         response.setHeader(Http::ContentType, contentType());
 
         _ioDevice->open(QIODevice::ReadOnly);

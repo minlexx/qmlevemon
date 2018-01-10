@@ -35,9 +35,9 @@ namespace Css {
 class RuleSet {
 public:
     RuleSet();
-    RuleSet(QString block = "",
-            QString element = "*",
-            QString modifier = "",
+    RuleSet(QString block = QLatin1String(""),
+            QString element = QLatin1String("*"),
+            QString modifier = QLatin1String(""),
             bool isWrapper = false);
     ~RuleSet();
 
@@ -57,8 +57,8 @@ public:
     void addDeclarations(QString declarations);
     void addChild(RuleSet ruleSet);
 
-    QString toString(QString parentSelector = "",
-                     int indent = 4);
+    QString toString(QString parentSelector = QLatin1String(""),
+                     int indent = 4) const;
 
     RuleSet& operator <<(QString declaration);
     RuleSet& operator <<(RuleSet ruleSet);

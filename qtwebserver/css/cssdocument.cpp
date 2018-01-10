@@ -45,8 +45,8 @@ Document& Document::operator <<(RuleSet ruleSet) {
 
 QByteArray Document::toByteArray(int indent) {
     QByteArray byteArray;
-    foreach(RuleSet ruleSet, _ruleSets) {
-        byteArray += ruleSet.toString("", indent).toUtf8() + "\n";
+    for(const RuleSet &ruleSet : _ruleSets) {
+        byteArray += ruleSet.toString(QLatin1String(""), indent).toUtf8() + "\n";
     }
     return byteArray;
 }

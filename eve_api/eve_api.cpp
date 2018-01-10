@@ -57,7 +57,7 @@ bool eveapi_request_first_access_token(const QString& code,
                      &local_event_loop, &QEventLoop::quit);
 
     QNetworkRequest req;
-    req.setUrl(QUrl("https://login.eveonline.com/oauth/token"));
+    req.setUrl(QUrl(QLatin1String("https://login.eveonline.com/oauth/token")));
 
     // create Authorization: Basic ... OAuth header
     // The header should be the string “Basic ” plus the Base64
@@ -65,7 +65,7 @@ bool eveapi_request_first_access_token(const QString& code,
     QByteArray auth_data = evesso_client_id() + ":" + evesso_client_secret_key();
     QByteArray auth_header = "Basic " + auth_data.toBase64();
     req.setHeader(QNetworkRequest::UserAgentHeader, evesso_user_agent());
-    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+    req.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
     req.setRawHeader("Authorization", auth_header);
 
     QByteArray post_data = "grant_type=authorization_code&code=" + code.toUtf8();
@@ -91,15 +91,16 @@ bool eveapi_request_first_access_token(const QString& code,
             "refresh_token":"gEy...fM0"
         } */
         QJsonObject jobj = QJsonDocument::fromJson(replyJson).object();
-        if (jobj.contains("access_token") && jobj.contains("refresh_token")
-                && jobj.contains("expires_in")) {
+        if (jobj.contains(QLatin1String("access_token"))
+                && jobj.contains(QLatin1String("refresh_token"))
+                && jobj.contains(QLatin1String("expires_in"))) {
             // correct reply
             qCDebug(logApi) << "Login OK, got all the tokens";
             // get data
-            int expires_in = jobj.value("expires_in").toInt();
+            int expires_in = jobj.value(QLatin1String("expires_in")).toInt();
             QDateTime expire_dt = QDateTime::currentDateTime().addSecs(expires_in);
-            result.access_token = jobj.value("access_token").toString().toUtf8();
-            result.refresh_token = jobj.value("refresh_token").toString().toUtf8();
+            result.access_token = jobj.value(QLatin1String("access_token")).toString().toUtf8();
+            result.refresh_token = jobj.value(QLatin1String("refresh_token")).toString().toUtf8();
             result.expire_dt = expire_dt;
         } else {
             // incorrect reply
@@ -114,7 +115,7 @@ bool eveapi_request_first_access_token(const QString& code,
 
     // obtain caharacter ID
     QNetworkRequest req2;
-    req2.setUrl(QUrl("https://login.eveonline.com/oauth/verify"));
+    req2.setUrl(QUrl(QLatin1String("https://login.eveonline.com/oauth/verify")));
     req2.setRawHeader("User-Agent", evesso_user_agent());
     req2.setRawHeader("Authorization", QByteArray("Bearer ") + result.access_token);
 
@@ -127,8 +128,8 @@ bool eveapi_request_first_access_token(const QString& code,
         req_timer.stop();
         QByteArray replyJson = rep->readAll();
         QJsonObject jobj = QJsonDocument::fromJson(replyJson).object();
-        if (jobj.contains("CharacterID")) {
-            character_id = jobj.value("CharacterID").toVariant().toULongLong();
+        if (jobj.contains(QLatin1String("CharacterID"))) {
+            character_id = jobj.value(QLatin1String("CharacterID")).toVariant().toULongLong();
             qCDebug(logApi) << "Requested character_id OK";
         } else {
             qCWarning(logApi) << "Error obtaining character_id: not in reply!";
@@ -159,7 +160,7 @@ bool eveapi_refresh_access_token(EveOAuthTokens& tokens)
                      &local_event_loop, &QEventLoop::quit);
 
     QNetworkRequest req;
-    req.setUrl(QUrl("https://login.eveonline.com/oauth/token"));
+    req.setUrl(QUrl(QLatin1String("https://login.eveonline.com/oauth/token")));
 
     // create Authorization: Basic ... OAuth header
     // The header should be the string “Basic ” plus the Base64
@@ -167,7 +168,7 @@ bool eveapi_refresh_access_token(EveOAuthTokens& tokens)
     QByteArray auth_data = evesso_client_id() + ":" + evesso_client_secret_key();
     QByteArray auth_header = "Basic " + auth_data.toBase64();
     req.setHeader(QNetworkRequest::UserAgentHeader, evesso_user_agent());
-    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+    req.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/x-www-form-urlencoded"));
     req.setRawHeader("Authorization", auth_header);
 
     QByteArray post_data = "grant_type=refresh_token&refresh_token=" + tokens.refresh_token;
@@ -193,15 +194,16 @@ bool eveapi_refresh_access_token(EveOAuthTokens& tokens)
             "refresh_token":"gEy...fM0"
         } */
         QJsonObject jobj = QJsonDocument::fromJson(replyJson).object();
-        if (jobj.contains("access_token") && jobj.contains("refresh_token")
-                && jobj.contains("expires_in")) {
+        if (jobj.contains(QLatin1String("access_token"))
+                && jobj.contains(QLatin1String("refresh_token"))
+                && jobj.contains(QLatin1String("expires_in"))) {
             // correct reply
             qCDebug(logApi) << "Token refresh OK, got all the tokens";
             // get data
-            int expires_in = jobj.value("expires_in").toInt();
+            int expires_in = jobj.value(QLatin1String("expires_in")).toInt();
             QDateTime expire_dt = QDateTime::currentDateTime().addSecs(expires_in);
-            tokens.access_token = jobj.value("access_token").toString().toUtf8();
-            tokens.refresh_token = jobj.value("refresh_token").toString().toUtf8();
+            tokens.access_token = jobj.value(QLatin1String("access_token")).toString().toUtf8();
+            tokens.refresh_token = jobj.value(QLatin1String("refresh_token")).toString().toUtf8();
             tokens.expire_dt = expire_dt;
         } else {
             // incorrect reply
@@ -361,7 +363,7 @@ bool EveApi::get_server_status(QJsonObject& reply)
     QJsonDocument reply_doc;
     int reply_http_status = 0;
     bool req_ok = this->send_general_esi_request_json(
-                EsiReqType::GET, "/status/", QByteArray(), 15, QByteArray(),
+                EsiReqType::GET, QLatin1String("/status/"), QByteArray(), 15, QByteArray(),
                 reply_http_status, reply_doc);
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!reply_doc.isObject()) return false;
@@ -374,7 +376,7 @@ bool EveApi::get_character_attributes(QJsonObject& reply, quint64 char_id, const
 {
     QJsonDocument replyJson;
     int reply_http_status = 0;
-    QString url = QString("/characters/%1/attributes/").arg(char_id);
+    QString url = QString(QLatin1String("/characters/%1/attributes/")).arg(char_id);
     bool req_ok = this->send_general_esi_request_json(
                 EsiReqType::GET, url, QByteArray(), 15, access_token,
                 reply_http_status, replyJson);
@@ -389,7 +391,7 @@ bool EveApi::get_character_public_info(QJsonObject& reply, quint64 char_id)
 {
     QJsonDocument replyJson;
     int reply_http_status = 0;
-    QString url = QString("/characters/%1/").arg(char_id);
+    QString url = QString(QLatin1String("/characters/%1/")).arg(char_id);
     bool req_ok = this->send_general_esi_request_json(
                 EsiReqType::GET, url, QByteArray(), 15, QByteArray(),
                 reply_http_status, replyJson);
@@ -404,7 +406,7 @@ bool EveApi::get_character_location(QJsonObject& reply, quint64 char_id, const Q
 {
     QJsonDocument replyJson;
     int reply_http_status = 0;
-    QString url = QString("/characters/%1/location/").arg(char_id);
+    QString url = QString(QLatin1String("/characters/%1/location/")).arg(char_id);
     bool req_ok = this->send_general_esi_request_json(
                 EsiReqType::GET, url, QByteArray(), 15, access_token,
                 reply_http_status, replyJson);
@@ -419,7 +421,7 @@ bool EveApi::get_character_ship(QJsonObject& reply, quint64 char_id, const QByte
 {
     QJsonDocument replyJson;
     int reply_http_status = 0;
-    QString url = QString("/characters/%1/ship/").arg(char_id);
+    QString url = QString(QLatin1String("/characters/%1/ship/")).arg(char_id);
     bool req_ok = this->send_general_esi_request_json(
                 EsiReqType::GET, url, QByteArray(), 15, access_token,
                 reply_http_status, replyJson);
@@ -434,7 +436,7 @@ bool EveApi::get_character_skillqueue(QJsonArray& reply, quint64 char_id, const 
 {
     QJsonDocument replyJson;
     int reply_http_status = 0;
-    QString url = QString("/characters/%1/skillqueue/").arg(char_id);
+    QString url = QString(QLatin1String("/characters/%1/skillqueue/")).arg(char_id);
     bool req_ok = this->send_general_esi_request_json(
                 EsiReqType::GET, url, QByteArray(), 15, access_token,
                 reply_http_status, replyJson);
@@ -449,7 +451,7 @@ bool EveApi::get_character_skills(QJsonObject& reply, quint64 char_id, const QBy
 {
     QJsonDocument replyJson;
     int reply_http_status = 0;
-    QString url = QString("/characters/%1/skills/").arg(char_id);
+    QString url = QString(QLatin1String("/characters/%1/skills/")).arg(char_id);
     bool req_ok = this->send_general_esi_request_json(
                 EsiReqType::GET, url, QByteArray(), 15, access_token,
                 reply_http_status, replyJson);
@@ -465,7 +467,7 @@ bool EveApi::get_character_wallet(float& reply, quint64 char_id, const QByteArra
     // /characters/91205062/wallet/
     QByteArray replyBa;
     int reply_http_status = 0;
-    QString url = QString("/characters/%1/wallet/").arg(char_id);
+    QString url = QString(QLatin1String("/characters/%1/wallet/")).arg(char_id);
     bool req_ok = this->send_general_esi_request(
                 EsiReqType::GET, url, QByteArray(), 15, access_token,
                 reply_http_status, replyBa);
@@ -480,7 +482,7 @@ bool EveApi::get_corporation_public_data(QJsonObject& reply, quint64 corp_id)
 {
     QJsonDocument replyJson;
     int reply_http_status = 0;
-    QString url = QString("/corporations/%1/").arg(corp_id);
+    QString url = QString(QLatin1String("/corporations/%1/")).arg(corp_id);
     bool req_ok = this->send_general_esi_request_json(
                 EsiReqType::GET, url, QByteArray(), 15, QByteArray(),
                 reply_http_status, replyJson);
@@ -495,7 +497,7 @@ bool EveApi::get_alliance_public_data(QJsonObject& reply, quint64 ally_id)
 {
     QJsonDocument replyJson;
     int reply_http_status = 0;
-    QString url = QString("/alliances/%1/").arg(ally_id);
+    QString url = QString(QLatin1String("/alliances/%1/")).arg(ally_id);
     bool req_ok = this->send_general_esi_request_json(
                 EsiReqType::GET, url, QByteArray(), 15, QByteArray(),
                 reply_http_status, replyJson);
@@ -510,7 +512,7 @@ bool EveApi::get_universe_bloodlines(QJsonArray& reply)
 {
     QJsonDocument jdoc;
     int reply_http_status = 0; // √
-    QString url = QString("/universe/bloodlines/");
+    QString url = QString(QLatin1String("/universe/bloodlines/"));
     bool req_ok = this->send_general_esi_request_json(
                 EsiReqType::GET, url, QByteArray(), 15, QByteArray(),
                 reply_http_status, jdoc);
@@ -525,7 +527,7 @@ bool EveApi::get_universe_constellation(QJsonObject& reply, quint64 constellatio
 {
     QJsonDocument jdoc;
     int reply_http_status = 0; // √
-    QString url = QString("/universe/constellations/%1/").arg(constellation_id);
+    QString url = QString(QLatin1String("/universe/constellations/%1/")).arg(constellation_id);
     bool req_ok = this->send_general_esi_request_json(
                 EsiReqType::GET, url, QByteArray(), 15, QByteArray(),
                 reply_http_status, jdoc);
@@ -540,7 +542,7 @@ bool EveApi::get_universe_races(QJsonArray& reply)
 {
     QJsonDocument jdoc;
     int reply_http_status = 0; // √
-    QString url = QString("/universe/races/");
+    QString url = QString(QLatin1String("/universe/races/"));
     bool req_ok = this->send_general_esi_request_json(
                 EsiReqType::GET, url, QByteArray(), 15, QByteArray(),
                 reply_http_status, jdoc);
@@ -555,7 +557,7 @@ bool EveApi::get_universe_region(QJsonObject& reply, quint64 region_id)
 {
     QJsonDocument jdoc;
     int reply_http_status = 0; // √
-    QString url = QString("/universe/regions/%1/").arg(region_id);
+    QString url = QString(QLatin1String("/universe/regions/%1/")).arg(region_id);
     bool req_ok = this->send_general_esi_request_json(
                 EsiReqType::GET, url, QByteArray(), 15, QByteArray(),
                 reply_http_status, jdoc);
@@ -570,7 +572,7 @@ bool EveApi::get_universe_station(QJsonObject& reply, quint64 station_id)
 {
     QJsonDocument jdoc;
     int reply_http_status = 0; // √
-    QString url = QString("/universe/stations/%1/").arg(station_id);
+    QString url = QString(QLatin1String("/universe/stations/%1/")).arg(station_id);
     bool req_ok = this->send_general_esi_request_json(
                 EsiReqType::GET, url, QByteArray(), 15, QByteArray(),
                 reply_http_status, jdoc);
@@ -585,7 +587,7 @@ bool EveApi::get_universe_structure(QJsonObject& reply, quint64 structure_id, co
 {
     QJsonDocument jdoc;
     int reply_http_status = 0; // √
-    QString url = QString("/universe/structures/%1/").arg(structure_id);
+    QString url = QString(QLatin1String("/universe/structures/%1/")).arg(structure_id);
     bool req_ok = this->send_general_esi_request_json(
                 EsiReqType::GET, url, QByteArray(), 15, access_token,
                 reply_http_status, jdoc);
@@ -600,7 +602,7 @@ bool EveApi::get_universe_system(QJsonObject& reply, quint64 ss_id)
 {
     QJsonDocument jdoc;
     int reply_http_status = 0; // √
-    QString url = QString("/universe/systems/%1/").arg(ss_id);
+    QString url = QString(QLatin1String("/universe/systems/%1/")).arg(ss_id);
     bool req_ok = this->send_general_esi_request_json(
                 EsiReqType::GET, url, QByteArray(), 15, QByteArray(),
                 reply_http_status, jdoc);
@@ -615,7 +617,7 @@ bool EveApi::get_universe_typeid(QJsonObject& reply, quint64 type_id)
 {
     QJsonDocument jdoc;
     int reply_http_status = 0; // √
-    QString url = QString("/universe/types/%1/").arg(type_id);
+    QString url = QString(QLatin1String("/universe/types/%1/")).arg(type_id);
     bool req_ok = this->send_general_esi_request_json(
                 EsiReqType::GET, url, QByteArray(), 15, QByteArray(),
                 reply_http_status, jdoc);

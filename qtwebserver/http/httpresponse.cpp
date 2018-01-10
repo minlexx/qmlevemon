@@ -32,16 +32,16 @@ namespace QtWebServer {
 namespace Http {
 
 Response::Response()
-    : Logger("WebServer::Http::Response") {
+    : Logger(QLatin1String("WebServer::Http::Response")) {
     _statusCode = Http::Ok;
-    _body = "";
+    _body.clear();
 }
 
 QByteArray Response::toByteArray() {
     QByteArray response = "";
 
     // HTTP response header line.
-    response += QString("HTTP/1.1 %1 %2\r\n")
+    response += QString(QLatin1String("HTTP/1.1 %1 %2\r\n"))
             .arg(_statusCode)
             .arg(Http::reasonPhrase(_statusCode))
             .toUtf8();
@@ -49,7 +49,7 @@ QByteArray Response::toByteArray() {
     // Append HTTP headers.
     QStringList headerNames = _headers.keys();
     foreach(QString headerName, headerNames) {
-        response += QString("%1: %2\r\n")
+        response += QString(QLatin1String("%1: %2\r\n"))
                 .arg(headerName)
                 .arg(_headers.value(headerName))
                 .toUtf8();

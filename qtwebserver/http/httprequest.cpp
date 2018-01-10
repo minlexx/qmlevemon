@@ -33,12 +33,12 @@ namespace QtWebServer {
 namespace Http {
 
 Request::Request()
-    : Logger("WebServer::Http::Request") {
+    : Logger(QLatin1String("WebServer::Http::Request")) {
     setDefaults();
 }
 
 Request::Request(const QByteArray &rawRequest)
-    : Logger("WebServer::Http::Request") {
+    : Logger(QLatin1String("WebServer::Http::Request")) {
     setDefaults();
     deserialize(rawRequest);
 }
@@ -133,17 +133,17 @@ void Request::setDefaults() {
     _headers.clear();
     _urlParameters.clear();
     _valid = false;
-    _method = "";
-    _uniqueResourceIdentifier = "";
-    _version = "";
-    _body = "";
+    _method.clear();
+    _uniqueResourceIdentifier.clear();;
+    _version.clear();
+    _body.clear();
 }
 
 void Request::deserialize(QByteArray rawRequest) {
     // Read ahead the first line in the request
     QByteArray rawRequestLine = takeLine(rawRequest);
     QStringList requestLine = QString::fromUtf8(rawRequestLine)
-                                .split(QRegExp("\\s+"));
+                                .split(QRegExp(QLatin1String("\\s+")));
 
     if(requestLine.count() < 3) {
         // The request line has to contain three strings: The method
@@ -155,7 +155,7 @@ void Request::deserialize(QByteArray rawRequest) {
 
     _method = requestLine.at(0).toLower();
 
-    QStringList splittedURI = requestLine.at(1).split('?', QString::SkipEmptyParts);
+    QStringList splittedURI = requestLine.at(1).split(QLatin1Char('?'), QString::SkipEmptyParts);
     if(splittedURI.count() > 1) {
         _urlParameters = Util::FormUrlCodec::decodeFormUrl(splittedURI.at(1).toUtf8());
     }
@@ -179,13 +179,13 @@ void Request::deserializeHeader(const QByteArray& rawHeader) {
     int colonPosition;
     int headerLineLength = headerLine.count();
     for(colonPosition = 0; colonPosition < headerLineLength; colonPosition++) {
-        if(headerLine.at(colonPosition) == ':') {
+        if(headerLine.at(colonPosition) == QLatin1Char(':')) {
             break;
         }
     }
 
     if(colonPosition == headerLineLength) {
-        log(QString("Invalid header line found %1").arg(headerLine), Log::Warning);
+        log(QString(QLatin1String("Invalid header line found %1")).arg(headerLine), Log::Warning);
         return;
     }
 

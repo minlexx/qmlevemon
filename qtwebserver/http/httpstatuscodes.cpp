@@ -79,10 +79,10 @@ ReasonPhrasePair reasonPhrasePairMap[STATUS_CODE_COUNT] = {
 QString reasonPhrase(Http::StatusCode statusCode) {
     for(int i = 0; i < STATUS_CODE_COUNT; i++) {
         if(reasonPhrasePairMap[i].statusCode == statusCode) {
-            return reasonPhrasePairMap[i].reasonPhrase;
+            return QString::fromUtf8(reasonPhrasePairMap[i].reasonPhrase);
         }
     }
-    return "";
+    return QString();
 }
 
 } // namespace Http
