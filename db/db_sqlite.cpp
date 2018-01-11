@@ -119,7 +119,11 @@ bool EM::DbSqlite::open_sde(const QString& db_filename)
     QStringList needed_tables({
         QStringLiteral("invTypes"),
         QStringLiteral("invGroups"),
-        QStringLiteral("invCategories")
+        QStringLiteral("invCategories"),
+        QStringLiteral("chrRaces"),
+        QStringLiteral("chrFactions"),
+        QStringLiteral("chrBloodlines"),
+        QStringLiteral("chrAncestries")
     });
     for (const QString& needed_table: needed_tables) {
         if (!existing_tables.contains(needed_table)) {
@@ -175,6 +179,9 @@ bool EM::DbSqlite::execSqlFile(QSqlDatabase *db, const QString& filename)
             qCWarning(logDb) << filename << " line " << nLines << "; SQL Error:"
                              << q.lastError().text();
             nErrors++;
+        }
+        if (nLines % 1000 == 0) {
+            qCDebug(logDb) << "    " << nLines << " lines...";
         }
     }
     f.close();

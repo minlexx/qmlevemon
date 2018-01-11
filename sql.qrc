@@ -1,5 +1,9 @@
 <RCC>
     <qresource prefix="/">
+        <file>sql/chrAncestries.sql</file>
+        <file>sql/chrBloodlines.sql</file>
+        <file>sql/chrFactions.sql</file>
+        <file>sql/chrRaces.sql</file>
         <file>sql/invTypes.sql</file>
         <file>sql/invGroups.sql</file>
         <file>sql/invCategories.sql</file>
