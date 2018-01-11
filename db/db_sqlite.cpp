@@ -1,6 +1,7 @@
 #include <QGlobalStatic>
 #include <QSqlError>
 #include <QSqlQuery>
+#include <QSqlDriver>
 #include <QDataStream>
 #include <QBuffer>
 #include <QFile>
@@ -156,11 +157,18 @@ bool EM::DbSqlite::execSqlFile(QSqlDatabase *db, const QString& filename)
         qCWarning(logDb) << "Failed to open imput SQL file for reading:" << filename;
         return false;
     }
+    QSqlDriver *driver = db->driver();
     QSqlQuery q(*db);
     QTextStream ts(&f);
     QString line;
     int nLines = 0;
     int nErrors = 0;
+    if (driver->hasFeature(QSqlDriver::Transactions)) {
+        bool ok = db->transaction();
+        if (!ok) {
+            qCWarning(logDb) << "    DB transaction failed to start!";
+        }
+    }
     while (ts.readLineInto(&line)) {
         nLines++;
         if (line.startsWith(QLatin1String("--"))) {
@@ -185,6 +193,12 @@ bool EM::DbSqlite::execSqlFile(QSqlDatabase *db, const QString& filename)
         }
     }
     f.close();
+    if (driver->hasFeature(QSqlDriver::Transactions)) {
+        bool ok = db->commit();
+        if (!ok) {
+            qCWarning(logDb) << "    DB transaction failed to commit!";
+        }
+    }
     qCDebug(logDb) << filename << "executed, " << nErrors << "errors, "
                    << nLines << "lines total.";
     return (nErrors == 0);
