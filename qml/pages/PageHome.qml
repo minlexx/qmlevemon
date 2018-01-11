@@ -31,20 +31,18 @@ Rectangle {
     ListModel {
         id: testCharactersModel
         ListElement {
-            // profilePicture: "../../tests/92181726_128.jpg"
             characterId: 1365367652
             characterName: "Lexx Min"
-            isk: "43 052 383,23"
+            iskAmountStr: "43 052 383,23 ISK"
             trainingSkill: "Minmatar Cruiser V"
             trainingSkillTimeLeft: "21d 16h 6m 12s"
             trainingSkillEndDateTime: "Sun 15.10.2017 3:33:42"
             queueTimeLeft: "47d 16h 6m 12s"
         }
         ListElement {
-            // profilePicture: "../../tests/94016386_128.jpg"
             characterId: 5478468754
             characterName: "Alya Kastra"
-            isk: "590 137 154,35"
+            iskAmountStr: "590 137 154,35 ISK"
             trainingSkill: "Drone Interfacing V"
             trainingSkillTimeLeft: "12d 1h 10m 30s"
             trainingSkillEndDateTime: "Sun 15.10.2017 3:33:42"
