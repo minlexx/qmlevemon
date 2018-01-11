@@ -1,7 +1,6 @@
 #include "model_manager.h"
 #include <QtGlobal>
 #include <QGlobalStatic>
-#include <QQmlContext>
 #include <QLoggingCategory>
 #include <QDebug>
 
@@ -9,28 +8,26 @@
 #include "character_model.h"
 
 
-Q_GLOBAL_STATIC(EM::ModelManager, g_modelManager)
-
 Q_LOGGING_CATEGORY(logModels, "evemon.models")
 
+namespace EM {
 
-EM::ModelManager *EM::ModelManager::instance()
+Q_GLOBAL_STATIC(ModelManager, g_modelManager)
+
+
+ModelManager *ModelManager::instance()
 {
     return g_modelManager();
 }
 
 
-EM::ModelManager::ModelManager(QObject *parent):
+ModelManager::ModelManager(QObject *parent):
     QObject(parent),
     m_characterModel(Q_NULLPTR)
 {
     qCDebug(logModels) << "ModelManager ctor";
-    m_characterModel = new EM::CharacterModel(this);
+    m_characterModel = new CharacterModel(this);
     m_characterModel->loadCharacters();
 }
 
-
-void EM::ModelManager::registerModelsAsContextProperties(QQmlContext *ctx)
-{
-    ctx->setContextProperty(QLatin1String("characterModel"), m_characterModel);
 }

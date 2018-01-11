@@ -3,8 +3,6 @@
 
 #include <QObject>
 
-class QQmlContext;
-
 
 namespace EM {
 
@@ -23,7 +21,6 @@ public:
     explicit EveSsoLoginManager(QObject *parent = Q_NULLPTR);
     virtual ~EveSsoLoginManager();
     static EveSsoLoginManager *instance();
-    void registerAsContextProperty(QQmlContext *ctx);
 
 
 public:

@@ -1,6 +1,5 @@
 #include "eve_sso.h"
 #include <QTimer>
-#include <QQmlContext>
 #include <QGlobalStatic>
 #include <QDesktopServices>
 #include <QUrl>
@@ -182,12 +181,6 @@ EM::EveSsoLoginManager::EveSsoLoginManager(QObject *parent):
 EM::EveSsoLoginManager::~EveSsoLoginManager()
 {
     delete d_ptr;
-}
-
-
-void EM::EveSsoLoginManager::registerAsContextProperty(QQmlContext *ctx)
-{
-    ctx->setContextProperty(QLatin1String("eveSsoLoginManager"), this);
 }
 
 

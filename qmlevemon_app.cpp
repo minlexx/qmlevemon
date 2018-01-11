@@ -19,7 +19,10 @@
 Q_LOGGING_CATEGORY(logApp, "evemon.app")
 
 
-EM::QmlEvemonApp::QmlEvemonApp(int& argc, char **argv):
+namespace EM {
+
+
+QmlEvemonApp::QmlEvemonApp(int& argc, char **argv):
     QGuiApplication(argc, argv),
     m_mainWindow(nullptr),
     m_portraitCache(nullptr),
@@ -30,14 +33,14 @@ EM::QmlEvemonApp::QmlEvemonApp(int& argc, char **argv):
     setApplicationDisplayName(QLatin1String("QML EVEMon"));
     setApplicationVersion(QLatin1String(QMLEVEMON_VERSION));
 
-    m_portraitCache = new EM::PortraitCache();
-    m_refresher = new EM::PeriodicalRefresher(this);
+    m_portraitCache = new PortraitCache();
+    m_refresher = new PeriodicalRefresher(this);
 
     this->initStorageDirectory();
 }
 
 
-EM::QmlEvemonApp::~QmlEvemonApp()
+QmlEvemonApp::~QmlEvemonApp()
 {
     qCDebug(logApp) << "~QmlEvemonApp()";
     // engine takes ownership of the image provider!
@@ -47,7 +50,7 @@ EM::QmlEvemonApp::~QmlEvemonApp()
 }
 
 
-bool EM::QmlEvemonApp::isDesktopPlatform() const
+bool QmlEvemonApp::isDesktopPlatform() const
 {
 #if defined(Q_OS_ANDROID)
     return false;
@@ -56,24 +59,26 @@ bool EM::QmlEvemonApp::isDesktopPlatform() const
 }
 
 
-bool EM::QmlEvemonApp::initQmlEngine()
+bool QmlEvemonApp::initQmlEngine()
 {
     QQmlContext *rootContext = m_engine.rootContext();
 
-    // set myself as context property
+    // set context properties
     rootContext->setContextProperty(QLatin1String("evemonapp"), this);
-
-    EM::ModelManager::instance()->registerModelsAsContextProperties(rootContext);
-    EM::EveSsoLoginManager::instance()->registerAsContextProperty(rootContext);
+    rootContext->setContextProperty(QLatin1String("characterModel"),
+                                    ModelManager::instance()->characterModel());
     rootContext->setContextProperty(QLatin1String("refresher"), m_refresher);
-    EM::DbSqlite::instance();  // init database
+    rootContext->setContextProperty(QLatin1String("eveSsoLoginManager"),
+                                    EveSsoLoginManager::instance());
+
+    DbSqlite::instance();  // init database
     // engine takes ownership of the image provider!
     // so we should not and cannot delete m_portraitCache
     m_engine.addImageProvider(QLatin1String("portrait"), m_portraitCache);
 
-    QObject::connect(EM::ModelManager::instance()->characterModel(),
-                     &EM::CharacterModel::newCharacterAdded,
-                     m_refresher, &EM::PeriodicalRefresher::refresh,
+    QObject::connect(ModelManager::instance()->characterModel(),
+                     &CharacterModel::newCharacterAdded,
+                     m_refresher, &PeriodicalRefresher::refresh,
                      Qt::QueuedConnection);
 
     m_engine.load(QUrl(QLatin1String("qrc:/qml/main.qml")));
@@ -92,31 +97,31 @@ bool EM::QmlEvemonApp::initQmlEngine()
 }
 
 
-EM::Db *EM::QmlEvemonApp::database() const
+Db *QmlEvemonApp::database() const
 {
-    return EM::DbSqlite::instance();
+    return DbSqlite::instance();
 }
 
 
-QString EM::QmlEvemonApp::storageDirectory() const
+QString QmlEvemonApp::storageDirectory() const
 {
     return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 }
 
 
-EM::PortraitCache *EM::QmlEvemonApp::portraitCache() const
+PortraitCache *QmlEvemonApp::portraitCache() const
 {
     return m_portraitCache;
 }
 
 
-QQuickWindow *EM::QmlEvemonApp::mainWindow() const
+QQuickWindow *QmlEvemonApp::mainWindow() const
 {
     return m_mainWindow;
 }
 
 
-void EM::QmlEvemonApp::initStorageDirectory()
+void QmlEvemonApp::initStorageDirectory()
 {
     QString appdata_dirname = this->storageDirectory();
     // Note: The storage location returned can be a directory that does not exist;
@@ -134,14 +139,14 @@ void EM::QmlEvemonApp::initStorageDirectory()
 }
 
 
-quint64 EM::QmlEvemonApp::curCharId() const
+quint64 QmlEvemonApp::curCharId() const
 {
     return m_curCharId;
 }
 
 
 // called from QML when selcting character page
-void EM::QmlEvemonApp::setCurrentCharacter(quint64 char_id)
+void QmlEvemonApp::setCurrentCharacter(quint64 char_id)
 {
     if (m_curCharId == char_id) {
         qCDebug(logApp) << " already current char:" << char_id;
@@ -154,7 +159,7 @@ void EM::QmlEvemonApp::setCurrentCharacter(quint64 char_id)
         return;
     }
     // character should exist
-    EM::Character *ch = EM::ModelManager::instance()->characterModel()->findCharacterById(char_id);
+    Character *ch = ModelManager::instance()->characterModel()->findCharacterById(char_id);
     if (ch == nullptr) {
         // something goes completely wrong
         qCDebug(logApp) << "setCurrentCharacter(" << char_id << ") failed!";
@@ -168,21 +173,23 @@ void EM::QmlEvemonApp::setCurrentCharacter(quint64 char_id)
 
 
 // called from QML to request update character portrait
-void EM::QmlEvemonApp::requestRefreshCharacterPortrait(quint64 char_id)
+void QmlEvemonApp::requestRefreshCharacterPortrait(quint64 char_id)
 {
     m_portraitCache->removeCachedImageForCharacter(char_id);
 }
 
 
 // called from QML to force refresh all characters
-void EM::QmlEvemonApp::forceRefresh()
+void QmlEvemonApp::forceRefresh()
 {
     m_refresher->forceRefreshNow();
 }
 
 
 
-EM::QmlEvemonApp *EM::globalAppInstance()
+QmlEvemonApp *globalAppInstance()
 {
-    return dynamic_cast<EM::QmlEvemonApp *>(QCoreApplication::instance());
+    return dynamic_cast<QmlEvemonApp *>(QCoreApplication::instance());
 }
+
+} // namespace
