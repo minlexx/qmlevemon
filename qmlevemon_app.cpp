@@ -12,8 +12,8 @@
 #include "models/character_model.h"
 #include "models/model_manager.h"
 #include "eve_api/eve_sso.h"
+#include "network/periodical_refresher.h"
 #include "qmlevemon_app.h"
-#include "periodical_refresher.h"
 
 
 Q_LOGGING_CATEGORY(logApp, "evemon.app")

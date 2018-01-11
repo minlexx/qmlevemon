@@ -23,7 +23,6 @@ option(BUILD_TESTING "Build tests (for developers)" OFF)
 set(qmlevemon_srcs
     "main.cpp"
     "qmlevemon_app.cpp"
-    "periodical_refresher.cpp"
     "db/db.cpp"
     "db/db_sqlite.cpp"
     "db/portrait_cache.cpp"
@@ -35,6 +34,7 @@ set(qmlevemon_srcs
     "models/character_model.cpp"
     "models/formulas.cpp"
     "models/update_timestamps.cpp"
+    "network/periodical_refresher.cpp"
     "qml.qrc"
     "img.qrc"
     "sql.qrc"
