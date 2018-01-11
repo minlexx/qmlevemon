@@ -17,11 +17,11 @@ QtObject {
     property color textLightColor: "#666666"
     property color textUrlColor: "#EFC247"
 
-    property int textSizeH1: 20
-    property int textSizeH2: 15
-    property int textSizeH3: 10
-    property int textSizeH4: 9
-    property int textSizeH5: 7
+    property int textSizeH1: 17
+    property int textSizeH2: 13
+    property int textSizeH3: 9
+    property int textSizeH4: 8
+    property int textSizeH5: 6
 
     property string fontFamily: "Tahoma"
 
