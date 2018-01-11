@@ -68,7 +68,7 @@ public:
         }
 
         // try to load portrait from cache
-        Db *db = EM::globalAppInstance()->database();
+        Db *db = globalAppInstance()->database();
 
         if (!db->loadPortrait(char_id, m_image)) {
             // cache failed, download from eve image server
@@ -170,7 +170,7 @@ QQuickImageResponse *PortraitCache::requestImageResponse(
 // specific hack to clear cached image for character
 void PortraitCache::removeCachedImageForCharacter(quint64 char_id)
 {
-    Db *db = EM::globalAppInstance()->database();
+    Db *db = globalAppInstance()->database();
     db->deletePortrait(char_id);
 }
 

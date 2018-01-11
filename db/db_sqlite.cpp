@@ -219,7 +219,7 @@ bool DbSqlite::loadCharacters(QList<Character *>& charList)
     while (q.next()) {
         quint64 char_id = q.value(0).toULongLong();
         QByteArray char_data = q.value(1).toByteArray();
-        EM::Character *character = new EM::Character();
+        Character *character = new Character();
         QDataStream stream(&char_data, QIODevice::ReadOnly);
         stream >> (*character);
         // check that character was loaded properly
@@ -241,7 +241,7 @@ bool DbSqlite::saveCharacters(const QList<Character *>& charList)
     QSqlQuery q(m_chars_db);
     q.exec(QLatin1String("DELETE FROM characters"));
     q.clear();
-    for (const EM::Character *character: charList) {
+    for (const Character *character: charList) {
         QByteArray char_data;
         QDataStream stream(&char_data, QIODevice::WriteOnly);
         stream << (*character);

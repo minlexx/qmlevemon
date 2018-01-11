@@ -144,7 +144,7 @@ protected:
 
     /**
      * @brief check_refresh_token - check if EVE OAuth tokens need refresh, refresh if needed
-     * @param ch - EM::Character pointer whose tokens to refresh
+     * @param ch - Character pointer whose tokens to refresh
      * @return true if refresh is not needed, ot refresh was OK. false on refresh error
      */
     bool check_refresh_token(Character *ch) {

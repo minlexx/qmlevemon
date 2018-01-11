@@ -33,9 +33,9 @@ QByteArray evesso_client_secret_key() {
 
 QByteArray evesso_user_agent() {
     QByteArray ret;
-    ret.append(EM::globalAppInstance()->applicationName().toUtf8());
+    ret.append(globalAppInstance()->applicationName().toUtf8());
     ret.append("/");
-    ret.append(EM::globalAppInstance()->applicationVersion().toUtf8());
+    ret.append(globalAppInstance()->applicationVersion().toUtf8());
     ret.append(", alexey.min@gmail.com");
     // "qmlevemon/0.1.0, alexey.min@gmail.com"
     return ret;

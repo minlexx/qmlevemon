@@ -8,7 +8,7 @@
 namespace EM {
 
 
-class DbSqlite: public EM::Db
+class DbSqlite: public Db
 {
 public:
     DbSqlite();
