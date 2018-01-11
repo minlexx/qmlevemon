@@ -6,8 +6,14 @@
 -- sqlite> .schema invTypes
 -- sqlite> select typeId,groupId,typeName,iconId,graphicId from invtypes;
 -- sqlite> .exit
-CREATE TABLE IF NOT EXISTS "invTypes" ( "typeID" INTEGER NOT NULL, "groupID" INTEGER, "typeName" VARCHAR(100), "iconID" INTEGER, "graphicID" INTEGER, PRIMARY KEY ("typeID"));
-CREATE INDEX "ix_invTypes_groupID" ON "invTypes" ("groupID");
+CREATE TABLE IF NOT EXISTS "invTypes" (
+    "typeID" INTEGER NOT NULL,
+    "groupID" INTEGER,
+    "typeName" VARCHAR(100),
+    "iconID" INTEGER,
+    "graphicID" INTEGER,
+    PRIMARY KEY ("typeID")
+);
 INSERT INTO invTypes VALUES(0,0,'#System',NULL,0);
 INSERT INTO invTypes VALUES(2,2,'Corporation',NULL,0);
 INSERT INTO invTypes VALUES(3,3,'Region',NULL,0);
@@ -33457,3 +33463,4 @@ INSERT INTO invTypes VALUES(370488,368726,'‘Tairei’s Crimson’ AM-L SKIN',N
 INSERT INTO invTypes VALUES(370658,351844,'Council''s Modified Repair Tool',NULL,0);
 INSERT INTO invTypes VALUES(371027,350858,'X-MS16 Snowball Launcher',NULL,0);
 INSERT INTO invTypes VALUES(441265,0,'',2888,0);
+CREATE INDEX "ix_invTypes_groupID" ON "invTypes" ("groupID");
