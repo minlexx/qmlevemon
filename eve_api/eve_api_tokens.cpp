@@ -2,19 +2,21 @@
 #include "eve_api_tokens.h"
 
 
-EM::EveOAuthTokens::EveOAuthTokens()
+namespace EM {
+
+EveOAuthTokens::EveOAuthTokens()
 {
     //
 }
 
 
-EM::EveOAuthTokens::EveOAuthTokens(const EM::EveOAuthTokens &other)
+EveOAuthTokens::EveOAuthTokens(const EveOAuthTokens &other)
 {
     (*this) = other;
 }
 
 
-EM::EveOAuthTokens& EM::EveOAuthTokens::operator=(const EM::EveOAuthTokens& other)
+EveOAuthTokens& EveOAuthTokens::operator=(const EveOAuthTokens& other)
 {
     if (this == &other) return (*this);
     this->access_token = other.access_token;
@@ -24,7 +26,7 @@ EM::EveOAuthTokens& EM::EveOAuthTokens::operator=(const EM::EveOAuthTokens& othe
 }
 
 
-bool EM::EveOAuthTokens::operator==(const EveOAuthTokens& other)
+bool EveOAuthTokens::operator==(const EveOAuthTokens& other)
 {
     if (this == &other) return true;
     if (this->access_token != other.access_token) return false;
@@ -34,9 +36,9 @@ bool EM::EveOAuthTokens::operator==(const EveOAuthTokens& other)
 }
 
 
-QString EM::EveOAuthTokens::toString() const
+QString EveOAuthTokens::toString() const
 {
-    QString ret(QLatin1String("<EM::EveEveOAuthTokens "));
+    QString ret(QLatin1String("<EveEveOAuthTokens "));
     ret.append(QLatin1String("access_token="));
     ret.append(QString::fromUtf8(access_token));
     ret.append(QLatin1String("; refresh_token="));
@@ -48,11 +50,13 @@ QString EM::EveOAuthTokens::toString() const
 }
 
 
-bool EM::EveOAuthTokens::needsRefresh() const
+bool EveOAuthTokens::needsRefresh() const
 {
     if (this->expire_dt <= QDateTime::currentDateTime()) return true;
     return false;
 }
+
+} // namespace
 
 
 

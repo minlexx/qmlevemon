@@ -250,40 +250,40 @@ Q_SIGNALS:
 
 protected:
     // general info
-    quint64   m_characterId;
+    quint64   m_characterId = 0;
     QString   m_characterName;
-    quint64   m_corporationId;
+    quint64   m_corporationId = 0;
     QString   m_corporationName;
     QString   m_corporationTicker;
-    quint64   m_allianceId;
+    quint64   m_allianceId = 0;
     QString   m_allianceName;
     QString   m_allianceTicker;
     // general - origins
-    quint64   m_raceId;
+    quint64   m_raceId = 0;
     QString   m_raceName;
-    quint64   m_ancestryId;
+    quint64   m_ancestryId = 0;
     QString   m_ancestryName;
-    quint64   m_bloodlineId;
+    quint64   m_bloodlineId = 0;
     QString   m_bloodlineName;
-    int       m_gender;  // 0 - male
+    int       m_gender = 0;  // 0 - male
     QDateTime m_birthday_dt;
-    float     m_securityStatus;
+    float     m_securityStatus = 0.0f;
     QString   m_bio;
 
     // wallet info
-    float     m_isk;
+    float     m_isk = 0.0f;
 
     // location info
-    quint64   m_currentSolarSystemId;
+    quint64   m_currentSolarSystemId = 0;
     QString   m_currentSolarSystemName;
-    float     m_currentSolarSystemSecurity;
-    quint64   m_currentConstellationId;
+    float     m_currentSolarSystemSecurity = 0.0f;
+    quint64   m_currentConstellationId = 0;
     QString   m_currentConstellationName;
-    quint64   m_currentRegionId;
+    quint64   m_currentRegionId = 0;
     QString   m_currentRegionName;
     // location - station
-    quint64   m_currentStationId;
-    quint64   m_currentStructureId;
+    quint64   m_currentStationId = 0;
+    quint64   m_currentStructureId = 0;
     QString   m_currentStructureName;
     // location - ship
     quint64   m_currentShipTypeId;
@@ -292,12 +292,12 @@ protected:
 
     // skills and related
     // attributes
-    int m_attributeCharisma;
-    int m_attributeIntelligence;
-    int m_attributeMemory;
-    int m_attributePerception;
-    int m_attributeWillpower;
-    int m_numBonusRemaps;
+    int m_attributeCharisma = 0;
+    int m_attributeIntelligence = 0;
+    int m_attributeMemory = 0;
+    int m_attributePerception = 0;
+    int m_attributeWillpower = 0;
+    int m_numBonusRemaps = 0;
     QDateTime m_lastRemapDate;
     QDateTime m_remapCooldownDate;
 

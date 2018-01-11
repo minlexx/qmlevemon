@@ -7,44 +7,23 @@
 
 Q_LOGGING_CATEGORY(logCharacter, "evemon.character")
 
+namespace EM {
 
-EM::Character::Character():
-    QObject(nullptr),
-    m_characterId(0),
-    m_corporationId(0),
-    m_allianceId(0),
-    m_raceId(0),
-    m_ancestryId(0),
-    m_bloodlineId(0),
-    m_gender(0),
-    m_isk(0.0f),
-    m_securityStatus(0.0f),
-    m_currentSolarSystemId(0),
-    m_currentSolarSystemSecurity(0.0f),
-    m_currentConstellationId(0),
-    m_currentRegionId(0),
-    m_currentStationId(0),
-    m_currentStructureId(0),
-    m_currentShipTypeId(0),
-    m_attributeCharisma(0),
-    m_attributeIntelligence(0),
-    m_attributeMemory(0),
-    m_attributePerception(0),
-    m_attributeWillpower(0),
-    m_numBonusRemaps(0)
+Character::Character():
+    QObject(nullptr)
 {
     //
 }
 
 
-EM::Character::Character(const EM::Character& other):
+Character::Character(const Character& other):
     QObject(nullptr)
 {
     (*this) = other;
 }
 
 
-EM::Character& EM::Character::operator=(const EM::Character& other)
+Character& Character::operator=(const Character& other)
 {
     if (this == &other) return (*this);
     // general info
@@ -86,16 +65,16 @@ EM::Character& EM::Character::operator=(const EM::Character& other)
 }
 
 
-bool EM::Character::operator==(const Character& other)
+bool Character::operator==(const Character& other)
 {
     if (this == &other) return true;
     return (this->m_characterId == other.m_characterId);
 }
 
 
-QString EM::Character::toString() const
+QString Character::toString() const
 {
-    QString ret(QLatin1String("<EM::Character "));
+    QString ret(QLatin1String("<Character "));
     ret.append(m_characterName);
     ret.append(QLatin1String("; id="));
     ret.append(QString::number(m_characterId));
@@ -104,323 +83,323 @@ QString EM::Character::toString() const
 }
 
 
-quint64 EM::Character::characterId() const { return m_characterId; }
+quint64 Character::characterId() const { return m_characterId; }
 
-void EM::Character::setCharacterId(quint64 char_id) {
+void Character::setCharacterId(quint64 char_id) {
     if (char_id == m_characterId) return;
     m_characterId = char_id;
     emit characterIdChanged();
 }
 
-QString EM::Character::characterName() const { return m_characterName; }
+QString Character::characterName() const { return m_characterName; }
 
-void EM::Character::setCharacterName(const QString& name) {
+void Character::setCharacterName(const QString& name) {
     if (name == m_characterName) return;
     m_characterName = name;
     emit characterNameChanged();
 }
 
-quint64 EM::Character::corporationId() const { return m_corporationId; }
+quint64 Character::corporationId() const { return m_corporationId; }
 
-void EM::Character::setCorporationId(quint64 corp_id) {
+void Character::setCorporationId(quint64 corp_id) {
     if (corp_id == m_corporationId) return;
     m_corporationId = corp_id;
     emit corporationIdChanged();
 }
 
-QString EM::Character::corporationName() const { return m_corporationName; }
+QString Character::corporationName() const { return m_corporationName; }
 
-void EM::Character::setCorporationName(const QString& corp_name) {
+void Character::setCorporationName(const QString& corp_name) {
     if (corp_name == m_corporationName) return;
     m_corporationName = corp_name;
     emit corporationNameChanged();
 }
 
-QString EM::Character::corporationTicker() const { return m_corporationTicker; }
+QString Character::corporationTicker() const { return m_corporationTicker; }
 
-void EM::Character::setCorporationTicker(const QString& ticker) {
+void Character::setCorporationTicker(const QString& ticker) {
     if (ticker == m_corporationTicker) return;
     m_corporationTicker = ticker;
     emit corporationTickerChanged();
 }
 
-quint64 EM::Character::allianceId() const { return m_allianceId; }
+quint64 Character::allianceId() const { return m_allianceId; }
 
-void EM::Character::setAllianceId(quint64 ally_id) {
+void Character::setAllianceId(quint64 ally_id) {
     if (ally_id == m_allianceId) return;
     m_allianceId = ally_id;
     emit allianceIdChanged();
 }
 
-QString EM::Character::allianceName() const { return m_allianceName; }
+QString Character::allianceName() const { return m_allianceName; }
 
-void EM::Character::setAllianceName(const QString& ally_name) {
+void Character::setAllianceName(const QString& ally_name) {
     if (m_allianceName == ally_name) return;
     m_allianceName = ally_name;
     emit allianceNameChanged();
 }
 
-QString EM::Character::allianceTicker() const { return m_allianceTicker; }
+QString Character::allianceTicker() const { return m_allianceTicker; }
 
-void EM::Character::setAllianceTicker(const QString& ticker) {
+void Character::setAllianceTicker(const QString& ticker) {
     if (ticker == m_allianceTicker) return;
     m_allianceTicker = ticker;
     emit allianceTickerChanged();
 }
 
-quint64 EM::Character::raceId() const { return m_raceId; }
-void EM::Character::setRaceId(quint64 race_id) { m_raceId = race_id; }
+quint64 Character::raceId() const { return m_raceId; }
+void Character::setRaceId(quint64 race_id) { m_raceId = race_id; }
 
-QString EM::Character::raceName() const { return m_raceName; }
+QString Character::raceName() const { return m_raceName; }
 
-void EM::Character::setRaceName(const QString& race_name) {
+void Character::setRaceName(const QString& race_name) {
     if (race_name == m_raceName) return;
     m_raceName = race_name;
     emit raceNameChanged();
 }
 
-quint64 EM::Character::ancestryId() const { return m_ancestryId; }
-void EM::Character::setAncestryId(quint64 id) { m_ancestryId = id; }
+quint64 Character::ancestryId() const { return m_ancestryId; }
+void Character::setAncestryId(quint64 id) { m_ancestryId = id; }
 
-QString EM::Character::ancestryName() const { return m_ancestryName; }
+QString Character::ancestryName() const { return m_ancestryName; }
 
-void EM::Character::setAncestryName(const QString& name) {
+void Character::setAncestryName(const QString& name) {
     if (name == m_ancestryName) return;
     m_ancestryName = name;
     emit ancestryNameChanged();
 }
 
-quint64 EM::Character::bloodlineId() const { return m_bloodlineId; }
-void EM::Character::setBloodlineId(quint64 id) { m_bloodlineId = id; }
+quint64 Character::bloodlineId() const { return m_bloodlineId; }
+void Character::setBloodlineId(quint64 id) { m_bloodlineId = id; }
 
-QString EM::Character::bloodlineName() const { return m_bloodlineName; }
+QString Character::bloodlineName() const { return m_bloodlineName; }
 
-void EM::Character::setBloodlineName(const QString& name) {
+void Character::setBloodlineName(const QString& name) {
     if (name == m_bloodlineName) return;
     m_bloodlineName = name;
     emit bloodlineNameChanged();
 }
 
-int EM::Character::gender() const { return m_gender; }
+int Character::gender() const { return m_gender; }
 
-void EM::Character::setGender(int g) {
+void Character::setGender(int g) {
     if (g == m_gender) return;
     m_gender = g;
     emit genderChanged();
 }
 
-QDateTime EM::Character::birthday() const { return m_birthday_dt; }
+QDateTime Character::birthday() const { return m_birthday_dt; }
 
-void EM::Character::setBirthday(const QDateTime& dt) {
+void Character::setBirthday(const QDateTime& dt) {
     if (dt == m_birthday_dt) return;
     m_birthday_dt = dt;
     emit birthdayChanged();
 }
 
-float EM::Character::securityStatus() const { return m_securityStatus; }
+float Character::securityStatus() const { return m_securityStatus; }
 
-QString EM::Character::securityStatusStr() const {
+QString Character::securityStatusStr() const {
     return QString::number(static_cast<double>(m_securityStatus), 'f', 1);
 }
 
-void EM::Character::setSecurityStatus(float ss) {
+void Character::setSecurityStatus(float ss) {
     if (qFuzzyCompare(ss, m_securityStatus)) return;
     m_securityStatus = ss;
     emit securityStatusChanged();
 }
 
-QString EM::Character::bio() const { return m_bio; }
+QString Character::bio() const { return m_bio; }
 
-void EM::Character::setBio(const QString& s) {
+void Character::setBio(const QString& s) {
     if (m_bio == s) return;
     m_bio = s;
     emit bioChanged();
 }
 
 // wallet info
-float EM::Character::iskAmount() const { return m_isk; }
+float Character::iskAmount() const { return m_isk; }
 
-QString EM::Character::iskAmountStr() const{
+QString Character::iskAmountStr() const{
     return QLocale::system().toCurrencyString(m_isk, QLatin1String(" ISK"), 2);
 }
 
-void EM::Character::setIskAmount(float isk) {
+void Character::setIskAmount(float isk) {
     if (qFuzzyCompare(isk, m_isk)) return;
     m_isk = isk;
     emit iskAmountChanged();
 }
 
 // location info
-quint64 EM::Character::currentSolarSystemId() const { return m_currentSolarSystemId; }
+quint64 Character::currentSolarSystemId() const { return m_currentSolarSystemId; }
 
-void EM::Character::setCurrentSolarSystemId(quint64 id) {
+void Character::setCurrentSolarSystemId(quint64 id) {
     if (m_currentSolarSystemId == id) return;
     m_currentSolarSystemId = id;
     emit currentSolarSystemChanged();
 }
 
-QString EM::Character::currentSolarSystemName() const { return m_currentSolarSystemName; }
+QString Character::currentSolarSystemName() const { return m_currentSolarSystemName; }
 
-void EM::Character::setCurrentSolarSystemName(const QString& name) {
+void Character::setCurrentSolarSystemName(const QString& name) {
     if (m_currentSolarSystemName == name) return;
     m_currentSolarSystemName = name;
     emit currentSolarSystemChanged();
 }
 
-float EM::Character::currentSolarSystemSecurity() const { return m_currentSolarSystemSecurity; }
+float Character::currentSolarSystemSecurity() const { return m_currentSolarSystemSecurity; }
 
-QString EM::Character::currentSolarSystemSecurityStr() const {
+QString Character::currentSolarSystemSecurityStr() const {
     return QString::number(static_cast<double>(m_currentSolarSystemSecurity), 'f', 2);
 }
 
-void EM::Character::setCurrentSolarSystemSecurity(float ss) {
+void Character::setCurrentSolarSystemSecurity(float ss) {
     if (qFuzzyCompare(m_currentSolarSystemSecurity, ss)) return;
     m_currentSolarSystemSecurity = ss;
     emit currentSolarSystemSecurityChanged();
 }
 
-quint64 EM::Character::currentConstellationId() const { return m_currentConstellationId; }
+quint64 Character::currentConstellationId() const { return m_currentConstellationId; }
 
-void EM::Character::setCurrentConstellationId(quint64 id) {
+void Character::setCurrentConstellationId(quint64 id) {
     if (m_currentConstellationId == id) return;
     m_currentConstellationId = id;
     emit currentConstellationChanged();
 }
 
-QString EM::Character::currentConstellationName() const { return m_currentConstellationName; }
+QString Character::currentConstellationName() const { return m_currentConstellationName; }
 
-void EM::Character::setCurrentConstellationName(const QString& name) {
+void Character::setCurrentConstellationName(const QString& name) {
     if (m_currentConstellationName == name) return;
     m_currentConstellationName = name;
     emit currentConstellationChanged();
 }
 
-quint64 EM::Character::currentRegionId() const { return m_currentRegionId; }
+quint64 Character::currentRegionId() const { return m_currentRegionId; }
 
-void EM::Character::setCurrentRegionId(quint64 id) {
+void Character::setCurrentRegionId(quint64 id) {
     if (m_currentRegionId == id) return;
     m_currentRegionId = id;
     emit currentRegionChanged();
 }
 
-QString EM::Character::currentRegionName() const { return m_currentRegionName; }
+QString Character::currentRegionName() const { return m_currentRegionName; }
 
-void EM::Character::setCurrentRegionName(const QString& name) {
+void Character::setCurrentRegionName(const QString& name) {
     if (m_currentRegionName == name) return;
     m_currentRegionName = name;
     emit currentRegionChanged();
 }
 
-quint64 EM::Character::currentStationId() const { return m_currentStationId; }
+quint64 Character::currentStationId() const { return m_currentStationId; }
 
-void EM::Character::setCurrentStationId(quint64 id) {
+void Character::setCurrentStationId(quint64 id) {
     if (m_currentStationId == id) return;
     m_currentStationId = id;
     emit isDockedChanged();
 }
 
-quint64 EM::Character::currentStructureId() const { return m_currentStructureId; }
+quint64 Character::currentStructureId() const { return m_currentStructureId; }
 
-void EM::Character::setCurrentStructureId(quint64 id) {
+void Character::setCurrentStructureId(quint64 id) {
     if (m_currentStructureId == id) return;
     m_currentStructureId = id;
     emit isDockedChanged();
 }
 
-QString EM::Character::currentStructureName() const { return m_currentStructureName; }
+QString Character::currentStructureName() const { return m_currentStructureName; }
 
-void EM::Character::setCurrentStructureName(const QString& name) {
+void Character::setCurrentStructureName(const QString& name) {
     if (m_currentStructureName == name) return;
     m_currentStructureName = name;
     emit isDockedChanged();
 }
 
-bool    EM::Character::isDocked() const { return ((m_currentStationId > 0) || (m_currentStructureId > 0)); }
+bool Character::isDocked() const { return ((m_currentStationId > 0) || (m_currentStructureId > 0)); }
 
-quint64 EM::Character::currentShipTypeId() const { return m_currentShipTypeId; }
+quint64 Character::currentShipTypeId() const { return m_currentShipTypeId; }
 
-void EM::Character::setCurrentShipTypeId(quint64 id) {
+void Character::setCurrentShipTypeId(quint64 id) {
     if (m_currentShipTypeId == id) return;
     m_currentShipTypeId = id;
     emit currentShipChanged();
 }
 
-QString EM::Character::currentShipTypeName() const { return m_currentShipTypeName; }
+QString Character::currentShipTypeName() const { return m_currentShipTypeName; }
 
-void EM::Character::setCurrentShipTypeName(const QString& name) {
+void Character::setCurrentShipTypeName(const QString& name) {
     if (m_currentShipTypeName == name) return;
     m_currentShipTypeName = name;
     emit currentShipChanged();
 }
 
-QString EM::Character::currentShipFriendlyName() const { return m_currentShipFriendlyName; }
+QString Character::currentShipFriendlyName() const { return m_currentShipFriendlyName; }
 
-void EM::Character::setCurrentShipFriendlyName(const QString& name) {
+void Character::setCurrentShipFriendlyName(const QString& name) {
     if (m_currentShipFriendlyName == name) return;
     m_currentShipFriendlyName = name;
     emit currentShipChanged();
 }
 
 // skills and related
-int EM::Character::attributeCharisma() const { return m_attributeCharisma; }
-int EM::Character::attributeIntelligence() const { return m_attributeIntelligence; }
-int EM::Character::attributeMemory() const { return m_attributeMemory; }
-int EM::Character::attributePerception() const { return m_attributePerception; }
-int EM::Character::attributeWillpower() const { return m_attributeWillpower; }
-int EM::Character::numBonusRemaps() const { return m_numBonusRemaps; }
-QDateTime EM::Character::lastRemapDate() const { return m_lastRemapDate; }
-QDateTime EM::Character::remapCooldownDate() const { return m_remapCooldownDate; }
+int Character::attributeCharisma() const { return m_attributeCharisma; }
+int Character::attributeIntelligence() const { return m_attributeIntelligence; }
+int Character::attributeMemory() const { return m_attributeMemory; }
+int Character::attributePerception() const { return m_attributePerception; }
+int Character::attributeWillpower() const { return m_attributeWillpower; }
+int Character::numBonusRemaps() const { return m_numBonusRemaps; }
+QDateTime Character::lastRemapDate() const { return m_lastRemapDate; }
+QDateTime Character::remapCooldownDate() const { return m_remapCooldownDate; }
 
-void EM::Character::setAttributeCharisma(int a) {
+void Character::setAttributeCharisma(int a) {
     if (m_attributeCharisma != a) {
         m_attributeCharisma = a;
         emit attributeCharismaChanged();
     }
 }
 
-void EM::Character::setAttributeIntelligence(int a) {
+void Character::setAttributeIntelligence(int a) {
     if (m_attributeIntelligence != a) {
         m_attributeIntelligence = a;
         emit attributeIntelligenceChanged();
     }
 }
 
-void EM::Character::setAttributeMemory(int a) {
+void Character::setAttributeMemory(int a) {
     if (m_attributeMemory != a) {
         m_attributeMemory = a;
         emit attributeMemoryChanged();
     }
 }
 
-void EM::Character::setAttributePerception(int a) {
+void Character::setAttributePerception(int a) {
     if (m_attributePerception != a) {
         m_attributePerception = a;
         emit attributePerceptionChanged();
     }
 }
 
-void EM::Character::setAttributeWillpower(int a) {
+void Character::setAttributeWillpower(int a) {
     if (m_attributeWillpower != a) {
         m_attributeWillpower = a;
         emit attributeWillpowerChanged();
     }
 }
 
-void EM::Character::setNumBonusRemaps(int n) {
+void Character::setNumBonusRemaps(int n) {
     if (m_numBonusRemaps != n) {
         m_numBonusRemaps = n;
         emit numBonusRemapsChanged();
     }
 }
 
-void EM::Character::setLastRemapDate(const QDateTime& dt) {
+void Character::setLastRemapDate(const QDateTime& dt) {
     if (m_lastRemapDate != dt) {
         m_lastRemapDate = dt;
         emit lastRemapDateChanged();
     }
 }
 
-void EM::Character::setRemapCooldownDate(const QDateTime& dt) {
+void Character::setRemapCooldownDate(const QDateTime& dt) {
     if (m_remapCooldownDate != dt) {
         m_remapCooldownDate = dt;
         emit remapCooldownDateChanged();
@@ -428,28 +407,30 @@ void EM::Character::setRemapCooldownDate(const QDateTime& dt) {
 }
 
 // auth info
-EM::EveOAuthTokens EM::Character::getAuthTokens() const { return m_tokens; }
-void EM::Character::setAuthTokens(const EveOAuthTokens& tokens) { m_tokens = tokens; }
+EveOAuthTokens Character::getAuthTokens() const { return m_tokens; }
+void Character::setAuthTokens(const EveOAuthTokens& tokens) { m_tokens = tokens; }
 
-EM::UpdateTimestamps EM::Character::updateTimestamps() const { return m_update_timestamps; }
-void EM::Character::setUpdateTimestamps(const EM::UpdateTimestamps& ts) { m_update_timestamps = ts; }
+UpdateTimestamps Character::updateTimestamps() const { return m_update_timestamps; }
+void Character::setUpdateTimestamps(const UpdateTimestamps& ts) { m_update_timestamps = ts; }
 
-void EM::Character::setUpdateTimestamp(UpdateTimestamps::UTST kind)
+void Character::setUpdateTimestamp(UpdateTimestamps::UTST kind)
 {
     m_update_timestamps.updateTs(kind);
 }
 
-void EM::Character::resetUpdateTimestamp(UpdateTimestamps::UTST kind) {
+void Character::resetUpdateTimestamp(UpdateTimestamps::UTST kind) {
     m_update_timestamps.resetTs(kind);
 }
 
-void EM::Character::forceRefreshPublicInfo() { resetUpdateTimestamp(UpdateTimestamps::UTST::PUBLIC); }
-void EM::Character::forceRefreshSkills() { resetUpdateTimestamp(UpdateTimestamps::UTST::SKILLS); }
-void EM::Character::forceRefreshWallet() { resetUpdateTimestamp(UpdateTimestamps::UTST::WALLET); }
-void EM::Character::forceRefreshLocation() { resetUpdateTimestamp(UpdateTimestamps::UTST::LOCATION); }
-void EM::Character::forceRefreshClones() { resetUpdateTimestamp(UpdateTimestamps::UTST::CLONES); }
-void EM::Character::forceRefreshAssets() { resetUpdateTimestamp(UpdateTimestamps::UTST::ASSETS); }
+void Character::forceRefreshPublicInfo() { resetUpdateTimestamp(UpdateTimestamps::UTST::PUBLIC); }
+void Character::forceRefreshSkills() { resetUpdateTimestamp(UpdateTimestamps::UTST::SKILLS); }
+void Character::forceRefreshWallet() { resetUpdateTimestamp(UpdateTimestamps::UTST::WALLET); }
+void Character::forceRefreshLocation() { resetUpdateTimestamp(UpdateTimestamps::UTST::LOCATION); }
+void Character::forceRefreshClones() { resetUpdateTimestamp(UpdateTimestamps::UTST::CLONES); }
+void Character::forceRefreshAssets() { resetUpdateTimestamp(UpdateTimestamps::UTST::ASSETS); }
 
+
+} // namespace
 
 
 // increase version number when savedata format changes
@@ -584,3 +565,4 @@ QDataStream& operator>>(QDataStream& stream, EM::Character& character)
     stream >> uts;    character.setUpdateTimestamps(uts);
     return stream;
 }
+

@@ -20,8 +20,12 @@
 #include "models/character_model.h"
 
 
-Q_GLOBAL_STATIC(EM::EveSsoLoginManager, g_eveSsoMgr)
 Q_LOGGING_CATEGORY(logSso, "evemon.sso")
+
+
+namespace EM {
+
+Q_GLOBAL_STATIC(EveSsoLoginManager, g_eveSsoMgr)
 
 
 class HttpSsoCallbackResource: public QtWebServer::Http::Resource
@@ -65,7 +69,7 @@ Q_SIGNALS:
 };
 
 
-class EM::EveSsoLoginManagerPrivate: public QObject
+class EveSsoLoginManagerPrivate: public QObject
 {
     Q_OBJECT
 public:
@@ -132,15 +136,15 @@ public Q_SLOTS:
             emit ssoAuthError(tr("EVE OAuth login error: Invalid state!"));
             return;
         }
-        EM::EveOAuthTokens tokens;
+        EveOAuthTokens tokens;
         quint64 character_id = 0;
-        bool res = EM::eveapi_request_first_access_token(code, tokens, character_id);
+        bool res = eveapi_request_first_access_token(code, tokens, character_id);
         if (res) {
             emit ssoAuthOk();
-            EM::Character *character = new EM::Character();
+            Character *character = new Character();
             character->setAuthTokens(tokens);
             character->setCharacterId(character_id);
-            EM::CharacterModel *char_model = EM::ModelManager::instance()->characterModel();
+            CharacterModel *char_model = ModelManager::instance()->characterModel();
             char_model->addNewCharacter(character);
         } else {
             emit ssoAuthError(tr("EVE OAuth login error: request error or time out!"));
@@ -160,44 +164,44 @@ protected:
 };
 
 
-EM::EveSsoLoginManager *EM::EveSsoLoginManager::instance()
+EveSsoLoginManager *EveSsoLoginManager::instance()
 {
     return g_eveSsoMgr();
 }
 
 
-EM::EveSsoLoginManager::EveSsoLoginManager(QObject *parent):
+EveSsoLoginManager::EveSsoLoginManager(QObject *parent):
     QObject(parent),
-    d_ptr(new EM::EveSsoLoginManagerPrivate())
+    d_ptr(new EveSsoLoginManagerPrivate())
 {
     qCDebug(logSso) << "EveSsoLoginManager ctor";
-    QObject::connect(d_ptr, &EM::EveSsoLoginManagerPrivate::ssoAuthOk,
-                     this, &EM::EveSsoLoginManager::ssoAuthOk);
-    QObject::connect(d_ptr, &EM::EveSsoLoginManagerPrivate::ssoAuthError,
-                     this, &EM::EveSsoLoginManager::ssoAuthError);
+    QObject::connect(d_ptr, &EveSsoLoginManagerPrivate::ssoAuthOk,
+                     this, &EveSsoLoginManager::ssoAuthOk);
+    QObject::connect(d_ptr, &EveSsoLoginManagerPrivate::ssoAuthError,
+                     this, &EveSsoLoginManager::ssoAuthError);
 }
 
 
-EM::EveSsoLoginManager::~EveSsoLoginManager()
+EveSsoLoginManager::~EveSsoLoginManager()
 {
     delete d_ptr;
 }
 
 
-int EM::EveSsoLoginManager::localHttpServerPort() const {
+int EveSsoLoginManager::localHttpServerPort() const {
     Q_D(const EveSsoLoginManager);
     return d->listenPort();
 }
 
 
-void EM::EveSsoLoginManager::slotSetLocalHttpServerPort(int port) {
+void EveSsoLoginManager::slotSetLocalHttpServerPort(int port) {
     Q_D(EveSsoLoginManager);
     d->setListenPort(port);
     emit localHttpServerPortChanged();
 }
 
 
-void EM::EveSsoLoginManager::slotStartSsoAuth()
+void EveSsoLoginManager::slotStartSsoAuth()
 {
     qCDebug(logSso) << "start SSO Auth";
     Q_D(EveSsoLoginManager);
@@ -209,7 +213,7 @@ void EM::EveSsoLoginManager::slotStartSsoAuth()
     loginUrl += QStringLiteral("&redirect_uri=");
     loginUrl += QString(QLatin1String("http://localhost:%1/evesso")).arg(d->listenPort());
     loginUrl += QStringLiteral("&client_id=");
-    loginUrl += QString::fromUtf8(EM::evesso_client_id());
+    loginUrl += QString::fromUtf8(evesso_client_id());
     loginUrl += QStringLiteral("&scope=");
     loginUrl += QStringLiteral("esi-calendar.read_calendar_events.v1 "
                                "esi-location.read_location.v1 "
@@ -250,7 +254,7 @@ void EM::EveSsoLoginManager::slotStartSsoAuth()
 }
 
 
-void EM::EveSsoLoginManager::slotCancelSsoAuth()
+void EveSsoLoginManager::slotCancelSsoAuth()
 {
     qCDebug(logSso) << "cancel SSO Auth";
     Q_D(EveSsoLoginManager);
@@ -259,3 +263,5 @@ void EM::EveSsoLoginManager::slotCancelSsoAuth()
 
 
 #include "eve_sso.moc"
+
+} // namespace

@@ -9,7 +9,10 @@
 Q_LOGGING_CATEGORY(logCharacterModel, "evemon.character_model")
 
 
-EM::CharacterModel::CharacterModel(QObject *parent):
+namespace EM {
+
+
+CharacterModel::CharacterModel(QObject *parent):
     QAbstractListModel(parent),
     m_mutex(QMutex::Recursive)
 {
@@ -45,7 +48,7 @@ EM::CharacterModel::CharacterModel(QObject *parent):
 }
 
 
-EM::CharacterModel::~CharacterModel()
+CharacterModel::~CharacterModel()
 {
     // delete all characters
     QMutexLocker locker(&m_mutex);
@@ -56,27 +59,27 @@ EM::CharacterModel::~CharacterModel()
 }
 
 
-QHash<int, QByteArray> EM::CharacterModel::roleNames() const
+QHash<int, QByteArray> CharacterModel::roleNames() const
 {
     return m_roles;
 }
 
 
-int EM::CharacterModel::rowCount(const QModelIndex &parent) const
+int CharacterModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    QMutexLocker locker(&const_cast<EM::CharacterModel *>(this)->m_mutex);
+    QMutexLocker locker(&m_mutex);
     return m_characterList.size();
 }
 
 
-QVariant EM::CharacterModel::data(const QModelIndex &index, int role) const
+QVariant CharacterModel::data(const QModelIndex &index, int role) const
 {
     QVariant ret;
     if (!index.isValid()) {
         return ret;
     }
-    QMutexLocker locker(&const_cast<EM::CharacterModel *>(this)->m_mutex);
+    QMutexLocker locker(&m_mutex);
     int row = index.row();
     if ((row < 0) || (row >= m_characterList.count())) {
         return ret;
@@ -117,42 +120,46 @@ QVariant EM::CharacterModel::data(const QModelIndex &index, int role) const
 }
 
 
-void EM::CharacterModel::loadCharacters()
+void CharacterModel::loadCharacters()
 {
     QMutexLocker locker(&m_mutex);
     m_characterList.clear();
     beginResetModel();
-    EM::DbSqlite::instance()->loadCharacters(m_characterList);
+    DbSqlite::instance()->loadCharacters(m_characterList);
     endResetModel();
 }
 
 
-void EM::CharacterModel::addNewCharacter(EM::Character *character)
+void CharacterModel::addNewCharacter(Character *character)
 {
     m_mutex.lock();
     int firstRow = m_characterList.size();  // we will append to list
     beginInsertRows(QModelIndex(), firstRow, firstRow);
     m_characterList.append(character);
-    EM::DbSqlite::instance()->saveCharacters(m_characterList);
+    DbSqlite::instance()->saveCharacters(m_characterList);
     m_mutex.unlock();  // unlock before emitting any signals
     endInsertRows();
     emit newCharacterAdded();
 }
 
 
-QList<EM::Character *> EM::CharacterModel::getCharacters() const
+/**
+ * @brief CharacterModel::getCharacters
+ * @return an explicitly copied characters objects list
+ */
+QList<Character *> CharacterModel::getCharacters() const
 {
-    QList<EM::Character *> ret;
-    EM::CharacterModel *non_const_this = const_cast<EM::CharacterModel *>(this);
-    non_const_this->m_mutex.lock();
-    ret = this->m_characterList; // const this!
-    non_const_this->m_mutex.unlock();
+    QList<Character *> ret;
+    m_mutex.lock();
+    ret.reserve(this->m_characterList.size());
+    ret.append(this->m_characterList);
+    m_mutex.unlock();
     return ret;
 }
 
 
 // emit signal to model clients that some character has changed data
-void EM::CharacterModel::markCharacterAsUpdated(EM::Character *character)
+void CharacterModel::markCharacterAsUpdated(Character *character)
 {
     if (!character) return;
     m_mutex.lock();
@@ -160,18 +167,18 @@ void EM::CharacterModel::markCharacterAsUpdated(EM::Character *character)
     m_mutex.unlock();  // unlock before emitting any signals
     if (row == -1) return; // not found
     // update in DB
-    EM::DbSqlite::instance()->saveCharacter(character);
+    DbSqlite::instance()->saveCharacter(character);
     // emit signal for model clients
     QModelIndex topLeft = index(row);
     emit dataChanged(topLeft, topLeft); // one item changed only ;)
 }
 
 
-EM::Character *EM::CharacterModel::findCharacterById(quint64 char_id)
+Character *CharacterModel::findCharacterById(quint64 char_id)
 {
-    EM::Character *ret = nullptr;
+    Character *ret = nullptr;
     m_mutex.lock();
-    for (EM::Character *ch: m_characterList) {
+    for (Character *ch: m_characterList) {
         if (ch && ch->characterId() == char_id) {
             ret = ch;
             break;
@@ -183,3 +190,5 @@ EM::Character *EM::CharacterModel::findCharacterById(quint64 char_id)
     }
     return ret;
 }
+
+} // namespace

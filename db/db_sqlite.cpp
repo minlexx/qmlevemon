@@ -14,11 +14,15 @@
 #include "qmlevemon_app.h"
 
 
-Q_GLOBAL_STATIC(EM::DbSqlite, g_em_db_sqlite)
 Q_LOGGING_CATEGORY(logDb, "evemon.db")
 
 
-EM::DbSqlite::DbSqlite()
+namespace EM {
+
+Q_GLOBAL_STATIC(DbSqlite, g_em_db_sqlite)
+
+
+DbSqlite::DbSqlite()
 {
     QString appdata_dirname = globalAppInstance()->storageDirectory();
     QString db_filename = appdata_dirname + QLatin1String("/characters.db");
@@ -28,19 +32,19 @@ EM::DbSqlite::DbSqlite()
 }
 
 
-EM::DbSqlite::~DbSqlite()
+DbSqlite::~DbSqlite()
 {
     close();
 }
 
 
-EM::Db* EM::DbSqlite::instance()
+Db* DbSqlite::instance()
 {
     return g_em_db_sqlite();
 }
 
 
-bool EM::DbSqlite::open(const QString& db_filename)
+bool DbSqlite::open(const QString& db_filename)
 {
     if (m_chars_db.isOpen()) {
         qCWarning(logDb) << "cannot open DB: already opened!";
@@ -88,7 +92,7 @@ bool EM::DbSqlite::open(const QString& db_filename)
 }
 
 
-bool EM::DbSqlite::open_sde(const QString& db_filename)
+bool DbSqlite::open_sde(const QString& db_filename)
 {
     if (m_eve_sde_db.isOpen()) {
         qCWarning(logDb) << "cannot open SDE DB: already opened!";
@@ -137,7 +141,7 @@ bool EM::DbSqlite::open_sde(const QString& db_filename)
 }
 
 
-void EM::DbSqlite::close()
+void DbSqlite::close()
 {
     if (m_chars_db.isOpen()) {
         m_chars_db.close();
@@ -150,7 +154,7 @@ void EM::DbSqlite::close()
 }
 
 
-bool EM::DbSqlite::execSqlFile(QSqlDatabase *db, const QString& filename)
+bool DbSqlite::execSqlFile(QSqlDatabase *db, const QString& filename)
 {
     QFile f(filename);
     if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -205,7 +209,7 @@ bool EM::DbSqlite::execSqlFile(QSqlDatabase *db, const QString& filename)
 }
 
 
-bool EM::DbSqlite::loadCharacters(QList<Character *>& charList)
+bool DbSqlite::loadCharacters(QList<Character *>& charList)
 {
     if (!m_chars_db.isOpen()) return false;
     QSqlQuery q(m_chars_db);
@@ -231,7 +235,7 @@ bool EM::DbSqlite::loadCharacters(QList<Character *>& charList)
 }
 
 
-bool EM::DbSqlite::saveCharacters(const QList<Character *>& charList)
+bool DbSqlite::saveCharacters(const QList<Character *>& charList)
 {
     if (!m_chars_db.isOpen()) return false;
     QSqlQuery q(m_chars_db);
@@ -251,7 +255,7 @@ bool EM::DbSqlite::saveCharacters(const QList<Character *>& charList)
 }
 
 
-bool EM::DbSqlite::saveCharacter(const Character *character)
+bool DbSqlite::saveCharacter(const Character *character)
 {
     if (!character) return false;
     if (!m_chars_db.isOpen()) return false;
@@ -268,7 +272,7 @@ bool EM::DbSqlite::saveCharacter(const Character *character)
 }
 
 
-bool EM::DbSqlite::loadPortrait(quint64 char_id, QImage& img)
+bool DbSqlite::loadPortrait(quint64 char_id, QImage& img)
 {
     if (!m_chars_db.isOpen()) {
         return false;
@@ -289,7 +293,7 @@ bool EM::DbSqlite::loadPortrait(quint64 char_id, QImage& img)
 }
 
 
-bool EM::DbSqlite::savePortrait(quint64 char_id, const QImage& img)
+bool DbSqlite::savePortrait(quint64 char_id, const QImage& img)
 {
     if (!m_chars_db.isOpen() || img.isNull()) {
         return false;
@@ -307,7 +311,7 @@ bool EM::DbSqlite::savePortrait(quint64 char_id, const QImage& img)
 }
 
 
-bool EM::DbSqlite::deletePortrait(quint64 char_id)
+bool DbSqlite::deletePortrait(quint64 char_id)
 {
     if (!m_chars_db.isOpen()) {
         return false;
@@ -319,7 +323,7 @@ bool EM::DbSqlite::deletePortrait(quint64 char_id)
 }
 
 
-QString EM::DbSqlite::typeName(quint64 type_id)
+QString DbSqlite::typeName(quint64 type_id)
 {
     QString ret;
     if (!m_eve_sde_db.isOpen()) {
@@ -335,3 +339,5 @@ QString EM::DbSqlite::typeName(quint64 type_id)
     }
     return ret;
 }
+
+} // namespace

@@ -1,26 +1,31 @@
 #include "db.h"
 
 
-EM::Db::Db()
+namespace EM {
+
+Db::Db()
 {
     //
 }
 
 
-EM::Db::~Db()
+Db::~Db()
 {
     //
 }
 
 
-EM::Db::Db(const Db &other)
+Db::Db(const Db &other)
 {
     Q_UNUSED(other);
 }
 
 
-EM::Db& EM::Db::operator=(const Db& other)
+Db& Db::operator=(const Db& other)
 {
     Q_UNUSED(other)
     return (*this);
+}
+
+
 }
