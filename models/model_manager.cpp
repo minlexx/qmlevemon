@@ -6,6 +6,7 @@
 
 // all models
 #include "character_model.h"
+#include "skill_tree_model.h"
 
 
 Q_LOGGING_CATEGORY(logModels, "evemon.models")
@@ -22,12 +23,15 @@ ModelManager *ModelManager::instance()
 
 
 ModelManager::ModelManager(QObject *parent):
-    QObject(parent),
-    m_characterModel(Q_NULLPTR)
+    QObject(parent)
 {
     qCDebug(logModels) << "ModelManager ctor";
+
     m_characterModel = new CharacterModel(this);
     m_characterModel->loadCharacters();
+
+    m_skillTreeModel = new SkillTreeModel(this);
+    m_skillTreeModel->load();
 }
 
 }

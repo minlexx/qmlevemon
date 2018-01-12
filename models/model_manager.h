@@ -7,6 +7,7 @@ namespace EM {
 
 
 class CharacterModel;
+class SkillTreeModel;
 
 class ModelManager: public QObject
 {
@@ -18,9 +19,11 @@ public:
 
 public:
     CharacterModel *characterModel() { return m_characterModel; }
+    SkillTreeModel *skillTreeModel() { return m_skillTreeModel; }
 
 private:
-    CharacterModel *m_characterModel;
+    CharacterModel *m_characterModel = nullptr;
+    SkillTreeModel *m_skillTreeModel = nullptr;
 };
 
 

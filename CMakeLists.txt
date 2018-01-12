@@ -37,6 +37,7 @@ set(qmlevemon_srcs
     "models/model_manager.cpp"
     "models/skill.cpp"
     "models/skill_group.cpp"
+    "models/skill_tree_model.cpp"
     "models/update_timestamps.cpp"
     "network/periodical_refresher.cpp"
     "qml.qrc"
