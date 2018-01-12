@@ -101,8 +101,8 @@ Rectangle {
         anchors.topMargin: AppStyle.marginSmall
         text: (curChar.gender ? qsTr("Female") : qsTr("Male")) + ", "
               + curChar.raceName + " - "
-              + curChar.ancestryName + " - "
-              + curChar.bloodlineName
+              + curChar.bloodlineName + " - "
+              + curChar.ancestryName
         //text: "Male, Caldari - Achura - Inventors"
         font.family: AppStyle.fontFamily
         font.pointSize: AppStyle.textSizeH3
