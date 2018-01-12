@@ -47,7 +47,7 @@ class CharacterModel: public QAbstractListModel
 
 public:
     explicit CharacterModel(QObject *parent = Q_NULLPTR);
-    ~CharacterModel();
+    ~CharacterModel() override;
     void loadCharacters();
     void addNewCharacter(Character *character);
     QList<Character *> getCharacters() const;
@@ -56,9 +56,9 @@ public:
     Character *findCharacterById(quint64 char_id);
 
 public:  // reimplmented interface
-    QHash<int, QByteArray> roleNames() const;
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    QHash<int, QByteArray> roleNames() const override;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
 Q_SIGNALS:
     void newCharacterAdded();
