@@ -1,5 +1,7 @@
 #include "skill_group.h"
 
+namespace EM {
+
 
 SkillGroup::SkillGroup():
     QObject(nullptr)
@@ -50,3 +52,6 @@ void SkillGroup::setGroupId(quint64 groupId)
     m_groupId = groupId;
     emit groupIdChanged();
 }
+
+
+} // namespace

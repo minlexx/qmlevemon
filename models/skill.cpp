@@ -1,5 +1,7 @@
 #include "skill.h"
 
+namespace EM {
+
 
 SkillTemplate::SkillTemplate():
     QObject(nullptr)
@@ -70,3 +72,6 @@ void SkillTemplate::setSkillGroup(const SkillGroup *group)
     emit skillGroupChanged();
     emit skillGroupNameChanged();
 }
+
+
+} // namespace
