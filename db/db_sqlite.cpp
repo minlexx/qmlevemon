@@ -323,6 +323,78 @@ bool DbSqlite::deletePortrait(quint64 char_id)
 }
 
 
+QString DbSqlite::raceName(quint64 race_id)
+{
+    QString ret;
+    if (!m_eve_sde_db.isOpen()) {
+        return ret;
+    }
+    QSqlQuery q(m_eve_sde_db);
+    q.prepare(QLatin1String("SELECT raceName FROM chrRaces WHERE raceID = ?"));
+    q.addBindValue(race_id, QSql::In);
+    if (q.exec()) {
+        if (q.next()) {
+            ret = q.value(0).toString();
+        }
+    }
+    return ret;
+}
+
+
+QString DbSqlite::bloodlineName(quint64 bloodline_id)
+{
+    QString ret;
+    if (!m_eve_sde_db.isOpen()) {
+        return ret;
+    }
+    QSqlQuery q(m_eve_sde_db);
+    q.prepare(QLatin1String("SELECT bloodlineName FROM chrBloodlines WHERE bloodlineID = ?"));
+    q.addBindValue(bloodline_id, QSql::In);
+    if (q.exec()) {
+        if (q.next()) {
+            ret = q.value(0).toString();
+        }
+    }
+    return ret;
+}
+
+
+QString DbSqlite::ancestryName(quint64 ancestry_id)
+{
+    QString ret;
+    if (!m_eve_sde_db.isOpen()) {
+        return ret;
+    }
+    QSqlQuery q(m_eve_sde_db);
+    q.prepare(QLatin1String("SELECT ancestryName FROM chrAncestries WHERE ancestryID = ?"));
+    q.addBindValue(ancestry_id, QSql::In);
+    if (q.exec()) {
+        if (q.next()) {
+            ret = q.value(0).toString();
+        }
+    }
+    return ret;
+}
+
+
+QString DbSqlite::factionName(quint64 faction_id)
+{
+    QString ret;
+    if (!m_eve_sde_db.isOpen()) {
+        return ret;
+    }
+    QSqlQuery q(m_eve_sde_db);
+    q.prepare(QLatin1String("SELECT factionName FROM chrFactions WHERE factionID = ?"));
+    q.addBindValue(faction_id, QSql::In);
+    if (q.exec()) {
+        if (q.next()) {
+            ret = q.value(0).toString();
+        }
+    }
+    return ret;
+}
+
+
 QString DbSqlite::typeName(quint64 type_id)
 {
     QString ret;

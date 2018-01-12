@@ -32,6 +32,10 @@ public:
     virtual bool savePortrait(quint64 char_id, const QImage& img) = 0;
     virtual bool deletePortrait(quint64 char_id) = 0;
 
+    virtual QString raceName(quint64 race_id) = 0;
+    virtual QString bloodlineName(quint64 bloodline_id) = 0;
+    virtual QString ancestryName(quint64 ancestry_id) = 0;
+    virtual QString factionName(quint64 faction_id) = 0;
     virtual QString typeName(quint64 type_id) = 0;
 
 protected:
