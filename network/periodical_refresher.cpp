@@ -12,10 +12,12 @@
 #include <QDebug>
 
 #include "periodical_refresher.h"
+#include "db/db.h"
 #include "models/character.h"
 #include "models/character_model.h"
 #include "models/model_manager.h"
 #include "eve_api/eve_api.h"
+#include "qmlevemon_app.h"
 
 
 Q_LOGGING_CATEGORY(logRefresher, "evemon.refresher")
@@ -51,9 +53,10 @@ public Q_SLOTS:
         qCDebug(logRefresher) << "BG Refresh started";
 
         // maybe fill universe data, run only once per program start
-        if (m_eve_races.isEmpty()) {
-            this->fill_universe_data();
-        }
+        // not needed now - use SDE DB
+        //if (m_eve_races.isEmpty()) {
+        //    this->fill_universe_data();
+        //}
 
         // update server status
         this->update_server_status();
@@ -222,17 +225,10 @@ protected:
         ch->setSecurityStatus(sec_status);
         //
         // resolve names for race, bloodline, ancestry
-        if (m_eve_races.contains(ch->raceId())) {
-            ch->setRaceName(m_eve_races[ch->raceId()]);
-        }
-        if (m_eve_bloodlines.contains(ch->bloodlineId())) {
-            ch->setBloodlineName(m_eve_bloodlines[ch->bloodlineId()]);
-        }
-        if (m_eve_ancestries.contains(ch->ancestryId())) {
-            ch->setAncestryName(m_eve_ancestries[ch->ancestryId()]);
-        } else {
-            ch->setAncestryName(QString(QLatin1String("Ancestry ID: %1")).arg(ch->ancestryId()));
-        }
+        Db *db = globalAppInstance()->database();
+        ch->setRaceName(db->raceName(ch->raceId()));
+        ch->setBloodlineName(db->bloodlineName(ch->bloodlineId()));
+        ch->setAncestryName(db->ancestryName(ch->ancestryId()));
 
         // fetch corpporation name
         QJsonObject corpReply;
@@ -351,6 +347,7 @@ protected:
             return 0;
         }
 
+        Db *db = globalAppInstance()->database();
         quint64 ship_type_id = 0;
         QString ship_friendly_name = reply.value(QLatin1String("ship_name")).toString();
         ship_type_id = reply.value(QLatin1String("ship_type_id")).toVariant().toULongLong();
@@ -360,18 +357,10 @@ protected:
         }
         if (ch->currentShipTypeId() != ship_type_id) {
             ch->setCurrentShipTypeId(ship_type_id);
-            // lookup ship type name; first fast lookup in cache?
-            if (m_eve_typeids.contains(ship_type_id)) {
-                ch->setCurrentShipTypeName(m_eve_typeids[ship_type_id]);
-            } else {
-                // make a request :(
-                if (m_api->get_universe_typeid(reply, ship_type_id)) {
-                    QString ship_type_name = reply.value(QLatin1String("name")).toString();
-                    if (!ship_type_name.isEmpty()) {
-                        m_eve_typeids[ship_type_id] = ship_type_name;
-                        ch->setCurrentShipTypeName(ship_type_name);
-                    }
-                }
+            // lookup ship type name;
+            QString shipTypeName = db->typeName(ship_type_id);
+            if (!shipTypeName.isEmpty()) {
+                ch->setCurrentShipTypeName(shipTypeName);
             }
         }
 
@@ -469,44 +458,44 @@ protected:
     }
 
 
-    void fill_universe_data() {
-        qCDebug(logRefresher) << "start fill_universe_data";
-        QJsonArray jarr;
+//    void fill_universe_data() {
+//        qCDebug(logRefresher) << "start fill_universe_data";
+//        QJsonArray jarr;
 
-        // fill races
-        if (m_api->get_universe_races(jarr)) {
-            for (const QJsonValueRef race_info: jarr) {
-                if (race_info.isObject()) {
-                    QJsonObject jobj = race_info.toObject();
-                    quint64 race_id = jobj.value(QLatin1String("race_id")).toVariant().toULongLong();
-                    QString name = jobj.value(QLatin1String("name")).toString();
-                    if ((race_id > 0) && (!name.isEmpty())) {
-                        m_eve_races.insert(race_id, name);
-                        qCDebug(logRefresher) << "  added race" << race_id << name;
-                    }
-                }
-            }
-        }
+//        // fill races
+//        if (m_api->get_universe_races(jarr)) {
+//            for (const QJsonValueRef race_info: jarr) {
+//                if (race_info.isObject()) {
+//                    QJsonObject jobj = race_info.toObject();
+//                    quint64 race_id = jobj.value(QLatin1String("race_id")).toVariant().toULongLong();
+//                    QString name = jobj.value(QLatin1String("name")).toString();
+//                    if ((race_id > 0) && (!name.isEmpty())) {
+//                        m_eve_races.insert(race_id, name);
+//                        qCDebug(logRefresher) << "  added race" << race_id << name;
+//                    }
+//                }
+//            }
+//        }
 
-        // fill bloodlines
-        if (m_api->get_universe_bloodlines(jarr)) {
-            for (const QJsonValueRef bloodline_info: jarr) {
-                if (bloodline_info.isObject()) {
-                    QJsonObject jobj = bloodline_info.toObject();
-                    quint64 bloodline_id = jobj.value(QLatin1String("bloodline_id")).toVariant().toULongLong();
-                    QString name = jobj.value(QLatin1String("name")).toString();
-                    if ((bloodline_id > 0) && (!name.isEmpty())) {
-                        m_eve_bloodlines.insert(bloodline_id, name);
-                        qCDebug(logRefresher) << "  added bloodline" << bloodline_id << name;
-                    }
-                }
-            }
-        }
+//        // fill bloodlines
+//        if (m_api->get_universe_bloodlines(jarr)) {
+//            for (const QJsonValueRef bloodline_info: jarr) {
+//                if (bloodline_info.isObject()) {
+//                    QJsonObject jobj = bloodline_info.toObject();
+//                    quint64 bloodline_id = jobj.value(QLatin1String("bloodline_id")).toVariant().toULongLong();
+//                    QString name = jobj.value(QLatin1String("name")).toString();
+//                    if ((bloodline_id > 0) && (!name.isEmpty())) {
+//                        m_eve_bloodlines.insert(bloodline_id, name);
+//                        qCDebug(logRefresher) << "  added bloodline" << bloodline_id << name;
+//                    }
+//                }
+//            }
+//        }
 
-        // TODO: fill ancestries: ESI currently does not have ancestries endpoint.
+//        // TODO: fill ancestries: ESI currently does not have ancestries endpoint.
 
-        qCDebug(logRefresher) << "end fill_universe_data";
-    }
+//        qCDebug(logRefresher) << "end fill_universe_data";
+//    }
 
 
 protected:
@@ -517,10 +506,11 @@ protected:
     EveApi *m_api;
     // eve universe data
     // those hases store data that can never change (staticdata)
-    QHash<quint64, QString> m_eve_races;
-    QHash<quint64, QString> m_eve_bloodlines;
-    QHash<quint64, QString> m_eve_ancestries;
-    QHash<quint64, QString> m_eve_typeids;
+    // now - used from SDE (Static Data Export Database), remove this
+    // QHash<quint64, QString> m_eve_races;
+    // QHash<quint64, QString> m_eve_bloodlines;
+    // QHash<quint64, QString> m_eve_ancestries;
+    // QHash<quint64, QString> m_eve_typeids;
 };
 
 
