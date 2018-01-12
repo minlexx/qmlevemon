@@ -30,6 +30,9 @@ public:
     virtual QString factionName(quint64 faction_id) override;
     virtual QString typeName(quint64 type_id) override;
 
+    virtual QJsonArray loadSkillGroups() override;
+    virtual QJsonArray loadSkillsInGroup(quint64 group_id) override;
+
 protected:
     bool open(const QString& db_filename);
     bool open_sde(const QString& db_filename);

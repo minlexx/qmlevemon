@@ -412,4 +412,65 @@ QString DbSqlite::typeName(quint64 type_id)
     return ret;
 }
 
+
+QJsonArray DbSqlite::loadSkillGroups()
+{
+    QJsonArray ret;
+    if (!m_eve_sde_db.isOpen()) {
+        return ret;
+    }
+
+    // 1. find "Skills" category
+    quint64 skills_category_id = 0;
+    QSqlQuery q(m_eve_sde_db);
+    if (q.exec(QLatin1String("SELECT categoryID FROM invCategories WHERE categoryName = 'Skill'"))) {
+        if (q.next()) {
+            skills_category_id = q.value(0).toULongLong();
+        }
+    }
+    if (skills_category_id == 0) {
+        qCWarning(logDb) << "DbSqlite::loadSkillGroups(): failed to find 'Skills' category!";
+        return ret;
+    }
+    q.clear();
+
+    // 2. find all inv groups in category 'Skills'
+    q.prepare(QLatin1String("SELECT groupID, groupName FROM invGroups WHERE categoryID = ?"));
+    q.addBindValue(skills_category_id, QSql::In);
+    if (q.exec()) {
+        while(q.next()) {
+            QJsonObject obj;
+            obj.insert(QLatin1String("id"), q.value(0).toString());
+            obj.insert(QLatin1String("name"), q.value(1).toString());
+            ret.append(QJsonValue(obj));
+        }
+    }
+
+    return ret;
+}
+
+
+QJsonArray DbSqlite::loadSkillsInGroup(quint64 group_id)
+{
+    QJsonArray ret;
+    if (!m_eve_sde_db.isOpen()) {
+        return ret;
+    }
+
+    QSqlQuery q(m_eve_sde_db);
+    // find all inv types in group
+    q.prepare(QLatin1String("SELECT typeID, typeName FROM invTypes WHERE groupID = ?"));
+    q.addBindValue(group_id, QSql::In);
+    if (q.exec()) {
+        while(q.next()) {
+            QJsonObject obj;
+            obj.insert(QLatin1String("id"), q.value(0).toString());
+            obj.insert(QLatin1String("name"), q.value(1).toString());
+            ret.append(QJsonValue(obj));
+        }
+    }
+
+    return ret;
+}
+
 } // namespace

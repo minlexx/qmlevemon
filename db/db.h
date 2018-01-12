@@ -6,6 +6,8 @@
 #include <QList>
 #include <QImage>
 #include <QString>
+#include <QJsonObject>
+#include <QJsonArray>
 
 
 namespace EM {
@@ -37,6 +39,9 @@ public:
     virtual QString ancestryName(quint64 ancestry_id) = 0;
     virtual QString factionName(quint64 faction_id) = 0;
     virtual QString typeName(quint64 type_id) = 0;
+
+    virtual QJsonArray loadSkillGroups() = 0;
+    virtual QJsonArray loadSkillsInGroup(quint64 group_id) = 0;
 
 protected:
     Db(const Db &other);
