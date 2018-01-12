@@ -8,6 +8,8 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
+include(FeatureSummary)
+
 find_package(Qt5 5.7 CONFIG REQUIRED COMPONENTS
     Core
     Network
@@ -102,3 +104,5 @@ install(
     TARGETS ${PROJECT_NAME}
     RUNTIME DESTINATION bin
 )
+
+feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
