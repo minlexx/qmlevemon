@@ -13,5 +13,6 @@
         <file>qml/pages/PageAddCharacter.qml</file>
         <file>qml/pages/PageCharacterMain.qml</file>
         <file>qml/pages/PageHome.qml</file>
+        <file>qml/pages/TestPage.qml</file>
     </qresource>
 </RCC>

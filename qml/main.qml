@@ -102,6 +102,7 @@ ApplicationWindow {
             model: ListModel {
                 ListElement { title: qsTr("Add character"); action: "add_character" }
                 ListElement { title: qsTr("About"); action: "about" }
+                ListElement { title: qsTr("Test page"); action: "test_page" }
                 ListElement { title: qsTr("Quit"); action: "quit" }
             }
 
@@ -142,6 +143,11 @@ ApplicationWindow {
     Component {
         id: pageAbout
         PageAbout { }
+    }
+
+    Component {
+        id: pageTest
+        TestPage { }
     }
 
     Component {
@@ -232,6 +238,10 @@ ApplicationWindow {
         } else if (page === "about") {
             nav_title = qsTr("About...")
             mainStack.push(pageAbout);
+            handled = true;
+        } else if (page === "test_page") {
+            nav_title = qsTr("Test page")
+            mainStack.push(pageTest);
             handled = true;
         }
 
