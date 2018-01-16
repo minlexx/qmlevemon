@@ -10,6 +10,7 @@
 #include "db/portrait_cache.h"
 #include "models/character.h"
 #include "models/character_model.h"
+#include "models/skill_tree_model.h"
 #include "models/model_manager.h"
 #include "eve_api/eve_sso.h"
 #include "network/periodical_refresher.h"
@@ -67,6 +68,8 @@ bool QmlEvemonApp::initQmlEngine()
     rootContext->setContextProperty(QLatin1String("evemonapp"), this);
     rootContext->setContextProperty(QLatin1String("characterModel"),
                                     ModelManager::instance()->characterModel());
+    rootContext->setContextProperty(QLatin1String("skillTreeModel"),
+                                    ModelManager::instance()->skillTreeModel());
     rootContext->setContextProperty(QLatin1String("refresher"), m_refresher);
     rootContext->setContextProperty(QLatin1String("eveSsoLoginManager"),
                                     EveSsoLoginManager::instance());
