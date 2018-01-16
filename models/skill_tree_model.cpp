@@ -66,7 +66,7 @@ QHash<int, QByteArray> SkillTreeModel::roleNames() const
 
 int SkillTreeModel::rowCount(const QModelIndex &parent) const
 {
-    return 0;
+    return m_data.size();
 }
 
 
@@ -140,6 +140,7 @@ QModelIndex SkillTreeModel::index(int row, int column, const QModelIndex &parent
 
 QModelIndex SkillTreeModel::parent(const QModelIndex &child) const
 {
+    if (!child.isValid()) return QModelIndex();
     SkillTreeModelData *modelData = modelDataFromIndex(child);
     if (modelData->type == SkillTreeModelData::EntryType::TGroup) {
         // skill groups have no parent
@@ -158,6 +159,7 @@ QModelIndex SkillTreeModel::parent(const QModelIndex &child) const
 
 bool SkillTreeModel::hasChildren(const QModelIndex &parent) const
 {
+    if (!parent.isValid()) return false;
     SkillTreeModelData *modelData = modelDataFromIndex(parent);
     if (modelData->type == SkillTreeModelData::EntryType::TGroup) {
         // skill groups have no parent
