@@ -435,7 +435,7 @@ QJsonArray DbSqlite::loadSkillGroups()
     q.clear();
 
     // 2. find all inv groups in category 'Skills'
-    q.prepare(QLatin1String("SELECT groupID, groupName FROM invGroups WHERE categoryID = ?"));
+    q.prepare(QLatin1String("SELECT groupID, groupName FROM invGroups WHERE categoryID = ? ORDER BY groupName"));
     q.addBindValue(skills_category_id, QSql::In);
     if (q.exec()) {
         while(q.next()) {
