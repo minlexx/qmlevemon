@@ -15,6 +15,7 @@ class SkillTemplate: public QObject
     Q_PROPERTY(quint64     skillId          READ skillId        WRITE setSkillId    NOTIFY skillIdChanged)
     Q_PROPERTY(const SkillGroup *skillGroup READ skillGroup     WRITE setSkillGroup NOTIFY skillGroupChanged)
     Q_PROPERTY(QString     skillGroupName   READ skillGroupName NOTIFY skillGroupNameChanged)
+    Q_PROPERTY(quint64     skillGroupId     READ skillGroupId   NOTIFY skillGroupIdChanged)
 
 public:
     SkillTemplate();
@@ -26,6 +27,7 @@ public:
     quint64 skillId() const;
     const SkillGroup *skillGroup() const;
     QString skillGroupName() const;
+    quint64 skillGroupId() const;
 
 public Q_SLOTS:
     void setSkillName(const QString& name);
@@ -37,6 +39,7 @@ Q_SIGNALS:
     void skillIdChanged();
     void skillGroupChanged();
     void skillGroupNameChanged();
+    void skillGroupIdChanged();
 
 protected:
     QString m_skillName;

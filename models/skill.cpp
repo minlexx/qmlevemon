@@ -49,6 +49,13 @@ QString SkillTemplate::skillGroupName() const
 }
 
 
+quint64 SkillTemplate::skillGroupId() const
+{
+    if (!m_skillGroup) return 0;
+    return m_skillGroup->groupId();
+}
+
+
 void SkillTemplate::setSkillName(const QString& name)
 {
     if (m_skillName == name) return;
@@ -71,6 +78,7 @@ void SkillTemplate::setSkillGroup(const SkillGroup *group)
     m_skillGroup = group;
     emit skillGroupChanged();
     emit skillGroupNameChanged();
+    emit skillGroupIdChanged();
 }
 
 
