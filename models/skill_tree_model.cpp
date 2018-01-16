@@ -162,11 +162,11 @@ bool SkillTreeModel::hasChildren(const QModelIndex &parent) const
     if (!parent.isValid()) return false;
     SkillTreeModelData *modelData = modelDataFromIndex(parent);
     if (modelData->type == SkillTreeModelData::EntryType::TGroup) {
-        // skill groups have no parent
-        return false;
+        // all skill groups can have children
+        return true;
     }
-    // other type - skill - always has parent skillGroup
-    return true;
+    // other type - skill - always has no children
+    return false;
 }
 
 bool SkillTreeModel::load()
