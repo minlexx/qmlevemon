@@ -33,6 +33,11 @@ Rectangle {
                 role: "name"
                 title: qsTr("Name")
             }
+            QQC1.TableViewColumn {
+                width: 500
+                role: "id"
+                title: qsTr("Id")
+            }
         }
     }
 }
