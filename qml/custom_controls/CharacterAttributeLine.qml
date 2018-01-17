@@ -5,45 +5,26 @@ import "../"
 
 Item {
     id: container
+    height: iconWidth
+    width: iconWidth + vtext.width
 
-    property int intelligence: 10
-    property int memory: 10
-    property int perception: 10
-    property int willpower: 10
-    property int charisma: 10
-
+    property int attributeValue: 10
     property int iconWidth: 32
+    property string iconSourceUrl: "../../img/char_attributes/intelligence.png"
+    property alias font: vtext.font
+    property alias textColor: vtext.color
 
-    Column {
-        Image {
-            id: imgInt
-            source: "../../img/char_attributes/intelligence.png"
-            width: iconWidth
-            height: iconWidth
-        }
-        Image {
-            id: imgMem
-            source: "../../img/char_attributes/memory.png"
-            width: iconWidth
-            height: iconWidth
-        }
-        Image {
-            id: imgPerc
-            source: "../../img/char_attributes/perception.png"
-            width: iconWidth
-            height: iconWidth
-        }
-        Image {
-            id: imgWillp
-            source: "../../img/char_attributes/willpower.png"
-            width: iconWidth
-            height: iconWidth
-        }
-        Image {
-            id: imgCharisma
-            source: "../../img/char_attributes/charisma.png"
-            width: iconWidth
-            height: iconWidth
-        }
+    Image {
+        id: icon
+        source: iconSourceUrl
+        width: iconWidth
+        height: iconWidth
+    }
+    Text {
+        id: vtext
+        anchors.left: icon.right
+        anchors.verticalCenter: icon.verticalCenter
+        text: attributeValue + " " + qsTr("points")
+        color: AppStyle.textLightColor
     }
 }
