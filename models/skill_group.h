@@ -18,6 +18,7 @@ public:
     SkillGroup(const SkillGroup& other);
     SkillGroup& operator=(const SkillGroup& other);
     SkillGroup& operator=(SkillGroup&& other);
+    bool operator==(const SkillGroup& other) const;
 
     QString groupName() const;
     quint64 groupId() const;

@@ -33,6 +33,13 @@ SkillGroup& SkillGroup::operator=(SkillGroup&& other)
 }
 
 
+bool SkillGroup::operator==(const SkillGroup &other) const
+{
+    if (this == &other) return true;
+    return (m_groupId == other.m_groupId);
+}
+
+
 QString SkillGroup::groupName() const { return m_groupName; }
 
 quint64 SkillGroup::groupId() const { return m_groupId; }
