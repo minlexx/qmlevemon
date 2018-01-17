@@ -57,7 +57,6 @@ public:
     QVector<SkillGroup *> getSkillGroups() const;
 
 private:
-    bool isValidIndex(const QModelIndex& idx) const;
     SkillTreeNode *modelDataFromIndex(const QModelIndex& idx) const;
 
 protected:

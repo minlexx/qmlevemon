@@ -86,20 +86,6 @@ int SkillTreeModel::columnCount(const QModelIndex &parent) const
 }
 
 
-bool SkillTreeModel::isValidIndex(const QModelIndex& idx) const
-{
-    int row = idx.row();
-    int column = idx.column();
-    if (column > 1) {
-        return false;
-    }
-    if ((row < 0) || (row >= rowCount())) {
-        return false;
-    }
-    return true;
-}
-
-
 SkillTreeModel::SkillTreeNode *SkillTreeModel::modelDataFromIndex(const QModelIndex& idx) const
 {
     auto *ret = static_cast<SkillTreeModel::SkillTreeNode *>(idx.internalPointer());
@@ -113,8 +99,11 @@ SkillTreeModel::SkillTreeNode *SkillTreeModel::modelDataFromIndex(const QModelIn
 QVariant SkillTreeModel::data(const QModelIndex &index, int role) const
 {
     QVariant ret;
-    if (!isValidIndex(index)) return ret;
     SkillTreeModel::SkillTreeNode *modelData = modelDataFromIndex(index);
+    if (!modelData) {
+        qCWarning(logStree) << Q_FUNC_INFO << "no data for index" << index;
+        return ret;
+    }
     switch(role) {
     case Qt::DisplayRole:
     case Roles::Name:
@@ -126,6 +115,9 @@ QVariant SkillTreeModel::data(const QModelIndex &index, int role) const
     case Roles::Type:
         ret = static_cast<int>(modelData->type);
         break;
+    }
+    if (!ret.isValid()) {
+        qCWarning(logStree) << "returning invalid QVariant for index" << index;
     }
     return ret;
 }
@@ -208,7 +200,11 @@ bool SkillTreeModel::load()
         SkillGroup *skillGroup = new SkillGroup();
         skillGroup->setGroupId(jobj.value(QLatin1String("id")).toVariant().toULongLong());
         skillGroup->setGroupName(jobj.value(QLatin1String("name")).toString());
-        m_skillGroups.insert(skillGroup->groupId(), skillGroup);
+        if (!m_skillGroups.contains(skillGroup->groupId())) {
+            m_skillGroups.insert(skillGroup->groupId(), skillGroup);
+        } else {
+            qCWarning(logStree) << "Skill group:" << skillGroup->groupId() << "already loaded! Error in SDE?";
+        }
 
         // create skillgroup node
         SkillTreeModel::SkillTreeNode *node = new SkillTreeModel::SkillTreeNode(skillGroup);
@@ -228,7 +224,11 @@ bool SkillTreeModel::load()
             skillTemplate->setSkillGroup(skillGroup);
             skillTemplate->setSkillId(jobj.value(QLatin1String("id")).toVariant().toULongLong());
             skillTemplate->setSkillName(jobj.value(QLatin1String("name")).toString());
-            m_skillTemplates.insert(skillTemplate->skillId(), skillTemplate);
+            if (!m_skillTemplates.contains(skillTemplate->skillId())) {
+                m_skillTemplates.insert(skillTemplate->skillId(), skillTemplate);
+            } else {
+                qCWarning(logStree) << "Skill template:" << skillTemplate->skillId() << "already loaded! Error in SDE?";
+            }
 
             // create skill entry
             SkillTreeModel::SkillTreeNode *skillNode = new SkillTreeModel::SkillTreeNode(skillTemplate);
