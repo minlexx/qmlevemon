@@ -9,9 +9,6 @@
 
 namespace EM {
 
-
-class SkillTreeModelData;
-
 class SkillTreeModel: public QAbstractItemModel
 {
     Q_OBJECT
@@ -20,6 +17,24 @@ class SkillTreeModel: public QAbstractItemModel
         Id = Qt::UserRole + 1,
         Name,
         Type
+    };
+
+    class SkillTreeNode {
+    public:
+        enum class NodeType { Root, Group, Skill };
+        SkillTreeNode(): type(NodeType::Root) { }
+        explicit SkillTreeNode(SkillGroup *gr): type(NodeType::Group), group(gr) { }
+        explicit SkillTreeNode(SkillTemplate *sk): type(NodeType::Skill), skill(sk) { }
+        ~SkillTreeNode();
+        void appendChild(SkillTreeNode *node);
+        QString name() const;
+        quint64 id() const;
+    public:
+        NodeType type = NodeType::Root;
+        SkillGroup *group = nullptr;
+        SkillTemplate *skill = nullptr;
+        SkillTreeNode *parent = nullptr;
+        QList<SkillTreeNode *> children;
     };
 
 public:
@@ -39,17 +54,21 @@ public:
 
 public:
     bool load();
-    QVector<SkillGroup> getSkillGroups() const;
+    QVector<SkillGroup *> getSkillGroups() const;
 
 private:
     bool isValidIndex(const QModelIndex& idx) const;
-    SkillTreeModelData *modelDataFromIndex(const QModelIndex& idx) const;
+    SkillTreeNode *modelDataFromIndex(const QModelIndex& idx) const;
 
 protected:
     QHash<int, QByteArray> m_roles;
-    QHash<quint64, SkillGroup> m_skillGroups;  // map groupId => SkillGroup
-    QVector<SkillTreeModelData *> m_data;
-    QHash<quint64, int> m_idToModelIndexMap;
+
+    // storage for all skill tree data in memmory
+    QHash<quint64, SkillGroup *>    m_skillGroups;     // map groupId => SkillGroup
+    QHash<quint64, SkillTemplate *> m_skillTemplates;  // map skillId => SkillTemplate
+
+    // actual model data
+    SkillTreeNode *m_rootNode = nullptr;
 };
 
 

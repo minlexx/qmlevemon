@@ -10,42 +10,43 @@ Q_LOGGING_CATEGORY(logStree, "evemon.skilltree")
 namespace EM {
 
 
-class SkillTreeModelData
+SkillTreeModel::SkillTreeNode::~SkillTreeNode()
 {
-public:
-    enum EntryType {
-        TSkill = 0,
-        TGroup = 1
-    };
-
-public:
-    explicit SkillTreeModelData(EntryType typ): type(typ) { }
-    ~SkillTreeModelData() = default;
-
-    QString name() const {
-        switch (type) {
-        case EntryType::TGroup: return group.groupName(); break;
-        case EntryType::TSkill: return skill.skillName(); break;
-        }
-        return QString();
+    for (SkillTreeNode *node: children) {
+        delete node;
     }
+    children.clear();
+}
 
-    quint64 id() const {
-        switch (type) {
-        case EntryType::TGroup: return group.groupId(); break;
-        case EntryType::TSkill: return skill.skillId(); break;
-        }
-        return 0;
+void SkillTreeModel::SkillTreeNode::appendChild(SkillTreeNode *node)
+{
+    node->parent = this;
+    children.append(node);
+}
+
+QString SkillTreeModel::SkillTreeNode::name() const
+{
+    switch (type) {
+    case NodeType::Group: return group->groupName(); break;
+    case NodeType::Skill: return skill->skillName(); break;
     }
+    return QString();
+}
 
-    EntryType type;
-    SkillGroup group;
-    SkillTemplate skill;
-};
+quint64 SkillTreeModel::SkillTreeNode::id() const
+{
+    switch (type) {
+    case NodeType::Group: return group->groupId(); break;
+    case NodeType::Skill: return skill->skillId(); break;
+    }
+    return 0;
+}
+
 
 
 SkillTreeModel::SkillTreeModel(QObject *parent):
-    QAbstractItemModel(parent)
+    QAbstractItemModel(parent),
+    m_rootNode(new SkillTreeNode())
 {
     // init role names
     m_roles.insert(Qt::DisplayRole, "name");
@@ -55,7 +56,10 @@ SkillTreeModel::SkillTreeModel(QObject *parent):
 }
 
 
-SkillTreeModel::~SkillTreeModel() { }
+SkillTreeModel::~SkillTreeModel()
+{
+    delete m_rootNode;
+}
 
 
 QHash<int, QByteArray> SkillTreeModel::roleNames() const
@@ -66,14 +70,19 @@ QHash<int, QByteArray> SkillTreeModel::roleNames() const
 
 int SkillTreeModel::rowCount(const QModelIndex &parent) const
 {
-    return m_data.size();
+    if (parent.isValid()) {
+        // child node?
+        SkillTreeNode *node = modelDataFromIndex(parent);
+        return node->children.size();
+    }
+    return m_rootNode->children.size();
 }
 
 
 int SkillTreeModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
-    return 1;
+    return 2;
 }
 
 
@@ -81,19 +90,23 @@ bool SkillTreeModel::isValidIndex(const QModelIndex& idx) const
 {
     int row = idx.row();
     int column = idx.column();
-    if (column > 0) {
+    if (column > 1) {
         return false;
     }
-    if ((row < 0) || (row >= m_data.size())) {
+    if ((row < 0) || (row >= rowCount())) {
         return false;
     }
     return true;
 }
 
 
-SkillTreeModelData *SkillTreeModel::modelDataFromIndex(const QModelIndex& idx) const
+SkillTreeModel::SkillTreeNode *SkillTreeModel::modelDataFromIndex(const QModelIndex& idx) const
 {
-    return m_data.at(idx.row());
+    auto *ret = static_cast<SkillTreeModel::SkillTreeNode *>(idx.internalPointer());
+    if (!ret) {
+        qCWarning(logStree) << Q_FUNC_INFO << "returning nullptr!";
+    }
+    return ret;
 }
 
 
@@ -101,7 +114,7 @@ QVariant SkillTreeModel::data(const QModelIndex &index, int role) const
 {
     QVariant ret;
     if (!isValidIndex(index)) return ret;
-    SkillTreeModelData *modelData = modelDataFromIndex(index);
+    SkillTreeModel::SkillTreeNode *modelData = modelDataFromIndex(index);
     switch(role) {
     case Qt::DisplayRole:
     case Roles::Name:
@@ -131,9 +144,17 @@ QVariant SkillTreeModel::headerData(int section, Qt::Orientation orientation, in
 
 QModelIndex SkillTreeModel::index(int row, int column, const QModelIndex &parent) const
 {
-    Q_UNUSED(parent)
-    QModelIndex index = createIndex(row, column, nullptr);
-    if (!isValidIndex(index)) return QModelIndex();
+    SkillTreeModel::SkillTreeNode *linkedNode = nullptr;
+    if (parent.isValid()) {
+        // need to find model data for group item first
+        int parent_idx = parent.row();
+        SkillTreeModel::SkillTreeNode *groupNode = m_rootNode->children.at(parent_idx);
+        linkedNode = groupNode->children.at(row);
+    } else {
+        // this is an index for group itself
+        linkedNode = m_rootNode->children.at(row);
+    }
+    QModelIndex index = createIndex(row, column, linkedNode);
     return index;
 }
 
@@ -141,16 +162,19 @@ QModelIndex SkillTreeModel::index(int row, int column, const QModelIndex &parent
 QModelIndex SkillTreeModel::parent(const QModelIndex &child) const
 {
     if (!child.isValid()) return QModelIndex();
-    SkillTreeModelData *modelData = modelDataFromIndex(child);
-    if (modelData->type == SkillTreeModelData::EntryType::TGroup) {
+    SkillTreeModel::SkillTreeNode *modelData = modelDataFromIndex(child);
+    if (modelData->type == SkillTreeModel::SkillTreeNode::NodeType::Group) {
         // skill groups have no parent
         return QModelIndex();
     }
     // but skills do have a parent - skill group
-    quint64 parent_id = modelData->skill.skillGroupId();
-    if (m_idToModelIndexMap.contains(parent_id)) {
-        int model_row = m_idToModelIndexMap[parent_id];
-        return createIndex(model_row, 0, nullptr);
+    quint64 parent_id = modelData->skill->skillGroupId();
+    int parent_row = 0;
+    for (SkillTreeModel::SkillTreeNode *node: m_rootNode->children) {
+        if (node->id() == parent_id) {
+            return createIndex(parent_row, 0, node);
+        }
+        parent_row++;
     }
     // something went wrong
     return QModelIndex();
@@ -160,8 +184,8 @@ QModelIndex SkillTreeModel::parent(const QModelIndex &child) const
 bool SkillTreeModel::hasChildren(const QModelIndex &parent) const
 {
     if (!parent.isValid()) return false;
-    SkillTreeModelData *modelData = modelDataFromIndex(parent);
-    if (modelData->type == SkillTreeModelData::EntryType::TGroup) {
+    SkillTreeModel::SkillTreeNode *modelData = modelDataFromIndex(parent);
+    if (modelData->type == SkillTreeModel::SkillTreeNode::NodeType::Group) {
         // all skill groups can have children
         return true;
     }
@@ -181,35 +205,34 @@ bool SkillTreeModel::load()
         const QJsonObject& jobj = (*it).toObject();
         // qCDebug(logStree) << "  load group: " << jobj;
         // ^^ QJsonObject({"id":"255","name":"Gunnery"})
-        SkillGroup skillGroup;
-        skillGroup.setGroupId(jobj.value(QLatin1String("id")).toVariant().toULongLong());
-        skillGroup.setGroupName(jobj.value(QLatin1String("name")).toString());
-        m_skillGroups.insert(skillGroup.groupId(), skillGroup);
+        SkillGroup *skillGroup = new SkillGroup();
+        skillGroup->setGroupId(jobj.value(QLatin1String("id")).toVariant().toULongLong());
+        skillGroup->setGroupName(jobj.value(QLatin1String("name")).toString());
+        m_skillGroups.insert(skillGroup->groupId(), skillGroup);
+
+        // create skillgroup node
+        SkillTreeModel::SkillTreeNode *node = new SkillTreeModel::SkillTreeNode(skillGroup);
+        m_rootNode->appendChild(node);
     }
 
     // load skills
-    for (quint64 groupId: m_skillGroups.keys()) {
-        // create group entry
-        SkillTreeModelData *groupData = new SkillTreeModelData(SkillTreeModelData::EntryType::TGroup);
-        groupData->group = m_skillGroups[groupId];
-        m_idToModelIndexMap[groupId] = m_data.size();
-        m_data.append(groupData);
-
+    for (SkillTreeModel::SkillTreeNode *groupNode: m_rootNode->children) {
         // load skills for each group
+        quint64 groupId = groupNode->group->groupId();
         QJsonArray jskills = db->loadSkillsInGroup(groupId);
         for (auto it = jskills.constBegin(); it != jskills.constEnd(); it++) {
             numSkills++;
             const QJsonObject& jobj = (*it).toObject();
-            SkillTemplate stmpl;
-            stmpl.setSkillGroup(&m_skillGroups[groupId]);
-            stmpl.setSkillId(jobj.value(QLatin1String("id")).toVariant().toULongLong());
-            stmpl.setSkillName(jobj.value(QLatin1String("name")).toString());
+            const SkillGroup *skillGroup = m_skillGroups[groupId];
+            SkillTemplate *skillTemplate = new SkillTemplate();
+            skillTemplate->setSkillGroup(skillGroup);
+            skillTemplate->setSkillId(jobj.value(QLatin1String("id")).toVariant().toULongLong());
+            skillTemplate->setSkillName(jobj.value(QLatin1String("name")).toString());
+            m_skillTemplates.insert(skillTemplate->skillId(), skillTemplate);
 
             // create skill entry
-            SkillTreeModelData *skillData = new SkillTreeModelData(SkillTreeModelData::EntryType::TSkill);
-            skillData->skill = stmpl;
-            m_idToModelIndexMap[stmpl.skillId()] = m_data.size();
-            m_data.append(skillData);
+            SkillTreeModel::SkillTreeNode *skillNode = new SkillTreeModel::SkillTreeNode(skillTemplate);
+            groupNode->appendChild(skillNode);
         }
     }
 
@@ -218,9 +241,9 @@ bool SkillTreeModel::load()
 }
 
 
-QVector<SkillGroup> SkillTreeModel::getSkillGroups() const
+QVector<SkillGroup *> SkillTreeModel::getSkillGroups() const
 {
-    QVector<SkillGroup> ret;
+    QVector<SkillGroup *> ret;
     for (auto it = m_skillGroups.constBegin(); it != m_skillGroups.constEnd(); it++) {
         ret.append(it.value());
     }
