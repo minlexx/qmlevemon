@@ -459,7 +459,7 @@ QJsonArray DbSqlite::loadSkillsInGroup(quint64 group_id)
 
     QSqlQuery q(m_eve_sde_db);
     // find all inv types in group
-    q.prepare(QLatin1String("SELECT typeID, typeName FROM invTypes WHERE groupID = ?"));
+    q.prepare(QLatin1String("SELECT typeID, typeName FROM invTypes WHERE groupID = ? ORDER BY typeName"));
     q.addBindValue(group_id, QSql::In);
     if (q.exec()) {
         while(q.next()) {
