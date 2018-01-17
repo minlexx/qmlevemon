@@ -34,7 +34,7 @@ Rectangle {
                 title: qsTr("Name")
             }
             QQC1.TableViewColumn {
-                width: 500
+                width: 100
                 role: "id"
                 title: qsTr("Id")
             }
