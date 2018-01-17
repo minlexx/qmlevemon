@@ -35,6 +35,13 @@ SkillTemplate& SkillTemplate::operator=(SkillTemplate&& other)
 }
 
 
+bool SkillTemplate::operator==(const SkillTemplate &other) const
+{
+    if (this == &other) return true;
+    return (m_skillId == other.m_skillId);
+}
+
+
 QString SkillTemplate::skillName() const { return m_skillName; }
 
 quint64 SkillTemplate::skillId() const { return m_skillId; }

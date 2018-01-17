@@ -22,6 +22,7 @@ public:
     SkillTemplate(const SkillTemplate& other);
     SkillTemplate& operator=(const SkillTemplate& other);
     SkillTemplate& operator=(SkillTemplate&& other);
+    bool operator==(const SkillTemplate& other) const;
 
     QString skillName() const;
     quint64 skillId() const;
