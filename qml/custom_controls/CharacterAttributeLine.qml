@@ -11,6 +11,7 @@ Item {
     property int attributeValue: 10
     property int iconWidth: 32
     property string iconSourceUrl: "../../img/char_attributes/intelligence.png"
+    property string tooltipText: "Attribute"
     property alias font: vtext.font
     property alias textColor: vtext.color
 
@@ -19,6 +20,15 @@ Item {
         source: iconSourceUrl
         width: iconWidth
         height: iconWidth
+        MouseArea {
+            id: iconMa
+            anchors.fill: parent
+            hoverEnabled: true
+        }
+        ToolTip {
+            visible: iconMa.containsMouse
+            text: tooltipText
+        }
     }
     Text {
         id: vtext

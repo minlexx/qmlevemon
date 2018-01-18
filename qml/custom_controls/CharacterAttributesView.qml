@@ -29,6 +29,7 @@ Item {
             iconSourceUrl: "qrc:///img/char_attributes/intelligence.png"
             font.pointSize: fontSize
             font.family: fontFamily
+            tooltipText: qsTr("Intelligence")
         }
         CharacterAttributeLine {
             id: attrMemory
@@ -37,30 +38,34 @@ Item {
             iconSourceUrl: "qrc:///img/char_attributes/memory.png"
             font.pointSize: fontSize
             font.family: fontFamily
+            tooltipText: qsTr("Memory")
         }
         CharacterAttributeLine {
             id: attrPerception
             iconWidth: iconWidth
-            attributeValue: intelligence
+            attributeValue: perception
             iconSourceUrl: "qrc:///img/char_attributes/perception.png"
             font.pointSize: fontSize
             font.family: fontFamily
+            tooltipText: qsTr("Perception")
         }
         CharacterAttributeLine {
             id: attrWillpower
             iconWidth: iconWidth
-            attributeValue: intelligence
+            attributeValue: willpower
             iconSourceUrl: "qrc:///img/char_attributes/willpower.png"
             font.pointSize: fontSize
             font.family: fontFamily
+            tooltipText: qsTr("Willpower")
         }
         CharacterAttributeLine {
             id: attrCharisma
             iconWidth: iconWidth
-            attributeValue: intelligence
+            attributeValue: charisma
             iconSourceUrl: "qrc:///img/char_attributes/charisma.png"
             font.pointSize: fontSize
             font.family: fontFamily
+            tooltipText: qsTr("Charisma")
         }
     }
 }
