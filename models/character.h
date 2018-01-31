@@ -63,6 +63,7 @@ class Character: public QObject
     Q_PROPERTY(int       numBonusRemaps         READ numBonusRemaps         NOTIFY numBonusRemapsChanged)
     Q_PROPERTY(QDateTime lastRemapDate          READ lastRemapDate          NOTIFY lastRemapDateChanged)
     Q_PROPERTY(QDateTime remapCooldownDate      READ remapCooldownDate      NOTIFY remapCooldownDateChanged)
+    Q_PROPERTY(quint64   totalSp                READ totalSp                NOTIFY totalSpChanged)
 
 public:
     Character();
@@ -185,6 +186,8 @@ public:
     int numBonusRemaps() const;
     QDateTime lastRemapDate() const;
     QDateTime remapCooldownDate() const;
+    quint64 totalSp() const;
+    // skills and related - setters
     void setAttributeCharisma(int a);
     void setAttributeIntelligence(int a);
     void setAttributeMemory(int a);
@@ -193,6 +196,7 @@ public:
     void setNumBonusRemaps(int n);
     void setLastRemapDate(const QDateTime& dt);
     void setRemapCooldownDate(const QDateTime& dt);
+    void setTotalSp(quint64 sp);
 
     // auth info
     EveOAuthTokens getAuthTokens() const;
@@ -247,6 +251,7 @@ Q_SIGNALS:
     void numBonusRemapsChanged();
     void lastRemapDateChanged();
     void remapCooldownDateChanged();
+    void totalSpChanged();
 
 protected:
     // general info
@@ -300,6 +305,7 @@ protected:
     int m_numBonusRemaps = 0;
     QDateTime m_lastRemapDate;
     QDateTime m_remapCooldownDate;
+    quint64 m_totalSp = 0;
 
     // auth info
     EveOAuthTokens m_tokens;

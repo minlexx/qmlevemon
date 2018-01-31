@@ -88,7 +88,7 @@ quint64 Character::characterId() const { return m_characterId; }
 void Character::setCharacterId(quint64 char_id) {
     if (char_id == m_characterId) return;
     m_characterId = char_id;
-    emit characterIdChanged();
+    Q_EMIT characterIdChanged();
 }
 
 QString Character::characterName() const { return m_characterName; }
@@ -96,7 +96,7 @@ QString Character::characterName() const { return m_characterName; }
 void Character::setCharacterName(const QString& name) {
     if (name == m_characterName) return;
     m_characterName = name;
-    emit characterNameChanged();
+    Q_EMIT characterNameChanged();
 }
 
 quint64 Character::corporationId() const { return m_corporationId; }
@@ -104,7 +104,7 @@ quint64 Character::corporationId() const { return m_corporationId; }
 void Character::setCorporationId(quint64 corp_id) {
     if (corp_id == m_corporationId) return;
     m_corporationId = corp_id;
-    emit corporationIdChanged();
+    Q_EMIT corporationIdChanged();
 }
 
 QString Character::corporationName() const { return m_corporationName; }
@@ -112,7 +112,7 @@ QString Character::corporationName() const { return m_corporationName; }
 void Character::setCorporationName(const QString& corp_name) {
     if (corp_name == m_corporationName) return;
     m_corporationName = corp_name;
-    emit corporationNameChanged();
+    Q_EMIT corporationNameChanged();
 }
 
 QString Character::corporationTicker() const { return m_corporationTicker; }
@@ -120,7 +120,7 @@ QString Character::corporationTicker() const { return m_corporationTicker; }
 void Character::setCorporationTicker(const QString& ticker) {
     if (ticker == m_corporationTicker) return;
     m_corporationTicker = ticker;
-    emit corporationTickerChanged();
+    Q_EMIT corporationTickerChanged();
 }
 
 quint64 Character::allianceId() const { return m_allianceId; }
@@ -128,7 +128,7 @@ quint64 Character::allianceId() const { return m_allianceId; }
 void Character::setAllianceId(quint64 ally_id) {
     if (ally_id == m_allianceId) return;
     m_allianceId = ally_id;
-    emit allianceIdChanged();
+    Q_EMIT allianceIdChanged();
 }
 
 QString Character::allianceName() const { return m_allianceName; }
@@ -136,7 +136,7 @@ QString Character::allianceName() const { return m_allianceName; }
 void Character::setAllianceName(const QString& ally_name) {
     if (m_allianceName == ally_name) return;
     m_allianceName = ally_name;
-    emit allianceNameChanged();
+    Q_EMIT allianceNameChanged();
 }
 
 QString Character::allianceTicker() const { return m_allianceTicker; }
@@ -144,7 +144,7 @@ QString Character::allianceTicker() const { return m_allianceTicker; }
 void Character::setAllianceTicker(const QString& ticker) {
     if (ticker == m_allianceTicker) return;
     m_allianceTicker = ticker;
-    emit allianceTickerChanged();
+    Q_EMIT allianceTickerChanged();
 }
 
 quint64 Character::raceId() const { return m_raceId; }
@@ -155,7 +155,7 @@ QString Character::raceName() const { return m_raceName; }
 void Character::setRaceName(const QString& race_name) {
     if (race_name == m_raceName) return;
     m_raceName = race_name;
-    emit raceNameChanged();
+    Q_EMIT raceNameChanged();
 }
 
 quint64 Character::ancestryId() const { return m_ancestryId; }
@@ -166,7 +166,7 @@ QString Character::ancestryName() const { return m_ancestryName; }
 void Character::setAncestryName(const QString& name) {
     if (name == m_ancestryName) return;
     m_ancestryName = name;
-    emit ancestryNameChanged();
+    Q_EMIT ancestryNameChanged();
 }
 
 quint64 Character::bloodlineId() const { return m_bloodlineId; }
@@ -177,7 +177,7 @@ QString Character::bloodlineName() const { return m_bloodlineName; }
 void Character::setBloodlineName(const QString& name) {
     if (name == m_bloodlineName) return;
     m_bloodlineName = name;
-    emit bloodlineNameChanged();
+    Q_EMIT bloodlineNameChanged();
 }
 
 int Character::gender() const { return m_gender; }
@@ -185,7 +185,7 @@ int Character::gender() const { return m_gender; }
 void Character::setGender(int g) {
     if (g == m_gender) return;
     m_gender = g;
-    emit genderChanged();
+    Q_EMIT genderChanged();
 }
 
 QDateTime Character::birthday() const { return m_birthday_dt; }
@@ -193,7 +193,7 @@ QDateTime Character::birthday() const { return m_birthday_dt; }
 void Character::setBirthday(const QDateTime& dt) {
     if (dt == m_birthday_dt) return;
     m_birthday_dt = dt;
-    emit birthdayChanged();
+    Q_EMIT birthdayChanged();
 }
 
 float Character::securityStatus() const { return m_securityStatus; }
@@ -205,7 +205,7 @@ QString Character::securityStatusStr() const {
 void Character::setSecurityStatus(float ss) {
     if (qFuzzyCompare(ss, m_securityStatus)) return;
     m_securityStatus = ss;
-    emit securityStatusChanged();
+    Q_EMIT securityStatusChanged();
 }
 
 QString Character::bio() const { return m_bio; }
@@ -213,7 +213,7 @@ QString Character::bio() const { return m_bio; }
 void Character::setBio(const QString& s) {
     if (m_bio == s) return;
     m_bio = s;
-    emit bioChanged();
+    Q_EMIT bioChanged();
 }
 
 // wallet info
@@ -226,7 +226,7 @@ QString Character::iskAmountStr() const{
 void Character::setIskAmount(float isk) {
     if (qFuzzyCompare(isk, m_isk)) return;
     m_isk = isk;
-    emit iskAmountChanged();
+    Q_EMIT iskAmountChanged();
 }
 
 // location info
@@ -235,7 +235,7 @@ quint64 Character::currentSolarSystemId() const { return m_currentSolarSystemId;
 void Character::setCurrentSolarSystemId(quint64 id) {
     if (m_currentSolarSystemId == id) return;
     m_currentSolarSystemId = id;
-    emit currentSolarSystemChanged();
+    Q_EMIT currentSolarSystemChanged();
 }
 
 QString Character::currentSolarSystemName() const { return m_currentSolarSystemName; }
@@ -243,7 +243,7 @@ QString Character::currentSolarSystemName() const { return m_currentSolarSystemN
 void Character::setCurrentSolarSystemName(const QString& name) {
     if (m_currentSolarSystemName == name) return;
     m_currentSolarSystemName = name;
-    emit currentSolarSystemChanged();
+    Q_EMIT currentSolarSystemChanged();
 }
 
 float Character::currentSolarSystemSecurity() const { return m_currentSolarSystemSecurity; }
@@ -255,7 +255,7 @@ QString Character::currentSolarSystemSecurityStr() const {
 void Character::setCurrentSolarSystemSecurity(float ss) {
     if (qFuzzyCompare(m_currentSolarSystemSecurity, ss)) return;
     m_currentSolarSystemSecurity = ss;
-    emit currentSolarSystemSecurityChanged();
+    Q_EMIT currentSolarSystemSecurityChanged();
 }
 
 quint64 Character::currentConstellationId() const { return m_currentConstellationId; }
@@ -263,7 +263,7 @@ quint64 Character::currentConstellationId() const { return m_currentConstellatio
 void Character::setCurrentConstellationId(quint64 id) {
     if (m_currentConstellationId == id) return;
     m_currentConstellationId = id;
-    emit currentConstellationChanged();
+    Q_EMIT currentConstellationChanged();
 }
 
 QString Character::currentConstellationName() const { return m_currentConstellationName; }
@@ -271,7 +271,7 @@ QString Character::currentConstellationName() const { return m_currentConstellat
 void Character::setCurrentConstellationName(const QString& name) {
     if (m_currentConstellationName == name) return;
     m_currentConstellationName = name;
-    emit currentConstellationChanged();
+    Q_EMIT currentConstellationChanged();
 }
 
 quint64 Character::currentRegionId() const { return m_currentRegionId; }
@@ -279,7 +279,7 @@ quint64 Character::currentRegionId() const { return m_currentRegionId; }
 void Character::setCurrentRegionId(quint64 id) {
     if (m_currentRegionId == id) return;
     m_currentRegionId = id;
-    emit currentRegionChanged();
+    Q_EMIT currentRegionChanged();
 }
 
 QString Character::currentRegionName() const { return m_currentRegionName; }
@@ -287,7 +287,7 @@ QString Character::currentRegionName() const { return m_currentRegionName; }
 void Character::setCurrentRegionName(const QString& name) {
     if (m_currentRegionName == name) return;
     m_currentRegionName = name;
-    emit currentRegionChanged();
+    Q_EMIT currentRegionChanged();
 }
 
 quint64 Character::currentStationId() const { return m_currentStationId; }
@@ -295,7 +295,7 @@ quint64 Character::currentStationId() const { return m_currentStationId; }
 void Character::setCurrentStationId(quint64 id) {
     if (m_currentStationId == id) return;
     m_currentStationId = id;
-    emit isDockedChanged();
+    Q_EMIT isDockedChanged();
 }
 
 quint64 Character::currentStructureId() const { return m_currentStructureId; }
@@ -303,7 +303,7 @@ quint64 Character::currentStructureId() const { return m_currentStructureId; }
 void Character::setCurrentStructureId(quint64 id) {
     if (m_currentStructureId == id) return;
     m_currentStructureId = id;
-    emit isDockedChanged();
+    Q_EMIT isDockedChanged();
 }
 
 QString Character::currentStructureName() const { return m_currentStructureName; }
@@ -311,7 +311,7 @@ QString Character::currentStructureName() const { return m_currentStructureName;
 void Character::setCurrentStructureName(const QString& name) {
     if (m_currentStructureName == name) return;
     m_currentStructureName = name;
-    emit isDockedChanged();
+    Q_EMIT isDockedChanged();
 }
 
 bool Character::isDocked() const { return ((m_currentStationId > 0) || (m_currentStructureId > 0)); }
@@ -321,7 +321,7 @@ quint64 Character::currentShipTypeId() const { return m_currentShipTypeId; }
 void Character::setCurrentShipTypeId(quint64 id) {
     if (m_currentShipTypeId == id) return;
     m_currentShipTypeId = id;
-    emit currentShipChanged();
+    Q_EMIT currentShipChanged();
 }
 
 QString Character::currentShipTypeName() const { return m_currentShipTypeName; }
@@ -329,7 +329,7 @@ QString Character::currentShipTypeName() const { return m_currentShipTypeName; }
 void Character::setCurrentShipTypeName(const QString& name) {
     if (m_currentShipTypeName == name) return;
     m_currentShipTypeName = name;
-    emit currentShipChanged();
+    Q_EMIT currentShipChanged();
 }
 
 QString Character::currentShipFriendlyName() const { return m_currentShipFriendlyName; }
@@ -337,7 +337,7 @@ QString Character::currentShipFriendlyName() const { return m_currentShipFriendl
 void Character::setCurrentShipFriendlyName(const QString& name) {
     if (m_currentShipFriendlyName == name) return;
     m_currentShipFriendlyName = name;
-    emit currentShipChanged();
+    Q_EMIT currentShipChanged();
 }
 
 // skills and related
@@ -349,60 +349,68 @@ int Character::attributeWillpower() const { return m_attributeWillpower; }
 int Character::numBonusRemaps() const { return m_numBonusRemaps; }
 QDateTime Character::lastRemapDate() const { return m_lastRemapDate; }
 QDateTime Character::remapCooldownDate() const { return m_remapCooldownDate; }
+quint64 Character::totalSp() const { return m_totalSp; }
 
 void Character::setAttributeCharisma(int a) {
     if (m_attributeCharisma != a) {
         m_attributeCharisma = a;
-        emit attributeCharismaChanged();
+        Q_EMIT attributeCharismaChanged();
     }
 }
 
 void Character::setAttributeIntelligence(int a) {
     if (m_attributeIntelligence != a) {
         m_attributeIntelligence = a;
-        emit attributeIntelligenceChanged();
+        Q_EMIT attributeIntelligenceChanged();
     }
 }
 
 void Character::setAttributeMemory(int a) {
     if (m_attributeMemory != a) {
         m_attributeMemory = a;
-        emit attributeMemoryChanged();
+        Q_EMIT attributeMemoryChanged();
     }
 }
 
 void Character::setAttributePerception(int a) {
     if (m_attributePerception != a) {
         m_attributePerception = a;
-        emit attributePerceptionChanged();
+        Q_EMIT attributePerceptionChanged();
     }
 }
 
 void Character::setAttributeWillpower(int a) {
     if (m_attributeWillpower != a) {
         m_attributeWillpower = a;
-        emit attributeWillpowerChanged();
+        Q_EMIT attributeWillpowerChanged();
     }
 }
 
 void Character::setNumBonusRemaps(int n) {
     if (m_numBonusRemaps != n) {
         m_numBonusRemaps = n;
-        emit numBonusRemapsChanged();
+        Q_EMIT numBonusRemapsChanged();
     }
 }
 
 void Character::setLastRemapDate(const QDateTime& dt) {
     if (m_lastRemapDate != dt) {
         m_lastRemapDate = dt;
-        emit lastRemapDateChanged();
+        Q_EMIT lastRemapDateChanged();
     }
 }
 
 void Character::setRemapCooldownDate(const QDateTime& dt) {
     if (m_remapCooldownDate != dt) {
         m_remapCooldownDate = dt;
-        emit remapCooldownDateChanged();
+        Q_EMIT remapCooldownDateChanged();
+    }
+}
+
+void Character::setTotalSp(quint64 sp) {
+    if (sp != m_totalSp) {
+        m_totalSp = sp;
+        Q_EMIT totalSpChanged();
     }
 }
 
@@ -434,7 +442,7 @@ void Character::forceRefreshAssets() { resetUpdateTimestamp(UpdateTimestamps::UT
 
 
 // increase version number when savedata format changes
-static const int SAVEDATA_VERSION = 7;
+static const int SAVEDATA_VERSION = 8;
 
 
 QDataStream& operator<<(QDataStream& stream, const EM::Character& character)
@@ -486,6 +494,7 @@ QDataStream& operator<<(QDataStream& stream, const EM::Character& character)
     stream << character.numBonusRemaps();
     stream << character.lastRemapDate();
     stream << character.remapCooldownDate();
+    stream << character.totalSp();
     // auth tokens
     stream << character.getAuthTokens();
     // update timestamps
@@ -559,6 +568,7 @@ QDataStream& operator>>(QDataStream& stream, EM::Character& character)
     stream >> i;      character.setNumBonusRemaps(i);
     stream >> dt;     character.setLastRemapDate(dt);
     stream >> dt;     character.setRemapCooldownDate(dt);
+    stream >> ui64;   character.setTotalSp(ui64);
     // auth tokens
     stream >> tokens; character.setAuthTokens(tokens);
     // update timestamps

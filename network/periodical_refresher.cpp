@@ -380,6 +380,7 @@ protected:
 
         int num_updates = 0;
         QJsonObject reply;
+        QJsonArray replyArr;
 
         // refresh character attributes
         qCDebug(logRefresher) << " refreshing attributes for" << ch->toString();
@@ -432,7 +433,27 @@ protected:
         }
 
         // refresh character skills
+        if (m_api->get_character_skills(reply, ch->characterId(), ch->getAuthTokens().access_token)) {
+            quint64 totalSp = reply.value(QLatin1String("total_sp")).toVariant().toULongLong();
+            ch->setTotalSp(totalSp);
+            QJsonArray jskills = reply.value(QLatin1String("skills")).toArray();
+            for (auto jskill: qAsConst(jskills)) {
+                //
+            }
+        }
+
         // refresh character skillqueue
+        if (m_api->get_character_skillqueue(replyArr, ch->characterId(), ch->getAuthTokens().access_token)) {
+            // qCDebug(logRefresher) << replyArr;
+            // QJsonArray([{"finish_date":"2018-02-15T18:45:55Z",
+            //              "finished_level":5,
+            //              "level_end_sp":1280000,
+            //              "level_start_sp":226275,
+            //              "queue_position":0,
+            //              "skill_id":20315,
+            //              "start_date":"2018-01-28T11:42:48Z",
+            //              "training_start_sp":226275 },
+        }
 
         ch->setUpdateTimestamp(UpdateTimestamps::UTST::SKILLS);
         return num_updates;
@@ -457,60 +478,12 @@ protected:
         return 1;
     }
 
-
-//    void fill_universe_data() {
-//        qCDebug(logRefresher) << "start fill_universe_data";
-//        QJsonArray jarr;
-
-//        // fill races
-//        if (m_api->get_universe_races(jarr)) {
-//            for (const QJsonValueRef race_info: jarr) {
-//                if (race_info.isObject()) {
-//                    QJsonObject jobj = race_info.toObject();
-//                    quint64 race_id = jobj.value(QLatin1String("race_id")).toVariant().toULongLong();
-//                    QString name = jobj.value(QLatin1String("name")).toString();
-//                    if ((race_id > 0) && (!name.isEmpty())) {
-//                        m_eve_races.insert(race_id, name);
-//                        qCDebug(logRefresher) << "  added race" << race_id << name;
-//                    }
-//                }
-//            }
-//        }
-
-//        // fill bloodlines
-//        if (m_api->get_universe_bloodlines(jarr)) {
-//            for (const QJsonValueRef bloodline_info: jarr) {
-//                if (bloodline_info.isObject()) {
-//                    QJsonObject jobj = bloodline_info.toObject();
-//                    quint64 bloodline_id = jobj.value(QLatin1String("bloodline_id")).toVariant().toULongLong();
-//                    QString name = jobj.value(QLatin1String("name")).toString();
-//                    if ((bloodline_id > 0) && (!name.isEmpty())) {
-//                        m_eve_bloodlines.insert(bloodline_id, name);
-//                        qCDebug(logRefresher) << "  added bloodline" << bloodline_id << name;
-//                    }
-//                }
-//            }
-//        }
-
-//        // TODO: fill ancestries: ESI currently does not have ancestries endpoint.
-
-//        qCDebug(logRefresher) << "end fill_universe_data";
-//    }
-
-
 protected:
     PeriodicalRefresher *m_owner;
     QAtomicInteger<int> m_active;
     QAtomicInteger<int> m_server_players;
     //
     EveApi *m_api;
-    // eve universe data
-    // those hases store data that can never change (staticdata)
-    // now - used from SDE (Static Data Export Database), remove this
-    // QHash<quint64, QString> m_eve_races;
-    // QHash<quint64, QString> m_eve_bloodlines;
-    // QHash<quint64, QString> m_eve_ancestries;
-    // QHash<quint64, QString> m_eve_typeids;
 };
 
 
