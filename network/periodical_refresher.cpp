@@ -15,6 +15,7 @@
 #include "db/db.h"
 #include "models/character.h"
 #include "models/character_model.h"
+#include "models/character_skill.h"
 #include "models/model_manager.h"
 #include "eve_api/eve_api.h"
 #include "qmlevemon_app.h"
