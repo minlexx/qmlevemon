@@ -438,7 +438,8 @@ protected:
             ch->setTotalSp(totalSp);
             QJsonArray jskills = reply.value(QLatin1String("skills")).toArray();
             for (auto jskill: qAsConst(jskills)) {
-                //
+                // qCDebug(logRefresher) << jskill;
+                // {"active_skill_level":5, "skill_id":30547, "skillpoints_in_skill":256000, "trained_skill_level":5}
             }
         }
 
