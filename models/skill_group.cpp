@@ -1,3 +1,4 @@
+#include <utility>
 #include "skill_group.h"
 
 namespace EM {
@@ -15,6 +16,11 @@ SkillGroup::SkillGroup(const SkillGroup& other):
     (*this) = other;
 }
 
+SkillGroup::SkillGroup(SkillGroup &&other)
+{
+    (*this) = std::move(other);
+}
+
 
 SkillGroup& SkillGroup::operator=(const SkillGroup& other)
 {
@@ -27,8 +33,8 @@ SkillGroup& SkillGroup::operator=(const SkillGroup& other)
 
 SkillGroup& SkillGroup::operator=(SkillGroup&& other)
 {
-    m_groupId = other.m_groupId;
-    m_groupName = other.m_groupName;
+    m_groupId = std::move(other.m_groupId);
+    m_groupName = std::move(other.m_groupName);
     return (*this);
 }
 
@@ -49,7 +55,7 @@ void SkillGroup::setGroupName(const QString& groupName)
 {
     if (m_groupName == groupName) return;
     m_groupName = groupName;
-    emit groupNameChanged();
+    Q_EMIT groupNameChanged();
 }
 
 
@@ -57,7 +63,7 @@ void SkillGroup::setGroupId(quint64 groupId)
 {
     if (m_groupId == groupId) return;
     m_groupId = groupId;
-    emit groupIdChanged();
+    Q_EMIT groupIdChanged();
 }
 
 

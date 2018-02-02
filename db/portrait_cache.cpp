@@ -128,7 +128,7 @@ public:
         if (m_requestedSize.isValid())
             m_image = m_image.scaled(m_requestedSize);
 
-        emit finished();
+        Q_EMIT finished();
     }
 
     QString m_id;

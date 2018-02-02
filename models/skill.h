@@ -20,6 +20,7 @@ class SkillTemplate: public QObject
 public:
     SkillTemplate();
     SkillTemplate(const SkillTemplate& other);
+    SkillTemplate(SkillTemplate&& other);
     SkillTemplate& operator=(const SkillTemplate& other);
     SkillTemplate& operator=(SkillTemplate&& other);
     bool operator==(const SkillTemplate& other) const;

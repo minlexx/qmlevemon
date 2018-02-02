@@ -1,3 +1,4 @@
+#include <utility>
 #include <QDataStream>
 #include "eve_api_tokens.h"
 
@@ -16,12 +17,27 @@ EveOAuthTokens::EveOAuthTokens(const EveOAuthTokens &other)
 }
 
 
+EveOAuthTokens::EveOAuthTokens(EveOAuthTokens &&other)
+{
+    (*this) = std::move(other);
+}
+
+
 EveOAuthTokens& EveOAuthTokens::operator=(const EveOAuthTokens& other)
 {
     if (this == &other) return (*this);
     this->access_token = other.access_token;
     this->refresh_token = other.refresh_token;
     this->expire_dt = other.expire_dt;
+    return (*this);
+}
+
+
+EveOAuthTokens& EveOAuthTokens::operator=(EveOAuthTokens&& other)
+{
+    this->access_token = std::move(other.access_token);
+    this->refresh_token = std::move(other.refresh_token);
+    this->expire_dt = std::move(other.expire_dt);
     return (*this);
 }
 

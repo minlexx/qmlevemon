@@ -139,7 +139,7 @@ void CharacterModel::addNewCharacter(Character *character)
     DbSqlite::instance()->saveCharacters(m_characterList);
     m_mutex.unlock();  // unlock before emitting any signals
     endInsertRows();
-    emit newCharacterAdded();
+    Q_EMIT newCharacterAdded();
 }
 
 
@@ -170,7 +170,7 @@ void CharacterModel::markCharacterAsUpdated(Character *character)
     DbSqlite::instance()->saveCharacter(character);
     // emit signal for model clients
     QModelIndex topLeft = index(row);
-    emit dataChanged(topLeft, topLeft); // one item changed only ;)
+    Q_EMIT dataChanged(topLeft, topLeft); // one item changed only ;)
 }
 
 

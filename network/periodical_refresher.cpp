@@ -112,7 +112,7 @@ protected:
     {
         if (active) m_active = 1;
         else m_active = 0;
-        emit m_owner->networkActivityChanged();
+        Q_EMIT m_owner->networkActivityChanged();
     }
 
 
@@ -141,7 +141,7 @@ protected:
             // change atomic integer and emit signal only if value has really changed
             if (prev_server_players != server_players) {
                 m_server_players = server_players;
-                emit m_owner->serverPlayersOnlineChanged();
+                Q_EMIT m_owner->serverPlayersOnlineChanged();
             }
         }
     }

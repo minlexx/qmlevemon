@@ -1,3 +1,4 @@
+#include <utility>
 #include "character_skill.h"
 
 
@@ -14,6 +15,11 @@ CharacterSkill::CharacterSkill(const CharacterSkill &other)
     (*this) = other;
 }
 
+CharacterSkill::CharacterSkill(CharacterSkill&& other)
+{
+    (*this) = std::move(other);
+}
+
 CharacterSkill &CharacterSkill::operator=(const CharacterSkill &other)
 {
     if (this == &other) return (*this);
@@ -26,8 +32,8 @@ CharacterSkill &CharacterSkill::operator=(const CharacterSkill &other)
 CharacterSkill &CharacterSkill::operator=(CharacterSkill &&other)
 {
     SkillTemplate::operator=(other);
-    m_trainedLevel = other.m_trainedLevel;
-    m_activeLevel = other.m_activeLevel;
+    m_trainedLevel = std::move(other.m_trainedLevel);
+    m_activeLevel = std::move(other.m_activeLevel);
     return (*this);
 }
 

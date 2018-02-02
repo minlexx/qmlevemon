@@ -158,7 +158,7 @@ void QmlEvemonApp::setCurrentCharacter(quint64 char_id)
     // specia value - overview page, no character selected
     if (char_id == 0) {
         m_curCharId = 0;
-        emit curCharIdChanged();
+        Q_EMIT curCharIdChanged();
         return;
     }
     // character should exist
@@ -170,7 +170,7 @@ void QmlEvemonApp::setCurrentCharacter(quint64 char_id)
     }
     qCDebug(logApp) << "setting current displayed character as:" << ch->toString();
     m_curCharId = ch->characterId();
-    emit curCharIdChanged();
+    Q_EMIT curCharIdChanged();
     m_engine.rootContext()->setContextProperty(QLatin1String("curChar"), ch);
 }
 

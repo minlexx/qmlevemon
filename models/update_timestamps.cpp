@@ -1,3 +1,4 @@
+#include <utility>
 #include <QDataStream>
 #include "update_timestamps.h"
 
@@ -14,6 +15,11 @@ UpdateTimestamps::UpdateTimestamps()
 UpdateTimestamps::UpdateTimestamps(const UpdateTimestamps& other)
 {
     (*this) = other;
+}
+
+UpdateTimestamps::UpdateTimestamps(UpdateTimestamps &&other)
+{
+    (*this) = std::move(other);
 }
 
 
@@ -72,12 +78,23 @@ qint64 UpdateTimestamps::p_get_cache_seconds(UTST kind)
 UpdateTimestamps& UpdateTimestamps::operator=(const UpdateTimestamps& other)
 {
     if (this == &other) return (*this);
-    dt_public = other.dt_public;
-    dt_skills = other.dt_skills;
-    dt_wallet = other.dt_wallet;
+    dt_public   = other.dt_public;
+    dt_skills   = other.dt_skills;
+    dt_wallet   = other.dt_wallet;
     dt_location = other.dt_location;
-    dt_clones = other.dt_clones;
-    dt_assets = other.dt_assets;
+    dt_clones   = other.dt_clones;
+    dt_assets   = other.dt_assets;
+    return (*this);
+}
+
+UpdateTimestamps& UpdateTimestamps::operator=(UpdateTimestamps&& other)
+{
+    dt_public   = std::move(other.dt_public);
+    dt_skills   = std::move(other.dt_skills);
+    dt_wallet   = std::move(other.dt_wallet);
+    dt_location = std::move(other.dt_location);
+    dt_clones   = std::move(other.dt_clones);
+    dt_assets   = std::move(other.dt_assets);
     return (*this);
 }
 

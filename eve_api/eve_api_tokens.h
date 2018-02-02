@@ -17,7 +17,9 @@ class EveOAuthTokens
 public:
     EveOAuthTokens();
     EveOAuthTokens(const EveOAuthTokens &other);
+    EveOAuthTokens(EveOAuthTokens &&other);
     EveOAuthTokens& operator=(const EveOAuthTokens& other);
+    EveOAuthTokens& operator=(EveOAuthTokens&& other);
     bool operator==(const EveOAuthTokens& other);
     QString toString() const;
     bool needsRefresh() const;

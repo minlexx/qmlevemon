@@ -1,3 +1,4 @@
+#include <utility>
 #include <QDataStream>
 #include <QLocale>
 #include <QLoggingCategory>
@@ -20,6 +21,11 @@ Character::Character(const Character& other):
     QObject(nullptr)
 {
     (*this) = other;
+}
+
+Character::Character(Character &&other)
+{
+    (*this) = std::move(other);
 }
 
 
@@ -57,10 +63,71 @@ Character& Character::operator=(const Character& other)
     m_currentShipTypeId = other.m_currentShipTypeId;
     m_currentShipTypeName = other.m_currentShipTypeName;
     m_currentShipFriendlyName = other.m_currentShipFriendlyName;
+    // skills and related
+    m_attributeCharisma = other.m_attributeCharisma;
+    m_attributeIntelligence = other.m_attributeIntelligence;
+    m_attributeMemory = other.m_attributeMemory;
+    m_attributePerception = other.m_attributePerception;
+    m_attributeWillpower = other.m_attributeWillpower;
+    m_numBonusRemaps = other.m_numBonusRemaps;
+    m_lastRemapDate = other.m_lastRemapDate;
+    m_remapCooldownDate = other.m_remapCooldownDate;
+    m_totalSp = other.m_totalSp;
     // auth info
     m_tokens = other.m_tokens;
     // last update date-times
     m_update_timestamps = other.m_update_timestamps;
+    return (*this);
+}
+
+
+Character& Character::operator=(Character&& other)
+{
+    // general info
+    m_characterId = std::move(other.m_characterId);
+    m_characterName = std::move(other.m_characterName);
+    m_corporationId = std::move(other.m_corporationId);
+    m_corporationName = std::move(other.m_corporationName);
+    m_corporationTicker = std::move(other.m_corporationTicker);
+    m_allianceId = std::move(other.m_allianceId);
+    m_allianceName = std::move(other.m_allianceName);
+    m_allianceTicker = std::move(other.m_allianceTicker);
+    // general - origins
+    m_raceId = std::move(other.m_raceId);
+    m_raceName = std::move(other.m_raceName);
+    m_ancestryId = std::move(other.m_ancestryId);
+    m_ancestryName = std::move(other.m_ancestryName);
+    m_bloodlineId = std::move(other.m_bloodlineId);
+    m_bloodlineName = std::move(other.m_bloodlineName);
+    m_gender = std::move(other.m_gender);
+    m_birthday_dt = std::move(other.m_birthday_dt);
+    m_securityStatus = std::move(other.m_securityStatus);
+    m_bio = std::move(other.m_bio);
+    // wallet info
+    m_isk = std::move(other.m_isk);
+    // location info
+    m_currentSolarSystemId = std::move(other.m_currentSolarSystemId);
+    m_currentSolarSystemName = std::move(other.m_currentSolarSystemName);
+    m_currentStationId = std::move(other.m_currentStationId);
+    m_currentStructureId = std::move(other.m_currentStructureId);
+    m_currentStructureName = std::move(other.m_currentStructureName);
+    m_currentShipTypeId = std::move(other.m_currentShipTypeId);
+    m_currentShipTypeName = std::move(other.m_currentShipTypeName);
+    m_currentShipFriendlyName = std::move(other.m_currentShipFriendlyName);
+    // skills and related
+    m_attributeCharisma = std::move(other.m_attributeCharisma);
+    m_attributeIntelligence = std::move(other.m_attributeIntelligence);
+    m_attributeMemory = std::move(other.m_attributeMemory);
+    m_attributePerception = std::move(other.m_attributePerception);
+    m_attributeWillpower = std::move(other.m_attributeWillpower);
+    m_numBonusRemaps = std::move(other.m_numBonusRemaps);
+    m_lastRemapDate = std::move(other.m_lastRemapDate);
+    m_remapCooldownDate = std::move(other.m_remapCooldownDate);
+    m_totalSp = std::move(other.m_totalSp);
+    // auth info
+    m_tokens = std::move(other.m_tokens);
+    // last update date-times
+    m_update_timestamps = std::move(other.m_update_timestamps);
     return (*this);
 }
 

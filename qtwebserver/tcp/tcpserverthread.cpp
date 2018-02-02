@@ -51,7 +51,7 @@ ServerThread::NetworkServiceThreadState ServerThread::state() {
 
 void ServerThread::setState(ServerThread::NetworkServiceThreadState state) {
     _networkServiceThreadState = state;
-    emit stateChanged(state);
+    Q_EMIT stateChanged(state);
 }
 
 void ServerThread::handleNewConnection(int socketHandle) {

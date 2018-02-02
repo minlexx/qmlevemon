@@ -68,7 +68,9 @@ class Character: public QObject
 public:
     Character();
     Character(const Character& other);
+    Character(Character&& other);
     Character& operator=(const Character& other);
+    Character& operator=(Character&& other);
     bool operator==(const Character& other);
 
     QString toString() const;

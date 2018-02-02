@@ -16,6 +16,7 @@ class SkillGroup: public QObject
 public:
     SkillGroup();
     SkillGroup(const SkillGroup& other);
+    SkillGroup(SkillGroup&& other);
     SkillGroup& operator=(const SkillGroup& other);
     SkillGroup& operator=(SkillGroup&& other);
     bool operator==(const SkillGroup& other) const;

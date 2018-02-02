@@ -18,6 +18,7 @@ class CharacterSkill: public SkillTemplate
 public:
     CharacterSkill();
     CharacterSkill(const CharacterSkill& other);
+    CharacterSkill(CharacterSkill&& other);
     CharacterSkill& operator=(const CharacterSkill& other);
     CharacterSkill& operator=(CharacterSkill&& other);
     bool operator==(const CharacterSkill& other) const;

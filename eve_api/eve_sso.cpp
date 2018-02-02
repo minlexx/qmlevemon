@@ -59,7 +59,7 @@ public:
             if (params.contains(QLatin1String("code")) && params.contains(QLatin1String("state"))) {
                 QString code = QString::fromUtf8(params[QLatin1String("code")]);
                 QString state = QString::fromUtf8(params[QLatin1String("state")]);
-                emit codeReceived(code, state);
+                Q_EMIT codeReceived(code, state);
             }
         }
     }
@@ -133,21 +133,21 @@ public Q_SLOTS:
 #endif
         // check valid state
         if (state != m_sso_state) {
-            emit ssoAuthError(tr("EVE OAuth login error: Invalid state!"));
+            Q_EMIT ssoAuthError(tr("EVE OAuth login error: Invalid state!"));
             return;
         }
         EveOAuthTokens tokens;
         quint64 character_id = 0;
         bool res = eveapi_request_first_access_token(code, tokens, character_id);
         if (res) {
-            emit ssoAuthOk();
+            Q_EMIT ssoAuthOk();
             Character *character = new Character();
             character->setAuthTokens(tokens);
             character->setCharacterId(character_id);
             CharacterModel *char_model = ModelManager::instance()->characterModel();
             char_model->addNewCharacter(character);
         } else {
-            emit ssoAuthError(tr("EVE OAuth login error: request error or time out!"));
+            Q_EMIT ssoAuthError(tr("EVE OAuth login error: request error or time out!"));
         }
     }
 
@@ -197,7 +197,7 @@ int EveSsoLoginManager::localHttpServerPort() const {
 void EveSsoLoginManager::slotSetLocalHttpServerPort(int port) {
     Q_D(EveSsoLoginManager);
     d->setListenPort(port);
-    emit localHttpServerPortChanged();
+    Q_EMIT localHttpServerPortChanged();
 }
 
 

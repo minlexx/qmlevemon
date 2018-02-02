@@ -20,7 +20,9 @@ public:
 public:
     UpdateTimestamps();
     UpdateTimestamps(const UpdateTimestamps& other);
+    UpdateTimestamps(UpdateTimestamps&& other);
     UpdateTimestamps& operator=(const UpdateTimestamps& other);
+    UpdateTimestamps& operator=(UpdateTimestamps&& other);
 
     void resetTs(UTST kind);
     void updateTs(UTST kind);
