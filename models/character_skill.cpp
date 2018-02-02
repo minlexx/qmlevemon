@@ -58,4 +58,14 @@ void CharacterSkill::setActiveLevel(int lvl)
     }
 }
 
+quint64 CharacterSkill::skillPointsInSkill() const { return m_skillPointsInSkill; }
+
+void CharacterSkill::setSkillPointsInSkill(quint64 sp) {
+    if (sp != m_skillPointsInSkill) {
+        m_skillPointsInSkill = sp;
+        Q_EMIT skillPointsInSkillChanged();
+    }
+}
+
+
 }

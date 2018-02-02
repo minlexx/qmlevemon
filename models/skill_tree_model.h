@@ -55,6 +55,7 @@ public:
 public:
     bool load();
     QVector<SkillGroup *> getSkillGroups() const;
+    const SkillGroup *findSkillGroupForSkillId(quint64 skillId) const;
 
 private:
     SkillTreeNode *modelDataFromIndex(const QModelIndex& idx) const;

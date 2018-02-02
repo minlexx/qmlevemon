@@ -250,5 +250,11 @@ QVector<SkillGroup *> SkillTreeModel::getSkillGroups() const
     return ret;
 }
 
+const SkillGroup *SkillTreeModel::findSkillGroupForSkillId(quint64 skillId) const
+{
+    SkillTemplate *tmpl = m_skillTemplates[skillId];
+    return tmpl->skillGroup();
+}
+
 
 } // namespace EM

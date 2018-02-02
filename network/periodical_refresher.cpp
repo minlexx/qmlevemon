@@ -17,6 +17,7 @@
 #include "models/character_model.h"
 #include "models/character_skill.h"
 #include "models/model_manager.h"
+#include "models/skill_tree_model.h"
 #include "eve_api/eve_api.h"
 #include "qmlevemon_app.h"
 
@@ -434,13 +435,20 @@ protected:
         }
 
         // refresh character skills
+        SkillTreeModel *skillTree = ModelManager::instance()->skillTreeModel();
         if (m_api->get_character_skills(reply, ch->characterId(), ch->getAuthTokens().access_token)) {
             quint64 totalSp = reply.value(QLatin1String("total_sp")).toVariant().toULongLong();
             ch->setTotalSp(totalSp);
             QJsonArray jskills = reply.value(QLatin1String("skills")).toArray();
-            for (auto jskill: qAsConst(jskills)) {
+            for (auto jskillvalue: qAsConst(jskills)) {
                 // qCDebug(logRefresher) << jskill;
                 // {"active_skill_level":5, "skill_id":30547, "skillpoints_in_skill":256000, "trained_skill_level":5}
+                const QJsonObject& jskill = jskillvalue.toObject();
+                CharacterSkill chSkill;
+                chSkill.setSkillId(jskill.value(QLatin1String("skill_id")).toVariant().toULongLong());
+                chSkill.setActiveLevel(jskill.value(QLatin1String("active_skill_level")).toInt());
+                chSkill.setTrainedLevel(jskill.value(QLatin1String("trained_skill_level")).toInt());
+                chSkill.setSkillPointsInSkill(jskill.value(QLatin1String("skillpoints_in_skill")).toVariant().toULongLong());
             }
         }
 
