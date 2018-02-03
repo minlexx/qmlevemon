@@ -2,7 +2,7 @@
 #define H_EM_CHARACTER_SKILL
 
 #include <QObject>
-#include "skill.h"
+#include "skill_template.h".h"
 
 
 namespace EM {

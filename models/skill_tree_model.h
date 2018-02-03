@@ -1,7 +1,7 @@
 #ifndef H_SKILL_TREE_MODEL
 #define H_SKILL_TREE_MODEL
 
-#include "skill.h"
+#include "skill_template.h"
 #include <QAbstractItemModel>
 #include <QHash>
 #include <QByteArray>
