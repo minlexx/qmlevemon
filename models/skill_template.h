@@ -8,6 +8,20 @@
 namespace EM {
 
 
+enum class CharacterAttributeID {
+    INVALID = 0,
+    CHARISMA = 164,
+    INTELLIGENCE = 165,
+    MEMORY = 166,
+    PERCEPTION = 167,
+    WILLPOWER = 168
+};
+
+
+CharacterAttributeID charAttributeFromID(int id);
+QString charAttributeName(CharacterAttributeID attr);
+
+
 class SkillTemplate: public QObject
 {
     Q_OBJECT

@@ -4,6 +4,32 @@
 namespace EM {
 
 
+CharacterAttributeID charAttributeFromID(int id)
+{
+    switch (id) {
+    case CharacterAttributeID::CHARISMA: return CharacterAttributeID::CHARISMA; break;
+    case CharacterAttributeID::INTELLIGENCE: return CharacterAttributeID::INTELLIGENCE; break;
+    case CharacterAttributeID::MEMORY: return CharacterAttributeID::MEMORY; break;
+    case CharacterAttributeID::PERCEPTION: return CharacterAttributeID::PERCEPTION; break;
+    case CharacterAttributeID::WILLPOWER: return CharacterAttributeID::WILLPOWER; break;
+    }
+    return CharacterAttributeID::INVALID;
+}
+
+
+QString charAttributeName(CharacterAttributeID attr)
+{
+    switch (attr) {
+    case CharacterAttributeID::CHARISMA: return QStringLiteral("Charisma"); break;
+    case CharacterAttributeID::INTELLIGENCE: QStringLiteral("Intelligence"); break;
+    case CharacterAttributeID::MEMORY: return QStringLiteral("Memory"); break;
+    case CharacterAttributeID::PERCEPTION: return QStringLiteral("Perception"); break;
+    case CharacterAttributeID::WILLPOWER: return QStringLiteral("Willpower"); break;
+    }
+    return QStringLiteral("Invalid!");
+}
+
+
 SkillTemplate::SkillTemplate():
     QObject(nullptr)
 {
