@@ -54,12 +54,6 @@ public Q_SLOTS:
         setNetworkActive(true);
         qCDebug(logRefresher) << "BG Refresh started";
 
-        // maybe fill universe data, run only once per program start
-        // not needed now - use SDE DB
-        //if (m_eve_races.isEmpty()) {
-        //    this->fill_universe_data();
-        //}
-
         // update server status
         this->update_server_status();
 
@@ -119,6 +113,7 @@ protected:
     void update_server_status() {
         QJsonObject jobj;
         bool req_ok = m_api->get_server_status(jobj);
+        if (QThread::currentThread()->isInterruptionRequested()) return;
         if (req_ok) {
             // parse reply
             int prev_server_players = m_server_players;
@@ -180,6 +175,7 @@ protected:
         if (!m_api->get_character_public_info(obj, ch->characterId())) {
             return 0;
         }
+        if (QThread::currentThread()->isInterruptionRequested()) return 0;
 
         // parse reply
         // {
@@ -227,7 +223,9 @@ protected:
         ch->setSecurityStatus(sec_status);
         //
         // resolve names for race, bloodline, ancestry
-        Db *db = globalAppInstance()->database();
+        QmlEvemonApp *gApp = globalAppInstance();
+        if (!gApp) return 0;
+        Db *db = gApp->database();
         ch->setRaceName(db->raceName(ch->raceId()));
         ch->setBloodlineName(db->bloodlineName(ch->bloodlineId()));
         ch->setAncestryName(db->ancestryName(ch->ancestryId()));
@@ -235,6 +233,7 @@ protected:
         // fetch corpporation name
         QJsonObject corpReply;
         if (m_api->get_corporation_public_data(corpReply, ch->corporationId())) {
+            if (QThread::currentThread()->isInterruptionRequested()) return 0;
             QString corp_name, corp_ticker;
             // ESI had changed corporation_name => name
             if (corpReply.contains(QLatin1String("corporation_name"))) {
@@ -255,6 +254,7 @@ protected:
             if (ch->allianceId() > 0) {
                 QJsonObject allyReply;
                 if (m_api->get_alliance_public_data(allyReply, ch->allianceId())) {
+                    if (QThread::currentThread()->isInterruptionRequested()) return 0;
                     QString ally_name, ally_ticker;
                     ally_name = allyReply.value(QLatin1String("alliance_name")).toString();
                     ally_ticker = allyReply.value(QLatin1String("ticker")).toString();
@@ -285,6 +285,8 @@ protected:
         if (!m_api->get_character_location(reply, ch->characterId(), ch->getAuthTokens().access_token)) {
             return 0; // req failed
         }
+        if (QThread::currentThread()->isInterruptionRequested()) return 0;
+
         quint64 ss_id = 0, station_id = 0, structure_id = 0, prev_station_id = 0, prev_structure_id = 0;
         ss_id = reply.value(QLatin1String("solar_system_id")).toVariant().toULongLong();
         if (reply.contains(QLatin1String("structure_id"))) {
@@ -302,16 +304,19 @@ protected:
         if ((structure_id > 0) && (prev_structure_id != structure_id)) {
             // resolve structure name
             if (m_api->get_universe_structure(reply, structure_id, ch->getAuthTokens().access_token)) {
+                if (QThread::currentThread()->isInterruptionRequested()) return 0;
                 QString structure_name = reply.value(QLatin1String("name")).toString();
                 ch->setCurrentStructureName(structure_name);
             }
         } else if ((station_id > 0) && (prev_station_id != station_id)) {
             // resolve station name
             if (m_api->get_universe_station(reply, station_id)) {
+                if (QThread::currentThread()->isInterruptionRequested()) return 0;
                 QString station_name = reply.value(QLatin1String("name")).toString();
                 ch->setCurrentStructureName(station_name);
             }
         }
+        if (QThread::currentThread()->isInterruptionRequested()) return 0;
 
         // deal with results
         // *IF* the solarsystem *really* changed:
@@ -319,6 +324,8 @@ protected:
             ch->setCurrentSolarSystemId(ss_id);
             // get solarsystem info (name, constellation_id, security)
             if (m_api->get_universe_system(reply, ss_id)) {
+                if (QThread::currentThread()->isInterruptionRequested()) return 0;
+
                 QString ss_name = reply.value(QLatin1String("name")).toString();
                 quint64 constellation_id = reply.value(QLatin1String("constellation_id")).toVariant().toULongLong();
                 float ss_security = reply.value(QLatin1String("security_status")).toVariant().toFloat();
@@ -328,6 +335,8 @@ protected:
                 if (constellation_id != ch->currentConstellationId()) {
                     ch->setCurrentConstellationId(constellation_id);
                     if (m_api->get_universe_constellation(reply, constellation_id)) {
+                        if (QThread::currentThread()->isInterruptionRequested()) return 0;
+
                         QString const_name = reply.value(QLatin1String("name")).toString();
                         quint64 region_id = reply.value(QLatin1String("region_id")).toVariant().toULongLong();
                         ch->setCurrentConstellationName(const_name);
@@ -342,14 +351,18 @@ protected:
                 }
             }
         }
+        if (QThread::currentThread()->isInterruptionRequested()) return 0;
 
         // get current ship
         if (!m_api->get_character_ship(reply, ch->characterId(), ch->getAuthTokens().access_token)) {
             // req failed
             return 0;
         }
+        if (QThread::currentThread()->isInterruptionRequested()) return 0;
 
-        Db *db = globalAppInstance()->database();
+        QmlEvemonApp *gApp = globalAppInstance();
+        if (!gApp) return 0;
+        Db *db = gApp->database();
         quint64 ship_type_id = 0;
         QString ship_friendly_name = reply.value(QLatin1String("ship_name")).toString();
         ship_type_id = reply.value(QLatin1String("ship_type_id")).toVariant().toULongLong();
@@ -387,6 +400,8 @@ protected:
         // refresh character attributes
         qCDebug(logRefresher) << " refreshing attributes for" << ch->toString();
         if (m_api->get_character_attributes(reply, ch->characterId(), ch->getAuthTokens().access_token)) {
+            if (QThread::currentThread()->isInterruptionRequested()) return 0;
+
             num_updates++;
             /* { // example reply
               "charisma": 29,
@@ -433,10 +448,13 @@ protected:
                 ch->setRemapCooldownDate(remap_cooldown_date);
             }
         }
+        if (QThread::currentThread()->isInterruptionRequested()) return 0;
 
         // refresh character skills
         SkillTreeModel *skillTree = ModelManager::instance()->skillTreeModel();
         if (m_api->get_character_skills(reply, ch->characterId(), ch->getAuthTokens().access_token)) {
+            if (QThread::currentThread()->isInterruptionRequested()) return 0;
+
             quint64 totalSp = reply.value(QLatin1String("total_sp")).toVariant().toULongLong();
             ch->setTotalSp(totalSp);
             QJsonArray jskills = reply.value(QLatin1String("skills")).toArray();
@@ -454,6 +472,8 @@ protected:
 
         // refresh character skillqueue
         if (m_api->get_character_skillqueue(replyArr, ch->characterId(), ch->getAuthTokens().access_token)) {
+            if (QThread::currentThread()->isInterruptionRequested()) return 0;
+
             // qCDebug(logRefresher) << replyArr;
             // QJsonArray([{"finish_date":"2018-02-15T18:45:55Z",
             //              "finished_level":5,
@@ -483,6 +503,8 @@ protected:
         if (!m_api->get_character_wallet(isk, ch->characterId(), ch->getAuthTokens().access_token)) {
             return 0; // req failed
         }
+        if (QThread::currentThread()->isInterruptionRequested()) return 0;
+
         ch->setIskAmount(isk);
         ch->setUpdateTimestamp(UpdateTimestamps::UTST::WALLET);
         return 1;
@@ -521,6 +543,11 @@ PeriodicalRefresher::PeriodicalRefresher(QObject *parent):
 
 
 PeriodicalRefresher::~PeriodicalRefresher()
+{
+    stopGracefully();
+}
+
+void PeriodicalRefresher::stopGracefully()
 {
     qCDebug(logRefresher) << "BG Refresher stopping...";
     m_thread.requestInterruption();

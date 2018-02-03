@@ -23,6 +23,7 @@ public:
     virtual ~PeriodicalRefresher();
 
 public Q_SLOTS:
+    void stopGracefully();
     bool networkActivity() const;
     int serverPlayersOnline() const;
     void forceRefreshNow();
