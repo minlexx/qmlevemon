@@ -60,6 +60,7 @@ bool QmlEvemonApp::isDesktopPlatform() const
 }
 
 
+// setup QML root context's properties, creates image providers, etc
 bool QmlEvemonApp::initQmlEngine()
 {
     QQmlContext *rootContext = m_engine.rootContext();
@@ -186,6 +187,14 @@ void QmlEvemonApp::requestRefreshCharacterPortrait(quint64 char_id)
 void QmlEvemonApp::forceRefresh()
 {
     m_refresher->forceRefreshNow();
+}
+
+
+// // called from QML to request deletion of character from application
+void QmlEvemonApp::requestDeleteCharacter(quint64 characterId)
+{
+    qCDebug(logApp) << Q_FUNC_INFO << characterId;
+    ModelManager::instance()->characterModel()->removeCharacter(characterId);
 }
 
 
