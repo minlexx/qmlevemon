@@ -14,6 +14,7 @@ Rectangle {
     border.width: 0
 
     signal selectCharacterRequest(int characterId)
+    signal removeCharacterRequest(int characterId)
 
     CharacterPickerSidebar {
         id: charPickSidebar
@@ -23,6 +24,68 @@ Rectangle {
 
         onCharacterSelected: {
             container.selectCharacterRequest(char_id);
+        }
+    }
+
+    Popup {
+        id: removeConfirmPopup
+        visible: false
+        clip: true
+        closePolicy: Popup.CloseOnPressOutside | Popup.CloseOnEscape
+        modal: true
+
+        width: 400
+        height: 300
+        x: parent.width/2 - width/2
+        y: parent.height/2 - height/2
+
+        background: Rectangle {
+            implicitWidth: 400
+            implicitHeight: 300
+            border.width: 3
+            border.color: AppStyle.warningPopupBorderColor
+            color: AppStyle.warningPopupBgColor
+            radius: AppStyle.marginNormal
+        }
+
+        Text {
+            anchors.fill: parent
+            font.family: AppStyle.fontFamily
+            font.pointSize: AppStyle.textSizeH2
+            color: AppStyle.warningPopupTextColor
+            verticalAlignment: Text.AlignTop
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.Wrap
+            text: qsTr("Are you sure you want to delete this character?")
+        }
+
+        Item {
+            id: buttonContainter
+
+            width: btnOk.width + btnCancel.width + 3*AppStyle.marginNormal
+            height: btnOk.height + 2*AppStyle.marginNormal
+            x: parent.x + parent.width/2 - width/2
+            y: parent.y + parent.height - height - AppStyle.marginNormal
+
+            Row {
+                anchors.fill: parent
+                spacing: AppStyle.marginNormal
+                Button {
+                    id: btnOk
+                    text: qsTr("OK")
+                    onClicked: {
+                        removeConfirmPopup.close();
+                        container.removeCharacterRequest(curChar.characterId);
+                    }
+                }
+                Button {
+                    id: btnCancel
+                    text: qsTr("Cancel")
+                    onClicked: {
+                        removeConfirmPopup.close();
+                    }
+                }
+            }
         }
     }
 
@@ -75,6 +138,12 @@ Rectangle {
                         // change again to new URL with timestamp, to force reload
                         var curTimeStamp = new Date().getTime();
                         profilePic.source = "image://portrait/" + curChar.characterId + "/tm" + curTimeStamp;
+                    }
+                }
+                EMPopupMenuItem {
+                    text: qsTr("Delete this character")
+                    onTriggered: {
+                        removeConfirmPopup.open();
                     }
                 }
             }
