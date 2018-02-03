@@ -121,6 +121,9 @@ ApplicationWindow {
             onSelectCharacterRequest: {
                 nav_to("select_character", characterId);
             }
+            onRemoveCharacterRequest: {
+                evemonapp.requestDeleteCharacter(characterId);
+            }
         }
     }
 

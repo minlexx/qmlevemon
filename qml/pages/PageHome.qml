@@ -2,9 +2,10 @@ import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import "../"
+import "../custom_controls"
 
 Rectangle {
-    id: content
+    id: container
     //anchors.fill: parent // not needed in a StackView
     anchors.margins: AppStyle.marginNormal
 
@@ -13,6 +14,7 @@ Rectangle {
 
     signal addCharacterRequest()
     signal selectCharacterRequest(int characterId)
+    signal removeCharacterRequest(int characterId)
 
     Button {
         id: btnAddAccount
@@ -24,7 +26,7 @@ Rectangle {
         }
 
         onClicked: {
-            content.addCharacterRequest();
+            container.addCharacterRequest();
         }
     }
 
@@ -131,10 +133,104 @@ Rectangle {
             MouseArea {
                 id: mouseArea
                 anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
                 hoverEnabled: true
+                acceptedButtons: Qt.LeftButton | Qt.RightButton
 
                 onClicked: {
-                    content.selectCharacterRequest(model.characterId)
+                    if (mouse.button === Qt.LeftButton) {
+                        container.selectCharacterRequest(model.characterId)
+                    } else if (mouse.button == Qt.RightButton) {
+                        contextMenu.popup(mouse.x, mouse.y);
+                    }
+                }
+
+                onPressAndHold: {
+                    contextMenu.popup(mouse.x, mouse.y);
+                }
+
+                Menu {
+                    id: contextMenu
+
+                    // Menu.popup() function was introduced in Qt 5.10,
+                    // for 5.7 compatibility we can emulate it somehow
+                    function popup(x, y) {
+                        this.x = x;
+                        this.y = y;
+                        this.open();
+                    }
+
+                    EMPopupMenuItem {
+                        text: qsTr("Delete this character")
+                        onTriggered: {
+                            removeConfirmPopup.characterId = model.characterId;
+                            removeConfirmPopup.open();
+                        }
+                    }
+                }
+            }
+        }
+
+        Popup {
+            id: removeConfirmPopup
+            visible: false
+            clip: true
+            closePolicy: Popup.CloseOnPressOutside | Popup.CloseOnEscape
+            modal: true
+
+            width: 400
+            height: 300
+            x: parent.width/2 - width/2
+            y: parent.height/2 - height/2
+
+            property real characterId: 0
+
+            background: Rectangle {
+                implicitWidth: 400
+                implicitHeight: 300
+                border.width: 3
+                border.color: AppStyle.warningPopupBorderColor
+                color: AppStyle.warningPopupBgColor
+                radius: AppStyle.marginNormal
+            }
+
+            Text {
+                anchors.fill: parent
+                font.family: AppStyle.fontFamily
+                font.pointSize: AppStyle.textSizeH2
+                color: AppStyle.warningPopupTextColor
+                verticalAlignment: Text.AlignTop
+                horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.Wrap
+                text: qsTr("Are you sure you want to delete this character?")
+            }
+
+            Item {
+                id: buttonContainter
+
+                width: btnOk.width + btnCancel.width + 3*AppStyle.marginNormal
+                height: btnOk.height + 2*AppStyle.marginNormal
+                x: parent.x + parent.width/2 - width/2
+                y: parent.y + parent.height - height - AppStyle.marginNormal
+
+                Row {
+                    anchors.fill: parent
+                    spacing: AppStyle.marginNormal
+                    Button {
+                        id: btnOk
+                        text: qsTr("OK")
+                        onClicked: {
+                            removeConfirmPopup.close();
+                            container.removeCharacterRequest(removeConfirmPopup.characterId);
+                        }
+                    }
+                    Button {
+                        id: btnCancel
+                        text: qsTr("Cancel")
+                        onClicked: {
+                            removeConfirmPopup.close();
+                        }
+                    }
                 }
             }
         }
