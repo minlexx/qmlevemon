@@ -1,5 +1,5 @@
 #include <utility>
-#include "skill_template.h".h"
+#include "skill_template.h"
 
 namespace EM {
 
@@ -29,6 +29,9 @@ SkillTemplate& SkillTemplate::operator=(const SkillTemplate& other)
     m_skillId = other.m_skillId;
     m_skillName = other.m_skillName;
     m_skillGroup = other.m_skillGroup;
+    m_primaryAttribute = other.m_primaryAttribute;
+    m_secondaryAttribute = other.m_secondaryAttribute;
+    m_skillTimeConstant = other.m_skillTimeConstant;
     return (*this);
 }
 
@@ -38,6 +41,9 @@ SkillTemplate& SkillTemplate::operator=(SkillTemplate&& other)
     m_skillId = std::move(other.m_skillId);
     m_skillName = std::move(other.m_skillName);
     m_skillGroup = std::move(other.m_skillGroup);
+    m_primaryAttribute = std::move(other.m_primaryAttribute);
+    m_secondaryAttribute = std::move(other.m_secondaryAttribute);
+    m_skillTimeConstant = std::move(other.m_skillTimeConstant);
     return (*this);
 }
 
@@ -54,6 +60,12 @@ QString SkillTemplate::skillName() const { return m_skillName; }
 quint64 SkillTemplate::skillId() const { return m_skillId; }
 
 const SkillGroup *SkillTemplate::skillGroup() const { return m_skillGroup; }
+
+int SkillTemplate::primaryAttribute() const { return m_primaryAttribute; }
+
+int SkillTemplate::secondaryAttribute() const { return m_secondaryAttribute; }
+
+float SkillTemplate::skillTimeConstant() const { return m_skillTimeConstant; }
 
 
 QString SkillTemplate::skillGroupName() const
@@ -93,6 +105,30 @@ void SkillTemplate::setSkillGroup(const SkillGroup *group)
     Q_EMIT skillGroupChanged();
     Q_EMIT skillGroupNameChanged();
     Q_EMIT skillGroupIdChanged();
+}
+
+
+void SkillTemplate::setPrimaryAttribute(int att)
+{
+    if (att == m_primaryAttribute) return;
+    m_primaryAttribute = att;
+    Q_EMIT primaryAttributeChanged();
+}
+
+
+void SkillTemplate::setSecondaryAttribute(int att)
+{
+    if (att == m_secondaryAttribute) return;
+    m_secondaryAttribute = att;
+    Q_EMIT secondaryAttributeChanged();
+}
+
+
+void SkillTemplate::setSkillTimeConstant(float difficulty)
+{
+    if (difficulty == m_skillTimeConstant) return;
+    m_skillTimeConstant = difficulty;
+    Q_EMIT skillTimeConstantChanged();
 }
 
 
