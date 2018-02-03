@@ -50,6 +50,7 @@ public:
     ~CharacterModel() override;
     void loadCharacters();
     void addNewCharacter(Character *character);
+    void removeCharacter(quint64 char_id);
     QList<Character *> getCharacters() const;
     // emit signal to model clients that some character has changed data
     void markCharacterAsUpdated(Character *character);
@@ -62,6 +63,7 @@ public:  // reimplmented interface
 
 Q_SIGNALS:
     void newCharacterAdded();
+    void characterRemoved(quint64 char_id);
 
 private:
     QHash<int, QByteArray> m_roles;
