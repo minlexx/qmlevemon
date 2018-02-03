@@ -23,6 +23,9 @@ Q_LOGGING_CATEGORY(logApp, "evemon.app")
 namespace EM {
 
 
+static QmlEvemonApp *g_globalAppInstance = nullptr;
+
+
 QmlEvemonApp::QmlEvemonApp(int& argc, char **argv):
     QGuiApplication(argc, argv),
     m_mainWindow(nullptr),
@@ -30,6 +33,7 @@ QmlEvemonApp::QmlEvemonApp(int& argc, char **argv):
     m_refresher(nullptr),
     m_curCharId(0)
 {
+    g_globalAppInstance = this;
     setApplicationName(QLatin1String("qmlevemon"));
     setApplicationDisplayName(QLatin1String("QML EVEMon"));
     setApplicationVersion(QLatin1String(QMLEVEMON_VERSION));
@@ -44,10 +48,12 @@ QmlEvemonApp::QmlEvemonApp(int& argc, char **argv):
 QmlEvemonApp::~QmlEvemonApp()
 {
     qCDebug(logApp) << "~QmlEvemonApp()";
+    g_globalAppInstance = nullptr;  // indicate that shutdown is in progress, no app
+    m_refresher->stopGracefully();
     // engine takes ownership of the image provider!
     // so we should not and cannot delete m_portraitCache.
     // It is automatically deleted in QQmlEngine destructor
-    //delete m_portraitCache;
+    //delete m_portraitCache; // do not do this!
 }
 
 
@@ -201,7 +207,9 @@ void QmlEvemonApp::requestDeleteCharacter(quint64 characterId)
 
 QmlEvemonApp *globalAppInstance()
 {
-    return dynamic_cast<QmlEvemonApp *>(QCoreApplication::instance());
+    // return dynamic_cast<QmlEvemonApp *>(QCoreApplication::instance());
+    // we need to return nullptr if shutdown is in progress
+    return g_globalAppInstance;
 }
 
 } // namespace
