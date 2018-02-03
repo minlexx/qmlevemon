@@ -125,6 +125,8 @@ bool DbSqlite::open_sde(const QString& db_filename)
         QStringLiteral("invTypes"),
         QStringLiteral("invGroups"),
         QStringLiteral("invCategories"),
+        QStringLiteral("dgmAttributeTypes"),
+        QStringLiteral("dgmTypeAttributes"),
         QStringLiteral("chrRaces"),
         QStringLiteral("chrFactions"),
         QStringLiteral("chrBloodlines"),
@@ -449,6 +451,10 @@ QJsonArray DbSqlite::loadSkillGroups()
     return ret;
 }
 
+// SELECT it.typeId, it.typeName, ta.attributeID, ta.valueInt, ta.valueFloat, att.attributeName
+//  FROM invTypes it, dgmTypeAttributes ta, dgmAttributeTypes att
+//  WHERE ta.attributeID = att.attributeID AND it.typeID = ta.typeID AND it.typeID = 20312;
+
 
 QJsonArray DbSqlite::loadSkillsInGroup(quint64 group_id)
 {
@@ -459,7 +465,7 @@ QJsonArray DbSqlite::loadSkillsInGroup(quint64 group_id)
 
     QSqlQuery q(m_eve_sde_db);
     // find all inv types in group
-    q.prepare(QLatin1String("SELECT typeID, typeName FROM invTypes WHERE groupID = ? ORDER BY typeName"));
+    q.prepare(QLatin1String("SELECT typeID, typeName FROM invTypes it WHERE groupID = ? ORDER BY typeName"));
     q.addBindValue(group_id, QSql::In);
     if (q.exec()) {
         while(q.next()) {
@@ -467,6 +473,41 @@ QJsonArray DbSqlite::loadSkillsInGroup(quint64 group_id)
             obj.insert(QLatin1String("id"), q.value(0).toString());
             obj.insert(QLatin1String("name"), q.value(1).toString());
             ret.append(QJsonValue(obj));
+        }
+    }
+    q.clear();
+
+    // for every skill type fill in it's attributes
+    for (QJsonArray::iterator it = ret.begin(); it != ret.end(); it++) {
+        QJsonObject skill_obj = (*it).toObject(); // copy of an object inside array
+        quint64 skill_id = skill_obj.value(QLatin1String("id")).toVariant().toULongLong();
+        // attributeID = 180 - primaryAttribute for skill, int value
+        // attributeID = 181 - secondaryAttribute for skill, int value
+        // attributeID = 275 - skillTimeConstant for skill, float value
+        q.prepare(QLatin1String("SELECT attributeID, valueInt, valueFloat "
+                                "FROM dgmTypeAttributes "
+                                "WHERE typeID=? AND attributeID IN (180,181,275)"));
+        q.addBindValue(skill_id, QSql::In);
+        if (q.exec()) {
+            while (q.next()) {
+                quint64 attributeID = q.value(0).toULongLong();
+                int valueInt = q.value(1).toInt();
+                float valueFloat = q.value(2).toFloat();
+                switch (attributeID) {
+                case 180:
+                    skill_obj.insert(QLatin1String("primaryAttribute"), valueInt);
+                    break;
+                case 181:
+                    skill_obj.insert(QLatin1String("secondaryAttribute"), valueInt);
+                    break;
+                case 275:
+                    skill_obj.insert(QLatin1String("skillTimeConstant"), valueFloat);
+                    break;
+                }
+            }
+            it = ret.erase(it);
+            ret.insert(it, skill_obj);
+            q.clear();
         }
     }
 

@@ -4,6 +4,8 @@
         <file>sql/chrBloodlines.sql</file>
         <file>sql/chrFactions.sql</file>
         <file>sql/chrRaces.sql</file>
+        <file>sql/dgmAttributeTypes.sql</file>
+        <file>sql/dgmTypeAttributes.sql</file>
         <file>sql/invTypes.sql</file>
         <file>sql/invGroups.sql</file>
         <file>sql/invCategories.sql</file>
