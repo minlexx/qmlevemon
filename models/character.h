@@ -64,6 +64,7 @@ class Character: public QObject
     Q_PROPERTY(QDateTime lastRemapDate          READ lastRemapDate          NOTIFY lastRemapDateChanged)
     Q_PROPERTY(QDateTime remapCooldownDate      READ remapCooldownDate      NOTIFY remapCooldownDateChanged)
     Q_PROPERTY(quint64   totalSp                READ totalSp                NOTIFY totalSpChanged)
+    Q_PROPERTY(bool      isAlphaClone           READ isAlphaClone           NOTIFY isAlphaCloneChanged)
 
 public:
     Character();
@@ -189,6 +190,7 @@ public:
     QDateTime lastRemapDate() const;
     QDateTime remapCooldownDate() const;
     quint64 totalSp() const;
+    bool isAlphaClone() const;
     // skills and related - setters
     void setAttributeCharisma(int a);
     void setAttributeIntelligence(int a);
@@ -199,6 +201,7 @@ public:
     void setLastRemapDate(const QDateTime& dt);
     void setRemapCooldownDate(const QDateTime& dt);
     void setTotalSp(quint64 sp);
+    void setIsAlphaClone(bool alpha);
 
     // auth info
     EveOAuthTokens getAuthTokens() const;
@@ -254,6 +257,7 @@ Q_SIGNALS:
     void lastRemapDateChanged();
     void remapCooldownDateChanged();
     void totalSpChanged();
+    void isAlphaCloneChanged();
 
 protected:
     // general info
@@ -308,6 +312,7 @@ protected:
     QDateTime m_lastRemapDate;
     QDateTime m_remapCooldownDate;
     quint64 m_totalSp = 0;
+    bool m_isAlphaClone = false;
 
     // auth info
     EveOAuthTokens m_tokens;

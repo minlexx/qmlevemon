@@ -73,6 +73,7 @@ Character& Character::operator=(const Character& other)
     m_lastRemapDate = other.m_lastRemapDate;
     m_remapCooldownDate = other.m_remapCooldownDate;
     m_totalSp = other.m_totalSp;
+    m_isAlphaClone = other.m_isAlphaClone;
     // auth info
     m_tokens = other.m_tokens;
     // last update date-times
@@ -124,6 +125,7 @@ Character& Character::operator=(Character&& other)
     m_lastRemapDate = std::move(other.m_lastRemapDate);
     m_remapCooldownDate = std::move(other.m_remapCooldownDate);
     m_totalSp = std::move(other.m_totalSp);
+    m_isAlphaClone = std::move(other.m_isAlphaClone);
     // auth info
     m_tokens = std::move(other.m_tokens);
     // last update date-times
@@ -417,6 +419,7 @@ int Character::numBonusRemaps() const { return m_numBonusRemaps; }
 QDateTime Character::lastRemapDate() const { return m_lastRemapDate; }
 QDateTime Character::remapCooldownDate() const { return m_remapCooldownDate; }
 quint64 Character::totalSp() const { return m_totalSp; }
+bool Character::isAlphaClone() const { return m_isAlphaClone; }
 
 void Character::setAttributeCharisma(int a) {
     if (m_attributeCharisma != a) {
@@ -481,6 +484,13 @@ void Character::setTotalSp(quint64 sp) {
     }
 }
 
+void Character::setIsAlphaClone(bool alpha) {
+    if (m_isAlphaClone != alpha) {
+        m_isAlphaClone = alpha;
+        Q_EMIT isAlphaCloneChanged();
+    }
+}
+
 // auth info
 EveOAuthTokens Character::getAuthTokens() const { return m_tokens; }
 void Character::setAuthTokens(const EveOAuthTokens& tokens) { m_tokens = tokens; }
@@ -509,7 +519,7 @@ void Character::forceRefreshAssets() { resetUpdateTimestamp(UpdateTimestamps::UT
 
 
 // increase version number when savedata format changes
-static const int SAVEDATA_VERSION = 8;
+static const int SAVEDATA_VERSION = 9;
 
 
 QDataStream& operator<<(QDataStream& stream, const EM::Character& character)
@@ -562,6 +572,7 @@ QDataStream& operator<<(QDataStream& stream, const EM::Character& character)
     stream << character.lastRemapDate();
     stream << character.remapCooldownDate();
     stream << character.totalSp();
+    stream << character.isAlphaClone();
     // auth tokens
     stream << character.getAuthTokens();
     // update timestamps
@@ -580,6 +591,7 @@ QDataStream& operator>>(QDataStream& stream, EM::Character& character)
     QDateTime dt;
     EM::EveOAuthTokens tokens;
     EM::UpdateTimestamps uts;
+    bool b = false;
 
     // first read and check version
     stream >> savedata_version;
@@ -636,6 +648,7 @@ QDataStream& operator>>(QDataStream& stream, EM::Character& character)
     stream >> dt;     character.setLastRemapDate(dt);
     stream >> dt;     character.setRemapCooldownDate(dt);
     stream >> ui64;   character.setTotalSp(ui64);
+    stream >> b;      character.setIsAlphaClone(b);
     // auth tokens
     stream >> tokens; character.setAuthTokens(tokens);
     // update timestamps
