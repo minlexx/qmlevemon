@@ -150,7 +150,21 @@ Rectangle {
         }
     }
 
+    TextKeyValue {
+        id: alphaCloneStatusText
+        anchors {
+            top: profilePic.bottom
+            left: profilePic.left
+            topMargin: AppStyle.marginSmall
+        }
+        fontPointSize: AppStyle.textSizeH4
+        keyText: qsTr("Account:")
+        valueText: curChar.isAlphaClone ? qsTr("Alpha") : qsTr("Omega")
+        valueTextColor: curChar.isAlphaClone ? AppStyle.textDefaultColor : "green"
+    }
+
     Flow {
+        id: charBasicInfoFlow
         anchors.left: profilePic.right
         anchors.right: parent.right
         anchors.top: parent.top
@@ -212,7 +226,7 @@ Rectangle {
                     id: charBirthdayText
                     keyText: qsTr("Birthday:")
                     //valueText: "18.10.2015 12:20:41"
-                    valueText: curChar.birthday
+                    valueText: Qt.formatDateTime(curChar.birthday)
                 }
                 TextKeyValue {
                     id: charCorpText
@@ -265,6 +279,29 @@ Rectangle {
             perception: curChar.attributePerception
             willpower: curChar.attributeWillpower
             charisma: curChar.attributeCharisma
+            numBonusRemaps: curChar.numBonusRemaps
+            lastRemapDate: curChar.lastRemapDate
+            remapCooldownDate: curChar.remapCooldownDate
+        }
+    }
+
+    Rectangle {
+        x: 10
+        y: charBasicInfoFlow.y + charBasicInfoFlow.height
+        width: parent.width-20
+        height: parent.height
+        border { width: 1; color: "red"; }
+        color: "yellow"
+        /*anchors {
+            top: charBasicInfoFlow.bottom
+            topMargin: AppStyle.marginNormal
+            bottom: parent.bottom
+            left: parent.left
+            right: parent.right
+        }*/
+        Component.onCompleted: {
+            console.log(charBasicInfoFlow.x, charBasicInfoFlow.y, charBasicInfoFlow.width, charBasicInfoFlow.height);
+            console.log(x, y, width, height);
         }
     }
 
@@ -344,9 +381,12 @@ Rectangle {
     }
 
     /*TabBar {
-        anchors.top: charDockedInText.bottom
+        anchors {
+            top: charBasicInfoFlow.bottom
+            topMargin: AppStyle.marginNormal
+        }
         width: parent.width
-        anchors.topMargin: AppStyle.marginNormal
+        height: 50
         TabButton { text: qsTr("Tab 1"); }
         TabButton { text: qsTr("Tab 2"); }
         TabButton { text: qsTr("Tab 3"); }
