@@ -452,9 +452,11 @@ protected:
 
         // refresh character skills
         SkillTreeModel *skillTree = ModelManager::instance()->skillTreeModel();
+        // get ALL character's skills
         if (m_api->get_character_skills(reply, ch->characterId(), ch->getAuthTokens().access_token)) {
             if (QThread::currentThread()->isInterruptionRequested()) return 0;
 
+            bool isAlphaClone = false;
             quint64 totalSp = reply.value(QLatin1String("total_sp")).toVariant().toULongLong();
             ch->setTotalSp(totalSp);
             QJsonArray jskills = reply.value(QLatin1String("skills")).toArray();
@@ -467,7 +469,14 @@ protected:
                 chSkill.setActiveLevel(jskill.value(QLatin1String("active_skill_level")).toInt());
                 chSkill.setTrainedLevel(jskill.value(QLatin1String("trained_skill_level")).toInt());
                 chSkill.setSkillPointsInSkill(jskill.value(QLatin1String("skillpoints_in_skill")).toVariant().toULongLong());
+                // detect alpha clone
+                // if any skill has activeLevel < trainedLevel, this is alpha
+                if (chSkill.activeLevel() < chSkill.trainedLevel()) {
+                    isAlphaClone = true;
+                }
             }
+            // forcefully update character's alpha clone status
+            ch->setIsAlphaClone(isAlphaClone);
         }
 
         // refresh character skillqueue
