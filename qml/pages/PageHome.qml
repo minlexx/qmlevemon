@@ -140,7 +140,7 @@ Rectangle {
                 onClicked: {
                     if (mouse.button === Qt.LeftButton) {
                         container.selectCharacterRequest(model.characterId)
-                    } else if (mouse.button == Qt.RightButton) {
+                    } else if (mouse.button === Qt.RightButton) {
                         contextMenu.popup(mouse.x, mouse.y);
                     }
                 }
