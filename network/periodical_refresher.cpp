@@ -549,11 +549,13 @@ PeriodicalRefresher::~PeriodicalRefresher()
 
 void PeriodicalRefresher::stopGracefully()
 {
-    qCDebug(logRefresher) << "BG Refresher stopping...";
-    m_thread.requestInterruption();
-    m_thread.quit();
-    m_thread.wait();
-    qCDebug(logRefresher) << "BG Refresher stopped.";
+    if (m_thread.isRunning()) {
+        qCDebug(logRefresher) << "BG Refresher stopping...";
+        m_thread.requestInterruption();
+        m_thread.quit();
+        m_thread.wait();
+        qCDebug(logRefresher) << "BG Refresher stopped.";
+    }
 }
 
 
