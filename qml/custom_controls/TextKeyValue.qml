@@ -5,7 +5,7 @@ import "../"
 Item {
     id: container
     height: keyTextItem.height + AppStyle.marginSmall
-    width: keyTextItem.width + valueTextItem.width + AppStyle.marginSmall
+    width: keyTextItem.width + valueTextItem.width + AppStyle.marginSmall + AppStyle.marginNormal
 
     property string keyText: "Key text"
     property string valueText: "Value text"
