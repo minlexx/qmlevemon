@@ -5,14 +5,17 @@ import "../"
 
 Item {
     id: container
-    implicitWidth: col.width
-    implicitHeight: col.height
+    implicitWidth: col1.width + col2.width
+    implicitHeight: col1.height
 
     property int intelligence: 10
     property int memory: 10
     property int perception: 10
     property int willpower: 10
     property int charisma: 10
+    property int numBonusRemaps: 0
+    property date lastRemapDate
+    property date remapCooldownDate
 
     property int iconWidth: 64
 
@@ -20,7 +23,7 @@ Item {
     property string fontFamily: AppStyle.fontFamily
 
     Column {
-        id: col
+        id: col1
 
         CharacterAttributeLine {
             id: attrIntelligence
@@ -66,6 +69,35 @@ Item {
             font.pointSize: fontSize
             font.family: fontFamily
             tooltipText: qsTr("Charisma")
+        }
+    }
+
+    Column {
+        id: col2
+        anchors.left: col1.right
+        anchors.top: parent.top
+        anchors.topMargin: 3
+
+        TextKeyValue {
+            height: 32
+            keyText: qsTr("Bonus remaps:")
+            valueText: numBonusRemaps
+            fontPointSize: container.fontSize
+            fontFamily: container.fontFamily
+        }
+        TextKeyValue {
+            height: 32
+            keyText: qsTr("Last remap date:")
+            valueText: Qt.formatDate(lastRemapDate)
+            fontPointSize: container.fontSize
+            fontFamily: container.fontFamily
+        }
+        TextKeyValue {
+            height: 32
+            keyText: qsTr("Remap cooldown:")
+            valueText: Qt.formatDate(remapCooldownDate)
+            fontPointSize: container.fontSize
+            fontFamily: container.fontFamily
         }
     }
 }
