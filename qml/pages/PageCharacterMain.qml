@@ -168,7 +168,6 @@ Rectangle {
         anchors.left: profilePic.right
         anchors.right: parent.right
         anchors.top: parent.top
-        anchors.bottom: parent.bottom
         anchors.leftMargin: AppStyle.marginNormal
         anchors.topMargin: AppStyle.marginNormal
         spacing: 10
@@ -285,24 +284,23 @@ Rectangle {
         }
     }
 
-    Rectangle {
-        x: 10
-        y: charBasicInfoFlow.y + charBasicInfoFlow.height
-        width: parent.width-20
-        height: parent.height
-        border { width: 1; color: "red"; }
-        color: "yellow"
-        /*anchors {
+    TabBar {
+        id: subInfoTabBar
+        anchors {
             top: charBasicInfoFlow.bottom
-            topMargin: AppStyle.marginNormal
-            bottom: parent.bottom
-            left: parent.left
+            left: profilePic.left
             right: parent.right
-        }*/
-        Component.onCompleted: {
-            console.log(charBasicInfoFlow.x, charBasicInfoFlow.y, charBasicInfoFlow.width, charBasicInfoFlow.height);
-            console.log(x, y, width, height);
+            topMargin: AppStyle.marginNormal
         }
+        height: 50
+        TabButton { text: qsTr("Skills"); }
+        TabButton { text: qsTr("Clones"); }
+        TabButton { text: qsTr("Wallet"); }
+        TabButton { text: qsTr("Assets"); }
+    }
+
+    SwipeView {
+        id: subInfoSwipeView
     }
 
     Image {
@@ -379,16 +377,4 @@ Rectangle {
         cached: true
         visible: maRefresh.containsMouse
     }
-
-    /*TabBar {
-        anchors {
-            top: charBasicInfoFlow.bottom
-            topMargin: AppStyle.marginNormal
-        }
-        width: parent.width
-        height: 50
-        TabButton { text: qsTr("Tab 1"); }
-        TabButton { text: qsTr("Tab 2"); }
-        TabButton { text: qsTr("Tab 3"); }
-    }*/
 }
