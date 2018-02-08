@@ -27,8 +27,9 @@ void SkillTreeModel::SkillTreeNode::appendChild(SkillTreeNode *node)
 QString SkillTreeModel::SkillTreeNode::name() const
 {
     switch (type) {
-    case NodeType::Group: return group->groupName(); break;
-    case NodeType::Skill: return skill->skillName(); break;
+    case NodeType::Group: return group->groupName();
+    case NodeType::Skill: return skill->skillName();
+    default: break;
     }
     return QString();
 }
@@ -36,8 +37,9 @@ QString SkillTreeModel::SkillTreeNode::name() const
 quint64 SkillTreeModel::SkillTreeNode::id() const
 {
     switch (type) {
-    case NodeType::Group: return group->groupId(); break;
-    case NodeType::Skill: return skill->skillId(); break;
+    case NodeType::Group: return group->groupId();
+    case NodeType::Skill: return skill->skillId();
+    default: break;
     }
     return 0;
 }
@@ -125,6 +127,7 @@ QVariant SkillTreeModel::data(const QModelIndex &index, int role) const
 
 QVariant SkillTreeModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
+    Q_UNUSED(role)
     if (orientation == Qt::Horizontal) {
         if (section == 0) {
             return QVariant(tr("Name"));
@@ -250,8 +253,22 @@ QVector<SkillGroup *> SkillTreeModel::getSkillGroups() const
     return ret;
 }
 
+const SkillTemplate *SkillTreeModel::findSkill(quint64 skillId) const
+{
+    if (!m_skillTemplates.contains(skillId)) {
+        qCWarning(logStree) << Q_FUNC_INFO << "cannot find template for skill:" << skillId;
+        return nullptr;
+    }
+    SkillTemplate *tmpl = m_skillTemplates[skillId];
+    return tmpl;
+}
+
 const SkillGroup *SkillTreeModel::findSkillGroupForSkillId(quint64 skillId) const
 {
+    if (!m_skillTemplates.contains(skillId)) {
+        qCWarning(logStree) << Q_FUNC_INFO << "cannot find template for skill:" << skillId;
+        return nullptr;
+    }
     SkillTemplate *tmpl = m_skillTemplates[skillId];
     return tmpl->skillGroup();
 }

@@ -55,6 +55,7 @@ public:
 public:
     bool load();
     QVector<SkillGroup *> getSkillGroups() const;
+    const SkillTemplate *findSkill(quint64 skillId) const;
     const SkillGroup *findSkillGroupForSkillId(quint64 skillId) const;
 
 private:
