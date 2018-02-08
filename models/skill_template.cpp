@@ -7,11 +7,11 @@ namespace EM {
 CharacterAttributeID charAttributeFromID(int id)
 {
     switch (id) {
-    case CharacterAttributeID::CHARISMA: return CharacterAttributeID::CHARISMA; break;
-    case CharacterAttributeID::INTELLIGENCE: return CharacterAttributeID::INTELLIGENCE; break;
-    case CharacterAttributeID::MEMORY: return CharacterAttributeID::MEMORY; break;
-    case CharacterAttributeID::PERCEPTION: return CharacterAttributeID::PERCEPTION; break;
-    case CharacterAttributeID::WILLPOWER: return CharacterAttributeID::WILLPOWER; break;
+    case static_cast<int>(CharacterAttributeID::CHARISMA):     return CharacterAttributeID::CHARISMA; break;
+    case static_cast<int>(CharacterAttributeID::INTELLIGENCE): return CharacterAttributeID::INTELLIGENCE; break;
+    case static_cast<int>(CharacterAttributeID::MEMORY):       return CharacterAttributeID::MEMORY; break;
+    case static_cast<int>(CharacterAttributeID::PERCEPTION):   return CharacterAttributeID::PERCEPTION; break;
+    case static_cast<int>(CharacterAttributeID::WILLPOWER):    return CharacterAttributeID::WILLPOWER; break;
     }
     return CharacterAttributeID::INVALID;
 }

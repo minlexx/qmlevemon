@@ -26,6 +26,7 @@ CharacterSkill &CharacterSkill::operator=(const CharacterSkill &other)
     SkillTemplate::operator=(other);
     m_trainedLevel = other.m_trainedLevel;
     m_activeLevel = other.m_activeLevel;
+    m_skillPointsInSkill = other.m_skillPointsInSkill;
     return (*this);
 }
 
@@ -34,6 +35,7 @@ CharacterSkill &CharacterSkill::operator=(CharacterSkill &&other)
     SkillTemplate::operator=(other);
     m_trainedLevel = std::move(other.m_trainedLevel);
     m_activeLevel = std::move(other.m_activeLevel);
+    m_skillPointsInSkill = std::move(other.m_skillPointsInSkill);
     return (*this);
 }
 
