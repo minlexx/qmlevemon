@@ -4,6 +4,7 @@
 #include <QString>
 #include <QObject>
 #include <QDateTime>
+#include "character_skill.h"
 #include "eve_api/eve_api_tokens.h"
 #include "update_timestamps.h"
 
