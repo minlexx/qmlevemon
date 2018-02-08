@@ -20,6 +20,11 @@ CharacterSkill::CharacterSkill(CharacterSkill&& other)
     (*this) = std::move(other);
 }
 
+CharacterSkill::CharacterSkill(const SkillTemplate *other)
+{
+    static_cast<SkillTemplate>(*this) = (*other);
+}
+
 CharacterSkill &CharacterSkill::operator=(const CharacterSkill &other)
 {
     if (this == &other) return (*this);
