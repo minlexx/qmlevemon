@@ -453,6 +453,7 @@ protected:
         // refresh character skills
         SkillTreeModel *skillTree = ModelManager::instance()->skillTreeModel();
         // get ALL character's skills
+        qCDebug(logRefresher) << " refreshing skills for" << ch->toString();
         if (m_api->get_character_skills(reply, ch->characterId(), ch->getAuthTokens().access_token)) {
             if (QThread::currentThread()->isInterruptionRequested()) return 0;
 
@@ -480,6 +481,7 @@ protected:
         }
 
         // refresh character skillqueue
+        qCDebug(logRefresher) << " refreshing skill queue for" << ch->toString();
         if (m_api->get_character_skillqueue(replyArr, ch->characterId(), ch->getAuthTokens().access_token)) {
             if (QThread::currentThread()->isInterruptionRequested()) return 0;
 
