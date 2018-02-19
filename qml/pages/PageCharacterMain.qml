@@ -301,6 +301,19 @@ Rectangle {
 
     SwipeView {
         id: subInfoSwipeView
+        anchors {
+            top: subInfoTabBar.bottom
+            left: subInfoTabBar.left
+            right: parent.right
+            topMargin: AppStyle.marginNormal
+        }
+        interactive: false // This QML property was introduced in QtQuick.Controls 2.1 (Qt 5.8).
+        currentIndex: subInfoTabBar.currentIndex
+
+        Text { text: "Skills" }
+        Text { text: "Clones" }
+        Text { text: "Wallet" }
+        Text { text: "Assets" }
     }
 
     Image {
