@@ -458,14 +458,18 @@ protected:
             if (QThread::currentThread()->isInterruptionRequested()) return 0;
 
             bool isAlphaClone = false;
+            QVector<CharacterSkill> charSkills;
+
             quint64 totalSp = reply.value(QLatin1String("total_sp")).toVariant().toULongLong();
             ch->setTotalSp(totalSp);
+
             QJsonArray jskills = reply.value(QLatin1String("skills")).toArray();
             for (auto jskillvalue: qAsConst(jskills)) {
                 // qCDebug(logRefresher) << jskill;
                 // {"active_skill_level":5, "skill_id":30547, "skillpoints_in_skill":256000, "trained_skill_level":5}
                 const QJsonObject& jskill = jskillvalue.toObject();
                 quint64 skill_id = jskill.value(QLatin1String("skill_id")).toVariant().toULongLong();
+
                 // create Character skill from skill template to "inherit" attributes
                 const SkillTemplate *skill_template = skillTree->findSkill(skill_id);
                 CharacterSkill chSkill(skill_template);
@@ -473,6 +477,10 @@ protected:
                 chSkill.setActiveLevel(jskill.value(QLatin1String("active_skill_level")).toInt());
                 chSkill.setTrainedLevel(jskill.value(QLatin1String("trained_skill_level")).toInt());
                 chSkill.setSkillPointsInSkill(jskill.value(QLatin1String("skillpoints_in_skill")).toVariant().toULongLong());
+
+                // store
+                charSkills.push_back(std::move(chSkill));
+
                 // detect alpha clone
                 // if any skill has activeLevel < trainedLevel, this is alpha
                 if (chSkill.activeLevel() < chSkill.trainedLevel()) {
@@ -481,6 +489,7 @@ protected:
             }
             // forcefully update character's alpha clone status
             ch->setIsAlphaClone(isAlphaClone);
+            ch->setSkills(charSkills);
         }
 
         // refresh character skillqueue
