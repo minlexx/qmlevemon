@@ -34,20 +34,27 @@ target_link_libraries(test_qtwebserver
 )
 
 
-set(test_character_datastream_srcs
-    "test_character_datastream.cpp"
-    "../models/character.cpp"
-    "../models/character_skill.cpp"
-    "../models/skill_group.cpp"
-    "../models/skill_template.cpp"
-    "../models/update_timestamps.cpp"
-    "../eve_api/eve_api_tokens.cpp"
-)
-add_executable(test_character_datastream ${test_character_datastream_srcs})
-target_include_directories(test_character_datastream PRIVATE "../")
-target_link_libraries(test_character_datastream
-    Qt5::Core
-    Qt5::Gui
-    Qt5::Sql
-    Qt5::Test
-)
+#set(test_character_datastream_srcs
+#    "test_character_datastream.cpp"
+#    "../models/character.cpp"
+#    "../models/character_model.cpp"
+#    "../models/character_skill.cpp"
+#    "../models/model_manager.cpp"
+#    "../models/skill_group.cpp"
+#    "../models/skill_template.cpp"
+#    "../models/skill_tree_model.cpp"
+#    "../models/update_timestamps.cpp"
+#    "../eve_api/eve_api_tokens.cpp"
+#    "../qmlevemon_app.cpp"
+#)
+#add_executable(test_character_datastream ${test_character_datastream_srcs})
+#target_include_directories(test_character_datastream PRIVATE "../")
+#target_compile_definitions(test_character_datastream PRIVATE QMLEVEMON_VERSION="${QMLEVEMON_VERSION}")
+#target_link_libraries(test_character_datastream
+#    Qt5::Core
+#    Qt5::Gui
+#    Qt5::Sql
+#    Qt5::Test
+#    Qt5::Qml
+#    Qt5::Quick
+#)
