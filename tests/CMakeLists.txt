@@ -37,6 +37,9 @@ target_link_libraries(test_qtwebserver
 set(test_character_datastream_srcs
     "test_character_datastream.cpp"
     "../models/character.cpp"
+    "../models/character_skill.cpp"
+    "../models/skill_group.cpp"
+    "../models/skill_template.cpp"
     "../models/update_timestamps.cpp"
     "../eve_api/eve_api_tokens.cpp"
 )
