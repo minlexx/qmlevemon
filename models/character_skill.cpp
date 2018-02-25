@@ -7,6 +7,7 @@ namespace EM {
 
 
 CharacterSkill::CharacterSkill()
+    : SkillTemplate()
 {
     //
 }
