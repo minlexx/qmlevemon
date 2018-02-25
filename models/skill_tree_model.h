@@ -39,7 +39,7 @@ class SkillTreeModel: public QAbstractItemModel
 
 public:
     explicit SkillTreeModel(QObject *parent = Q_NULLPTR);
-    virtual ~SkillTreeModel();
+    virtual ~SkillTreeModel() override;
 
     QHash<int, QByteArray> roleNames() const override;
     Q_INVOKABLE virtual int rowCount(const QModelIndex &parent = QModelIndex()) const override;
