@@ -465,8 +465,11 @@ protected:
                 // qCDebug(logRefresher) << jskill;
                 // {"active_skill_level":5, "skill_id":30547, "skillpoints_in_skill":256000, "trained_skill_level":5}
                 const QJsonObject& jskill = jskillvalue.toObject();
-                CharacterSkill chSkill;
-                chSkill.setSkillId(jskill.value(QLatin1String("skill_id")).toVariant().toULongLong());
+                quint64 skill_id = jskill.value(QLatin1String("skill_id")).toVariant().toULongLong();
+                // create Character skill from skill template to "inherit" attributes
+                const SkillTemplate *skill_template = skillTree->findSkill(skill_id);
+                CharacterSkill chSkill(skill_template);
+                chSkill.setSkillId(skill_id);
                 chSkill.setActiveLevel(jskill.value(QLatin1String("active_skill_level")).toInt());
                 chSkill.setTrainedLevel(jskill.value(QLatin1String("trained_skill_level")).toInt());
                 chSkill.setSkillPointsInSkill(jskill.value(QLatin1String("skillpoints_in_skill")).toVariant().toULongLong());
