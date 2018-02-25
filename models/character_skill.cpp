@@ -1,6 +1,9 @@
-#include <QDataStream>
 #include <utility>
+#include <QDataStream>
+
 #include "character_skill.h"
+#include "model_manager.h"
+#include "skill_tree_model.h"
 
 
 namespace EM {
@@ -109,11 +112,27 @@ QDataStream &operator>>(QDataStream &stream, EM::CharacterSkill &skill)
     quint64 ui64 = 0;
     float f = 0.0f;
     QString s;
+    quint64 skillId = 0;
+    QString skillName;
     // SkillTemplate properties
-    stream >> ui64;  skill.setSkillId(ui64);
-    stream >> s;     skill.setSkillName(s);
-    stream >> ui64;  // skill.setSkillGroupId();
-    stream >> s;     // skill.setSkillGroupName(s);
+    stream >> skillId;
+    stream >> skillName;
+    stream >> ui64;      // group id
+    stream >> s;         // group name
+
+    // fill in skill group
+    EM::SkillTreeModel *skillTree = EM::ModelManager::instance()->skillTreeModel();
+    if (skillTree) {
+        const EM::SkillTemplate *tmpl = skillTree->findSkill(skillId);
+        if (tmpl) {
+            skill = EM::CharacterSkill(tmpl); // create from template
+            // ^^ fills group, attributes, difficulty
+        }
+    }
+    // just in case...
+    skill.setSkillId(skillId);
+    skill.setSkillName(skillName);
+
     stream >> i;     skill.setPrimaryAttribute(i);
     stream >> i;     skill.setSecondaryAttribute(i);
     stream >> f;     skill.setSkillTimeConstant(f);
