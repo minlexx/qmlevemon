@@ -1,3 +1,4 @@
+#include <QDataStream>
 #include <utility>
 #include "character_skill.h"
 
@@ -15,13 +16,14 @@ CharacterSkill::CharacterSkill(const CharacterSkill &other)
     (*this) = other;
 }
 
-CharacterSkill::CharacterSkill(CharacterSkill&& other)
+CharacterSkill::CharacterSkill(CharacterSkill &&other)
 {
     (*this) = std::move(other);
 }
 
 CharacterSkill::CharacterSkill(const SkillTemplate *other)
 {
+    if (other == nullptr) return;
     static_cast<SkillTemplate>(*this) = (*other);
 }
 
@@ -81,4 +83,42 @@ void CharacterSkill::setSkillPointsInSkill(quint64 sp) {
 }
 
 
+}
+
+QDataStream &operator<<(QDataStream &stream, const EM::CharacterSkill &skill)
+{
+    // SkillTemplate properties
+    stream << skill.skillId();
+    stream << skill.skillName();
+    stream << skill.skillGroupId();
+    stream << skill.skillGroupName();
+    stream << skill.primaryAttribute();
+    stream << skill.secondaryAttribute();
+    stream << skill.skillTimeConstant();
+    // CharacterSkill properties
+    stream << skill.trainedLevel();
+    stream << skill.activeLevel();
+    stream << skill.skillPointsInSkill();
+    return stream;
+}
+
+QDataStream &operator>>(QDataStream &stream, EM::CharacterSkill &skill)
+{
+    int i = 0;
+    quint64 ui64 = 0;
+    float f = 0.0f;
+    QString s;
+    // SkillTemplate properties
+    stream >> ui64;  skill.setSkillId(ui64);
+    stream >> s;     skill.setSkillName(s);
+    stream >> ui64;  // skill.setSkillGroupId();
+    stream >> s;     // skill.setSkillGroupName(s);
+    stream >> i;     skill.setPrimaryAttribute(i);
+    stream >> i;     skill.setSecondaryAttribute(i);
+    stream >> f;     skill.setSkillTimeConstant(f);
+    // CharacterSkill properties
+    stream >> i;     skill.setTrainedLevel(i);
+    stream >> i;     skill.setActiveLevel(i);
+    stream >> ui64;  skill.setSkillPointsInSkill(ui64);
+    return stream;
 }
