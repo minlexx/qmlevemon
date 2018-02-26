@@ -10,7 +10,7 @@ set(CMAKE_AUTORCC ON)
 
 include(FeatureSummary)
 
-find_package(Qt5 5.7 CONFIG REQUIRED COMPONENTS
+find_package(Qt5 5.9 CONFIG REQUIRED COMPONENTS
     Core
     Network
     Xml
@@ -18,6 +18,7 @@ find_package(Qt5 5.7 CONFIG REQUIRED COMPONENTS
     Gui
     Qml
     Quick
+    QuickControls2
 )
 
 option(BUILD_TESTING "Build tests (for developers)" OFF)
@@ -97,6 +98,7 @@ target_link_libraries(${PROJECT_NAME}
     Qt5::Gui
     Qt5::Qml
     Qt5::Quick
+    Qt5::QuickControls2
 )
 
 if (BUILD_TESTING)

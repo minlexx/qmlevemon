@@ -1,4 +1,4 @@
-find_package(Qt5 5.7 CONFIG REQUIRED COMPONENTS
+find_package(Qt5 5.9 CONFIG REQUIRED COMPONENTS
     Test
 )
 
