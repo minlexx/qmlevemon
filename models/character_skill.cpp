@@ -1,11 +1,16 @@
 #include <utility>
+#include <QDataStream>
+
 #include "character_skill.h"
+#include "model_manager.h"
+#include "skill_tree_model.h"
 
 
 namespace EM {
 
 
 CharacterSkill::CharacterSkill()
+    : SkillTemplate()
 {
     //
 }
@@ -15,13 +20,14 @@ CharacterSkill::CharacterSkill(const CharacterSkill &other)
     (*this) = other;
 }
 
-CharacterSkill::CharacterSkill(CharacterSkill&& other)
+CharacterSkill::CharacterSkill(CharacterSkill &&other)
 {
     (*this) = std::move(other);
 }
 
 CharacterSkill::CharacterSkill(const SkillTemplate *other)
 {
+    if (other == nullptr) return;
     static_cast<SkillTemplate>(*this) = (*other);
 }
 
@@ -81,4 +87,58 @@ void CharacterSkill::setSkillPointsInSkill(quint64 sp) {
 }
 
 
+}
+
+QDataStream &operator<<(QDataStream &stream, const EM::CharacterSkill &skill)
+{
+    // SkillTemplate properties
+    stream << skill.skillId();
+    stream << skill.skillName();
+    stream << skill.skillGroupId();
+    stream << skill.skillGroupName();
+    stream << skill.primaryAttribute();
+    stream << skill.secondaryAttribute();
+    stream << skill.skillTimeConstant();
+    // CharacterSkill properties
+    stream << skill.trainedLevel();
+    stream << skill.activeLevel();
+    stream << skill.skillPointsInSkill();
+    return stream;
+}
+
+QDataStream &operator>>(QDataStream &stream, EM::CharacterSkill &skill)
+{
+    int i = 0;
+    quint64 ui64 = 0;
+    float f = 0.0f;
+    QString s;
+    quint64 skillId = 0;
+    QString skillName;
+    // SkillTemplate properties
+    stream >> skillId;
+    stream >> skillName;
+    stream >> ui64;      // group id
+    stream >> s;         // group name
+
+    // fill in skill group
+    EM::SkillTreeModel *skillTree = EM::ModelManager::instance()->skillTreeModel();
+    if (skillTree) {
+        const EM::SkillTemplate *tmpl = skillTree->findSkill(skillId);
+        if (tmpl) {
+            skill = EM::CharacterSkill(tmpl); // create from template
+            // ^^ fills group, attributes, difficulty
+        }
+    }
+    // just in case...
+    skill.setSkillId(skillId);
+    skill.setSkillName(skillName);
+
+    stream >> i;     skill.setPrimaryAttribute(i);
+    stream >> i;     skill.setSecondaryAttribute(i);
+    stream >> f;     skill.setSkillTimeConstant(f);
+    // CharacterSkill properties
+    stream >> i;     skill.setTrainedLevel(i);
+    stream >> i;     skill.setActiveLevel(i);
+    stream >> ui64;  skill.setSkillPointsInSkill(ui64);
+    return stream;
 }

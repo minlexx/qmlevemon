@@ -4,6 +4,8 @@
 #include <QString>
 #include <QObject>
 #include <QDateTime>
+#include <QVector>
+
 #include "character_skill.h"
 #include "eve_api/eve_api_tokens.h"
 #include "update_timestamps.h"
@@ -192,6 +194,7 @@ public:
     QDateTime remapCooldownDate() const;
     quint64 totalSp() const;
     bool isAlphaClone() const;
+    QVector<CharacterSkill> skills() const;
     // skills and related - setters
     void setAttributeCharisma(int a);
     void setAttributeIntelligence(int a);
@@ -203,6 +206,7 @@ public:
     void setRemapCooldownDate(const QDateTime& dt);
     void setTotalSp(quint64 sp);
     void setIsAlphaClone(bool alpha);
+    void setSkills(const QVector<CharacterSkill> &vskills);
 
     // auth info
     EveOAuthTokens getAuthTokens() const;
@@ -259,6 +263,7 @@ Q_SIGNALS:
     void remapCooldownDateChanged();
     void totalSpChanged();
     void isAlphaCloneChanged();
+    void skillsChanged();
 
 protected:
     // general info
@@ -314,6 +319,7 @@ protected:
     QDateTime m_remapCooldownDate;
     quint64 m_totalSp = 0;
     bool m_isAlphaClone = false;
+    QVector<CharacterSkill> m_skills;
 
     // auth info
     EveOAuthTokens m_tokens;
@@ -327,8 +333,8 @@ protected:
 
 
 // serializing functions
-QDataStream& operator<<(QDataStream& stream, const EM::Character& character);
-QDataStream& operator>>(QDataStream& stream, EM::Character& character);
+QDataStream& operator<<(QDataStream &stream, const EM::Character &character);
+QDataStream& operator>>(QDataStream &stream, EM::Character &character);
 
 
 #endif

@@ -4,6 +4,8 @@
 #include <QObject>
 #include "skill_template.h"
 
+class QDataStream;
+
 
 namespace EM {
 
@@ -17,12 +19,12 @@ class CharacterSkill: public SkillTemplate
 
 public:
     CharacterSkill();
-    CharacterSkill(const CharacterSkill& other);
-    CharacterSkill(CharacterSkill&& other);
+    CharacterSkill(const CharacterSkill &other);
+    CharacterSkill(CharacterSkill &&other);
     CharacterSkill(const SkillTemplate *other);
-    CharacterSkill& operator=(const CharacterSkill& other);
-    CharacterSkill& operator=(CharacterSkill&& other);
-    bool operator==(const CharacterSkill& other) const;
+    CharacterSkill& operator=(const CharacterSkill &other);
+    CharacterSkill& operator=(CharacterSkill &&other);
+    bool operator==(const CharacterSkill &other) const;
 
 public Q_SLOTS:
     int trainedLevel() const;
@@ -47,6 +49,10 @@ protected:
 
 
 } // namespace
+
+
+QDataStream& operator<<(QDataStream &stream, const EM::CharacterSkill &skill);
+QDataStream& operator>>(QDataStream &stream, EM::CharacterSkill &skill);
 
 
 #endif
