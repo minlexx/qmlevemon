@@ -81,6 +81,7 @@ was successful. Then switch back to this application.")
         anchors.horizontalCenter: parent.horizontalCenter
         y: btnLoginWithEve.y + btnLoginWithEve.height + AppStyle.marginNormal
         text: qsTr("Cancel")
+        font.pointSize: AppStyle.textSizeH3
         onClicked: container.loginCancel();
     }
 
@@ -124,6 +125,7 @@ was successful. Then switch back to this application.")
             x: parent.x + parent.width/2 - width/2
             y: parent.y + parent.height - height - AppStyle.marginNormal
             text: qsTr("Cancel")
+            font.pointSize: AppStyle.textSizeH3
             onClicked: {
                 waitingAuthPopup.close();
                 eveSsoLoginManager.slotCancelSsoAuth();

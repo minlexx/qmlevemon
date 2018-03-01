@@ -28,6 +28,7 @@ Item {
         ToolTip {
             visible: iconMa.containsMouse
             text: tooltipText
+            font.pointSize: AppStyle.textSizeH3
         }
     }
     Text {

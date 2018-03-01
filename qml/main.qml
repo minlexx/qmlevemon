@@ -50,6 +50,7 @@ ApplicationWindow {
             Text {
                 id: serverPlayersOnline
                 text: "TQ: " + refresher.serverPlayersOnline + qsTr(" players")
+                font.pointSize: AppStyle.textSizeH3
             }
 
             //Switch {
@@ -91,6 +92,7 @@ ApplicationWindow {
             delegate: ItemDelegate {
                 width: parent.width
                 text: model.title
+                font.pointSize: AppStyle.textSizeH3
                 highlighted: ListView.isCurrentItem
                 onClicked: {
                     ListView.currentIndex = index

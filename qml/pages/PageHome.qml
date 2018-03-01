@@ -19,6 +19,7 @@ Rectangle {
     Button {
         id: btnAddAccount
         text: qsTr("Add character")
+        font.pointSize: AppStyle.textSizeH3
         anchors {
             horizontalCenter: parent.horizontalCenter
             top: parent.top

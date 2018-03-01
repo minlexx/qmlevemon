@@ -7,6 +7,8 @@ Item {
     id: container
     width: 48
 
+    property int tooltipFontPointSize: AppStyle.textSizeH3
+
     signal characterSelected(int char_id)
 
     Column {
@@ -30,8 +32,9 @@ Item {
                 }
 
                 ToolTip {
-                      visible: ma.containsMouse
-                      text: model.characterName
+                    visible: ma.containsMouse
+                    text: model.characterName
+                    font.pointSize: tooltipFontPointSize
                 }
             }
         }

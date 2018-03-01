@@ -81,6 +81,7 @@ Rectangle {
                 Button {
                     id: btnCancel
                     text: qsTr("Cancel")
+                    font.pointSize: AppStyle.textSizeH3
                     onClicked: {
                         removeConfirmPopup.close();
                     }
