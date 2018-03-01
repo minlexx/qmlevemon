@@ -12,10 +12,12 @@ import "../"
  */
 MenuItem {
     id: em_menuItemContainter
+
     property color highlightColor: AppStyle.rectBgHighlightColor
     property color bgColor: AppStyle.bgColor
 
-    text: "EM Menu item"  // default text
+    text: "EM Menu item very very long"  // default text
+    font.pointSize: AppStyle.textSizeH2
     hoverEnabled: true
 
     background: Item {

@@ -220,6 +220,7 @@ Rectangle {
                     Button {
                         id: btnOk
                         text: qsTr("OK")
+                        font.pointSize: AppStyle.textSizeH2
                         onClicked: {
                             removeConfirmPopup.close();
                             container.removeCharacterRequest(removeConfirmPopup.characterId);
@@ -228,6 +229,7 @@ Rectangle {
                     Button {
                         id: btnCancel
                         text: qsTr("Cancel")
+                        font.pointSize: AppStyle.textSizeH2
                         onClicked: {
                             removeConfirmPopup.close();
                         }

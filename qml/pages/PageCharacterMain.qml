@@ -73,6 +73,7 @@ Rectangle {
                 Button {
                     id: btnOk
                     text: qsTr("OK")
+                    font.pointSize: AppStyle.textSizeH2
                     onClicked: {
                         removeConfirmPopup.close();
                         container.removeCharacterRequest(curChar.characterId);
@@ -81,7 +82,7 @@ Rectangle {
                 Button {
                     id: btnCancel
                     text: qsTr("Cancel")
-                    font.pointSize: AppStyle.textSizeH3
+                    font.pointSize: AppStyle.textSizeH2
                     onClicked: {
                         removeConfirmPopup.close();
                     }
@@ -119,6 +120,7 @@ Rectangle {
 
             Menu {
                 id: contextMenu
+                width: portraitMenuItem1.width + 1
 
                 // Menu.popup() function was introduced in Qt 5.10,
                 // for 5.7 compatibility we can emulate it somehow
@@ -129,6 +131,7 @@ Rectangle {
                 }
 
                 EMPopupMenuItem {
+                    id: portraitMenuItem1
                     text: qsTr("Update portrait from web")
                     onTriggered: {
                         console.log("Update portrait for: " + curChar.characterId);
@@ -346,8 +349,10 @@ Rectangle {
         Menu {
             id: refreshMenu
             y: imgRefresh.y
+            width: refreshmenuItem1.width + 1
 
             EMPopupMenuItem {
+                id: refreshmenuItem1
                 text: qsTr("Refresh public information");
                 y: parent.y + 1
                 onTriggered: { curChar.forceRefreshPublicInfo(); evemonapp.forceRefresh(); }
