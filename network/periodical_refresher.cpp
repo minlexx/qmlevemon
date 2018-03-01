@@ -478,14 +478,14 @@ protected:
                 chSkill.setTrainedLevel(jskill.value(QLatin1String("trained_skill_level")).toInt());
                 chSkill.setSkillPointsInSkill(jskill.value(QLatin1String("skillpoints_in_skill")).toVariant().toULongLong());
 
-                // store
-                charSkills.push_back(std::move(chSkill));
-
                 // detect alpha clone
                 // if any skill has activeLevel < trainedLevel, this is alpha
                 if (chSkill.activeLevel() < chSkill.trainedLevel()) {
                     isAlphaClone = true;
                 }
+
+                // store
+                charSkills.push_back(std::move(chSkill));
             }
             // forcefully update character's alpha clone status
             ch->setIsAlphaClone(isAlphaClone);

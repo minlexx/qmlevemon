@@ -9,6 +9,7 @@
 #include "character_skill.h"
 #include "eve_api/eve_api_tokens.h"
 #include "update_timestamps.h"
+#include "character_skillgroups_model.h"
 
 
 class QDataStream;
@@ -68,6 +69,7 @@ class Character: public QObject
     Q_PROPERTY(QDateTime remapCooldownDate      READ remapCooldownDate      NOTIFY remapCooldownDateChanged)
     Q_PROPERTY(quint64   totalSp                READ totalSp                NOTIFY totalSpChanged)
     Q_PROPERTY(bool      isAlphaClone           READ isAlphaClone           NOTIFY isAlphaCloneChanged)
+    Q_PROPERTY(CharacterSkillGroupsModel* skillGroupsModel  READ skillGroupsModel       NOTIFY skillsChanged)
 
 public:
     Character();
@@ -195,6 +197,7 @@ public:
     quint64 totalSp() const;
     bool isAlphaClone() const;
     QVector<CharacterSkill> skills() const;
+    CharacterSkillGroupsModel *skillGroupsModel();
     // skills and related - setters
     void setAttributeCharisma(int a);
     void setAttributeIntelligence(int a);
@@ -320,6 +323,7 @@ protected:
     quint64 m_totalSp = 0;
     bool m_isAlphaClone = false;
     QVector<CharacterSkill> m_skills;
+    CharacterSkillGroupsModel m_skillGroupsModel;
 
     // auth info
     EveOAuthTokens m_tokens;

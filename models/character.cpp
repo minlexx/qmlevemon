@@ -423,6 +423,7 @@ QDateTime Character::remapCooldownDate() const { return m_remapCooldownDate; }
 quint64 Character::totalSp() const { return m_totalSp; }
 bool Character::isAlphaClone() const { return m_isAlphaClone; }
 QVector<EM::CharacterSkill> Character::skills() const { return m_skills; }
+CharacterSkillGroupsModel *Character::skillGroupsModel() { return &m_skillGroupsModel; }
 
 void Character::setAttributeCharisma(int a) {
     if (m_attributeCharisma != a) {
@@ -498,6 +499,7 @@ void Character::setSkills(const QVector<CharacterSkill> &vskills)
 {
     if (m_skills != vskills) {
         m_skills = vskills;
+        m_skillGroupsModel.setFromSkills(m_skills);
         Q_EMIT skillsChanged();
     }
 }

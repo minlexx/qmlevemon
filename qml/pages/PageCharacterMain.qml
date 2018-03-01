@@ -314,7 +314,22 @@ Rectangle {
         interactive: false // This QML property was introduced in QtQuick.Controls 2.1 (Qt 5.8).
         currentIndex: subInfoTabBar.currentIndex
 
-        Text { text: "Skills" }
+        Rectangle {
+            border { width: 1; color: "red" }
+            color: "red"
+            width: 200
+            height: 200
+            Text { text: "Skills" }
+            /*ListView {
+                id: lvSkillsList
+                //model: curChar.skillGroupsModel
+                delegate: Item {
+                    Text {
+                        text: model.groupName + "/" + model.groupId
+                    }
+                }
+            }*/
+        }
         Text { text: "Clones" }
         Text { text: "Wallet" }
         Text { text: "Assets" }

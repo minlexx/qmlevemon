@@ -28,13 +28,14 @@ CharacterSkill::CharacterSkill(CharacterSkill &&other)
 CharacterSkill::CharacterSkill(const SkillTemplate *other)
 {
     if (other == nullptr) return;
-    static_cast<SkillTemplate>(*this) = (*other);
+     static_cast<SkillTemplate *>(this)->operator=(*other);
 }
 
 CharacterSkill &CharacterSkill::operator=(const CharacterSkill &other)
 {
     if (this == &other) return (*this);
-    SkillTemplate::operator=(other);
+    // SkillTemplate::operator=(other);
+    static_cast<SkillTemplate *>(this)->operator=(other);
     m_trainedLevel = other.m_trainedLevel;
     m_activeLevel = other.m_activeLevel;
     m_skillPointsInSkill = other.m_skillPointsInSkill;
@@ -43,7 +44,8 @@ CharacterSkill &CharacterSkill::operator=(const CharacterSkill &other)
 
 CharacterSkill &CharacterSkill::operator=(CharacterSkill &&other)
 {
-    SkillTemplate::operator=(other);
+    //SkillTemplate::operator=(std::move(other));
+    static_cast<SkillTemplate *>(this)->operator=(std::move(other));
     m_trainedLevel = std::move(other.m_trainedLevel);
     m_activeLevel = std::move(other.m_activeLevel);
     m_skillPointsInSkill = std::move(other.m_skillPointsInSkill);
