@@ -22,16 +22,22 @@ ModelManager *ModelManager::instance()
 }
 
 
-ModelManager::ModelManager(QObject *parent):
-    QObject(parent)
+ModelManager::ModelManager(QObject *parent)
+    : QObject(parent)
+    , m_characterModel(new CharacterModel(this))
+    , m_skillTreeModel(new SkillTreeModel(this))
 {
     qCDebug(logModels) << "ModelManager ctor";
+}
 
-    m_characterModel = new CharacterModel(this);
-    m_characterModel->loadCharacters();
 
-    m_skillTreeModel = new SkillTreeModel(this);
+void ModelManager::initModels()
+{
+    // skills model should be loaded first, as it is used
+    //   in characters model
     m_skillTreeModel->load();
+
+    m_characterModel->loadCharacters();
 }
 
 }

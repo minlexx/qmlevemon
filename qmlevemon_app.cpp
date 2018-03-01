@@ -71,6 +71,8 @@ bool QmlEvemonApp::initQmlEngine()
 {
     QQmlContext *rootContext = m_engine.rootContext();
 
+    ModelManager::instance()->initModels();
+
     // set context properties
     rootContext->setContextProperty(QLatin1String("evemonapp"), this);
     rootContext->setContextProperty(QLatin1String("characterModel"),

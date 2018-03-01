@@ -17,6 +17,8 @@ public:
     explicit ModelManager(QObject *parent = Q_NULLPTR);
     static ModelManager *instance();
 
+    void initModels();
+
 public:
     CharacterModel *characterModel() { return m_characterModel; }
     SkillTreeModel *skillTreeModel() { return m_skillTreeModel; }
