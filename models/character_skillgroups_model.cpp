@@ -53,10 +53,13 @@ void EM::CharacterSkillGroupsModel::setFromSkills(const QVector<EM::CharacterSki
         m_data.clear();
         for (const EM::CharacterSkill &sk: qAsConst(skills)) {
             const SkillGroup *skillGroup = sk.skillGroup();
-            // add only group that was not added before
-            if (!gset.contains(skillGroup->groupId())) {
-                gset << skillGroup->groupId();
-                m_data.push_back(std::move(ModelData(skillGroup->groupId(), skillGroup->groupName())));
+            // unlikely that skill has no group, but just in case..
+            if (Q_LIKELY(skillGroup)) {
+                // add only group that was not added before
+                if (!gset.contains(skillGroup->groupId())) {
+                    gset << skillGroup->groupId();
+                    m_data.push_back(std::move(ModelData(skillGroup->groupId(), skillGroup->groupName())));
+                }
             }
         }
     }
