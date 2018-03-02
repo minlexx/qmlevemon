@@ -287,51 +287,100 @@ Rectangle {
         }
     }
 
-    TabBar {
-        id: subInfoTabBar
+    Rectangle {
+        id: subInfoTabRect
         anchors {
             top: charBasicInfoFlow.bottom
+            bottom: parent.bottom
             left: profilePic.left
             right: parent.right
             topMargin: AppStyle.marginNormal
         }
-        height: 50
-        TabButton { text: qsTr("Skills"); }
-        TabButton { text: qsTr("Clones"); }
-        TabButton { text: qsTr("Wallet"); }
-        TabButton { text: qsTr("Assets"); }
-    }
+        color: AppStyle.mainColor
+        clip: true
 
-    SwipeView {
-        id: subInfoSwipeView
-        anchors {
-            top: subInfoTabBar.bottom
-            left: subInfoTabBar.left
-            right: parent.right
-            topMargin: AppStyle.marginNormal
+        TabBar {
+            id: subInfoTabBar
+            anchors {
+                top: parent.top
+                left: parent.left
+                right: parent.right
+                margins: 2
+            }
+            TabButton { text: qsTr("Skills"); }
+            TabButton { text: qsTr("Clones"); }
+            TabButton { text: qsTr("Wallet"); }
+            TabButton { text: qsTr("Assets"); }
         }
-        interactive: false // This QML property was introduced in QtQuick.Controls 2.1 (Qt 5.8).
-        currentIndex: subInfoTabBar.currentIndex
 
-        Rectangle {
-            border { width: 1; color: "red" }
-            color: "red"
-            width: 200
-            height: 200
-            Text { text: "Skills" }
-            /*ListView {
-                id: lvSkillsList
-                //model: curChar.skillGroupsModel
-                delegate: Item {
-                    Text {
-                        text: model.groupName + "/" + model.groupId
+        SwipeView {
+            id: subInfoSwipeView
+            anchors {
+                top: subInfoTabBar.bottom
+                bottom: parent.bottom
+                left: parent.left
+                right: parent.right
+                margins: 0
+            }
+            interactive: false // This QML property was introduced in QtQuick.Controls 2.1 (Qt 5.8).
+            currentIndex: subInfoTabBar.currentIndex
+
+            Rectangle {
+                id: rcTabSkills
+                border { width: 1; color: AppStyle.mainColor }
+                color: AppStyle.bgColor
+                width: subInfoSwipeView.width
+                height: subInfoSwipeView.height
+                clip: true
+
+                ListView {
+                    id: listViewSkills
+                    anchors.fill: parent
+                    anchors.margins: 1
+                    model: curChar.skillGroupsModel
+                    currentIndex: -1
+
+                    delegate: Rectangle {
+                        id: skillListRect
+                        implicitWidth: listViewSkills.width
+                        implicitHeight: txtSkillGroupName.implicitHeight + 2*AppStyle.marginSmall
+                        color: ListView.isCurrentItem ? AppStyle.rectBgHighlightColor : AppStyle.textDefaultColor
+                        border { width: 1; color: "white" }
+
+                        Text {
+                            id: txtSkillGroupName
+                            text: model.groupName
+                            maximumLineCount: 1
+                            font.pointSize: AppStyle.textSizeH2
+                            font.bold: true
+                            anchors {
+                                fill: parent
+                                leftMargin: AppStyle.marginNormal
+                            }
+
+                            //height: parent.height
+                            verticalAlignment: Text.AlignVCenter
+                            color: skillListRect.ListView.isCurrentItem ? AppStyle.textDefaultColor : AppStyle.textInvertedColor
+                        }
+
+                        MouseArea {
+                            id: ma1
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: containsMouse ? Qt.PointingHandCursor : Qt.ArrowCursor
+
+                            onClicked: {
+                                var clickedIndex = listViewSkills.indexAt(mouse.x, skillListRect.y + mouse.y);
+                                console.log(mouse.x, skillListRect.y + mouse.y, clickedIndex);
+                            }
+                        }
                     }
                 }
-            }*/
+            }
+            Text { text: "Clones" }
+            Text { text: "Wallet" }
+            Text { text: "Assets" }
         }
-        Text { text: "Clones" }
-        Text { text: "Wallet" }
-        Text { text: "Assets" }
     }
 
     Image {
