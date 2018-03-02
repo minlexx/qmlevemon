@@ -1,8 +1,11 @@
 #include <utility>
+#include <algorithm>
+
 #include <QDataStream>
 #include <QLocale>
 #include <QLoggingCategory>
 #include <QDebug>
+
 #include "character.h"
 
 
@@ -526,6 +529,23 @@ void Character::forceRefreshWallet() { resetUpdateTimestamp(UpdateTimestamps::UT
 void Character::forceRefreshLocation() { resetUpdateTimestamp(UpdateTimestamps::UTST::LOCATION); }
 void Character::forceRefreshClones() { resetUpdateTimestamp(UpdateTimestamps::UTST::CLONES); }
 void Character::forceRefreshAssets() { resetUpdateTimestamp(UpdateTimestamps::UTST::ASSETS); }
+
+QList<QObject *> Character::getSkillsForGroupId(quint64 groupId) const
+{
+    QList<QObject *> ret;
+    for (const CharacterSkill &sk: m_skills) {
+        if (sk.skillGroupId() == groupId) {
+            // insert a copy of skill to returned list
+            ret.append(new CharacterSkill(sk));
+        }
+    }
+    std::sort(ret.begin(), ret.end(), [](QObject *a, QObject *b) -> bool {
+        CharacterSkill *sa = qobject_cast<CharacterSkill *>(a);
+        CharacterSkill *sb = qobject_cast<CharacterSkill *>(b);
+        return sa->skillName() < sb->skillName();
+    });
+    return ret;
+}
 
 
 } // namespace

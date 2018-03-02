@@ -5,6 +5,7 @@
 #include <QObject>
 #include <QDateTime>
 #include <QVector>
+#include <QList>
 
 #include "character_skill.h"
 #include "eve_api/eve_api_tokens.h"
@@ -228,6 +229,8 @@ public Q_SLOTS:
     void forceRefreshClones();
     void forceRefreshAssets();
     // ^^ add more, if needed
+
+    QList<QObject *> getSkillsForGroupId(quint64 groupId) const;
 
 Q_SIGNALS:
     // general info
