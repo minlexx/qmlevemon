@@ -1,5 +1,9 @@
 #include <QSet>
+#include <QDebug>
+#include <QLoggingCategory>
 #include "character_skillgroups_model.h"
+
+Q_LOGGING_CATEGORY(logCharSkillGroupsModel, "evemon.characterskillgroupsmodel")
 
 
 EM::CharacterSkillGroupsModel::CharacterSkillGroupsModel(QObject *parent)
@@ -51,6 +55,7 @@ void EM::CharacterSkillGroupsModel::setFromSkills(const QVector<EM::CharacterSki
         QMutexLocker lock(&m_mutex);
         QSet<quint64> gset; // collect different excluse group IDs
         m_data.clear();
+        int numAdded = 0;
         for (const EM::CharacterSkill &sk: qAsConst(skills)) {
             const SkillGroup *skillGroup = sk.skillGroup();
             // unlikely that skill has no group, but just in case..
@@ -59,9 +64,12 @@ void EM::CharacterSkillGroupsModel::setFromSkills(const QVector<EM::CharacterSki
                 if (!gset.contains(skillGroup->groupId())) {
                     gset << skillGroup->groupId();
                     m_data.push_back(std::move(ModelData(skillGroup->groupId(), skillGroup->groupName())));
+                    numAdded++;
                 }
             }
         }
+
+        // qCDebug(logCharSkillGroupsModel) << " added " << numAdded << "skill groups";
     }
 
     endResetModel();
