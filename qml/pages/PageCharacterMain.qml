@@ -344,7 +344,7 @@ Rectangle {
                         id: skillListRect
                         implicitWidth: listViewSkills.width
                         implicitHeight: txtSkillGroupName.implicitHeight + 2*AppStyle.marginSmall
-                        color: ListView.isCurrentItem ? AppStyle.rectBgHighlightColor : AppStyle.textDefaultColor
+                        color: ListView.isCurrentItem ? AppStyle.rectBgHighlightColor : AppStyle.textLightColor
                         border { width: 1; color: "white" }
 
                         Text {
@@ -376,9 +376,40 @@ Rectangle {
                     }
                 }
             }
-            Text { text: "Clones" }
-            Text { text: "Wallet" }
-            Text { text: "Assets" }
+
+            Rectangle {
+                id: rcTabClones
+                border { width: 1; color: AppStyle.mainColor }
+                color: AppStyle.bgColor
+                width: subInfoSwipeView.width
+                height: subInfoSwipeView.height
+                clip: true
+
+                Text { text: "Clones" }
+            }
+
+
+            Rectangle {
+                id: rcTabWallet
+                border { width: 1; color: AppStyle.mainColor }
+                color: AppStyle.bgColor
+                width: subInfoSwipeView.width
+                height: subInfoSwipeView.height
+                clip: true
+
+                Text { text: "Wallet" }
+            }
+
+            Rectangle {
+                id: rcTabAssets
+                border { width: 1; color: AppStyle.mainColor }
+                color: AppStyle.bgColor
+                width: subInfoSwipeView.width
+                height: subInfoSwipeView.height
+                clip: true
+
+                Text { text: "Assets" }
+            }
         }
     }
 
