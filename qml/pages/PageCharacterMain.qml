@@ -357,8 +357,6 @@ Rectangle {
                                 fill: parent
                                 leftMargin: AppStyle.marginNormal
                             }
-
-                            //height: parent.height
                             verticalAlignment: Text.AlignVCenter
                             color: skillListRect.ListView.isCurrentItem ? AppStyle.textDefaultColor : AppStyle.textInvertedColor
                         }
@@ -371,7 +369,8 @@ Rectangle {
 
                             onClicked: {
                                 var clickedIndex = listViewSkills.indexAt(mouse.x, skillListRect.y + mouse.y);
-                                console.log(mouse.x, skillListRect.y + mouse.y, clickedIndex);
+                                // console.log(mouse.x, skillListRect.y + mouse.y, clickedIndex);
+                                listViewSkills.currentIndex = clickedIndex;
                             }
                         }
                     }
