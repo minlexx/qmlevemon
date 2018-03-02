@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <QSet>
 #include <QDebug>
 #include <QLoggingCategory>
@@ -68,9 +69,14 @@ void EM::CharacterSkillGroupsModel::setFromSkills(const QVector<EM::CharacterSki
                 }
             }
         }
-
+        std::sort(m_data.begin(), m_data.end(), std::less<ModelData>());
         // qCDebug(logCharSkillGroupsModel) << " added " << numAdded << "skill groups";
     }
 
     endResetModel();
+}
+
+bool EM::CharacterSkillGroupsModel::ModelData::operator<(const EM::CharacterSkillGroupsModel::ModelData &o) const
+{
+    return (m_name < o.m_name);
 }

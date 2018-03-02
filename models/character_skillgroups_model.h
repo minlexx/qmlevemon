@@ -28,6 +28,7 @@ class CharacterSkillGroupsModel: public QAbstractListModel
         ModelData(ModelData &&) = default;
         ModelData &operator=(const ModelData &) = default;
         ModelData &operator=(ModelData &&) = default;
+        bool operator<(const ModelData &o) const;
         quint64 m_id = 0;
         QString m_name;
     };
