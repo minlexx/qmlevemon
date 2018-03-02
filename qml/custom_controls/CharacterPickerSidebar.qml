@@ -5,13 +5,15 @@ import "../"
 
 Item {
     id: container
-    width: 48
+    implicitWidth: 48
+    implicitHeight: imagesCol.height
 
     property int tooltipFontPointSize: AppStyle.textSizeH3
 
     signal characterSelected(int char_id)
 
     Column {
+        id: imagesCol
         Repeater {
             model: characterModel
 
