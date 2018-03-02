@@ -187,7 +187,7 @@ Rectangle {
                 Item {
                     id: charNameTextItem
                     width: charNameText.width
-                    height: charNameText.height
+                    height: charNameText.height + AppStyle.marginSmall
                     Text {
                         id: charNameText
                         anchors.left: parent.left
@@ -208,7 +208,6 @@ Rectangle {
                         id: charOriginsText
                         anchors.left: parent.left
                         anchors.leftMargin: AppStyle.marginNormal
-                        anchors.topMargin: AppStyle.marginSmall
                         text: (curChar.gender ? qsTr("Female") : qsTr("Male")) + ", "
                               + curChar.raceName + " - "
                               + curChar.bloodlineName + " - "
