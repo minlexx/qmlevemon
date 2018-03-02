@@ -343,7 +343,9 @@ Rectangle {
                     delegate: Rectangle {
                         id: skillListRect
                         implicitWidth: listViewSkills.width
-                        implicitHeight: txtSkillGroupName.implicitHeight + 2*AppStyle.marginSmall
+                        implicitHeight: ListView.isCurrentItem
+                                        ? txtSkillGroupName.implicitHeight + 2*AppStyle.marginSmall + skillGroupSkillsRect.height
+                                        : txtSkillGroupName.implicitHeight + 2*AppStyle.marginSmall
                         color: ListView.isCurrentItem ? AppStyle.rectBgHighlightColor : AppStyle.textLightColor
                         border { width: 1; color: "white" }
 
@@ -359,6 +361,18 @@ Rectangle {
                             }
                             verticalAlignment: Text.AlignVCenter
                             color: skillListRect.ListView.isCurrentItem ? AppStyle.textDefaultColor : AppStyle.textInvertedColor
+                        }
+
+                        Rectangle {
+                            id: skillGroupSkillsRect
+                            visible: skillListRect.ListView.isCurrentItem
+                            width: listViewSkills.width
+                            height: 100
+                            anchors {
+                                top: txtSkillGroupName.bottom
+                            }
+
+                            color: "green"
                         }
 
                         MouseArea {
