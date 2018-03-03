@@ -33,6 +33,8 @@ Rectangle {
 
     // private part
     color: useAltBackColor ? backColorAlt : backColor
+    implicitHeight: txtSkillName.height + txtSp.height + 3*AppStyle.marginSmall
+    implicitWidth: txtSp.width + txtSpPerHour.width + txtTrainingTime.width + rcLevelIndicator.width + 4*AppStyle.marginBig + 5
 
     Rectangle {
         id: rcLevelIndicator
