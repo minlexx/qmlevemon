@@ -342,56 +342,69 @@ Rectangle {
                     model: curChar.skillGroupsModel
                     currentIndex: -1
 
-                    delegate: Rectangle {
-                        id: skillListRect
+                    delegate: Item {
+                        id: skillListItem
                         implicitWidth: listViewSkills.width
                         implicitHeight: ListView.isCurrentItem
-                                        ? txtSkillGroupName.implicitHeight + 2*AppStyle.marginSmall + skillGroupSkillsRect.height
-                                        : txtSkillGroupName.implicitHeight + 2*AppStyle.marginSmall
-                        color: ListView.isCurrentItem ? AppStyle.rectBgHighlightColor : AppStyle.textLightColor
-                        border { width: 1; color: "white" }
+                                ? txtSkillGroupName.implicitHeight + 2*AppStyle.marginSmall + skillGroupSkillsRect.height
+                                : txtSkillGroupName.implicitHeight + 2*AppStyle.marginSmall
 
-                        Text {
-                            id: txtSkillGroupName
-                            text: model.groupName
-                            maximumLineCount: 1
-                            font.pointSize: AppStyle.textSizeH2
-                            font.bold: true
-                            anchors {
-                                fill: parent
-                                leftMargin: AppStyle.marginNormal
+                        Rectangle {
+                            id: skillListTitleRect
+                            implicitWidth: listViewSkills.width
+                            implicitHeight: txtSkillGroupName.implicitHeight + 2*AppStyle.marginSmall
+                            color: skillListItem.ListView.isCurrentItem ? AppStyle.rectBgHighlightColor : AppStyle.textLightColor
+                            border { width: 1; color: "white" }
+
+                            Text {
+                                id: txtSkillGroupName
+                                text: model.groupName
+                                maximumLineCount: 1
+                                font.pointSize: AppStyle.textSizeH3
+                                font.bold: true
+                                anchors {
+                                    fill: parent
+                                    leftMargin: AppStyle.marginNormal
+                                }
+                                verticalAlignment: Text.AlignVCenter
+                                color: skillListItem.ListView.isCurrentItem ? AppStyle.textDefaultColor : AppStyle.textInvertedColor
                             }
-                            verticalAlignment: Text.AlignVCenter
-                            color: skillListRect.ListView.isCurrentItem ? AppStyle.textDefaultColor : AppStyle.textInvertedColor
+
+                            MouseArea {
+                                id: ma1
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                cursorShape: containsMouse ? Qt.PointingHandCursor : Qt.ArrowCursor
+
+                                onClicked: {
+                                    var curIdx = listViewSkills.currentIndex
+                                    var clickedIndex = listViewSkills.indexAt(mouse.x, skillListItem.y + mouse.y);
+                                    //console.log(mouse.x, skillListTitleRect.y + mouse.y, clickedIndex);
+                                    if (clickedIndex === curIdx) {
+                                        // the same item is clicked twice, collapse all
+                                        listViewSkills.currentIndex = -1;
+                                    } else {
+                                        // activate different item
+                                        listViewSkills.currentIndex = clickedIndex;
+                                    }
+                                }
+                            }
                         }
 
                         Rectangle {
                             id: skillGroupSkillsRect
-                            visible: skillListRect.ListView.isCurrentItem
+                            visible: skillListItem.ListView.isCurrentItem
                             width: listViewSkills.width
                             height: 100
                             anchors {
-                                top: txtSkillGroupName.bottom
+                                top: skillListTitleRect.bottom
                             }
 
                             color: "green"
                         }
-
-                        MouseArea {
-                            id: ma1
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            cursorShape: containsMouse ? Qt.PointingHandCursor : Qt.ArrowCursor
-
-                            onClicked: {
-                                var clickedIndex = listViewSkills.indexAt(mouse.x, skillListRect.y + mouse.y);
-                                // console.log(mouse.x, skillListRect.y + mouse.y, clickedIndex);
-                                listViewSkills.currentIndex = clickedIndex;
-                            }
-                        }
-                    }
-                }
-            }
+                    } // List item
+                } // ListView
+            } // rect tab skills
 
             Rectangle {
                 id: rcTabClones
