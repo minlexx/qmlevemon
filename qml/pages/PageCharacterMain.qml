@@ -294,7 +294,9 @@ Rectangle {
             bottom: parent.bottom
             left: profilePic.left
             right: parent.right
-            margins: AppStyle.marginNormal
+            topMargin: AppStyle.marginNormal
+            bottomMargin: AppStyle.marginNormal
+            rightMargin: AppStyle.marginNormal
         }
         color: AppStyle.mainColor
         clip: true
