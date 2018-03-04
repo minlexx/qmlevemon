@@ -22,6 +22,7 @@ QHash<int, QByteArray> EM::CharacterSkillGroupsModel::roleNames() const
 
 int EM::CharacterSkillGroupsModel::rowCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent)
     QMutexLocker lock(&m_mutex);
     return m_data.size();
 }
