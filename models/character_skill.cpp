@@ -144,3 +144,10 @@ QDataStream &operator>>(QDataStream &stream, EM::CharacterSkill &skill)
     stream >> ui64;  skill.setSkillPointsInSkill(ui64);
     return stream;
 }
+
+
+QDebug operator<<(QDebug stream, const EM::CharacterSkill &skill)
+{
+    stream << "[CharacterSkill " << skill.skillName() << "/" << skill.skillId() << "]";
+    return stream;
+}

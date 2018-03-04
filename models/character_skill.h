@@ -2,6 +2,7 @@
 #define H_EM_CHARACTER_SKILL
 
 #include <QObject>
+#include <QDebug>
 #include "skill_template.h"
 
 class QDataStream;
@@ -53,6 +54,7 @@ protected:
 
 QDataStream& operator<<(QDataStream &stream, const EM::CharacterSkill &skill);
 QDataStream& operator>>(QDataStream &stream, EM::CharacterSkill &skill);
+QDebug operator<<(QDebug stream, const EM::CharacterSkill &skill);
 
 
 #endif
