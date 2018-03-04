@@ -7,6 +7,7 @@ Rectangle {
 
     // public interface
 
+    property int skillId: 0
     property int skillQueueNum: 1
     property int skillRank: 1
     property int skillLevel: 1
