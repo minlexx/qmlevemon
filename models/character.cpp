@@ -537,6 +537,7 @@ QList<QObject *> Character::getSkillsForGroupId(quint64 groupId) const
         if (sk.skillGroupId() == groupId) {
             // insert a copy of skill to returned list
             ret.append(new CharacterSkill(sk));
+            qCDebug(logCharacter) << Q_FUNC_INFO << "group" << groupId << "; adding skill: " << sk;
         }
     }
     std::sort(ret.begin(), ret.end(), [](QObject *a, QObject *b) -> bool {

@@ -341,6 +341,7 @@ Rectangle {
                     anchors.margins: 1
                     model: curChar.skillGroupsModel
                     currentIndex: -1
+                    interactive: true
 
                     delegate: Item {
                         id: skillListItem
@@ -385,6 +386,7 @@ Rectangle {
                                         listViewSkills.currentIndex = -1;
                                     } else {
                                         // activate different item
+                                        lvSkillsInGroup.model = curChar.getSkillsForGroupId(model.groupId);
                                         listViewSkills.currentIndex = clickedIndex;
                                     }
                                 }
@@ -396,11 +398,23 @@ Rectangle {
                             visible: skillListItem.ListView.isCurrentItem
                             width: listViewSkills.width
                             height: 100
-                            anchors {
-                                top: skillListTitleRect.bottom
-                            }
+                            anchors. top: skillListTitleRect.bottom
+                            color: AppStyle.bgColor
 
-                            color: "green"
+                            ListView {
+                                id: lvSkillsInGroup
+                                model: null
+                                currentIndex: -1
+                                interactive: false
+                                delegate: SkillProgressBar {
+                                    skillName: modelData.skillName
+                                    skillId: modelData.skillId
+                                    skillLevel: modelData.activeLevel // modelData.trainedLevel // TODO: support alpha clones
+                                    skillSpCurrent: modelData.skillPointsInSkill
+                                    isInProgress: false
+                                    isQueued: false
+                                }
+                            }
                         }
                     } // List item
                 } // ListView
