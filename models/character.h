@@ -309,7 +309,7 @@ protected:
     quint64   m_currentStructureId = 0;
     QString   m_currentStructureName;
     // location - ship
-    quint64   m_currentShipTypeId;
+    quint64   m_currentShipTypeId = 0;
     QString   m_currentShipTypeName;
     QString   m_currentShipFriendlyName;
 
