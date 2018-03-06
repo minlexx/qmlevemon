@@ -63,6 +63,7 @@ Rectangle {
                 top: parent.top
                 topMargin: lvlIndSmallSpacing
             }
+            visible: skillLevelTrained >= 5
         }
         Rectangle {
             id: rclv4
@@ -75,6 +76,7 @@ Rectangle {
                 top: parent.top
                 topMargin: lvlIndSmallSpacing
             }
+            visible: skillLevelTrained >= 4
         }
         Rectangle {
             id: rclv3
@@ -87,6 +89,7 @@ Rectangle {
                 top: parent.top
                 topMargin: lvlIndSmallSpacing
             }
+            visible: skillLevelTrained >= 3
         }
         Rectangle {
             id: rclv2
@@ -99,6 +102,7 @@ Rectangle {
                 top: parent.top
                 topMargin: lvlIndSmallSpacing
             }
+            visible: skillLevelTrained >= 2
         }
         Rectangle {
             id: rclv1
@@ -111,6 +115,7 @@ Rectangle {
                 top: parent.top
                 topMargin: lvlIndSmallSpacing
             }
+            visible: skillLevelTrained >= 1
         }
     }
 
