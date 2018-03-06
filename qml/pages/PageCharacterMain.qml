@@ -380,13 +380,11 @@ Rectangle {
                                 onClicked: {
                                     var curIdx = listViewSkills.currentIndex
                                     var clickedIndex = listViewSkills.indexAt(mouse.x, skillListItem.y + mouse.y);
-                                    //console.log(mouse.x, skillListTitleRect.y + mouse.y, clickedIndex);
                                     if (clickedIndex === curIdx) {
                                         // the same item is clicked twice, collapse all
                                         listViewSkills.currentIndex = -1;
                                     } else {
                                         // activate different item
-                                        //lvSkillsInGroup.model = curChar.getSkillsForGroupId(model.groupId);
                                         skillsInGroupRepeater.model = curChar.getSkillsForGroupId(model.groupId);
                                         listViewSkills.currentIndex = clickedIndex;
                                     }
