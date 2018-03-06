@@ -227,6 +227,9 @@ bool SkillTreeModel::load()
             skillTemplate->setSkillGroup(skillGroup);
             skillTemplate->setSkillId(jobj.value(QLatin1String("id")).toVariant().toULongLong());
             skillTemplate->setSkillName(jobj.value(QLatin1String("name")).toString());
+            skillTemplate->setPrimaryAttribute(jobj.value(QLatin1String("primaryAttribute")).toInt());
+            skillTemplate->setSecondaryAttribute(jobj.value(QLatin1String("secondaryAttribute")).toInt());
+            skillTemplate->setSkillTimeConstant(jobj.value(QLatin1String("skillTimeConstant")).toVariant().toFloat());
             if (!m_skillTemplates.contains(skillTemplate->skillId())) {
                 m_skillTemplates.insert(skillTemplate->skillId(), skillTemplate);
             } else {
