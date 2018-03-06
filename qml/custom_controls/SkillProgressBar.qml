@@ -10,12 +10,13 @@ Rectangle {
     property int skillId: 0
     property int skillQueueNum: 1
     property int skillRank: 1
-    property int skillLevel: 1
+    property int skillLevelActive: 1
+    property int skillLevelTrained: 1
     property string skillName: "Skill name"
     property string skillSpCurrent: "0"
     property string skillSpTotal: "1000"
     property int skillSpPerHour: 2200
-    property string skillTrainingTimeLeft: "1d 12h 56s"
+    property string skillTrainingTimeLeft: "" // "1d 12h 56s"
     property bool isInProgress: true
     property bool isQueued: false
 
@@ -36,16 +37,80 @@ Rectangle {
     color: useAltBackColor ? backColorAlt : backColor
     implicitHeight: txtSkillName.height + txtSp.height + 3*AppStyle.marginSmall
     implicitWidth: txtSp.width + txtSpPerHour.width + txtTrainingTime.width + rcLevelIndicator.width + 4*AppStyle.marginBig + 5
+    property int index: 0
+    property int lvlIndSmallRectSize: 15
+    property int lvlIndSmallSpacing: 3
 
     Rectangle {
         id: rcLevelIndicator
-        width: 100
-        height: 30
+        width: lvlIndSmallRectSize*5 + lvlIndSmallSpacing*6
+        height: lvlIndSmallRectSize + lvlIndSmallSpacing*2
         border { width: 1; color: levelIndicatorColor }
         anchors {
             top: parent.top
             right: parent.right
-            margins: 5
+            margins: lvlIndSmallSpacing
+        }
+
+        Rectangle {
+            id: rclv5
+            width: lvlIndSmallRectSize
+            height: lvlIndSmallRectSize
+            color: "black"
+            anchors {
+                right: parent.right
+                rightMargin: lvlIndSmallSpacing
+                top: parent.top
+                topMargin: lvlIndSmallSpacing
+            }
+        }
+        Rectangle {
+            id: rclv4
+            width: lvlIndSmallRectSize
+            height: lvlIndSmallRectSize
+            color: "black"
+            anchors {
+                right: rclv5.left
+                rightMargin: lvlIndSmallSpacing
+                top: parent.top
+                topMargin: lvlIndSmallSpacing
+            }
+        }
+        Rectangle {
+            id: rclv3
+            width: lvlIndSmallRectSize
+            height: lvlIndSmallRectSize
+            color: "black"
+            anchors {
+                right: rclv4.left
+                rightMargin: lvlIndSmallSpacing
+                top: parent.top
+                topMargin: lvlIndSmallSpacing
+            }
+        }
+        Rectangle {
+            id: rclv2
+            width: lvlIndSmallRectSize
+            height: lvlIndSmallRectSize
+            color: "black"
+            anchors {
+                right: rclv3.left
+                rightMargin: lvlIndSmallSpacing
+                top: parent.top
+                topMargin: lvlIndSmallSpacing
+            }
+        }
+        Rectangle {
+            id: rclv1
+            width: lvlIndSmallRectSize
+            height: lvlIndSmallRectSize
+            color: "black"
+            anchors {
+                right: rclv2.left
+                rightMargin: lvlIndSmallSpacing
+                top: parent.top
+                topMargin: lvlIndSmallSpacing
+            }
         }
     }
 
@@ -64,7 +129,7 @@ Rectangle {
             family: fontFamily
             pointSize: fontSize
         }
-        text: (skillQueueNum > 0) ? (skillQueueNum + ". " + skillName) : skillName
+        text: ((skillQueueNum > 0) ? (skillQueueNum + ". " + skillName) : skillName) + "   " + qsTr("lv.") + " " + skillLevelActive
         color: isQueued ? textQueuedColor : textColor
     }
 
@@ -92,7 +157,6 @@ Rectangle {
             rightMargin: AppStyle.marginSmall
             bottomMargin: AppStyle.marginSmall
             leftMargin: (skillQueueNum > 0) ? AppStyle.marginBig : 0
-            //leftMargin: AppStyle.marginBig
         }
         font {
             bold: false
@@ -118,6 +182,7 @@ Rectangle {
         }
         text: qsTr("SP/Hour") + ": " + skillSpPerHour
         color: isQueued ? textQueuedColor : textColor
+        visible: isInProgress
     }
 
     Text {
@@ -136,5 +201,6 @@ Rectangle {
         }
         text: qsTr("Training time") + ": " + skillTrainingTimeLeft
         color: isQueued ? textQueuedColor : textColor
+        visible: isInProgress
     }
 }

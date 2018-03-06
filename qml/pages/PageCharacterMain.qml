@@ -386,7 +386,8 @@ Rectangle {
                                         listViewSkills.currentIndex = -1;
                                     } else {
                                         // activate different item
-                                        lvSkillsInGroup.model = curChar.getSkillsForGroupId(model.groupId);
+                                        //lvSkillsInGroup.model = curChar.getSkillsForGroupId(model.groupId);
+                                        skillsInGroupRepeater.model = curChar.getSkillsForGroupId(model.groupId);
                                         listViewSkills.currentIndex = clickedIndex;
                                     }
                                 }
@@ -397,22 +398,35 @@ Rectangle {
                             id: skillGroupSkillsRect
                             visible: skillListItem.ListView.isCurrentItem
                             width: listViewSkills.width
-                            height: 100
+                            height: skillsInGroupColumn.height
                             anchors. top: skillListTitleRect.bottom
                             color: AppStyle.bgColor
 
-                            ListView {
-                                id: lvSkillsInGroup
-                                model: null
-                                currentIndex: -1
-                                interactive: false
-                                delegate: SkillProgressBar {
-                                    skillName: modelData.skillName
-                                    skillId: modelData.skillId
-                                    skillLevel: modelData.activeLevel // modelData.trainedLevel // TODO: support alpha clones
-                                    skillSpCurrent: modelData.skillPointsInSkill
-                                    isInProgress: false
-                                    isQueued: false
+                            Column {
+                                id: skillsInGroupColumn
+                                width: parent.width
+
+                                Repeater {
+                                    id: skillsInGroupRepeater
+                                    model: null
+                                    delegate: SkillProgressBar {
+                                        skillQueueNum: 0
+                                        skillName: modelData.skillName
+                                        skillId: modelData.skillId
+                                        skillRank: modelData.skillTimeConstant
+                                        skillLevelActive: modelData.activeLevel
+                                        skillLevelTrained: modelData.trainedLevel
+                                        skillSpCurrent: modelData.skillPointsInSkill
+                                        isInProgress: false
+                                        isQueued: false
+
+                                        width: skillsInGroupColumn.width
+                                        useAltBackColor: (index % 2 == 1)
+                                    }
+
+                                    onItemAdded: {
+                                        item.index = index;
+                                    }
                                 }
                             }
                         }
