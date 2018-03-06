@@ -148,6 +148,8 @@ QDataStream &operator>>(QDataStream &stream, EM::CharacterSkill &skill)
 
 QDebug operator<<(QDebug stream, const EM::CharacterSkill &skill)
 {
-    stream << "[CharacterSkill " << skill.skillName() << "/" << skill.skillId() << "]";
+    stream << "[CharacterSkill " << skill.skillName() << "/" << skill.skillId();
+    stream << " / diff: " << skill.skillTimeConstant();
+    stream << "]";
     return stream;
 }
