@@ -39,6 +39,7 @@ class CharacterModel: public QAbstractListModel
         ISK,
         ISKAmountStr,
         // skills info
+        TotalSP,
         TrainingSkill,
         TrainingSkillTimeLeft,
         TrainingSkillEndDateTime,

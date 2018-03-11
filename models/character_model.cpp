@@ -38,6 +38,7 @@ CharacterModel::CharacterModel(QObject *parent):
     m_roles.insert(Roles::ISK, "isk");
     m_roles.insert(Roles::ISKAmountStr, "iskAmountStr");
     // skills info
+    m_roles.insert(Roles::TotalSP, "totalSp");
     m_roles.insert(Roles::TrainingSkill, "trainingSkill");
     m_roles.insert(Roles::TrainingSkillTimeLeft, "trainingSkillTimeLeft");
     m_roles.insert(Roles::TrainingSkillEndDateTime, "trainingSkillEndDateTime");
@@ -111,6 +112,7 @@ QVariant CharacterModel::data(const QModelIndex &index, int role) const
         } break;
     case ISKAmountStr: ret = ch->iskAmountStr(); break;
         // skills info
+    case TotalSP: ret = ch->totalSp(); break;
     case TrainingSkill: ret = QLatin1String("-"); break;
     case TrainingSkillTimeLeft: ret = QLatin1String("-"); break;
     case TrainingSkillEndDateTime: ret = QLatin1String("-"); break;

@@ -106,6 +106,12 @@ Rectangle {
                     font.family: AppStyle.fontFamily
                 }
                 Text {
+                    text: Number(model.totalSp).toLocaleString(Qt.locale(), 'f', 0) + " SP"
+                    color: AppStyle.textSecondaryColor
+                    font.pointSize: AppStyle.textSizeH3
+                    font.family: AppStyle.fontFamily
+                }
+                Text {
                     text: model.trainingSkill
                     color: AppStyle.textLightColor
                     font.pointSize: AppStyle.textSizeH3
