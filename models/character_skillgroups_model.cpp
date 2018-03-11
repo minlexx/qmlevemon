@@ -13,6 +13,11 @@ EM::CharacterSkillGroupsModel::CharacterSkillGroupsModel(QObject *parent)
     m_roles.insert(Qt::DisplayRole, QByteArrayLiteral("display"));
     m_roles.insert(Roles::GroupName, QByteArrayLiteral("groupName"));
     m_roles.insert(Roles::GroupId, QByteArrayLiteral("groupId"));
+    m_roles.insert(Roles::SkillsInGroupTrained, QByteArrayLiteral("skillsInGroupTrained"));
+    m_roles.insert(Roles::SkillsInGroupTotal, QByteArrayLiteral("skillsInGroupTotal"));
+    m_roles.insert(Roles::SkillPointsInGroup, QByteArrayLiteral("skillPointsInGroup"));
+    m_roles.insert(Roles::NumSkillsInQueue, QByteArrayLiteral("numSkillsInQueue"));
+    m_roles.insert(Roles::NumSkillsInTraining, QByteArrayLiteral("numSkillsInTraining"));
 }
 
 QHash<int, QByteArray> EM::CharacterSkillGroupsModel::roleNames() const
@@ -45,6 +50,23 @@ QVariant EM::CharacterSkillGroupsModel::data(const QModelIndex &index, int role)
     case Roles::GroupId:
         ret = item.m_id;
         break;
+    case Roles::SkillsInGroupTrained:
+        ret = item.m_skillsInGroupTrained;
+        break;
+    case Roles::SkillsInGroupTotal:
+        ret = item.m_skillsInGroupTotal;
+        break;
+    case Roles::SkillPointsInGroup:
+        ret = item.m_skillPointsInGroup;
+        break;
+    // TODO: currently not done, implement skill queues first
+    case Roles::NumSkillsInQueue:
+        ret = item.m_numSkillsInQueue;
+        break;
+    // TODO: currently not done, implement skill queues first
+    case Roles::NumSkillsInTraining:
+        ret = item.m_numSkillsInTraining;
+        break;
     }
     return ret;
 }
@@ -55,23 +77,49 @@ void EM::CharacterSkillGroupsModel::setFromSkills(const QVector<EM::CharacterSki
 
     {
         QMutexLocker lock(&m_mutex);
-        QSet<quint64> gset; // collect different excluse group IDs
+
+        // collect different excluse group IDs
+        QSet<quint64> gset;
+        QHash<quint64, int> skillsInGroup; // <group_id, num_skills>
+        QHash<quint64, quint64> skillPointsGroup; // <group_id, num_skillpoints>
         m_data.clear();
         int numAdded = 0;
         for (const EM::CharacterSkill &sk: qAsConst(skills)) {
             const SkillGroup *skillGroup = sk.skillGroup();
             // unlikely that skill has no group, but just in case..
             if (Q_LIKELY(skillGroup)) {
+
+                quint64 groupId = skillGroup->groupId();
+
                 // add only group that was not added before
-                if (!gset.contains(skillGroup->groupId())) {
-                    gset << skillGroup->groupId();
-                    m_data.push_back(std::move(ModelData(skillGroup->groupId(), skillGroup->groupName())));
+                if (!gset.contains(groupId)) {
+                    gset << groupId;
+                    m_data.push_back(ModelData(groupId, skillGroup->groupName()));
                     numAdded++;
                 }
+
+                // count skills in this group
+                if (!skillsInGroup.contains(groupId)) {
+                    skillsInGroup.insert(groupId, 1);
+                } else {
+                    ++skillsInGroup[groupId];
+                }
+
+                // count skillpoints in this group
+                if (!skillPointsGroup.contains(groupId)) {
+                    skillPointsGroup.insert(groupId, 0);
+                }
+                skillPointsGroup[groupId] += sk.skillPointsInSkill();
             }
         }
         std::sort(m_data.begin(), m_data.end(), std::less<ModelData>());
         // qCDebug(logCharSkillGroupsModel) << " added " << numAdded << "skill groups";
+
+        // update modeldata with collected counters
+        for (ModelData &md: m_data) {
+            md.m_skillsInGroupTrained = skillsInGroup[md.m_id];
+            md.m_skillPointsInGroup = skillPointsGroup[md.m_id];
+        }
     }
 
     endResetModel();

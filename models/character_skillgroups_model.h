@@ -17,7 +17,12 @@ class CharacterSkillGroupsModel: public QAbstractListModel
 
     enum Roles {
         GroupName = Qt::UserRole + 1,
-        GroupId
+        GroupId,
+        SkillsInGroupTrained,
+        SkillsInGroupTotal,
+        SkillPointsInGroup,
+        NumSkillsInQueue,
+        NumSkillsInTraining
     };
 
     class ModelData {
@@ -29,8 +34,15 @@ class CharacterSkillGroupsModel: public QAbstractListModel
         ModelData &operator=(const ModelData &) = default;
         ModelData &operator=(ModelData &&) = default;
         bool operator<(const ModelData &o) const;
+
+    public:
         quint64 m_id = 0;
         QString m_name;
+        int m_skillsInGroupTrained = 0;
+        int m_skillsInGroupTotal = 0;
+        quint64 m_skillPointsInGroup = 0;
+        int m_numSkillsInQueue = 0;
+        int m_numSkillsInTraining = 0;
     };
 
 public:
