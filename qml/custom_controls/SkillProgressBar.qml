@@ -167,7 +167,7 @@ Rectangle {
             bold: false
             pointSize: fontSize
         }
-        text: "SP: " + skillSpCurrent + " / " + skillSpTotal
+        text: "SP: " + Number(skillSpCurrent).toLocaleString(Qt.locale(),'f',0) + " / " + Number(skillSpTotal).toLocaleString(Qt.locale(),'f',0)
         color: isQueued ? textQueuedColor : textColor
     }
 
