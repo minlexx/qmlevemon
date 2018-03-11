@@ -364,9 +364,44 @@ Rectangle {
                                 font.pointSize: AppStyle.textSizeH3
                                 font.bold: true
                                 anchors {
-                                    fill: parent
+                                    top: parent.top
+                                    left: parent.left
                                     leftMargin: AppStyle.marginNormal
                                 }
+                                height: implicitHeight + 2*AppStyle.marginSmall
+                                width: 250
+                                verticalAlignment: Text.AlignVCenter
+                                color: skillListItem.ListView.isCurrentItem ? AppStyle.textDefaultColor : AppStyle.textInvertedColor
+                            }
+
+                            Text {
+                                id: txtSkillsInGroupCounters
+                                text: model.skillsInGroupTrained + qsTr(" of ") + model.skillsInGroupTotal + qsTr(" skills") // "11 of 13 skills"
+                                maximumLineCount: 1
+                                font.pointSize: AppStyle.textSizeH4
+                                font.bold: false
+                                anchors {
+                                    left: txtSkillGroupName.right
+                                    leftMargin: AppStyle.marginBig
+                                    top: parent.top
+                                }
+                                height: txtSkillGroupName.height
+                                verticalAlignment: Text.AlignVCenter
+                                color: skillListItem.ListView.isCurrentItem ? AppStyle.textDefaultColor : AppStyle.textInvertedColor
+                            }
+
+                            Text {
+                                id: txtSkillPointsInGroup
+                                text: Number(model.skillPointsInGroup).toLocaleString(Qt.locale(), 'f', 0) + " SP"
+                                maximumLineCount: 1
+                                font.pointSize: AppStyle.textSizeH4
+                                font.bold: false
+                                anchors {
+                                    left: txtSkillsInGroupCounters.right
+                                    leftMargin: AppStyle.marginBig*2
+                                    top: parent.top
+                                }
+                                height: txtSkillGroupName.height
                                 verticalAlignment: Text.AlignVCenter
                                 color: skillListItem.ListView.isCurrentItem ? AppStyle.textDefaultColor : AppStyle.textInvertedColor
                             }
