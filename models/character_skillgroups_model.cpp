@@ -94,7 +94,7 @@ void EM::CharacterSkillGroupsModel::setFromSkills(const QVector<EM::CharacterSki
                 // add only group that was not added before
                 if (!gset.contains(groupId)) {
                     gset << groupId;
-                    m_data.push_back(ModelData(groupId, skillGroup->groupName()));
+                    m_data.push_back(ModelData(groupId, skillGroup->groupName(), skillGroup->numSkillsInGroup()));
                     numAdded++;
                 }
 

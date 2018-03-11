@@ -28,7 +28,8 @@ class CharacterSkillGroupsModel: public QAbstractListModel
     class ModelData {
     public:
         ModelData() {}
-        ModelData(quint64 id, const QString &name): m_id(id), m_name(name) {}
+        ModelData(quint64 id, const QString &name, int numSkillInGroup):
+            m_id(id), m_name(name), m_skillsInGroupTotal(numSkillInGroup)  {}
         ModelData(const ModelData &) = default;
         ModelData(ModelData &&) = default;
         ModelData &operator=(const ModelData &) = default;
