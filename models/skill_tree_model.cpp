@@ -222,7 +222,10 @@ bool SkillTreeModel::load()
         for (auto it = jskills.constBegin(); it != jskills.constEnd(); it++) {
             numSkills++;
             const QJsonObject& jobj = (*it).toObject();
-            const SkillGroup *skillGroup = m_skillGroups[groupId];
+            // count number of skills in group
+            SkillGroup *skillGroup = m_skillGroups[groupId];
+            skillGroup->setNumSkillsInGroup(skillGroup->numSkillsInGroup() + 1);  // skillsInGroup++
+            //
             SkillTemplate *skillTemplate = new SkillTemplate();
             skillTemplate->setSkillGroup(skillGroup);
             skillTemplate->setSkillId(jobj.value(QLatin1String("id")).toVariant().toULongLong());
