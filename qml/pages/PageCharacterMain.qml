@@ -415,6 +415,7 @@ Rectangle {
                                         skillLevelActive: modelData.activeLevel
                                         skillLevelTrained: modelData.trainedLevel
                                         skillSpCurrent: modelData.skillPointsInSkill
+                                        skillSpTotal: modelData.skillPointsInLevel
                                         isInProgress: false
                                         isQueued: false
 
