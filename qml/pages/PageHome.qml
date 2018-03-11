@@ -142,16 +142,17 @@ Rectangle {
                     if (mouse.button === Qt.LeftButton) {
                         container.selectCharacterRequest(model.characterId)
                     } else if (mouse.button === Qt.RightButton) {
-                        contextMenu.popup(mouse.x, mouse.y);
+                        characterPopupMenu.popup(mouse.x, mouse.y);
                     }
                 }
 
                 onPressAndHold: {
-                    contextMenu.popup(mouse.x, mouse.y);
+                    characterPopupMenu.popup(mouse.x, mouse.y);
                 }
 
                 Menu {
-                    id: contextMenu
+                    id: characterPopupMenu
+                    width: characterMenuItem1.width + 1
 
                     // Menu.popup() function was introduced in Qt 5.10,
                     // for 5.7 compatibility we can emulate it somehow
@@ -162,6 +163,7 @@ Rectangle {
                     }
 
                     EMPopupMenuItem {
+                        id: characterMenuItem1
                         text: qsTr("Delete this character")
                         onTriggered: {
                             removeConfirmPopup.characterId = model.characterId;
