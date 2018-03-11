@@ -50,6 +50,8 @@ QString SkillGroup::groupName() const { return m_groupName; }
 
 quint64 SkillGroup::groupId() const { return m_groupId; }
 
+int SkillGroup::numSkillsInGroup() const { return m_numSkillsInGroup; }
+
 
 void SkillGroup::setGroupName(const QString& groupName)
 {
@@ -64,6 +66,13 @@ void SkillGroup::setGroupId(quint64 groupId)
     if (m_groupId == groupId) return;
     m_groupId = groupId;
     Q_EMIT groupIdChanged();
+}
+
+void SkillGroup::setNumSkillsInGroup(int n)
+{
+    if (m_numSkillsInGroup == n) return;
+    m_numSkillsInGroup = n;
+    Q_EMIT numSkillsInGroupChanged();
 }
 
 
