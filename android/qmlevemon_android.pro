@@ -112,6 +112,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
     ANDROID_EXTRA_LIBS = \
-        $$PWD/../../../../bin/mingw/msys/1.0/home/Lexx/openssl-1.0.2n/libcrypto.so \
-        $$PWD/../../../../bin/mingw/msys/1.0/home/Lexx/openssl-1.0.2n/libssl.so
+        $$PWD/arm-linux-androideabi-4.9/libcrypto.so \
+        $$PWD/arm-linux-androideabi-4.9/libssl.so
 }
