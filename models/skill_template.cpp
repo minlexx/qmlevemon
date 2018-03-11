@@ -7,11 +7,11 @@ namespace EM {
 CharacterAttributeID charAttributeFromID(int id)
 {
     switch (id) {
-    case static_cast<int>(CharacterAttributeID::CHARISMA):     return CharacterAttributeID::CHARISMA; break;
-    case static_cast<int>(CharacterAttributeID::INTELLIGENCE): return CharacterAttributeID::INTELLIGENCE; break;
-    case static_cast<int>(CharacterAttributeID::MEMORY):       return CharacterAttributeID::MEMORY; break;
-    case static_cast<int>(CharacterAttributeID::PERCEPTION):   return CharacterAttributeID::PERCEPTION; break;
-    case static_cast<int>(CharacterAttributeID::WILLPOWER):    return CharacterAttributeID::WILLPOWER; break;
+    case static_cast<int>(CharacterAttributeID::CHARISMA):     return CharacterAttributeID::CHARISMA;
+    case static_cast<int>(CharacterAttributeID::INTELLIGENCE): return CharacterAttributeID::INTELLIGENCE;
+    case static_cast<int>(CharacterAttributeID::MEMORY):       return CharacterAttributeID::MEMORY;
+    case static_cast<int>(CharacterAttributeID::PERCEPTION):   return CharacterAttributeID::PERCEPTION;
+    case static_cast<int>(CharacterAttributeID::WILLPOWER):    return CharacterAttributeID::WILLPOWER;
     }
     return CharacterAttributeID::INVALID;
 }
@@ -20,11 +20,12 @@ CharacterAttributeID charAttributeFromID(int id)
 QString charAttributeName(CharacterAttributeID attr)
 {
     switch (attr) {
-    case CharacterAttributeID::CHARISMA: return QStringLiteral("Charisma"); break;
-    case CharacterAttributeID::INTELLIGENCE: QStringLiteral("Intelligence"); break;
-    case CharacterAttributeID::MEMORY: return QStringLiteral("Memory"); break;
-    case CharacterAttributeID::PERCEPTION: return QStringLiteral("Perception"); break;
-    case CharacterAttributeID::WILLPOWER: return QStringLiteral("Willpower"); break;
+    case CharacterAttributeID::CHARISMA: return QStringLiteral("Charisma");
+    case CharacterAttributeID::INTELLIGENCE: return QStringLiteral("Intelligence");
+    case CharacterAttributeID::MEMORY: return QStringLiteral("Memory");
+    case CharacterAttributeID::PERCEPTION: return QStringLiteral("Perception");
+    case CharacterAttributeID::WILLPOWER: return QStringLiteral("Willpower");
+    case CharacterAttributeID::INVALID: break;
     }
     return QStringLiteral("Invalid!");
 }

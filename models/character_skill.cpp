@@ -17,6 +17,7 @@ CharacterSkill::CharacterSkill()
 }
 
 CharacterSkill::CharacterSkill(const CharacterSkill &other)
+    : SkillTemplate(other)
 {
     (*this) = other;
 }

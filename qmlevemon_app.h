@@ -63,7 +63,7 @@ protected:
     QQuickWindow *m_mainWindow;
     PortraitCache *m_portraitCache;
     PeriodicalRefresher *m_refresher;
-    int m_curCharId;
+    quint64 m_curCharId;
 };
 
 
