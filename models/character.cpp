@@ -294,7 +294,7 @@ void Character::setBio(const QString& s) {
 float Character::iskAmount() const { return m_isk; }
 
 QString Character::iskAmountStr() const{
-    return QLocale::system().toCurrencyString(m_isk, QLatin1String(" ISK"), 2);
+    return QLocale::system().toCurrencyString(m_isk, QLatin1String(" ISK "), 2);
 }
 
 void Character::setIskAmount(float isk) {
