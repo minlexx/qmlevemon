@@ -17,6 +17,7 @@ class CharacterSkill: public SkillTemplate
     Q_PROPERTY(int     trainedLevel       READ trainedLevel       WRITE setTrainedLevel       NOTIFY trainedLevelChanged)
     Q_PROPERTY(int     activeLevel        READ activeLevel        WRITE setActiveLevel        NOTIFY activeLevelChanged)
     Q_PROPERTY(quint64 skillPointsInSkill READ skillPointsInSkill WRITE setSkillPointsInSkill NOTIFY skillPointsInSkillChanged)
+    Q_PROPERTY(quint64 skillPointsInLevel READ skillPointsInLevel NOTIFY trainedLevelChanged)
 
 public:
     CharacterSkill();
@@ -37,6 +38,8 @@ public Q_SLOTS:
     quint64 skillPointsInSkill() const;
     void setSkillPointsInSkill(quint64 sp);
 
+    quint64 skillPointsInLevel() const;
+
 Q_SIGNALS:
     void trainedLevelChanged();
     void activeLevelChanged();
@@ -46,6 +49,7 @@ protected:
     int m_trainedLevel = 0;
     int m_activeLevel = 0;
     quint64 m_skillPointsInSkill = 0;
+    quint64 m_skillPointsInLevel = 0;
 };
 
 

@@ -4,6 +4,7 @@
 #include "character_skill.h"
 #include "model_manager.h"
 #include "skill_tree_model.h"
+#include "formulas.h"
 
 
 namespace EM {
@@ -39,6 +40,7 @@ CharacterSkill &CharacterSkill::operator=(const CharacterSkill &other)
     m_trainedLevel = other.m_trainedLevel;
     m_activeLevel = other.m_activeLevel;
     m_skillPointsInSkill = other.m_skillPointsInSkill;
+    m_skillPointsInLevel = other.m_skillPointsInLevel;
     return (*this);
 }
 
@@ -49,6 +51,7 @@ CharacterSkill &CharacterSkill::operator=(CharacterSkill &&other)
     m_trainedLevel = std::move(other.m_trainedLevel);
     m_activeLevel = std::move(other.m_activeLevel);
     m_skillPointsInSkill = std::move(other.m_skillPointsInSkill);
+    m_skillPointsInLevel = std::move(other.m_skillPointsInLevel);
     return (*this);
 }
 
@@ -65,6 +68,9 @@ void CharacterSkill::setTrainedLevel(int lvl)
 {
     if (lvl != m_trainedLevel) {
         m_trainedLevel = lvl;
+        // calculate skillpoints total needed for this skill level
+        int skill_rank = static_cast<int>(skillTimeConstant());
+        m_skillPointsInLevel = skill_points_needed_for_skill_level(skill_rank, trainedLevel());
         Q_EMIT trainedLevelChanged();
     }
 }
@@ -89,6 +95,12 @@ void CharacterSkill::setSkillPointsInSkill(quint64 sp) {
 }
 
 
+quint64 CharacterSkill::skillPointsInLevel() const
+{
+    return m_skillPointsInLevel;
+}
+
+
 }
 
 QDataStream &operator<<(QDataStream &stream, const EM::CharacterSkill &skill)
@@ -105,6 +117,7 @@ QDataStream &operator<<(QDataStream &stream, const EM::CharacterSkill &skill)
     stream << skill.trainedLevel();
     stream << skill.activeLevel();
     stream << skill.skillPointsInSkill();
+    // stream << skill.skillPointsInLevel(); // <-- this field is calculated from trainedLevel, no need to save
     return stream;
 }
 
@@ -139,7 +152,7 @@ QDataStream &operator>>(QDataStream &stream, EM::CharacterSkill &skill)
     stream >> i;     skill.setSecondaryAttribute(i);
     stream >> f;     skill.setSkillTimeConstant(f);
     // CharacterSkill properties
-    stream >> i;     skill.setTrainedLevel(i);
+    stream >> i;     skill.setTrainedLevel(i);  // also calculates skillPointsInLevel
     stream >> i;     skill.setActiveLevel(i);
     stream >> ui64;  skill.setSkillPointsInSkill(ui64);
     return stream;
