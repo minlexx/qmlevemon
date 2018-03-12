@@ -21,6 +21,7 @@ int PeriodicalRefresherWorker::refresh_public_data(Character *ch) {
     }
     qCDebug(logRefresher) << " refreshing public data for" << ch->toString();
     QJsonObject obj;
+
     if (!m_api->get_character_public_info(obj, ch->characterId())) {
         return 0;
     }
@@ -60,6 +61,7 @@ int PeriodicalRefresherWorker::refresh_public_data(Character *ch) {
     sec_status = obj.value(QLatin1String("security_status")).toVariant().toFloat();
     bio = obj.value(QLatin1String("description")).toString();
 
+    // QMetaObject::invokeMethod(ch, "setCharacterName", Qt::BlockingQueuedConnection, Q_ARG(QString, name));
     ch->setCharacterName(name);
     ch->setBio(bio);
     ch->setGender(gender);

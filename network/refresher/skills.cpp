@@ -54,6 +54,7 @@ int PeriodicalRefresherWorker::refresh_skills(Character *ch) {
         QString sremap_cooldown_date = reply.value(QLatin1String("accrued_remap_cooldown_date")).toString();
         QDateTime last_remap_date = QDateTime::fromString(slast_remap_date, Qt::ISODate);
         QDateTime remap_cooldown_date = QDateTime::fromString(sremap_cooldown_date, Qt::ISODate);
+
         if (ch->attributeCharisma() != charisma) {
             ch->setAttributeCharisma(charisma);
         }
