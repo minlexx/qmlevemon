@@ -147,26 +147,31 @@ void CharacterModel::addNewCharacter(Character *character)
 
 void CharacterModel::removeCharacter(quint64 char_id)
 {
-    int toRemoveRow = -1;
-    m_mutex.lock();
-    for (int i = 0; i < m_characterList.size(); i++) {
-        Character *ch = m_characterList.at(i);
-        if (ch && ch->characterId() == char_id) {
-            toRemoveRow = i;
-            break;
+    // scope block to hold mutex locker
+    {
+        QMutexLocker lock(&m_mutex);
+
+        int toRemoveRow = -1;
+        for (int i = 0; i < m_characterList.size(); i++) {
+            Character *ch = m_characterList.at(i);
+            if (ch && ch->characterId() == char_id) {
+                toRemoveRow = i;
+                break;
+            }
         }
+        if (toRemoveRow == -1) {
+            qCWarning(logCharacterModel) << "Model cannot find character to remove:" << char_id;
+            return;
+        }
+
+        beginRemoveRows(QModelIndex(), toRemoveRow, toRemoveRow);
+        Character *toRemoveCh = m_characterList.takeAt(toRemoveRow);
+        delete toRemoveCh;
+        DbSqlite::instance()->deletePortrait(char_id);
+        DbSqlite::instance()->saveCharacters(m_characterList);
     }
-    if (toRemoveRow == -1) {
-        m_mutex.unlock();
-        qCWarning(logCharacterModel) << "Model cannot find character to remove:" << char_id;
-        return;
-    }
-    beginRemoveRows(QModelIndex(), toRemoveRow, toRemoveRow);
-    Character *toRemoveCh = m_characterList.takeAt(toRemoveRow);
-    delete toRemoveCh;
-    DbSqlite::instance()->deletePortrait(char_id);
-    DbSqlite::instance()->saveCharacters(m_characterList);
-    m_mutex.unlock();
+    // unlock mutex here, before signals emission
+
     endRemoveRows();
     Q_EMIT characterRemoved(char_id);
 }
