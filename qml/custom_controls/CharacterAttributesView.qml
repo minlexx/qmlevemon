@@ -16,6 +16,7 @@ Item {
     property int numBonusRemaps: 0
     property date lastRemapDate
     property date remapCooldownDate
+    property int totalSp: 0
 
     property int iconWidth: 64
 
@@ -74,9 +75,12 @@ Item {
 
     Column {
         id: col2
-        anchors.left: col1.right
-        anchors.top: parent.top
-        anchors.topMargin: 3
+        anchors {
+            left: col1.right
+            top: parent.top
+            topMargin: 3
+            leftMargin: AppStyle.marginBig
+        }
 
         TextKeyValue {
             height: 32
@@ -96,6 +100,13 @@ Item {
             height: 32
             keyText: qsTr("Remap cooldown:")
             valueText: Qt.formatDate(remapCooldownDate)
+            fontPointSize: container.fontSize
+            fontFamily: container.fontFamily
+        }
+        TextKeyValue {
+            height: 32
+            keyText: qsTr("Total SP:")
+            valueText: Number(totalSp).toLocaleString(Qt.locale(), 'f', 0)
             fontPointSize: container.fontSize
             fontFamily: container.fontFamily
         }

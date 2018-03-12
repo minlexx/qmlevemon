@@ -284,6 +284,7 @@ Rectangle {
             numBonusRemaps: curChar.numBonusRemaps
             lastRemapDate: curChar.lastRemapDate
             remapCooldownDate: curChar.remapCooldownDate
+            totalSp: curChar.totalSp
         }
     }
 
