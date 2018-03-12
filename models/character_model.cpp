@@ -124,22 +124,27 @@ QVariant CharacterModel::data(const QModelIndex &index, int role) const
 
 void CharacterModel::loadCharacters()
 {
-    QMutexLocker locker(&m_mutex);
-    m_characterList.clear();
-    beginResetModel();
-    DbSqlite::instance()->loadCharacters(m_characterList);
+    {
+        QMutexLocker locker(&m_mutex);
+        m_characterList.clear();
+        beginResetModel();
+        DbSqlite::instance()->loadCharacters(m_characterList);
+        // unlock mutex before emitting any signals
+    }
     endResetModel();
 }
 
 
 void CharacterModel::addNewCharacter(Character *character)
 {
-    m_mutex.lock();
-    int firstRow = m_characterList.size();  // we will append to list
-    beginInsertRows(QModelIndex(), firstRow, firstRow);
-    m_characterList.append(character);
-    DbSqlite::instance()->saveCharacters(m_characterList);
-    m_mutex.unlock();  // unlock before emitting any signals
+    {
+        QMutexLocker lock(&m_mutex);
+        int firstRow = m_characterList.size();  // we will append to list
+        beginInsertRows(QModelIndex(), firstRow, firstRow);
+        m_characterList.append(character);
+        DbSqlite::instance()->saveCharacters(m_characterList);
+        // unlock mutex before emitting any signals
+    }
     endInsertRows();
     Q_EMIT newCharacterAdded();
 }
@@ -183,22 +188,21 @@ void CharacterModel::removeCharacter(quint64 char_id)
  */
 QList<Character *> CharacterModel::getCharacters() const
 {
-    QList<Character *> ret;
-    m_mutex.lock();
-    ret.reserve(this->m_characterList.size());
-    ret.append(this->m_characterList);
-    m_mutex.unlock();
-    return ret;
+    QMutexLocker lock(&m_mutex);
+    return m_characterList;
 }
 
 
 // emit signal to model clients that some character has changed data
 void CharacterModel::markCharacterAsUpdated(Character *character)
 {
+    int row = -1;
     if (!character) return;
-    m_mutex.lock();
-    int row = m_characterList.indexOf(character);
-    m_mutex.unlock();  // unlock before emitting any signals
+    {
+        QMutexLocker lock(&m_mutex);
+        row = m_characterList.indexOf(character);
+        // unlock before emitting any signals
+    }
     if (row == -1) return; // not found
     // update in DB
     DbSqlite::instance()->saveCharacter(character);
@@ -211,14 +215,17 @@ void CharacterModel::markCharacterAsUpdated(Character *character)
 Character *CharacterModel::findCharacterById(quint64 char_id)
 {
     Character *ret = nullptr;
-    m_mutex.lock();
-    for (Character *ch: m_characterList) {
-        if (ch && ch->characterId() == char_id) {
-            ret = ch;
-            break;
+
+    {
+        QMutexLocker lock(&m_mutex);
+        for (Character *ch: m_characterList) {
+            if (ch && ch->characterId() == char_id) {
+                ret = ch;
+                break;
+            }
         }
     }
-    m_mutex.unlock();
+
     if (ret == nullptr) {
         qCWarning(logCharacterModel) << "model cannot find character by id:" << char_id;
     }
