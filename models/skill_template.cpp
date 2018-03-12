@@ -1,4 +1,5 @@
 #include <utility>
+#include <QCoreApplication>
 #include "skill_template.h"
 
 namespace EM {
@@ -20,14 +21,14 @@ CharacterAttributeID charAttributeFromID(int id)
 QString charAttributeName(CharacterAttributeID attr)
 {
     switch (attr) {
-    case CharacterAttributeID::CHARISMA: return QStringLiteral("Charisma");
-    case CharacterAttributeID::INTELLIGENCE: return QStringLiteral("Intelligence");
-    case CharacterAttributeID::MEMORY: return QStringLiteral("Memory");
-    case CharacterAttributeID::PERCEPTION: return QStringLiteral("Perception");
-    case CharacterAttributeID::WILLPOWER: return QStringLiteral("Willpower");
+    case CharacterAttributeID::CHARISMA:     return QCoreApplication::translate("charAttributeName", "Charisma");
+    case CharacterAttributeID::INTELLIGENCE: return QCoreApplication::translate("charAttributeName", "Intelligence");
+    case CharacterAttributeID::MEMORY:       return QCoreApplication::translate("charAttributeName", "Memory");
+    case CharacterAttributeID::PERCEPTION:   return QCoreApplication::translate("charAttributeName", "Perception");
+    case CharacterAttributeID::WILLPOWER:    return QCoreApplication::translate("charAttributeName", "Willpower");
     case CharacterAttributeID::INVALID: break;
     }
-    return QStringLiteral("Invalid!");
+    return QCoreApplication::translate("charAttributeName", "Invalid attribute!");
 }
 
 
