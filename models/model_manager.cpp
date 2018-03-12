@@ -33,8 +33,8 @@ ModelManager::ModelManager(QObject *parent)
 
 void ModelManager::initModels()
 {
-    // skills model should be loaded first, as it is used
-    //   in characters model
+    // skills model should be loaded first,
+    //   because it is used in characters model
     m_skillTreeModel->load();
 
     m_characterModel->loadCharacters();
