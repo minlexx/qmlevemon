@@ -29,6 +29,12 @@ SOURCES += \
     ../models/skill_tree_model.cpp \
     ../models/update_timestamps.cpp \
     ../network/periodical_refresher.cpp \
+    ../network/refresher/periodical_refresher_worker.cpp \
+    ../network/refresher/location.cpp \
+    ../network/refresher/public_data.cpp \
+    ../network/refresher/server_status.cpp \
+    ../network/refresher/skills.cpp \
+    ../network/refresher/wallet.cpp \
     ../qtwebserver/css/cssdocument.cpp \
     ../qtwebserver/css/cssruleset.cpp \
     ../qtwebserver/html/htmldocument.cpp \
@@ -68,6 +74,7 @@ HEADERS += \
     ../models/skill_tree_model.h \
     ../models/update_timestamps.h \
     ../network/periodical_refresher.h \
+    ../network/refresher/periodical_refresher_worker.h \
     ../qtwebserver/css/cssdocument.h \
     ../qtwebserver/css/cssruleset.h \
     ../qtwebserver/html/htmldocument.h \

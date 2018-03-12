@@ -4,13 +4,15 @@
 #include <QObject>
 #include <QThread>
 #include <QTimer>
+#include <QLoggingCategory>
+
+
+Q_DECLARE_LOGGING_CATEGORY(logRefresher)
 
 
 namespace EM {
 
-
 class PeriodicalRefresherWorker;
-
 
 class PeriodicalRefresher: public QObject
 {
