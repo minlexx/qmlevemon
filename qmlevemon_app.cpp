@@ -84,6 +84,7 @@ bool QmlEvemonApp::initQmlEngine()
                                     EveSsoLoginManager::instance());
 
     DbSqlite::instance();  // init database
+
     // engine takes ownership of the image provider!
     // so we should not and cannot delete m_portraitCache
     m_engine.addImageProvider(QLatin1String("portrait"), m_portraitCache);

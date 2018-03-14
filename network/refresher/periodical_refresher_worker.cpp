@@ -41,9 +41,11 @@ void PeriodicalRefresherWorker::refresh()
     this->refresh_server_status();
 
     // update characters
+    // get a copied list of characters and do all modifications to copies
+    // after all data was updated, return modified copy to model
     CharacterModel *cmodel = ModelManager::instance()->characterModel();
-    QList<Character *> clist = cmodel->getCharacters();
-    for (Character *ch: clist) {
+    QList<Character> clist = cmodel->getCharacters();
+    for (Character &ch: clist) {
         int num_updates = 0;
 
         // public data
@@ -62,9 +64,10 @@ void PeriodicalRefresherWorker::refresh()
         num_updates += this->refresh_wallet(ch);
         if (QThread::currentThread()->isInterruptionRequested()) break; // break early
 
-        // in the case of any updates were made to this character
+        // in the case of any updates were made to this character,
+        // after all data was updated, return modified copy to model
         if (num_updates > 0) {
-            cmodel->markCharacterAsUpdated(ch);
+            cmodel->updateCharacter(ch);
         }
 
         if (QThread::currentThread()->isInterruptionRequested()) break;  // break early
@@ -98,15 +101,15 @@ void PeriodicalRefresherWorker::setNetworkActive(bool active)
  * @param ch - Character pointer whose tokens to refresh
  * @return true if refresh is not needed, ot refresh was OK. false on refresh error
  */
-bool PeriodicalRefresherWorker::check_refresh_token(Character *ch) {
+bool PeriodicalRefresherWorker::check_refresh_token(Character &ch) {
     // not all functions require access_token, but for some...
-    EveOAuthTokens tokens = ch->getAuthTokens();
+    EveOAuthTokens tokens = ch.getAuthTokens();
     if (tokens.needsRefresh()) {
-        qCDebug(logRefresher) << "  tokens for" << ch->toString()
+        qCDebug(logRefresher) << "  tokens for" << ch.toString()
                               << " need refreshing...";
         if (eveapi_refresh_access_token(tokens)) {
             // qCDebug(logRefresher) << "  tokens refresh OK.";
-            ch->setAuthTokens(tokens);
+            ch.setAuthTokens(tokens);
         } else {
             qCWarning(logRefresher) << "  tokens refreshing failed!";
             return false;

@@ -52,9 +52,9 @@ public:
     void loadCharacters();
     void addNewCharacter(Character *character);
     void removeCharacter(quint64 char_id);
-    QList<Character *> getCharacters() const;
+    QList<Character> getCharacters() const;
     // emit signal to model clients that some character has changed data
-    void markCharacterAsUpdated(Character *character);
+    void updateCharacter(const Character &character);
     Character *findCharacterById(quint64 char_id);
 
 public:  // reimplmented interface

@@ -31,13 +31,13 @@ protected:
      * @param ch - Character pointer whose tokens to refresh
      * @return true if refresh is not needed, ot refresh was OK. false on refresh error
      */
-    bool check_refresh_token(Character *ch);
+    bool check_refresh_token(Character &ch);
 
     void refresh_server_status();
-    int refresh_public_data(Character *ch);
-    int refresh_location(Character *ch);
-    int refresh_skills(Character *ch);
-    int refresh_wallet(Character *ch);
+    int refresh_public_data(Character &ch);
+    int refresh_location(Character &ch);
+    int refresh_skills(Character &ch);
+    int refresh_wallet(Character &ch);
 
 protected:
     PeriodicalRefresher *m_owner = nullptr;

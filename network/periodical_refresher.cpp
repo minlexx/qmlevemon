@@ -47,8 +47,10 @@ PeriodicalRefresher::PeriodicalRefresher(QObject *parent):
     m_thread.start(QThread::LowPriority);
     m_refreshTimer.start();
     // initial refresh
-    // QMetaObject::invokeMethod(m_worker, "refresh", Qt::QueuedConnection); // dirty hack
-    QTimer::singleShot(3000, m_worker, &PeriodicalRefresherWorker::refresh);
+    QMetaObject::invokeMethod(m_worker, "refresh", Qt::QueuedConnection); // dirty hack, but SAFER
+    // QTimer::singleShot(3000, m_worker, &PeriodicalRefresherWorker::refresh);
+    // ^^ this can cause crash inside QSingleShotTimer event handler inside QObject code, if
+    //    application is closed right after the timer is fired
 }
 
 
@@ -59,6 +61,7 @@ PeriodicalRefresher::~PeriodicalRefresher()
 
 void PeriodicalRefresher::stopGracefully()
 {
+    m_refreshTimer.stop();
     if (m_thread.isRunning()) {
         qCDebug(logRefresher) << "BG Refresher stopping...";
         m_thread.requestInterruption();
