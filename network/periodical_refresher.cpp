@@ -88,6 +88,3 @@ void PeriodicalRefresher::forceRefreshNow()
 
 
 } // namespace
-
-
-#include "periodical_refresher.moc"
