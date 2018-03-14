@@ -6,6 +6,7 @@
 #include <QDateTime>
 #include <QVector>
 #include <QList>
+#include <QDebug>
 
 #include "character_skill.h"
 #include "eve_api/eve_api_tokens.h"
@@ -343,5 +344,7 @@ protected:
 QDataStream& operator<<(QDataStream &stream, const EM::Character &character);
 QDataStream& operator>>(QDataStream &stream, EM::Character &character);
 
+// debug output function
+QDebug operator<<(QDebug stream, const EM::Character &character);
 
 #endif

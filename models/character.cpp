@@ -693,3 +693,9 @@ QDataStream& operator>>(QDataStream &stream, EM::Character &character)
     return stream;
 }
 
+
+QDebug operator<<(QDebug stream, const EM::Character &character)
+{
+    stream << character.toString();
+    return stream;
+}
