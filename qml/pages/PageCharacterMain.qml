@@ -146,6 +146,7 @@ Rectangle {
                 }
                 EMPopupMenuItem {
                     text: qsTr("Delete this character")
+                    enabled: !refresher.networkActivity
                     onTriggered: {
                         removeConfirmPopup.open();
                     }

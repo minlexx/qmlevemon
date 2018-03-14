@@ -171,6 +171,7 @@ Rectangle {
                     EMPopupMenuItem {
                         id: characterMenuItem1
                         text: qsTr("Delete this character")
+                        enabled: !refresher.networkActivity
                         onTriggered: {
                             removeConfirmPopup.characterId = model.characterId;
                             removeConfirmPopup.open();
