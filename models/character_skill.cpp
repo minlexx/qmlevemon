@@ -60,7 +60,9 @@ bool CharacterSkill::operator==(const CharacterSkill &other) const
 {
     return ((m_skillId == other.m_skillId) &&
             (m_trainedLevel == other.m_trainedLevel) &&
-            (m_activeLevel == other.m_activeLevel));
+            (m_activeLevel == other.m_activeLevel) &&
+            (m_skillPointsInSkill == other.m_skillPointsInSkill)
+           );
 }
 
 int CharacterSkill::trainedLevel() const { return m_trainedLevel; }
