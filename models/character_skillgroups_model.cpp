@@ -20,6 +20,36 @@ EM::CharacterSkillGroupsModel::CharacterSkillGroupsModel(QObject *parent)
     m_roles.insert(Roles::NumSkillsInTraining, QByteArrayLiteral("numSkillsInTraining"));
 }
 
+EM::CharacterSkillGroupsModel::CharacterSkillGroupsModel(const EM::CharacterSkillGroupsModel &other)
+    : QAbstractListModel(other.parent())
+{
+    (*this) = other;
+}
+
+EM::CharacterSkillGroupsModel::CharacterSkillGroupsModel(EM::CharacterSkillGroupsModel &&other)
+    : QAbstractListModel(other.parent())
+{
+    (*this) = std::move(other);
+}
+
+EM::CharacterSkillGroupsModel &EM::CharacterSkillGroupsModel::operator=(const EM::CharacterSkillGroupsModel &other)
+{
+    QMutexLocker lock(&m_mutex);
+    if (this == &other) return *this;
+    m_roles = other.m_roles;
+    m_data = other.m_data;
+    return *this;
+}
+
+EM::CharacterSkillGroupsModel &EM::CharacterSkillGroupsModel::operator=(EM::CharacterSkillGroupsModel &&other)
+{
+    QMutexLocker lock(&m_mutex);
+    if (this == &other) return *this;
+    m_roles = std::move(other.m_roles);
+    m_data = std::move(other.m_data);
+    return *this;
+}
+
 QHash<int, QByteArray> EM::CharacterSkillGroupsModel::roleNames() const
 {
     return m_roles;
@@ -110,9 +140,12 @@ void EM::CharacterSkillGroupsModel::setFromSkills(const QVector<EM::CharacterSki
                     skillPointsGroup.insert(groupId, 0);
                 }
                 skillPointsGroup[groupId] += sk.skillPointsInSkill();
+            } else {
+                qCDebug(logCharSkillGroupsModel) << "Could not find a skill group for skill:" << sk;
             }
         }
         std::sort(m_data.begin(), m_data.end(), std::less<ModelData>());
+
         // qCDebug(logCharSkillGroupsModel) << " added " << numAdded << "skill groups";
 
         // update modeldata with collected counters
