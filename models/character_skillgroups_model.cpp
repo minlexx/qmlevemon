@@ -34,19 +34,27 @@ EM::CharacterSkillGroupsModel::CharacterSkillGroupsModel(EM::CharacterSkillGroup
 
 EM::CharacterSkillGroupsModel &EM::CharacterSkillGroupsModel::operator=(const EM::CharacterSkillGroupsModel &other)
 {
-    QMutexLocker lock(&m_mutex);
     if (this == &other) return *this;
-    m_roles = other.m_roles;
-    m_data = other.m_data;
+    {
+        beginResetModel();
+        QMutexLocker lock(&m_mutex);
+        m_roles = other.m_roles;
+        m_data = other.m_data;
+    }
+    endResetModel();
     return *this;
 }
 
 EM::CharacterSkillGroupsModel &EM::CharacterSkillGroupsModel::operator=(EM::CharacterSkillGroupsModel &&other)
 {
-    QMutexLocker lock(&m_mutex);
     if (this == &other) return *this;
-    m_roles = std::move(other.m_roles);
-    m_data = std::move(other.m_data);
+    {
+        beginResetModel();
+        QMutexLocker lock(&m_mutex);
+        m_roles = std::move(other.m_roles);
+        m_data = std::move(other.m_data);
+    }
+    endResetModel();
     return *this;
 }
 
