@@ -11,6 +11,7 @@
 *.gch
 *.pch
 
+*.pro.user
 CMakeLists.txt.user
 build/
 build511/
