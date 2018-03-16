@@ -182,6 +182,8 @@ void QmlEvemonApp::setCurrentCharacter(quint64 char_id)
     m_curCharId = ch->characterId();
     Q_EMIT curCharIdChanged();
     m_engine.rootContext()->setContextProperty(QLatin1String("curChar"), ch);
+    // not needed
+    //m_engine.rootContext()->setContextProperty(QLatin1String("curCharSkillGroupsModel"), ch->skillGroupsModel());
 }
 
 
@@ -202,7 +204,7 @@ void QmlEvemonApp::forceRefresh()
 // // called from QML to request deletion of character from application
 void QmlEvemonApp::requestDeleteCharacter(quint64 characterId)
 {
-    qCDebug(logApp) << Q_FUNC_INFO << characterId;
+    qCDebug(logApp) << "Deleting character:" << characterId;
     ModelManager::instance()->characterModel()->removeCharacter(characterId);
 }
 
