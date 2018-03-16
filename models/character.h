@@ -71,7 +71,7 @@ class Character: public QObject
     Q_PROPERTY(QDateTime remapCooldownDate      READ remapCooldownDate      NOTIFY remapCooldownDateChanged)
     Q_PROPERTY(quint64   totalSp                READ totalSp                NOTIFY totalSpChanged)
     Q_PROPERTY(bool      isAlphaClone           READ isAlphaClone           NOTIFY isAlphaCloneChanged)
-    Q_PROPERTY(CharacterSkillGroupsModel* skillGroupsModel  READ skillGroupsModel       NOTIFY skillsChanged)
+    Q_PROPERTY(CharacterSkillGroupsModel* skillGroupsModel  READ skillGroupsModel   NOTIFY skillsChanged)
 
 public:
     Character();
