@@ -13,20 +13,20 @@ Q_LOGGING_CATEGORY(logCharacter, "evemon.character")
 
 namespace EM {
 
-Character::Character():
-    QObject(nullptr)
+Character::Character(QObject *parent)
+    : QObject(parent)
 {
-    //
 }
 
 
-Character::Character(const Character& other):
-    QObject(nullptr)
+Character::Character(const Character& other)
+    : QObject(other.parent())
 {
     (*this) = other;
 }
 
 Character::Character(Character &&other)
+    : QObject(other.parent())
 {
     (*this) = std::move(other);
 }
@@ -83,6 +83,8 @@ Character& Character::operator=(const Character& other)
     m_tokens = other.m_tokens;
     // last update date-times
     m_update_timestamps = other.m_update_timestamps;
+    //
+    emitEverythingChanged();
     return (*this);
 }
 
@@ -132,12 +134,58 @@ Character& Character::operator=(Character&& other)
     m_totalSp = std::move(other.m_totalSp);
     m_isAlphaClone = std::move(other.m_isAlphaClone);
     m_skills = std::move(other.m_skills);
-    m_skillGroupsModel = std::move(m_skillGroupsModel);
+    m_skillGroupsModel = std::move(other.m_skillGroupsModel);
     // auth info
     m_tokens = std::move(other.m_tokens);
     // last update date-times
     m_update_timestamps = std::move(other.m_update_timestamps);
+    //
+    emitEverythingChanged();
     return (*this);
+}
+
+
+void Character::emitEverythingChanged() {
+    // general info
+    Q_EMIT characterIdChanged();
+    Q_EMIT characterNameChanged();
+    Q_EMIT corporationIdChanged();
+    Q_EMIT corporationNameChanged();
+    Q_EMIT corporationTickerChanged();
+    Q_EMIT allianceIdChanged();
+    Q_EMIT allianceNameChanged();
+    Q_EMIT allianceTickerChanged();
+    Q_EMIT raceNameChanged();
+    Q_EMIT ancestryNameChanged();
+    Q_EMIT bloodlineNameChanged();
+    Q_EMIT genderChanged();
+    Q_EMIT birthdayChanged();
+    Q_EMIT securityStatusChanged();
+    Q_EMIT bioChanged();
+    // wallet info
+    Q_EMIT iskAmountChanged();
+    // location info
+    Q_EMIT currentSolarSystemChanged();
+    Q_EMIT currentSolarSystemSecurityChanged();
+    Q_EMIT currentConstellationChanged();
+    Q_EMIT currentRegionChanged();
+    Q_EMIT isDockedChanged();
+    Q_EMIT currentShipChanged();
+    // skills and related
+    Q_EMIT attributeCharismaChanged();
+    Q_EMIT attributeIntelligenceChanged();
+    Q_EMIT attributeMemoryChanged();
+    Q_EMIT attributePerceptionChanged();
+    Q_EMIT attributeWillpowerChanged();
+    Q_EMIT numBonusRemapsChanged();
+    Q_EMIT lastRemapDateChanged();
+    Q_EMIT remapCooldownDateChanged();
+    Q_EMIT totalSpChanged();
+    Q_EMIT isAlphaCloneChanged();
+    Q_EMIT skillsChanged();
+    // ^^ for skillsChanged, also a model reset is emitted now by m_skillGroupsModel operator=()
+    // Q_EMIT m_skillGroupsModel.beginResetModel(); // canot -> protected
+    // Q_EMIT m_skillGroupsModel.endResetModel();
 }
 
 

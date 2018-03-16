@@ -74,7 +74,7 @@ class Character: public QObject
     Q_PROPERTY(QObject*  skillGroupsModel       READ skillGroupsModel       NOTIFY skillsChanged)
 
 public:
-    Character();
+    Character(QObject *parent = nullptr);
     Character(const Character& other);
     Character(Character&& other);
     Character& operator=(const Character& other);
@@ -271,6 +271,10 @@ Q_SIGNALS:
     void totalSpChanged();
     void isAlphaCloneChanged();
     void skillsChanged();
+
+protected Q_SLOTS:
+    // wooooooo
+    void emitEverythingChanged();
 
 protected:
     // general info
