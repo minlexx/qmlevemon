@@ -182,8 +182,6 @@ void QmlEvemonApp::setCurrentCharacter(quint64 char_id)
     m_curCharId = ch->characterId();
     Q_EMIT curCharIdChanged();
     m_engine.rootContext()->setContextProperty(QLatin1String("curChar"), ch);
-    // not needed
-    //m_engine.rootContext()->setContextProperty(QLatin1String("curCharSkillGroupsModel"), ch->skillGroupsModel());
 }
 
 
