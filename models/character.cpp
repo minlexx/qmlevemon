@@ -78,6 +78,7 @@ Character& Character::operator=(const Character& other)
     m_totalSp = other.m_totalSp;
     m_isAlphaClone = other.m_isAlphaClone;
     m_skills = other.m_skills;
+    m_skillGroupsModel = other.m_skillGroupsModel;
     // auth info
     m_tokens = other.m_tokens;
     // last update date-times
@@ -131,6 +132,7 @@ Character& Character::operator=(Character&& other)
     m_totalSp = std::move(other.m_totalSp);
     m_isAlphaClone = std::move(other.m_isAlphaClone);
     m_skills = std::move(other.m_skills);
+    m_skillGroupsModel = std::move(m_skillGroupsModel);
     // auth info
     m_tokens = std::move(other.m_tokens);
     // last update date-times
@@ -426,7 +428,11 @@ QDateTime Character::remapCooldownDate() const { return m_remapCooldownDate; }
 quint64 Character::totalSp() const { return m_totalSp; }
 bool Character::isAlphaClone() const { return m_isAlphaClone; }
 QVector<EM::CharacterSkill> Character::skills() const { return m_skills; }
-CharacterSkillGroupsModel *Character::skillGroupsModel() { return &m_skillGroupsModel; }
+
+QObject *Character::skillGroupsModel()
+{
+    return static_cast<QObject *>(&m_skillGroupsModel);
+}
 
 void Character::setAttributeCharisma(int a) {
     if (m_attributeCharisma != a) {
