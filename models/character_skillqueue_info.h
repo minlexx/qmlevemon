@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QDateTime>
+#include <QDataStream>
 
 namespace EM {
 
@@ -18,7 +19,7 @@ public:
 
 public:
     int trainingLevel = 0;
-    int queuePosition = 0;
+    int queuePosition = -1;
     quint64 levelStartSp = 0;
     quint64 levelEndSp = 0;
     QDateTime startDate;
@@ -26,5 +27,8 @@ public:
 };
 
 }
+
+QDataStream& operator<<(QDataStream &stream, const EM::CharacterSkillQueueInfo &info);
+QDataStream& operator>>(QDataStream &stream, EM::CharacterSkillQueueInfo &info);
 
 #endif

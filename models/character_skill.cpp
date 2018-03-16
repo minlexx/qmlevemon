@@ -38,10 +38,11 @@ CharacterSkill &CharacterSkill::operator=(const CharacterSkill &other)
     if (this == &other) return (*this);
     // SkillTemplate::operator=(other);
     static_cast<SkillTemplate *>(this)->operator=(other);
-    m_trainedLevel = other.m_trainedLevel;
-    m_activeLevel = other.m_activeLevel;
-    m_skillPointsInSkill = other.m_skillPointsInSkill;
-    m_skillPointsInLevel = other.m_skillPointsInLevel;
+    m_trainedLevel        = other.m_trainedLevel;
+    m_activeLevel         = other.m_activeLevel;
+    m_skillPointsInSkill  = other.m_skillPointsInSkill;
+    m_skillPointsInLevel  = other.m_skillPointsInLevel;
+    m_qinfo               = other.m_qinfo;
     return (*this);
 }
 
@@ -49,10 +50,11 @@ CharacterSkill &CharacterSkill::operator=(CharacterSkill &&other)
 {
     //SkillTemplate::operator=(std::move(other));
     static_cast<SkillTemplate *>(this)->operator=(std::move(other));
-    m_trainedLevel = std::move(other.m_trainedLevel);
-    m_activeLevel = std::move(other.m_activeLevel);
-    m_skillPointsInSkill = std::move(other.m_skillPointsInSkill);
-    m_skillPointsInLevel = std::move(other.m_skillPointsInLevel);
+    m_trainedLevel        = std::move(other.m_trainedLevel);
+    m_activeLevel         = std::move(other.m_activeLevel);
+    m_skillPointsInSkill  = std::move(other.m_skillPointsInSkill);
+    m_skillPointsInLevel  = std::move(other.m_skillPointsInLevel);
+    m_qinfo               = std::move(other.m_qinfo);
     return (*this);
 }
 
@@ -103,6 +105,47 @@ quint64 CharacterSkill::skillPointsInLevel() const
     return m_skillPointsInLevel;
 }
 
+CharacterSkillQueueInfo CharacterSkill::queueInfo() const
+{
+    return m_qinfo;
+}
+
+void CharacterSkill::setQueueInfo(const CharacterSkillQueueInfo &qinfo)
+{
+    m_qinfo = qinfo;
+    Q_EMIT queueChanged();
+}
+
+bool CharacterSkill::isInQueue() const
+{
+    return (m_qinfo.queuePosition >= 0);
+}
+
+int CharacterSkill::positionInQueue() const
+{
+    return m_qinfo.queuePosition;
+}
+
+double CharacterSkill::trainPercent() const
+{
+    double start_sp = static_cast<double>(m_qinfo.levelStartSp);
+    double end_sp = static_cast<double>(m_qinfo.levelEndSp);
+    double cur_sp = static_cast<double>(m_skillPointsInSkill);
+    double dist_passed = cur_sp - start_sp;
+    double dist_total = end_sp - start_sp;
+    return dist_passed / dist_total;
+}
+
+QDateTime CharacterSkill::trainStartDate() const
+{
+    return m_qinfo.startDate;
+}
+
+QDateTime CharacterSkill::trainFinishDate() const
+{
+    return m_qinfo.finishDate;
+}
+
 
 }
 
@@ -121,6 +164,7 @@ QDataStream &operator<<(QDataStream &stream, const EM::CharacterSkill &skill)
     stream << skill.activeLevel();
     stream << skill.skillPointsInSkill();
     // stream << skill.skillPointsInLevel(); // <-- this field is calculated from trainedLevel, no need to save
+    stream << skill.queueInfo();
     return stream;
 }
 
@@ -132,6 +176,8 @@ QDataStream &operator>>(QDataStream &stream, EM::CharacterSkill &skill)
     QString s;
     quint64 skillId = 0;
     QString skillName;
+    EM::CharacterSkillQueueInfo qinfo;
+
     // SkillTemplate properties
     stream >> skillId;
     stream >> skillName;
@@ -158,6 +204,7 @@ QDataStream &operator>>(QDataStream &stream, EM::CharacterSkill &skill)
     stream >> i;     skill.setTrainedLevel(i);  // also calculates skillPointsInLevel
     stream >> i;     skill.setActiveLevel(i);
     stream >> ui64;  skill.setSkillPointsInSkill(ui64);
+    stream >> qinfo; skill.setQueueInfo(qinfo);
     return stream;
 }
 

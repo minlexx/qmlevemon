@@ -553,7 +553,7 @@ QList<QObject *> Character::getSkillsForGroupId(quint64 groupId) const
 
 
 // increase version number when savedata format changes
-static const int SAVEDATA_VERSION = 10;
+static const int SAVEDATA_VERSION = 11;
 
 
 QDataStream& operator<<(QDataStream &stream, const EM::Character &character)
