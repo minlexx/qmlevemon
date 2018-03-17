@@ -586,6 +586,15 @@ void Character::setSkillQueueInfo(quint64 skill_id, const CharacterSkillQueueInf
     for (CharacterSkill &sk : m_skills) {
         if (sk.skillId() == skill_id) {
             sk.setQueueInfo(qinfo);
+
+            // check if this skill is currently in training,
+            // e.g. if it is first in queue
+            if (qinfo.queuePosition == 0) {
+                // we found currently training skill. update
+                qCDebug(logCharacter) << " found currently training skill:" << sk;
+                m_currentTrainingSkill = sk;
+            }
+
             return;
         }
     }
