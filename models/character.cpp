@@ -77,6 +77,7 @@ Character& Character::operator=(const Character& other)
     setRemapCooldownDate(other.m_remapCooldownDate);
     setTotalSp(other.m_totalSp);
     setIsAlphaClone(other.m_isAlphaClone);
+    m_currentTrainingSkill = other.m_currentTrainingSkill; // skillsChanged() will be emitted later in setSkills()
     setSkills(other.m_skills);
     // m_skillGroupsModel = other.m_skillGroupsModel; // model is calculated automatically in setSkills()
     // (no Q_PROPERTY for these, so no need to to use setters and emit signals)
@@ -133,6 +134,7 @@ Character& Character::operator=(Character&& other)
     setRemapCooldownDate(std::move(other.m_remapCooldownDate));
     setTotalSp(std::move(other.m_totalSp));
     setIsAlphaClone(std::move(other.m_isAlphaClone));
+    m_currentTrainingSkill = std::move(other.m_currentTrainingSkill); // skillsChanged() will be emitted later in setSkills()
     setSkills(std::move(other.m_skills));
     // m_skillGroupsModel = std::move(other.m_skillGroupsModel); // model is calculated automatically in setSkills()
     // (no Q_PROPERTY for these, so no need to to use setters and emit signals)
@@ -438,9 +440,9 @@ QObject *Character::skillGroupsModel()
     return static_cast<QObject *>(&m_skillGroupsModel);
 }
 
-QObject *Character::currentTrainingSkill() const
+const QObject *Character::currentTrainingSkill() const
 {
-    return nullptr;
+    return static_cast<const QObject *>(&m_currentTrainingSkill);
 }
 
 QDateTime Character::currentSkillTimeLeft() const
@@ -450,7 +452,7 @@ QDateTime Character::currentSkillTimeLeft() const
 
 QDateTime Character::currentSkillFinishDate() const
 {
-    return QDateTime();
+    return m_currentTrainingSkill.queueInfo().finishDate;
 }
 
 QDateTime Character::skillQueueFinishDate() const
@@ -532,6 +534,7 @@ void Character::setSkills(const QVector<CharacterSkill> &vskills)
 {
     if (m_skills != vskills) {
         m_skills = vskills;
+        // update skill groups model
         m_skillGroupsModel.setFromSkills(m_skills);
         Q_EMIT skillsChanged();
     }

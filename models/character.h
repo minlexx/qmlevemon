@@ -72,7 +72,7 @@ class Character: public QObject
     Q_PROPERTY(quint64    totalSp                  READ totalSp                  NOTIFY totalSpChanged)
     Q_PROPERTY(bool       isAlphaClone             READ isAlphaClone             NOTIFY isAlphaCloneChanged)
     Q_PROPERTY(QObject*   skillGroupsModel         READ skillGroupsModel         NOTIFY skillsChanged)
-    Q_PROPERTY(QObject*   currentTrainingSkill     READ currentTrainingSkill     NOTIFY skillsChanged)
+    Q_PROPERTY(const QObject* currentTrainingSkill READ currentTrainingSkill     NOTIFY skillsChanged)
     Q_PROPERTY(QDateTime  currentSkillTimeLeft     READ currentSkillTimeLeft     NOTIFY skillsChanged)
     Q_PROPERTY(QDateTime  currentSkillFinishDate   READ currentSkillFinishDate   NOTIFY skillsChanged)
     Q_PROPERTY(QDateTime  skillQueueFinishDate     READ skillQueueFinishDate     NOTIFY skillsChanged)
@@ -204,7 +204,7 @@ public:
     bool isAlphaClone() const;
     QVector<CharacterSkill> skills() const;
     QObject *skillGroupsModel();
-    QObject  *currentTrainingSkill() const;
+    const QObject  *currentTrainingSkill() const;
     QDateTime currentSkillTimeLeft() const;
     QDateTime currentSkillFinishDate() const;
     QDateTime skillQueueFinishDate() const;
@@ -338,6 +338,7 @@ protected:
     bool m_isAlphaClone = false;
     QVector<CharacterSkill> m_skills;
     CharacterSkillGroupsModel m_skillGroupsModel;
+    CharacterSkill m_currentTrainingSkill;
 
     // auth info
     EveOAuthTokens m_tokens;
