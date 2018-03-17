@@ -560,10 +560,12 @@ QList<QObject *> Character::getSkillsForGroupId(quint64 groupId) const
 
 void Character::setSkillQueueInfo(quint64 skill_id, const CharacterSkillQueueInfo &qinfo)
 {
-    Q_UNUSED(skill_id)
-    Q_UNUSED(qinfo)
-
-    qCDebug(logCharacter) << "skill qinfo for skill: " << skill_id;
+    for (CharacterSkill &sk : m_skills) {
+        if (sk.skillId() == skill_id) {
+            sk.setQueueInfo(qinfo);
+            return;
+        }
+    }
 }
 
 
