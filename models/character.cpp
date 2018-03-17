@@ -558,6 +558,14 @@ QList<QObject *> Character::getSkillsForGroupId(quint64 groupId) const
     return ret;
 }
 
+void Character::setSkillQueueInfo(quint64 skill_id, const CharacterSkillQueueInfo &qinfo)
+{
+    Q_UNUSED(skill_id)
+    Q_UNUSED(qinfo)
+
+    qCDebug(logCharacter) << "skill qinfo for skill: " << skill_id;
+}
+
 
 } // namespace
 

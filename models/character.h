@@ -233,6 +233,8 @@ public Q_SLOTS:
 
     QList<QObject *> getSkillsForGroupId(quint64 groupId) const;
 
+    void setSkillQueueInfo(quint64 skill_id, const CharacterSkillQueueInfo &qinfo);
+
 Q_SIGNALS:
     // general info
     void characterIdChanged();
