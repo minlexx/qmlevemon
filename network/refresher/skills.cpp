@@ -95,11 +95,11 @@ int PeriodicalRefresherWorker::refresh_skills(Character &ch) {
         quint64 totalSp = reply.value(QLatin1String("total_sp")).toVariant().toULongLong();
         ch.setTotalSp(totalSp);
 
-        QJsonArray jskills = reply.value(QLatin1String("skills")).toArray();
-        for (auto jskillvalue: qAsConst(jskills)) {
+        const QJsonArray jskills = reply.value(QLatin1String("skills")).toArray();
+        for (auto jskillvalue: jskills) {
             // qCDebug(logRefresher) << jskill;
             // {"active_skill_level":5, "skill_id":30547, "skillpoints_in_skill":256000, "trained_skill_level":5}
-            const QJsonObject& jskill = jskillvalue.toObject();
+            const QJsonObject &jskill = jskillvalue.toObject();
             quint64 skill_id = jskill.value(QLatin1String("skill_id")).toVariant().toULongLong();
 
             // create Character skill from skill template to "inherit" attributes
@@ -118,6 +118,9 @@ int PeriodicalRefresherWorker::refresh_skills(Character &ch) {
 
             // store
             charSkills.push_back(std::move(chSkill));
+
+            // there are a lot of skills (few hundreds) so chech for exit more often
+            if (QThread::currentThread()->isInterruptionRequested()) return 0;
         }
         // forcefully update character's alpha clone status
         ch.setIsAlphaClone(isAlphaClone);
@@ -128,16 +131,34 @@ int PeriodicalRefresherWorker::refresh_skills(Character &ch) {
     qCDebug(logRefresher) << " refreshing skill queue for" << ch.toString();
     if (m_api->get_character_skillqueue(replyArr, ch.characterId(), ch.getAuthTokens().access_token)) {
         if (QThread::currentThread()->isInterruptionRequested()) return 0;
-
         // qCDebug(logRefresher) << replyArr;
-        // QJsonArray([{"finish_date":"2018-02-15T18:45:55Z",
-        //              "finished_level":5,
-        //              "level_end_sp":1280000,
-        //              "level_start_sp":226275,
-        //              "queue_position":0,
-        //              "skill_id":20315,
-        //              "start_date":"2018-01-28T11:42:48Z",
-        //              "training_start_sp":226275 },
+
+        for (auto jqueueItem: qAsConst(replyArr)) {
+            // [
+            //   {
+            //     "skill_id": 20315,
+            //     "finished_level": 5,
+            //     "queue_position": 0,
+            //     "level_end_sp": 1280000,
+            //     "level_start_sp": 226275,
+            //     "training_start_sp": 226275
+            //     "start_date": "2018-01-28T11:42:48Z",
+            //     "finish_date": "2018-02-15T18:45:55Z",
+            //   },
+
+            const QJsonObject &itemObj = jqueueItem.toObject();
+            quint64 skill_id = itemObj.value(QLatin1String("skill_id")).toVariant().toULongLong();
+
+            CharacterSkillQueueInfo qinfo;
+            qinfo.trainingLevel = itemObj.value(QLatin1String("finished_level")).toInt();
+            qinfo.queuePosition = itemObj.value(QLatin1String("queue_position")).toInt();
+            qinfo.levelStartSp = itemObj.value(QLatin1String("level_start_sp")).toVariant().toULongLong();
+            qinfo.levelEndSp = itemObj.value(QLatin1String("level_end_sp")).toVariant().toULongLong();
+            qinfo.startDate = QDateTime::fromString(itemObj.value(QLatin1String("start_date")).toString(), Qt::ISODate);
+            qinfo.finishDate = QDateTime::fromString(itemObj.value(QLatin1String("finish_date")).toString(), Qt::ISODate);
+
+            ch.setSkillQueueInfo(skill_id, qinfo);
+        }
     }
 
     ch.setUpdateTimestamp(UpdateTimestamps::UTST::SKILLS);
