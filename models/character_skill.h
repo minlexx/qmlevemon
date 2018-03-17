@@ -70,7 +70,6 @@ protected:
     int m_activeLevel = 0;
     quint64 m_skillPointsInSkill = 0;
     quint64 m_skillPointsInLevel = 0;
-
     CharacterSkillQueueInfo m_qinfo;
 };
 
