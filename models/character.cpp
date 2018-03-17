@@ -36,55 +36,55 @@ Character& Character::operator=(const Character& other)
 {
     if (this == &other) return (*this);
     // general info
-    m_characterId = other.m_characterId;
-    m_characterName = other.m_characterName;
-    m_corporationId = other.m_corporationId;
-    m_corporationName = other.m_corporationName;
-    m_corporationTicker = other.m_corporationTicker;
-    m_allianceId = other.m_allianceId;
-    m_allianceName = other.m_allianceName;
-    m_allianceTicker = other.m_allianceTicker;
+    setCharacterId(other.m_characterId);
+    setCharacterName(other.m_characterName);
+    setCorporationId(other.m_corporationId);
+    setCorporationName(other.m_corporationName);
+    setCorporationTicker(other.m_corporationTicker);
+    setAllianceId(other.m_allianceId);
+    setAllianceName(other.m_allianceName);
+    setAllianceTicker(other.m_allianceTicker);
     // general - origins
-    m_raceId = other.m_raceId;
-    m_raceName = other.m_raceName;
-    m_ancestryId = other.m_ancestryId;
-    m_ancestryName = other.m_ancestryName;
-    m_bloodlineId = other.m_bloodlineId;
-    m_bloodlineName = other.m_bloodlineName;
-    m_gender = other.m_gender;
-    m_birthday_dt = other.m_birthday_dt;
-    m_securityStatus = other.m_securityStatus;
-    m_bio = other.m_bio;
+    setRaceId(other.m_raceId);
+    setRaceName(other.m_raceName);
+    setAncestryId(other.m_ancestryId);
+    setAncestryName(other.m_ancestryName);
+    setBloodlineId(other.m_bloodlineId);
+    setBloodlineName(other.m_bloodlineName);
+    setGender(other.m_gender);
+    setBirthday(other.m_birthday_dt);
+    setSecurityStatus(other.m_securityStatus);
+    setBio(other.m_bio);
     // wallet info
-    m_isk = other.m_isk;
+    setIskAmount(other.m_isk);
     // location info
-    m_currentSolarSystemId = other.m_currentSolarSystemId;
-    m_currentSolarSystemName = other.m_currentSolarSystemName;
-    m_currentStationId = other.m_currentStationId;
-    m_currentStructureId = other.m_currentStructureId;
-    m_currentStructureName = other.m_currentStructureName;
-    m_currentShipTypeId = other.m_currentShipTypeId;
-    m_currentShipTypeName = other.m_currentShipTypeName;
-    m_currentShipFriendlyName = other.m_currentShipFriendlyName;
+    setCurrentSolarSystemId(other.m_currentSolarSystemId);
+    setCurrentSolarSystemName(other.m_currentSolarSystemName);
+    setCurrentStationId(other.m_currentStationId);
+    setCurrentStructureId(other.m_currentStructureId);
+    setCurrentStructureName(other.m_currentStructureName);
+    setCurrentShipTypeId(other.m_currentShipTypeId);
+    setCurrentShipTypeName(other.m_currentShipTypeName);
+    setCurrentShipFriendlyName(other.m_currentShipFriendlyName);
     // skills and related
-    m_attributeCharisma = other.m_attributeCharisma;
-    m_attributeIntelligence = other.m_attributeIntelligence;
-    m_attributeMemory = other.m_attributeMemory;
-    m_attributePerception = other.m_attributePerception;
-    m_attributeWillpower = other.m_attributeWillpower;
-    m_numBonusRemaps = other.m_numBonusRemaps;
-    m_lastRemapDate = other.m_lastRemapDate;
-    m_remapCooldownDate = other.m_remapCooldownDate;
-    m_totalSp = other.m_totalSp;
-    m_isAlphaClone = other.m_isAlphaClone;
-    m_skills = other.m_skills;
-    m_skillGroupsModel = other.m_skillGroupsModel;
+    setAttributeCharisma(other.m_attributeCharisma);
+    setAttributeIntelligence(other.m_attributeIntelligence);
+    setAttributeMemory(other.m_attributeMemory);
+    setAttributePerception(other.m_attributePerception);
+    setAttributeWillpower(other.m_attributeWillpower);
+    setNumBonusRemaps(other.m_numBonusRemaps);
+    setLastRemapDate(other.m_lastRemapDate);
+    setRemapCooldownDate(other.m_remapCooldownDate);
+    setTotalSp(other.m_totalSp);
+    setIsAlphaClone(other.m_isAlphaClone);
+    setSkills(other.m_skills);
+    // m_skillGroupsModel = other.m_skillGroupsModel; // model is calculated automatically in setSkills()
+    // (no Q_PROPERTY for these, so no need to to use setters and emit signals)
     // auth info
     m_tokens = other.m_tokens;
     // last update date-times
     m_update_timestamps = other.m_update_timestamps;
     //
-    emitEverythingChanged();
     return (*this);
 }
 
@@ -92,100 +92,56 @@ Character& Character::operator=(const Character& other)
 Character& Character::operator=(Character&& other)
 {
     // general info
-    m_characterId = std::move(other.m_characterId);
-    m_characterName = std::move(other.m_characterName);
-    m_corporationId = std::move(other.m_corporationId);
-    m_corporationName = std::move(other.m_corporationName);
-    m_corporationTicker = std::move(other.m_corporationTicker);
-    m_allianceId = std::move(other.m_allianceId);
-    m_allianceName = std::move(other.m_allianceName);
-    m_allianceTicker = std::move(other.m_allianceTicker);
+    setCharacterId(std::move(other.m_characterId));
+    setCharacterName(std::move(other.m_characterName));
+    setCorporationId(std::move(other.m_corporationId));
+    setCorporationName(std::move(other.m_corporationName));
+    setCorporationTicker(std::move(other.m_corporationTicker));
+    setAllianceId(std::move(other.m_allianceId));
+    setAllianceName(std::move(other.m_allianceName));
+    setAllianceTicker(std::move(other.m_allianceTicker));
     // general - origins
-    m_raceId = std::move(other.m_raceId);
-    m_raceName = std::move(other.m_raceName);
-    m_ancestryId = std::move(other.m_ancestryId);
-    m_ancestryName = std::move(other.m_ancestryName);
-    m_bloodlineId = std::move(other.m_bloodlineId);
-    m_bloodlineName = std::move(other.m_bloodlineName);
-    m_gender = std::move(other.m_gender);
-    m_birthday_dt = std::move(other.m_birthday_dt);
-    m_securityStatus = std::move(other.m_securityStatus);
-    m_bio = std::move(other.m_bio);
+    setRaceId(std::move(other.m_raceId));
+    setRaceName(std::move(other.m_raceName));
+    setAncestryId(std::move(other.m_ancestryId));
+    setAncestryName(std::move(other.m_ancestryName));
+    setBloodlineId(std::move(other.m_bloodlineId));
+    setBloodlineName(std::move(other.m_bloodlineName));
+    setGender(std::move(other.m_gender));
+    setBirthday(std::move(other.m_birthday_dt));
+    setSecurityStatus(std::move(other.m_securityStatus));
+    setBio(std::move(other.m_bio));
     // wallet info
-    m_isk = std::move(other.m_isk);
+    setIskAmount(std::move(other.m_isk));
     // location info
-    m_currentSolarSystemId = std::move(other.m_currentSolarSystemId);
-    m_currentSolarSystemName = std::move(other.m_currentSolarSystemName);
-    m_currentStationId = std::move(other.m_currentStationId);
-    m_currentStructureId = std::move(other.m_currentStructureId);
-    m_currentStructureName = std::move(other.m_currentStructureName);
-    m_currentShipTypeId = std::move(other.m_currentShipTypeId);
-    m_currentShipTypeName = std::move(other.m_currentShipTypeName);
-    m_currentShipFriendlyName = std::move(other.m_currentShipFriendlyName);
+    setCurrentSolarSystemId(std::move(other.m_currentSolarSystemId));
+    setCurrentSolarSystemName(std::move(other.m_currentSolarSystemName));
+    setCurrentStationId(std::move(other.m_currentStationId));
+    setCurrentStructureId(std::move(other.m_currentStructureId));
+    setCurrentStructureName(std::move(other.m_currentStructureName));
+    setCurrentShipTypeId(std::move(other.m_currentShipTypeId));
+    setCurrentShipTypeName(std::move(other.m_currentShipTypeName));
+    setCurrentShipFriendlyName(std::move(other.m_currentShipFriendlyName));
     // skills and related
-    m_attributeCharisma = std::move(other.m_attributeCharisma);
-    m_attributeIntelligence = std::move(other.m_attributeIntelligence);
-    m_attributeMemory = std::move(other.m_attributeMemory);
-    m_attributePerception = std::move(other.m_attributePerception);
-    m_attributeWillpower = std::move(other.m_attributeWillpower);
-    m_numBonusRemaps = std::move(other.m_numBonusRemaps);
-    m_lastRemapDate = std::move(other.m_lastRemapDate);
-    m_remapCooldownDate = std::move(other.m_remapCooldownDate);
-    m_totalSp = std::move(other.m_totalSp);
-    m_isAlphaClone = std::move(other.m_isAlphaClone);
-    m_skills = std::move(other.m_skills);
-    m_skillGroupsModel = std::move(other.m_skillGroupsModel);
+    setAttributeCharisma(std::move(other.m_attributeCharisma));
+    setAttributeIntelligence(std::move(other.m_attributeIntelligence));
+    setAttributeMemory(std::move(other.m_attributeMemory));
+    setAttributePerception(std::move(other.m_attributePerception));
+    setAttributeWillpower(std::move(other.m_attributeWillpower));
+    setNumBonusRemaps(std::move(other.m_numBonusRemaps));
+    setLastRemapDate(std::move(other.m_lastRemapDate));
+    setRemapCooldownDate(std::move(other.m_remapCooldownDate));
+    setTotalSp(std::move(other.m_totalSp));
+    setIsAlphaClone(std::move(other.m_isAlphaClone));
+    setSkills(std::move(other.m_skills));
+    // m_skillGroupsModel = std::move(other.m_skillGroupsModel); // model is calculated automatically in setSkills()
+    // (no Q_PROPERTY for these, so no need to to use setters and emit signals)
     // auth info
     m_tokens = std::move(other.m_tokens);
     // last update date-times
     m_update_timestamps = std::move(other.m_update_timestamps);
     //
-    emitEverythingChanged();
     return (*this);
-}
-
-
-void Character::emitEverythingChanged() {
-    // general info
-    Q_EMIT characterIdChanged();
-    Q_EMIT characterNameChanged();
-    Q_EMIT corporationIdChanged();
-    Q_EMIT corporationNameChanged();
-    Q_EMIT corporationTickerChanged();
-    Q_EMIT allianceIdChanged();
-    Q_EMIT allianceNameChanged();
-    Q_EMIT allianceTickerChanged();
-    Q_EMIT raceNameChanged();
-    Q_EMIT ancestryNameChanged();
-    Q_EMIT bloodlineNameChanged();
-    Q_EMIT genderChanged();
-    Q_EMIT birthdayChanged();
-    Q_EMIT securityStatusChanged();
-    Q_EMIT bioChanged();
-    // wallet info
-    Q_EMIT iskAmountChanged();
-    // location info
-    Q_EMIT currentSolarSystemChanged();
-    Q_EMIT currentSolarSystemSecurityChanged();
-    Q_EMIT currentConstellationChanged();
-    Q_EMIT currentRegionChanged();
-    Q_EMIT isDockedChanged();
-    Q_EMIT currentShipChanged();
-    // skills and related
-    Q_EMIT attributeCharismaChanged();
-    Q_EMIT attributeIntelligenceChanged();
-    Q_EMIT attributeMemoryChanged();
-    Q_EMIT attributePerceptionChanged();
-    Q_EMIT attributeWillpowerChanged();
-    Q_EMIT numBonusRemapsChanged();
-    Q_EMIT lastRemapDateChanged();
-    Q_EMIT remapCooldownDateChanged();
-    Q_EMIT totalSpChanged();
-    Q_EMIT isAlphaCloneChanged();
-    Q_EMIT skillsChanged();
-    // ^^ for skillsChanged, also a model reset is emitted now by m_skillGroupsModel operator=()
-    // Q_EMIT m_skillGroupsModel.beginResetModel(); // canot -> protected
-    // Q_EMIT m_skillGroupsModel.endResetModel();
 }
 
 

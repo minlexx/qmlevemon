@@ -20,43 +20,43 @@ EM::CharacterSkillGroupsModel::CharacterSkillGroupsModel(QObject *parent)
     m_roles.insert(Roles::NumSkillsInTraining, QByteArrayLiteral("numSkillsInTraining"));
 }
 
-EM::CharacterSkillGroupsModel::CharacterSkillGroupsModel(const EM::CharacterSkillGroupsModel &other)
-    : QAbstractListModel(other.parent())
-{
-    (*this) = other;
-}
+//EM::CharacterSkillGroupsModel::CharacterSkillGroupsModel(const EM::CharacterSkillGroupsModel &other)
+//    : QAbstractListModel(other.parent())
+//{
+//    (*this) = other;
+//}
 
-EM::CharacterSkillGroupsModel::CharacterSkillGroupsModel(EM::CharacterSkillGroupsModel &&other)
-    : QAbstractListModel(other.parent())
-{
-    (*this) = std::move(other);
-}
+//EM::CharacterSkillGroupsModel::CharacterSkillGroupsModel(EM::CharacterSkillGroupsModel &&other)
+//    : QAbstractListModel(other.parent())
+//{
+//    (*this) = std::move(other);
+//}
 
-EM::CharacterSkillGroupsModel &EM::CharacterSkillGroupsModel::operator=(const EM::CharacterSkillGroupsModel &other)
-{
-    if (this == &other) return *this;
-    {
-        beginResetModel();
-        QMutexLocker lock(&m_mutex);
-        m_roles = other.m_roles;
-        m_data = other.m_data;
-    }
-    endResetModel();
-    return *this;
-}
+//EM::CharacterSkillGroupsModel &EM::CharacterSkillGroupsModel::operator=(const EM::CharacterSkillGroupsModel &other)
+//{
+//    if (this == &other) return *this;
+//    {
+//        beginResetModel();
+//        QMutexLocker lock(&m_mutex);
+//        m_roles = other.m_roles;
+//        m_data = other.m_data;
+//    }
+//    endResetModel();
+//    return *this;
+//}
 
-EM::CharacterSkillGroupsModel &EM::CharacterSkillGroupsModel::operator=(EM::CharacterSkillGroupsModel &&other)
-{
-    if (this == &other) return *this;
-    {
-        beginResetModel();
-        QMutexLocker lock(&m_mutex);
-        m_roles = std::move(other.m_roles);
-        m_data = std::move(other.m_data);
-    }
-    endResetModel();
-    return *this;
-}
+//EM::CharacterSkillGroupsModel &EM::CharacterSkillGroupsModel::operator=(EM::CharacterSkillGroupsModel &&other)
+//{
+//    if (this == &other) return *this;
+//    {
+//        beginResetModel();
+//        QMutexLocker lock(&m_mutex);
+//        m_roles = std::move(other.m_roles);
+//        m_data = std::move(other.m_data);
+//    }
+//    endResetModel();
+//    return *this;
+//}
 
 QHash<int, QByteArray> EM::CharacterSkillGroupsModel::roleNames() const
 {

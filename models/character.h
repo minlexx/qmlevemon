@@ -272,10 +272,6 @@ Q_SIGNALS:
     void isAlphaCloneChanged();
     void skillsChanged();
 
-protected Q_SLOTS:
-    // wooooooo
-    void emitEverythingChanged();
-
 protected:
     // general info
     quint64   m_characterId = 0;
