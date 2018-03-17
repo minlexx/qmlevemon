@@ -110,6 +110,13 @@ int PeriodicalRefresherWorker::refresh_skills(Character &ch) {
             chSkill.setTrainedLevel(jskill.value(QLatin1String("trained_skill_level")).toInt());
             chSkill.setSkillPointsInSkill(jskill.value(QLatin1String("skillpoints_in_skill")).toVariant().toULongLong());
 
+            // warning detection
+            if (chSkill.activeLevel() == 0) {
+                // whaat, how canthis be
+                qCWarning(logRefresher) << "    We got a skill with active level = 0!" << chSkill.skillName();
+                qCWarning(logRefresher) << "    " << jskill;
+            }
+
             // detect alpha clone
             // if any skill has activeLevel < trainedLevel, this is alpha
             if (chSkill.activeLevel() < chSkill.trainedLevel()) {
