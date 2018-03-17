@@ -118,19 +118,19 @@ Rectangle {
                     font.family: AppStyle.fontFamily
                 }
                 Text {
-                    text: model.trainingSkillTimeLeft
+                    text: Qt.formatDateTime(model.trainingSkillTimeLeft)
                     color: AppStyle.textLightColor
                     font.pointSize: AppStyle.textSizeH3
                     font.family: AppStyle.fontFamily
                 }
                 Text {
-                    text: model.trainingSkillEndDateTime
+                    text: Qt.formatDateTime(model.trainingSkillEndDateTime)
                     color: AppStyle.textLightColor
                     font.pointSize: AppStyle.textSizeH3
                     font.family: AppStyle.fontFamily
                 }
                 Text {
-                    text: qsTr("Queue ends in: ") + model.queueTimeLeft
+                    text: qsTr("Queue ends in: ") + Qt.formatDateTime(model.queueTimeLeft)
                     color: AppStyle.textLightColor
                     font.pointSize: AppStyle.textSizeH3
                     font.family: AppStyle.fontFamily
