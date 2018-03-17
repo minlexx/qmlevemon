@@ -82,6 +82,23 @@ void CharacterSkill::setTrainedLevel(int lvl)
 
 int CharacterSkill::activeLevel() const { return m_activeLevel; }
 
+QString CharacterSkill::trainingLevelRoman() const
+{
+    int training_level = m_activeLevel + 1;
+    if (training_level > 5) {
+        training_level = 5;
+    }
+    QString ret;
+    switch (training_level) {
+    case 1: ret = QLatin1String("I"); break;
+    case 2: ret = QLatin1String("II"); break;
+    case 3: ret = QLatin1String("III"); break;
+    case 4: ret = QLatin1String("IV"); break;
+    case 5: ret = QLatin1String("V"); break;
+    }
+    return ret;
+}
+
 void CharacterSkill::setActiveLevel(int lvl)
 {
     if (lvl != m_activeLevel) {
