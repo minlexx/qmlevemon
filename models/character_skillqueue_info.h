@@ -22,6 +22,7 @@ public:
     int queuePosition = -1;
     quint64 levelStartSp = 0;
     quint64 levelEndSp = 0;
+    quint64 trainingStartSp = 0;
     QDateTime startDate;
     QDateTime finishDate;
 };

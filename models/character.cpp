@@ -583,8 +583,15 @@ QList<QObject *> Character::getSkillsForGroupId(quint64 groupId) const
 
 void Character::setSkillQueueInfo(quint64 skill_id, const CharacterSkillQueueInfo &qinfo)
 {
+    qCDebug(logCharacter) << "skill queue info for id:" << skill_id
+                          << "qpos:" << qinfo.queuePosition
+                          << "tr.level:" << qinfo.trainingLevel;
+
     for (CharacterSkill &sk : m_skills) {
         if (sk.skillId() == skill_id) {
+
+            qCDebug(logCharacter) << "Found corresponding skill:" << sk;
+
             sk.setQueueInfo(qinfo);
 
             // check if this skill is currently in training,
@@ -598,6 +605,8 @@ void Character::setSkillQueueInfo(quint64 skill_id, const CharacterSkillQueueInf
             return;
         }
     }
+
+    qCWarning(logCharacter) << "We do not have this skill!";
 }
 
 
@@ -605,7 +614,7 @@ void Character::setSkillQueueInfo(quint64 skill_id, const CharacterSkillQueueInf
 
 
 // increase version number when savedata format changes
-static const int SAVEDATA_VERSION = 11;
+static const int SAVEDATA_VERSION = 13;
 
 
 QDataStream& operator<<(QDataStream &stream, const EM::Character &character)

@@ -15,6 +15,7 @@ QDataStream &operator<<(QDataStream &stream, const EM::CharacterSkillQueueInfo &
     stream << info.queuePosition;
     stream << info.levelStartSp;
     stream << info.levelEndSp;
+    stream << info.trainingStartSp;
     stream << info.startDate;
     stream << info.finishDate;
     return stream;
@@ -26,6 +27,7 @@ QDataStream &operator>>(QDataStream &stream, EM::CharacterSkillQueueInfo &info)
     stream >> info.queuePosition;
     stream >> info.levelStartSp;
     stream >> info.levelEndSp;
+    stream >> info.trainingStartSp;
     stream >> info.startDate;
     stream >> info.finishDate;
     return stream;
