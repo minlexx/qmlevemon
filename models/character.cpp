@@ -438,6 +438,26 @@ QObject *Character::skillGroupsModel()
     return static_cast<QObject *>(&m_skillGroupsModel);
 }
 
+QObject *Character::currentTrainingSkill() const
+{
+    return nullptr;
+}
+
+QDateTime Character::currentSkillTimeLeft() const
+{
+    return QDateTime();
+}
+
+QDateTime Character::currentSkillFinishDate() const
+{
+    return QDateTime();
+}
+
+QDateTime Character::skillQueueFinishDate() const
+{
+    return QDateTime();
+}
+
 void Character::setAttributeCharisma(int a) {
     if (m_attributeCharisma != a) {
         m_attributeCharisma = a;

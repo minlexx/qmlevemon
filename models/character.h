@@ -61,17 +61,21 @@ class Character: public QObject
     Q_PROPERTY(QString   currentShipTypeName        READ currentShipTypeName        NOTIFY currentShipChanged)
     Q_PROPERTY(QString   currentShipFriendlyName    READ currentShipFriendlyName    NOTIFY currentShipChanged)
     // skills and related
-    Q_PROPERTY(int       attributeCharisma      READ attributeCharisma      NOTIFY attributeCharismaChanged)
-    Q_PROPERTY(int       attributeIntelligence  READ attributeIntelligence  NOTIFY attributeIntelligenceChanged)
-    Q_PROPERTY(int       attributeMemory        READ attributeMemory        NOTIFY attributeMemoryChanged)
-    Q_PROPERTY(int       attributePerception    READ attributePerception    NOTIFY attributePerceptionChanged)
-    Q_PROPERTY(int       attributeWillpower     READ attributeWillpower     NOTIFY attributeWillpowerChanged)
-    Q_PROPERTY(int       numBonusRemaps         READ numBonusRemaps         NOTIFY numBonusRemapsChanged)
-    Q_PROPERTY(QDateTime lastRemapDate          READ lastRemapDate          NOTIFY lastRemapDateChanged)
-    Q_PROPERTY(QDateTime remapCooldownDate      READ remapCooldownDate      NOTIFY remapCooldownDateChanged)
-    Q_PROPERTY(quint64   totalSp                READ totalSp                NOTIFY totalSpChanged)
-    Q_PROPERTY(bool      isAlphaClone           READ isAlphaClone           NOTIFY isAlphaCloneChanged)
-    Q_PROPERTY(QObject*  skillGroupsModel       READ skillGroupsModel       NOTIFY skillsChanged)
+    Q_PROPERTY(int        attributeCharisma        READ attributeCharisma        NOTIFY attributeCharismaChanged)
+    Q_PROPERTY(int        attributeIntelligence    READ attributeIntelligence    NOTIFY attributeIntelligenceChanged)
+    Q_PROPERTY(int        attributeMemory          READ attributeMemory          NOTIFY attributeMemoryChanged)
+    Q_PROPERTY(int        attributePerception      READ attributePerception      NOTIFY attributePerceptionChanged)
+    Q_PROPERTY(int        attributeWillpower       READ attributeWillpower       NOTIFY attributeWillpowerChanged)
+    Q_PROPERTY(int        numBonusRemaps           READ numBonusRemaps           NOTIFY numBonusRemapsChanged)
+    Q_PROPERTY(QDateTime  lastRemapDate            READ lastRemapDate            NOTIFY lastRemapDateChanged)
+    Q_PROPERTY(QDateTime  remapCooldownDate        READ remapCooldownDate        NOTIFY remapCooldownDateChanged)
+    Q_PROPERTY(quint64    totalSp                  READ totalSp                  NOTIFY totalSpChanged)
+    Q_PROPERTY(bool       isAlphaClone             READ isAlphaClone             NOTIFY isAlphaCloneChanged)
+    Q_PROPERTY(QObject*   skillGroupsModel         READ skillGroupsModel         NOTIFY skillsChanged)
+    Q_PROPERTY(QObject*   currentTrainingSkill     READ currentTrainingSkill     NOTIFY skillsChanged)
+    Q_PROPERTY(QDateTime  currentSkillTimeLeft     READ currentSkillTimeLeft     NOTIFY skillsChanged)
+    Q_PROPERTY(QDateTime  currentSkillFinishDate   READ currentSkillFinishDate   NOTIFY skillsChanged)
+    Q_PROPERTY(QDateTime  skillQueueFinishDate     READ skillQueueFinishDate     NOTIFY skillsChanged)
 
 public:
     Character(QObject *parent = nullptr);
@@ -200,6 +204,10 @@ public:
     bool isAlphaClone() const;
     QVector<CharacterSkill> skills() const;
     QObject *skillGroupsModel();
+    QObject  *currentTrainingSkill() const;
+    QDateTime currentSkillTimeLeft() const;
+    QDateTime currentSkillFinishDate() const;
+    QDateTime skillQueueFinishDate() const;
     // skills and related - setters
     void setAttributeCharisma(int a);
     void setAttributeIntelligence(int a);
