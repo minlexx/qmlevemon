@@ -114,9 +114,21 @@ QVariant CharacterModel::data(const QModelIndex &index, int role) const
     case ISKAmountStr: ret = ch->iskAmountStr(); break;
         // skills info
     case TotalSP: ret = ch->totalSp(); break;
-    case TrainingSkill: ret = QLatin1String("-"); break;
+    case TrainingSkill: {
+            ret = QLatin1String("-");
+            const CharacterSkill *sk = qobject_cast<const CharacterSkill *>(ch->currentTrainingSkill());
+            if (sk) {
+                ret = QString(QLatin1String("%1 %2")).arg(sk->skillName()).arg(sk->trainingLevelRoman());
+            }
+        } break;
     case TrainingSkillTimeLeft: ret = QLatin1String("-"); break;
-    case TrainingSkillEndDateTime: ret = QLatin1String("-"); break;
+    case TrainingSkillEndDateTime: {
+            ret = QLatin1String("-");
+            const CharacterSkill *sk = qobject_cast<const CharacterSkill *>(ch->currentTrainingSkill());
+            if (sk) {
+                ret = sk->trainFinishDate();
+            }
+        } break;
     case QueueTimeLeft: ret = QLatin1String("-"); break;
     }
     return ret;
