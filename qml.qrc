@@ -14,6 +14,7 @@
         <file>qml/pages/About.qml</file>
         <file>qml/pages/AddCharacter.qml</file>
         <file>qml/pages/char/CharMain.qml</file>
+        <file>qml/pages/char/CharTabSkills.qml</file>
         <file>qml/pages/Home.qml</file>
         <file>qml/pages/TestPage.qml</file>
     </qresource>
