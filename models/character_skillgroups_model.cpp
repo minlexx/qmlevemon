@@ -120,8 +120,11 @@ void EM::CharacterSkillGroupsModel::setFromSkills(const QVector<EM::CharacterSki
         QSet<quint64> gset;
         QHash<quint64, int> skillsInGroup; // <group_id, num_skills>
         QHash<quint64, quint64> skillPointsGroup; // <group_id, num_skillpoints>
+        QHash<quint64, int> skillsQueued; // <group_id, num_skills>
+
         m_data.clear();
         int numAdded = 0;
+
         for (const EM::CharacterSkill &sk: qAsConst(skills)) {
             const SkillGroup *skillGroup = sk.skillGroup();
             // unlikely that skill has no group, but just in case..
@@ -148,10 +151,20 @@ void EM::CharacterSkillGroupsModel::setFromSkills(const QVector<EM::CharacterSki
                     skillPointsGroup.insert(groupId, 0);
                 }
                 skillPointsGroup[groupId] += sk.skillPointsInSkill();
+
+                // count queued skills in this group
+                if (!skillsQueued.contains(groupId)) {
+                    skillsQueued.insert(groupId, 0);
+                }
+                if (sk.isInQueue()) {
+                    ++skillsQueued[groupId];
+                }
+
             } else {
                 qCDebug(logCharSkillGroupsModel) << "Could not find a skill group for skill:" << sk;
             }
         }
+
         std::sort(m_data.begin(), m_data.end(), std::less<ModelData>());
 
         // qCDebug(logCharSkillGroupsModel) << " added " << numAdded << "skill groups";
@@ -160,10 +173,22 @@ void EM::CharacterSkillGroupsModel::setFromSkills(const QVector<EM::CharacterSki
         for (ModelData &md: m_data) {
             md.m_skillsInGroupTrained = skillsInGroup[md.m_id];
             md.m_skillPointsInGroup = skillPointsGroup[md.m_id];
+            md.m_numSkillsInQueue = skillsQueued[md.m_id];
         }
     }
 
     endResetModel();
+}
+
+void EM::CharacterSkillGroupsModel::setActiveTrainingGroupId(quint64 groupId)
+{
+    // update modeldata
+    for (ModelData &md: m_data) {
+        if (md.m_id == groupId) {
+            md.m_numSkillsInTraining = 1;
+            return;
+        }
+    }
 }
 
 bool EM::CharacterSkillGroupsModel::ModelData::operator<(const EM::CharacterSkillGroupsModel::ModelData &o) const

@@ -586,6 +586,9 @@ void Character::setSkills(const QVector<CharacterSkill> &vskills)
             // qCDebug(logCharacter) << "    First skill:" << firstSkill;
             // qCDebug(logCharacter) << "    Last skill:" << lastSkill;
             // ^^ looks correct
+
+            // also update skill groups model, tell where current training skill is
+            m_skillGroupsModel.setActiveTrainingGroupId(firstSkill.skillGroupId());
         }
 
         Q_EMIT skillsChanged();
