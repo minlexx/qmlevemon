@@ -84,9 +84,9 @@ int CharacterSkill::activeLevel() const { return m_activeLevel; }
 
 QString CharacterSkill::trainingLevelRoman() const
 {
-    int training_level = m_activeLevel + 1;
-    if (training_level > 5) {
-        training_level = 5;
+    int training_level = trainingLevel();
+    if (training_level <= 0) {
+        return QString();
     }
     QString ret;
     switch (training_level) {
@@ -95,6 +95,7 @@ QString CharacterSkill::trainingLevelRoman() const
     case 3: ret = QLatin1String("III"); break;
     case 4: ret = QLatin1String("IV"); break;
     case 5: ret = QLatin1String("V"); break;
+    default: ret = QString::number(training_level, 10); break;
     }
     return ret;
 }
@@ -163,6 +164,11 @@ QDateTime CharacterSkill::trainFinishDate() const
     return m_qinfo.finishDate;
 }
 
+int CharacterSkill::trainingLevel() const
+{
+    return m_qinfo.trainingLevel;
+}
+
 
 }
 
@@ -229,8 +235,11 @@ QDataStream &operator>>(QDataStream &stream, EM::CharacterSkill &skill)
 QDebug operator<<(QDebug stream, const EM::CharacterSkill &skill)
 {
     stream << "<CharacterSkill " << skill.skillName() << "/" << skill.skillId();
-    stream << " lvl " << skill.activeLevel();
-    stream << " / rank: " << skill.skillTimeConstant();
+    stream << "/ lvl " << skill.activeLevel();
+    if (skill.trainingLevel() > 0) {
+        stream << " training lvl:" << skill.trainingLevel();
+    }
+    stream << "/ rank:" << skill.skillTimeConstant();
     stream << ">";
     return stream;
 }
