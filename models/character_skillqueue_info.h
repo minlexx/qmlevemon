@@ -19,7 +19,7 @@ public:
 
 public:
     int trainingLevel = 0;
-    int queuePosition = -1;
+    int queuePosition = -1; // -1 = not in queue
     quint64 levelStartSp = 0;
     quint64 levelEndSp = 0;
     quint64 trainingStartSp = 0;
