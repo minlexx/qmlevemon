@@ -3,7 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 import "../"
-import "../custom_controls"
+import "../../custom_controls"
 
 Rectangle {
     id: container

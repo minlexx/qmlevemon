@@ -13,7 +13,7 @@
         <file>qml/custom_controls/TextKeyValue.qml</file>
         <file>qml/pages/About.qml</file>
         <file>qml/pages/AddCharacter.qml</file>
-        <file>qml/pages/PageCharacterMain.qml</file>
+        <file>qml/pages/char/CharMain.qml</file>
         <file>qml/pages/Home.qml</file>
         <file>qml/pages/TestPage.qml</file>
     </qresource>

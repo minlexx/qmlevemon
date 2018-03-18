@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import "."
 import "./custom_controls"
 import "./pages"
+import "./pages/char"
 
 
 ApplicationWindow {
@@ -158,7 +159,7 @@ ApplicationWindow {
 
     Component {
         id: pageCharacterMain
-        PageCharacterMain {
+        CharMain {
             onSelectCharacterRequest: {
                 nav_to("select_character", characterId);
             }
