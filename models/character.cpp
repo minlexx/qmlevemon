@@ -466,7 +466,7 @@ QDateTime Character::skillQueueFinishDate() const
 
 bool Character::isSkillQueueEmpty() const
 {
-    return m_currentTrainingSkill.skillId() > 0;
+    return m_currentTrainingSkill.skillId() == 0;
 }
 
 void Character::setAttributeCharisma(int a) {
