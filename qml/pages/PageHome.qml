@@ -62,7 +62,7 @@ Rectangle {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
 
-        cellWidth: 430
+        cellWidth: 480
         cellHeight: 180
 
         //model: testCharactersModel
@@ -135,18 +135,10 @@ Rectangle {
                     font.family: AppStyle.fontFamily
                 }
 
-                // current skill finish date
-                //Text {
-                //    text: model.isQueueEmpty ? "" : Qt.formatDateTime(model.trainingSkillEndDateTime)
-                //    color: AppStyle.textLightColor
-                //    font.pointSize: AppStyle.textSizeH3
-                //    font.family: AppStyle.fontFamily
-                //}
-
                 // whole queue time left and finish date
                 Text {
                     text: model.isQueueEmpty ? "" :
-                              (qsTr("Queue ends: ") + model.queueTimeLeft
+                              (qsTr("Queue: ") + model.queueTimeLeft
                                + " (" + Qt.formatDateTime(model.queueFinishDateTime) + ")")
                     color: AppStyle.textLightColor
                     font.pointSize: AppStyle.textSizeH3
