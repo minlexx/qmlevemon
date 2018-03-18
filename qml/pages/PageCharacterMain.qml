@@ -349,13 +349,13 @@ Rectangle {
                         id: skillListItem
                         implicitWidth: listViewSkills.width
                         implicitHeight: ListView.isCurrentItem
-                                ? txtSkillGroupName.implicitHeight + 2*AppStyle.marginSmall + skillGroupSkillsRect.height
-                                : txtSkillGroupName.implicitHeight + 2*AppStyle.marginSmall
+                                ? txtSkillGroupName.height + skillGroupSkillsRect.height
+                                : txtSkillGroupName.height
 
                         Rectangle {
                             id: skillListTitleRect
                             implicitWidth: listViewSkills.width
-                            implicitHeight: txtSkillGroupName.implicitHeight + 2*AppStyle.marginSmall
+                            implicitHeight: txtSkillGroupName.height
                             color: skillListItem.ListView.isCurrentItem ? AppStyle.rectBgHighlightColor : AppStyle.textLightColor
                             border { width: 1; color: "white" }
 
@@ -370,8 +370,10 @@ Rectangle {
                                     left: parent.left
                                     leftMargin: AppStyle.marginNormal
                                 }
-                                height: implicitHeight + 2*AppStyle.marginSmall
-                                width: 250
+                                // height is bigger on android
+                                height: evemonapp.isDesktopPlatform ? implicitHeight + 2*AppStyle.marginSmall : implicitHeight + 2*AppStyle.marginNormal
+                                // height: implicitHeight + 2*AppStyle.marginNormal // for testing
+                                width: 160
                                 verticalAlignment: Text.AlignVCenter
                                 color: skillListItem.ListView.isCurrentItem ? AppStyle.textDefaultColor : AppStyle.textInvertedColor
                             }
@@ -388,7 +390,9 @@ Rectangle {
                                     top: parent.top
                                 }
                                 height: txtSkillGroupName.height
+                                width: 110
                                 verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignRight
                                 color: skillListItem.ListView.isCurrentItem ? AppStyle.textDefaultColor : AppStyle.textInvertedColor
                             }
 
@@ -404,7 +408,30 @@ Rectangle {
                                     top: parent.top
                                 }
                                 height: txtSkillGroupName.height
+                                width: 80
                                 verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignRight
+                                color: skillListItem.ListView.isCurrentItem ? AppStyle.textDefaultColor : AppStyle.textInvertedColor
+                            }
+
+                            Text {
+                                id: txtQueueInfoForGroup
+                                text: model.numSkillsInQueue > 0
+                                      ? ( "(" + model.numSkillsInQueue + " " + qsTr("in queue") +
+                                         (model.numSkillsInTraining > 0 ? (", " + model.numSkillsInTraining + qsTr(" training")) : "") + ")")
+                                      : ""
+                                maximumLineCount: 1
+                                font.pointSize: AppStyle.textSizeH4
+                                font.bold: false
+                                anchors {
+                                    left: txtSkillPointsInGroup.right
+                                    leftMargin: AppStyle.marginBig
+                                    top: parent.top
+                                }
+                                height: txtSkillGroupName.height
+                                // width: 80
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignLeft
                                 color: skillListItem.ListView.isCurrentItem ? AppStyle.textDefaultColor : AppStyle.textInvertedColor
                             }
 
