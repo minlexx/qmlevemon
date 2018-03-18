@@ -50,6 +50,7 @@ set(qmlevemon_srcs
     "network/refresher/server_status.cpp"
     "network/refresher/skills.cpp"
     "network/refresher/wallet.cpp"
+    "utils/str_utils.cpp"
     "qml.qrc"
     "img.qrc"
     "sql.qrc"

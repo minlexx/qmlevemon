@@ -35,6 +35,7 @@ SOURCES += \
     ../network/refresher/server_status.cpp \
     ../network/refresher/skills.cpp \
     ../network/refresher/wallet.cpp \
+    ../utils/str_utils.cpp \
     ../qtwebserver/css/cssdocument.cpp \
     ../qtwebserver/css/cssruleset.cpp \
     ../qtwebserver/html/htmldocument.cpp \
@@ -75,6 +76,7 @@ HEADERS += \
     ../models/update_timestamps.h \
     ../network/periodical_refresher.h \
     ../network/refresher/periodical_refresher_worker.h \
+    ../utils/str_utils.h \
     ../qtwebserver/css/cssdocument.h \
     ../qtwebserver/css/cssruleset.h \
     ../qtwebserver/html/htmldocument.h \
