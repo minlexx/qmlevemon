@@ -117,7 +117,7 @@ ApplicationWindow {
 
     Component {
         id: pageHome
-        PageHome {
+        Home {
             onAddCharacterRequest: {
                 menuAction("add_character")
             }
@@ -132,7 +132,7 @@ ApplicationWindow {
 
     Component {
         id: pageAddCharacter
-        PageAddCharacter {
+        AddCharacter {
             onLoginWithEveOnline: {
                 eveSsoLoginManager.slotStartSsoAuth();
             }
@@ -148,7 +148,7 @@ ApplicationWindow {
 
     Component {
         id: pageAbout
-        PageAbout { }
+        About { }
     }
 
     Component {

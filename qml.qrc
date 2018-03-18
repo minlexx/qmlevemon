@@ -11,10 +11,10 @@
         <file>qml/custom_controls/HamburgerMenuBackIcon.qml</file>
         <file>qml/custom_controls/SkillProgressBar.qml</file>
         <file>qml/custom_controls/TextKeyValue.qml</file>
-        <file>qml/pages/PageAbout.qml</file>
-        <file>qml/pages/PageAddCharacter.qml</file>
+        <file>qml/pages/About.qml</file>
+        <file>qml/pages/AddCharacter.qml</file>
         <file>qml/pages/PageCharacterMain.qml</file>
-        <file>qml/pages/PageHome.qml</file>
+        <file>qml/pages/Home.qml</file>
         <file>qml/pages/TestPage.qml</file>
     </qresource>
 </RCC>
