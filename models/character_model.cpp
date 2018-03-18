@@ -44,6 +44,8 @@ CharacterModel::CharacterModel(QObject *parent):
     m_roles.insert(Roles::TrainingSkillTimeLeft, "trainingSkillTimeLeft");
     m_roles.insert(Roles::TrainingSkillEndDateTime, "trainingSkillEndDateTime");
     m_roles.insert(Roles::QueueTimeLeft, "queueTimeLeft");
+    m_roles.insert(Roles::QueueFinishDateTime, "queueFinishDateTime");
+    m_roles.insert(Roles::IsQueueEmpty, "isQueueEmpty");
 
     // model init
     m_characterList.clear();
@@ -116,20 +118,33 @@ QVariant CharacterModel::data(const QModelIndex &index, int role) const
     case TotalSP: ret = ch->totalSp(); break;
     case TrainingSkill: {
             ret = QLatin1String("-");
-            const CharacterSkill *sk = qobject_cast<const CharacterSkill *>(ch->currentTrainingSkill());
-            if (sk) {
-                ret = QString(QLatin1String("%1 %2")).arg(sk->skillName()).arg(sk->trainingLevelRoman());
+            if (!ch->isSkillQueueEmpty()) {
+                const CharacterSkill *sk = qobject_cast<const CharacterSkill *>(ch->currentTrainingSkill());
+                if (sk) {
+                    // "Large Pulse Laser Specialiation V"
+                    ret = QString(QLatin1String("%1 %2")).arg(sk->skillName()).arg(sk->trainingLevelRoman());
+                }
             }
         } break;
-    case TrainingSkillTimeLeft: ret = QLatin1String("-"); break;
+    case TrainingSkillTimeLeft: {
+            ret = QLatin1String("-");
+            if (!ch->isSkillQueueEmpty()) {
+                ret = ch->currentSkillSecondsLeft();
+            }
+        } break;
     case TrainingSkillEndDateTime: {
             ret = QLatin1String("-");
-            const CharacterSkill *sk = qobject_cast<const CharacterSkill *>(ch->currentTrainingSkill());
-            if (sk) {
-                ret = sk->trainFinishDate();
+            if (!ch->isSkillQueueEmpty()) {
+                ret = ch->currentSkillFinishDate();
             }
         } break;
     case QueueTimeLeft: ret = QLatin1String("-"); break;
+    case QueueFinishDateTime: {
+            if (!ch->isSkillQueueEmpty()) {
+                ret = ch->skillQueueFinishDate();
+            }
+        } break;
+    case IsQueueEmpty: ret = ch->isSkillQueueEmpty(); break;
     }
     return ret;
 }

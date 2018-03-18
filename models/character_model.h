@@ -43,7 +43,9 @@ class CharacterModel: public QAbstractListModel
         TrainingSkill,
         TrainingSkillTimeLeft,
         TrainingSkillEndDateTime,
-        QueueTimeLeft
+        QueueTimeLeft,
+        QueueFinishDateTime,
+        IsQueueEmpty
     };
 
 public:
