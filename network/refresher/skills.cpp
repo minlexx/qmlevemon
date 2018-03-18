@@ -129,6 +129,9 @@ int PeriodicalRefresherWorker::refresh_skills(Character &ch) {
             // there are a lot of skills (few hundreds) so chech for exit more often
             if (QThread::currentThread()->isInterruptionRequested()) return 0;
         }
+
+        qCDebug(logRefresher) << Q_FUNC_INFO << "parsed skills";
+
         // forcefully update character's alpha clone status
         ch.setIsAlphaClone(isAlphaClone);
         ch.setSkills(charSkills);
@@ -161,11 +164,13 @@ int PeriodicalRefresherWorker::refresh_skills(Character &ch) {
             qinfo.queuePosition = itemObj.value(QLatin1String("queue_position")).toInt();
             qinfo.levelStartSp = itemObj.value(QLatin1String("level_start_sp")).toVariant().toULongLong();
             qinfo.levelEndSp = itemObj.value(QLatin1String("level_end_sp")).toVariant().toULongLong();
+            qinfo.trainingStartSp = itemObj.value(QLatin1String("training_start_sp")).toVariant().toULongLong();
             qinfo.startDate = QDateTime::fromString(itemObj.value(QLatin1String("start_date")).toString(), Qt::ISODate);
             qinfo.finishDate = QDateTime::fromString(itemObj.value(QLatin1String("finish_date")).toString(), Qt::ISODate);
 
             ch.setSkillQueueInfo(skill_id, qinfo);
         }
+        qCDebug(logRefresher) << Q_FUNC_INFO << "parsed skillqueue";
     }
 
     ch.setUpdateTimestamp(UpdateTimestamps::UTST::SKILLS);
