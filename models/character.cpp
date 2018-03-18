@@ -1,5 +1,6 @@
 #include <utility>
 #include <algorithm>
+#include <limits.h>
 
 #include <QDataStream>
 #include <QLocale>
@@ -77,9 +78,9 @@ Character& Character::operator=(const Character& other)
     setRemapCooldownDate(other.m_remapCooldownDate);
     setTotalSp(other.m_totalSp);
     setIsAlphaClone(other.m_isAlphaClone);
-    m_currentTrainingSkill = other.m_currentTrainingSkill; // skillsChanged() will be emitted later in setSkills()
     setSkills(other.m_skills);
-    // m_skillGroupsModel = other.m_skillGroupsModel; // model is calculated automatically in setSkills()
+    // m_skillGroupsModel is calculated in setSkills()
+    // m_currentTrainingSkill is calculated in setSkills()
     // (no Q_PROPERTY for these, so no need to to use setters and emit signals)
     // auth info
     m_tokens = other.m_tokens;
@@ -134,9 +135,9 @@ Character& Character::operator=(Character&& other)
     setRemapCooldownDate(std::move(other.m_remapCooldownDate));
     setTotalSp(std::move(other.m_totalSp));
     setIsAlphaClone(std::move(other.m_isAlphaClone));
-    m_currentTrainingSkill = std::move(other.m_currentTrainingSkill); // skillsChanged() will be emitted later in setSkills()
     setSkills(std::move(other.m_skills));
-    // m_skillGroupsModel = std::move(other.m_skillGroupsModel); // model is calculated automatically in setSkills()
+    // m_skillGroupsModel is calculated in setSkills()
+    // m_currentTrainingSkill is calculated in setSkills()
     // (no Q_PROPERTY for these, so no need to to use setters and emit signals)
     // auth info
     m_tokens = std::move(other.m_tokens);
@@ -445,9 +446,12 @@ const QObject *Character::currentTrainingSkill() const
     return static_cast<const QObject *>(&m_currentTrainingSkill);
 }
 
-QDateTime Character::currentSkillTimeLeft() const
+qint64 Character::currentSkillSecondsLeft() const
 {
-    return QDateTime();
+    QDateTime curDtUtc = QDateTime::currentDateTimeUtc();
+    qint64 msecs_left = curDtUtc.msecsTo(m_currentTrainingSkill.queueInfo().finishDate);
+    msecs_left /= 1000;
+    return msecs_left;
 }
 
 QDateTime Character::currentSkillFinishDate() const
@@ -457,7 +461,12 @@ QDateTime Character::currentSkillFinishDate() const
 
 QDateTime Character::skillQueueFinishDate() const
 {
-    return QDateTime();
+    return m_skillQueueFinishDate;
+}
+
+bool Character::isSkillQueueEmpty() const
+{
+    return m_currentTrainingSkill.skillId() > 0;
 }
 
 void Character::setAttributeCharisma(int a) {
@@ -536,6 +545,49 @@ void Character::setSkills(const QVector<CharacterSkill> &vskills)
         m_skills = vskills;
         // update skill groups model
         m_skillGroupsModel.setFromSkills(m_skills);
+
+        // find currently trained skill and last skill in queue
+        int indexInVector = 0;
+        int minQueuePos = INT_MAX;  // needed to find first skill in queue
+        int firstSkillIndex = -1;
+        int maxQueuePos = -1;  // needed to fins last skill in queue
+        int lastSkillIndex = -1;
+        for (const CharacterSkill &sk : qAsConst(m_skills)) {
+            int qpos = sk.queueInfo().queuePosition;
+            // is skill in queue?
+            if (qpos > 0) {
+                if (qpos < minQueuePos) {
+                    minQueuePos = qpos;
+                    firstSkillIndex = indexInVector;
+                }
+                if (qpos > maxQueuePos) {
+                    maxQueuePos = qpos;
+                    lastSkillIndex = indexInVector;
+                }
+            }
+            ++indexInVector;
+        }
+
+        if ((firstSkillIndex == -1) && (lastSkillIndex == -1)) {
+            // skill queue is empty!
+            qCWarning(logCharacter) << "Skill queue is empty!";
+            // zero out zurrent training skill skillId as indicator of empty queue
+            m_currentTrainingSkill.setSkillId(0);
+            m_currentTrainingSkill.setSkillName(QString());
+        } else {
+            // remember current training skill
+            const CharacterSkill &firstSkill = m_skills.at(firstSkillIndex);
+            m_currentTrainingSkill = firstSkill;
+
+            // remember when the whole skill queue ends
+            const CharacterSkill &lastSkill = m_skills.at(lastSkillIndex);
+            m_skillQueueFinishDate = lastSkill.queueInfo().finishDate;
+
+            qCDebug(logCharacter) << "    First skill:" << firstSkill;
+            qCDebug(logCharacter) << "    Last skill:" << lastSkill;
+            // ^^ looks correct
+        }
+
         Q_EMIT skillsChanged();
     }
 }
@@ -583,30 +635,16 @@ QList<QObject *> Character::getSkillsForGroupId(quint64 groupId) const
 
 void Character::setSkillQueueInfo(quint64 skill_id, const CharacterSkillQueueInfo &qinfo)
 {
-    qCDebug(logCharacter) << "skill queue info for id:" << skill_id
-                          << "qpos:" << qinfo.queuePosition
-                          << "tr.level:" << qinfo.trainingLevel;
-
+    // qCDebug(logCharacter) << "  skill queue info for id:" << skill_id
+    //                      << "qpos:" << qinfo.queuePosition
+    //                      << "tr.level:" << qinfo.trainingLevel;
     for (CharacterSkill &sk : m_skills) {
         if (sk.skillId() == skill_id) {
-
-            qCDebug(logCharacter) << "Found corresponding skill:" << sk;
-
             sk.setQueueInfo(qinfo);
-
-            // check if this skill is currently in training,
-            // e.g. if it is first in queue
-            if (qinfo.queuePosition == 0) {
-                // we found currently training skill. update
-                qCDebug(logCharacter) << " found currently training skill:" << sk;
-                m_currentTrainingSkill = sk;
-            }
-
             return;
         }
     }
-
-    qCWarning(logCharacter) << "We do not have this skill!";
+    qCWarning(logCharacter) << "We do not have this skill! id:" << skill_id;
 }
 
 

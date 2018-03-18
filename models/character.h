@@ -73,9 +73,10 @@ class Character: public QObject
     Q_PROPERTY(bool       isAlphaClone             READ isAlphaClone             NOTIFY isAlphaCloneChanged)
     Q_PROPERTY(QObject*   skillGroupsModel         READ skillGroupsModel         NOTIFY skillsChanged)
     Q_PROPERTY(const QObject* currentTrainingSkill READ currentTrainingSkill     NOTIFY skillsChanged)
-    Q_PROPERTY(QDateTime  currentSkillTimeLeft     READ currentSkillTimeLeft     NOTIFY skillsChanged)
+    Q_PROPERTY(qint64     currentSkillSecondsLeft  READ currentSkillSecondsLeft  NOTIFY skillsChanged)
     Q_PROPERTY(QDateTime  currentSkillFinishDate   READ currentSkillFinishDate   NOTIFY skillsChanged)
     Q_PROPERTY(QDateTime  skillQueueFinishDate     READ skillQueueFinishDate     NOTIFY skillsChanged)
+    Q_PROPERTY(bool       isSkillQueueEmpty        READ isSkillQueueEmpty        NOTIFY skillsChanged)
 
 public:
     Character(QObject *parent = nullptr);
@@ -205,9 +206,10 @@ public:
     QVector<CharacterSkill> skills() const;
     QObject *skillGroupsModel();
     const QObject  *currentTrainingSkill() const;
-    QDateTime currentSkillTimeLeft() const;
+    qint64 currentSkillSecondsLeft() const;
     QDateTime currentSkillFinishDate() const;
     QDateTime skillQueueFinishDate() const;
+    bool isSkillQueueEmpty() const;
     // skills and related - setters
     void setAttributeCharisma(int a);
     void setAttributeIntelligence(int a);
@@ -339,6 +341,7 @@ protected:
     QVector<CharacterSkill> m_skills;
     CharacterSkillGroupsModel m_skillGroupsModel;
     CharacterSkill m_currentTrainingSkill;
+    QDateTime m_skillQueueFinishDate;
 
     // auth info
     EveOAuthTokens m_tokens;
