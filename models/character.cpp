@@ -583,8 +583,8 @@ void Character::setSkills(const QVector<CharacterSkill> &vskills)
             const CharacterSkill &lastSkill = m_skills.at(lastSkillIndex);
             m_skillQueueFinishDate = lastSkill.queueInfo().finishDate;
 
-            qCDebug(logCharacter) << "    First skill:" << firstSkill;
-            qCDebug(logCharacter) << "    Last skill:" << lastSkill;
+            // qCDebug(logCharacter) << "    First skill:" << firstSkill;
+            // qCDebug(logCharacter) << "    Last skill:" << lastSkill;
             // ^^ looks correct
         }
 
