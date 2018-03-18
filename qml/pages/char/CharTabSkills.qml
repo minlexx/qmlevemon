@@ -6,7 +6,7 @@ import "../../"
 import "../../custom_controls"
 
 Rectangle {
-    id: rcTabSkills
+    id: container
     border { width: 1; color: AppStyle.mainColor }
     color: AppStyle.bgColor
     width: subInfoSwipeView.width

@@ -15,6 +15,10 @@
         <file>qml/pages/AddCharacter.qml</file>
         <file>qml/pages/char/CharMain.qml</file>
         <file>qml/pages/char/CharTabSkills.qml</file>
+        <file>qml/pages/char/CharTabSkillsQueue.qml</file>
+        <file>qml/pages/char/CharTabClones.qml</file>
+        <file>qml/pages/char/CharTabAssets.qml</file>
+        <file>qml/pages/char/CharTabWallet.qml</file>
         <file>qml/pages/Home.qml</file>
         <file>qml/pages/TestPage.qml</file>
     </qresource>

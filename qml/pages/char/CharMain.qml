@@ -331,39 +331,11 @@ Rectangle {
 
             CharTabSkills { }
 
-            Rectangle {
-                id: rcTabClones
-                border { width: 1; color: AppStyle.mainColor }
-                color: AppStyle.bgColor
-                width: subInfoSwipeView.width
-                height: subInfoSwipeView.height
-                clip: true
+            CharTabClones { }
 
-                Text { text: "Clones" }
-            }
+            CharTabWallet { }
 
-
-            Rectangle {
-                id: rcTabWallet
-                border { width: 1; color: AppStyle.mainColor }
-                color: AppStyle.bgColor
-                width: subInfoSwipeView.width
-                height: subInfoSwipeView.height
-                clip: true
-
-                Text { text: "Wallet" }
-            }
-
-            Rectangle {
-                id: rcTabAssets
-                border { width: 1; color: AppStyle.mainColor }
-                color: AppStyle.bgColor
-                width: subInfoSwipeView.width
-                height: subInfoSwipeView.height
-                clip: true
-
-                Text { text: "Assets" }
-            }
+            CharTabAssets { }
         }
     }
 
