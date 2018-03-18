@@ -47,13 +47,14 @@ QmlEvemonApp::QmlEvemonApp(int& argc, char **argv):
 
 QmlEvemonApp::~QmlEvemonApp()
 {
-    qCDebug(logApp) << "~QmlEvemonApp()";
+    qCDebug(logApp) << "~QmlEvemonApp(): destructor start";
     g_globalAppInstance = nullptr;  // indicate that shutdown is in progress, no app
     m_refresher->stopGracefully();
     // engine takes ownership of the image provider!
     // so we should not and cannot delete m_portraitCache.
     // It is automatically deleted in QQmlEngine destructor
     //delete m_portraitCache; // do not do this!
+    qCDebug(logApp) << "~QmlEvemonApp(): destructor end";
 }
 
 
@@ -162,7 +163,7 @@ quint64 QmlEvemonApp::curCharId() const
 void QmlEvemonApp::setCurrentCharacter(quint64 char_id)
 {
     if (m_curCharId == char_id) {
-        qCDebug(logApp) << " already current char:" << char_id;
+        // qCDebug(logApp) << " already current char:" << char_id;
         return;
     }
     // specia value - overview page, no character selected
@@ -175,10 +176,10 @@ void QmlEvemonApp::setCurrentCharacter(quint64 char_id)
     Character *ch = ModelManager::instance()->characterModel()->findCharacterById(char_id);
     if (ch == nullptr) {
         // something goes completely wrong
-        qCDebug(logApp) << "setCurrentCharacter(" << char_id << ") failed!";
+        qCWarning(logApp) << "setCurrentCharacter(" << char_id << ") failed!";
         return;
     }
-    qCDebug(logApp) << "setting current displayed character as:" << ch->toString();
+    // qCDebug(logApp) << "setting current displayed character as:" << ch->toString();
     m_curCharId = ch->characterId();
     Q_EMIT curCharIdChanged();
     m_engine.rootContext()->setContextProperty(QLatin1String("curChar"), ch);
