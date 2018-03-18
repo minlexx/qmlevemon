@@ -480,8 +480,8 @@ Rectangle {
                                         skillLevelTrained: modelData.trainedLevel
                                         skillSpCurrent: modelData.skillPointsInSkill
                                         skillSpTotal: modelData.skillPointsInLevel
-                                        isInProgress: false
-                                        isQueued: false
+                                        isInProgress: modelData.isInQueue ? (modelData.positionInQueue === 0) : false
+                                        isQueued: modelData.isInQueue
 
                                         width: skillsInGroupColumn.width
                                         useAltBackColor: (index % 2 == 1)
