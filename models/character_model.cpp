@@ -6,6 +6,8 @@
 #include "character_model.h"
 #include "qmlevemon_app.h"
 #include "db/db.h"
+#include "utils/str_utils.h"
+
 
 Q_LOGGING_CATEGORY(logCharacterModel, "evemon.character_model")
 
@@ -129,7 +131,8 @@ QVariant CharacterModel::data(const QModelIndex &index, int role) const
     case TrainingSkillTimeLeft: {
             ret = QLatin1String("-");
             if (!ch->isSkillQueueEmpty()) {
-                ret = ch->currentSkillSecondsLeft();
+                qint64 seconds_left = ch->currentSkillSecondsLeft();
+                ret = Utils::numberOfSecondsToTimeLeftString(seconds_left);
             }
         } break;
     case TrainingSkillEndDateTime: {
@@ -138,7 +141,14 @@ QVariant CharacterModel::data(const QModelIndex &index, int role) const
                 ret = ch->currentSkillFinishDate();
             }
         } break;
-    case QueueTimeLeft: ret = QLatin1String("-"); break;
+    case QueueTimeLeft: {
+            ret = QLatin1String("-");
+            if (!ch->isSkillQueueEmpty()) {
+                QDateTime finishDt = ch->skillQueueFinishDate();
+                qint64 seconds_left = QDateTime::currentDateTimeUtc().msecsTo(finishDt) / 1000;
+                ret = Utils::numberOfSecondsToTimeLeftString(seconds_left);
+            }
+        } break;
     case QueueFinishDateTime: {
             if (!ch->isSkillQueueEmpty()) {
                 ret = ch->skillQueueFinishDate();
