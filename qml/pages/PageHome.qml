@@ -112,25 +112,27 @@ Rectangle {
                     font.family: AppStyle.fontFamily
                 }
                 Text {
-                    text: model.trainingSkill
+                    text: model.isQueueEmpty ? qsTr("Training queue is empty!") : model.trainingSkill
                     color: AppStyle.textLightColor
                     font.pointSize: AppStyle.textSizeH3
                     font.family: AppStyle.fontFamily
                 }
                 Text {
-                    text: Qt.formatDateTime(model.trainingSkillTimeLeft)
+                    text: model.isQueueEmpty ? "" : Qt.formatDateTime(model.trainingSkillTimeLeft)
                     color: AppStyle.textLightColor
                     font.pointSize: AppStyle.textSizeH3
                     font.family: AppStyle.fontFamily
                 }
                 Text {
-                    text: Qt.formatDateTime(model.trainingSkillEndDateTime)
+                    text: model.isQueueEmpty ? "" : Qt.formatDateTime(model.trainingSkillEndDateTime)
                     color: AppStyle.textLightColor
                     font.pointSize: AppStyle.textSizeH3
                     font.family: AppStyle.fontFamily
                 }
                 Text {
-                    text: qsTr("Queue ends in: ") + Qt.formatDateTime(model.queueTimeLeft)
+                    text: model.isQueueEmpty ? "" :
+                              (qsTr("Queue ends in: ") + model.queueTimeLeft
+                               + "s (" + Qt.formatDateTime(model.queueFinishDateTime) + ")")
                     color: AppStyle.textLightColor
                     font.pointSize: AppStyle.textSizeH3
                     font.family: AppStyle.fontFamily
