@@ -92,6 +92,8 @@ Rectangle {
                 anchors.leftMargin: AppStyle.marginNormal
                 anchors.topMargin: AppStyle.marginNormal
                 spacing: 5
+
+                // character name
                 Text {
                     text: model.characterName
                     color: AppStyle.textDefaultColor
@@ -99,40 +101,53 @@ Rectangle {
                     font.family: AppStyle.fontFamily
                     font.bold: true
                 }
+
+                // ISK
                 Text {
                     text: model.iskAmountStr
                     color: AppStyle.textSecondaryColor
                     font.pointSize: AppStyle.textSizeH3
                     font.family: AppStyle.fontFamily
                 }
+
+                // Total SP
                 Text {
                     text: Number(model.totalSp).toLocaleString(Qt.locale(), 'f', 0) + " SP"
                     color: AppStyle.textSecondaryColor
                     font.pointSize: AppStyle.textSizeH3
                     font.family: AppStyle.fontFamily
                 }
+
+                // Training skill
                 Text {
                     text: model.isQueueEmpty ? qsTr("Training queue is empty!") : model.trainingSkill
                     color: AppStyle.textLightColor
                     font.pointSize: AppStyle.textSizeH3
                     font.family: AppStyle.fontFamily
                 }
+
+                // time left for current skill
                 Text {
-                    text: model.isQueueEmpty ? "" : Qt.formatDateTime(model.trainingSkillTimeLeft)
+                    text: model.isQueueEmpty ? "" : (qsTr("Left: ") + model.trainingSkillTimeLeft
+                                                     + " (" + Qt.formatDateTime(model.trainingSkillEndDateTime) + ")")
                     color: AppStyle.textLightColor
                     font.pointSize: AppStyle.textSizeH3
                     font.family: AppStyle.fontFamily
                 }
-                Text {
-                    text: model.isQueueEmpty ? "" : Qt.formatDateTime(model.trainingSkillEndDateTime)
-                    color: AppStyle.textLightColor
-                    font.pointSize: AppStyle.textSizeH3
-                    font.family: AppStyle.fontFamily
-                }
+
+                // current skill finish date
+                //Text {
+                //    text: model.isQueueEmpty ? "" : Qt.formatDateTime(model.trainingSkillEndDateTime)
+                //    color: AppStyle.textLightColor
+                //    font.pointSize: AppStyle.textSizeH3
+                //    font.family: AppStyle.fontFamily
+                //}
+
+                // whole queue time left and finish date
                 Text {
                     text: model.isQueueEmpty ? "" :
-                              (qsTr("Queue ends in: ") + model.queueTimeLeft
-                               + "s (" + Qt.formatDateTime(model.queueFinishDateTime) + ")")
+                              (qsTr("Queue ends: ") + model.queueTimeLeft
+                               + " (" + Qt.formatDateTime(model.queueFinishDateTime) + ")")
                     color: AppStyle.textLightColor
                     font.pointSize: AppStyle.textSizeH3
                     font.family: AppStyle.fontFamily
