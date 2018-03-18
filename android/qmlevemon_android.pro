@@ -23,6 +23,7 @@ SOURCES += \
     ../models/character_skill.cpp \
     ../models/character_skillgroups_model.cpp \
     ../models/character_skillqueue_info.cpp \
+    ../models/character_skillqueue_model.cpp \
     ../models/formulas.cpp \
     ../models/model_manager.cpp \
     ../models/skill_group.cpp \
@@ -70,6 +71,7 @@ HEADERS += \
     ../models/character_skill.h \
     ../models/character_skillgroups_model.h \
     ../models/character_skillqueue_info.h \
+    ../models/character_skillqueue_model.h \
     ../models/formulas.h \
     ../models/model_manager.h \
     ../models/skill_group.h \
