@@ -13,5 +13,5 @@ Rectangle {
     height: subInfoSwipeView.height
     clip: true
 
-    Text { text: "Wallet" }
+    Text { text: "Skills queue" }
 }

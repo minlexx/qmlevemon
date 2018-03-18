@@ -312,6 +312,7 @@ Rectangle {
                 margins: 2
             }
             TabButton { text: qsTr("Skills"); }
+            TabButton { text: qsTr("Skills queue"); }
             TabButton { text: qsTr("Clones"); }
             TabButton { text: qsTr("Wallet"); }
             TabButton { text: qsTr("Assets"); }
@@ -330,6 +331,8 @@ Rectangle {
             currentIndex: subInfoTabBar.currentIndex
 
             CharTabSkills { }
+
+            CharTabSkillsQueue { }
 
             CharTabClones { }
 
