@@ -18,6 +18,7 @@ public:
 public Q_SLOTS:
     // this is run in a background thread in an async Qt signal-slot connection
     void refresh();
+    void initialDelayedRefresh();
 
     bool isNetworkActive() const;
     int serverPlayersOnline() const;

@@ -77,6 +77,12 @@ void PeriodicalRefresherWorker::refresh()
     setNetworkActive(false);
 }
 
+void PeriodicalRefresherWorker::initialDelayedRefresh()
+{
+    // fire refresh, but delayed for 3 seconds
+    QTimer::singleShot(3000, this, &PeriodicalRefresherWorker::refresh);
+}
+
 
 bool PeriodicalRefresherWorker::isNetworkActive() const {
     int ret = m_active;
