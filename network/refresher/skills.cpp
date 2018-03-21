@@ -143,6 +143,10 @@ int PeriodicalRefresherWorker::refresh_skills(Character &ch) {
         if (QThread::currentThread()->isInterruptionRequested()) return 0;
         // qCDebug(logRefresher) << replyArr;
 
+        // this array comes ordered by queue position acsending,
+        // but "queue_position" in JSON sometimes does not start at 0
+        // we can count position ourselves
+        int real_qpos = 0;
         for (auto jqueueItem: qAsConst(replyArr)) {
             // [
             //   {
@@ -169,7 +173,10 @@ int PeriodicalRefresherWorker::refresh_skills(Character &ch) {
             qinfo.finishDate = QDateTime::fromString(itemObj.value(QLatin1String("finish_date")).toString(), Qt::ISODate);
 
             ch.setSkillQueueInfo(skill_id, qinfo);
+
+            ++real_qpos;
         }
+
         qCDebug(logRefresher) << Q_FUNC_INFO << "parsed skillqueue";
     }
 
