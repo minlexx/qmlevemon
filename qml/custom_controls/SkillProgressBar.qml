@@ -27,6 +27,7 @@ Rectangle {
     property color textQueuedColor: "#6595ea"
     property color backColor: AppStyle.bgColor
     property color backColorAlt: "#d3d3d3"
+    property color backColorTrainingNow: "#EEFFEE"
     property bool useAltBackColor: false
     property string fontFamily: AppStyle.fontFamily
     property int fontSize: AppStyle.textSizeH4
@@ -34,7 +35,7 @@ Rectangle {
     property color levelIndicatorColor: "black"
 
     // private part
-    color: useAltBackColor ? backColorAlt : backColor
+    color: isInProgress ? backColorTrainingNow : (useAltBackColor ? backColorAlt : backColor)
     implicitHeight: txtSkillName.height + txtSp.height + 3*AppStyle.marginSmall
     implicitWidth: txtSp.width + txtSpPerHour.width + txtTrainingTime.width + rcLevelIndicator.width + 4*AppStyle.marginBig + 5
     property int index: 0
@@ -56,66 +57,66 @@ Rectangle {
             id: rclv5
             width: lvlIndSmallRectSize
             height: lvlIndSmallRectSize
-            color: "black"
+            color: (isQueued && (skillLevelTrained == 4)) ? textQueuedColor : "black"
             anchors {
                 right: parent.right
                 rightMargin: lvlIndSmallSpacing
                 top: parent.top
                 topMargin: lvlIndSmallSpacing
             }
-            visible: skillLevelTrained >= 5
+            visible: (skillLevelTrained >= 5) || (isQueued && (skillLevelTrained == 4))
         }
         Rectangle {
             id: rclv4
             width: lvlIndSmallRectSize
             height: lvlIndSmallRectSize
-            color: "black"
+            color: (isQueued && (skillLevelTrained == 3)) ? textQueuedColor : "black"
             anchors {
                 right: rclv5.left
                 rightMargin: lvlIndSmallSpacing
                 top: parent.top
                 topMargin: lvlIndSmallSpacing
             }
-            visible: skillLevelTrained >= 4
+            visible: (skillLevelTrained >= 4) || (isQueued && (skillLevelTrained == 3))
         }
         Rectangle {
             id: rclv3
             width: lvlIndSmallRectSize
             height: lvlIndSmallRectSize
-            color: "black"
+            color: (isQueued && (skillLevelTrained == 2)) ? textQueuedColor : "black"
             anchors {
                 right: rclv4.left
                 rightMargin: lvlIndSmallSpacing
                 top: parent.top
                 topMargin: lvlIndSmallSpacing
             }
-            visible: skillLevelTrained >= 3
+            visible: (skillLevelTrained >= 3) || (isQueued && (skillLevelTrained == 2))
         }
         Rectangle {
             id: rclv2
             width: lvlIndSmallRectSize
             height: lvlIndSmallRectSize
-            color: "black"
+            color: (isQueued && (skillLevelTrained == 1)) ? textQueuedColor : "black"
             anchors {
                 right: rclv3.left
                 rightMargin: lvlIndSmallSpacing
                 top: parent.top
                 topMargin: lvlIndSmallSpacing
             }
-            visible: skillLevelTrained >= 2
+            visible: (skillLevelTrained >= 2) || (isQueued && (skillLevelTrained == 1))
         }
         Rectangle {
             id: rclv1
             width: lvlIndSmallRectSize
             height: lvlIndSmallRectSize
-            color: "black"
+            color: (isQueued && (skillLevelTrained == 0)) ? textQueuedColor : "black"
             anchors {
                 right: rclv2.left
                 rightMargin: lvlIndSmallSpacing
                 top: parent.top
                 topMargin: lvlIndSmallSpacing
             }
-            visible: skillLevelTrained >= 1
+            visible: (skillLevelTrained >= 1) || (isQueued && (skillLevelTrained == 0))
         }
     }
 
