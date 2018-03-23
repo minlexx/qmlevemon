@@ -172,6 +172,12 @@ int PeriodicalRefresherWorker::refresh_skills(Character &ch) {
             qinfo.startDate = QDateTime::fromString(itemObj.value(QLatin1String("start_date")).toString(), Qt::ISODate);
             qinfo.finishDate = QDateTime::fromString(itemObj.value(QLatin1String("finish_date")).toString(), Qt::ISODate);
 
+            // force skill queue items to be numbered from zero
+            if (qinfo.queuePosition != real_qpos) {
+                // qCDebug(logRefresher) << "    skillqueue: fixing qpos from" << qinfo.queuePosition << " to " << real_qpos;
+                qinfo.queuePosition = real_qpos;
+            }
+
             ch.setSkillQueueInfo(skill_id, qinfo);
 
             ++real_qpos;
