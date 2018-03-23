@@ -61,6 +61,11 @@ Character& Character::operator=(const Character& other)
     // location info
     setCurrentSolarSystemId(other.m_currentSolarSystemId);
     setCurrentSolarSystemName(other.m_currentSolarSystemName);
+    setCurrentSolarSystemSecurity(other.m_currentSolarSystemSecurity);
+    setCurrentConstellationId(other.m_currentConstellationId);
+    setCurrentConstellationName(other.m_currentConstellationName);
+    setCurrentRegionId(other.m_currentRegionId);
+    setCurrentRegionName(other.m_currentRegionName);
     setCurrentStationId(other.m_currentStationId);
     setCurrentStructureId(other.m_currentStructureId);
     setCurrentStructureName(other.m_currentStructureName);
@@ -118,6 +123,11 @@ Character& Character::operator=(Character&& other)
     // location info
     setCurrentSolarSystemId(std::move(other.m_currentSolarSystemId));
     setCurrentSolarSystemName(std::move(other.m_currentSolarSystemName));
+    setCurrentSolarSystemSecurity(std::move(other.m_currentSolarSystemSecurity));
+    setCurrentConstellationId(std::move(other.m_currentConstellationId));
+    setCurrentConstellationName(std::move(other.m_currentConstellationName));
+    setCurrentRegionId(std::move(other.m_currentRegionId));
+    setCurrentRegionName(std::move(other.m_currentRegionName));
     setCurrentStationId(std::move(other.m_currentStationId));
     setCurrentStructureId(std::move(other.m_currentStructureId));
     setCurrentStructureName(std::move(other.m_currentStructureName));
