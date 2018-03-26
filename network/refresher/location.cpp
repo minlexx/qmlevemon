@@ -29,9 +29,13 @@ int PeriodicalRefresherWorker::refresh_location(Character &ch) {
      // get current location
 
     if (!m_api->get_character_location(reply, ch.characterId(), ch.getAuthTokens().access_token)) {
+        qCWarning(logRefresher) << "Get character location failed!";
         return 0; // req failed
     }
     if (QThread::currentThread()->isInterruptionRequested()) return 0;
+
+    // qCDebug(logRefresher) << reply;
+    // ^^ QJsonObject({"solar_system_id":31001668,"structure_id":1021551599501})
 
     quint64 ss_id = 0, station_id = 0, structure_id = 0, prev_station_id = 0, prev_structure_id = 0;
     ss_id = reply.value(QLatin1String("solar_system_id")).toVariant().toULongLong();
@@ -53,6 +57,8 @@ int PeriodicalRefresherWorker::refresh_location(Character &ch) {
             if (QThread::currentThread()->isInterruptionRequested()) return 0;
             QString structure_name = reply.value(QLatin1String("name")).toString();
             ch.setCurrentStructureName(structure_name);
+        } else {
+            qCWarning(logRefresher) << "Resolve structure name failed!";
         }
     } else if ((station_id > 0) && (prev_station_id != station_id)) {
         // resolve station name
@@ -60,6 +66,8 @@ int PeriodicalRefresherWorker::refresh_location(Character &ch) {
             if (QThread::currentThread()->isInterruptionRequested()) return 0;
             QString station_name = reply.value(QLatin1String("name")).toString();
             ch.setCurrentStructureName(station_name);
+        } else {
+            qCWarning(logRefresher) << "Resolve station name failed!";
         }
     }
     if (QThread::currentThread()->isInterruptionRequested()) return 0;
@@ -98,6 +106,11 @@ int PeriodicalRefresherWorker::refresh_location(Character &ch) {
         }
     }
     if (QThread::currentThread()->isInterruptionRequested()) return 0;
+
+    // qCDebug(logRefresher) << "Read character location ok:";
+    // qCDebug(logRefresher) << "     solarsystem:" << ch.currentSolarSystemId() << ch.currentSolarSystemName() << ch.currentSolarSystemSecurity();
+    // qCDebug(logRefresher) << "     constellation:" << ch.currentConstellationId() << ch.currentConstellationName();
+    // qCDebug(logRefresher) << "     region:" << ch.currentRegionId() << ch.currentRegionName();
 
     // get current ship
     if (!m_api->get_character_ship(reply, ch.characterId(), ch.getAuthTokens().access_token)) {

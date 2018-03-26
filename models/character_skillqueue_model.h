@@ -29,7 +29,7 @@ class CharacterSkillQueueModel: public QAbstractListModel
         // properties from skill
         TrainedLevel,
         ActiveLevel,
-        TtrainingLevel,
+        TrainingLevel,
         TrainingLevelRoman,
         SkillPointsInSkill,
         SkillPointsInLevel,
@@ -51,7 +51,7 @@ public:  // reimplmented interface
 
 public:
     // other funcs
-    void addQueuedSkill(const CharacterSkill &skill);
+    void setSkillQueue(const QVector<CharacterSkill> &queue);
 
 private:
     QHash<int, QByteArray> m_roles;
