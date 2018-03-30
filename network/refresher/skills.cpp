@@ -7,6 +7,7 @@
 #include "../periodical_refresher.h"
 #include "eve_api/eve_api.h"
 #include "models/character.h"
+#include "models/character_skillqueue.h"
 #include "models/skill_tree_model.h"
 #include "models/model_manager.h"
 
@@ -164,6 +165,7 @@ int PeriodicalRefresherWorker::refresh_skills(Character &ch) {
             quint64 skill_id = itemObj.value(QLatin1String("skill_id")).toVariant().toULongLong();
 
             CharacterSkillQueueItem qinfo;
+            qinfo.skillId = skill_id;
             qinfo.trainingLevel = itemObj.value(QLatin1String("finished_level")).toInt();
             qinfo.queuePosition = itemObj.value(QLatin1String("queue_position")).toInt();
             qinfo.levelStartSp = itemObj.value(QLatin1String("level_start_sp")).toVariant().toULongLong();
@@ -177,8 +179,6 @@ int PeriodicalRefresherWorker::refresh_skills(Character &ch) {
                 // qCDebug(logRefresher) << "    skillqueue: fixing qpos from" << qinfo.queuePosition << " to " << real_qpos;
                 qinfo.queuePosition = real_qpos;
             }
-
-            ch.setSkillQueueInfo(skill_id, qinfo);
 
             ++real_qpos;
         }
