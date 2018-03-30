@@ -50,6 +50,10 @@ class CharacterSkillQueue
 
 public:
     CharacterSkillQueue();
+    CharacterSkillQueue(const CharacterSkillQueue &other) = default;
+    CharacterSkillQueue(CharacterSkillQueue &&other) = default;
+    CharacterSkillQueue &operator=(const CharacterSkillQueue &other) = default;
+    CharacterSkillQueue &operator=(CharacterSkillQueue &&other) = default;
 
 public:
     void clear();
