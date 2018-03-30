@@ -9,9 +9,10 @@
 #include <QDebug>
 
 #include "character_skill.h"
+#include "character_skillqueue.h"
+#include "character_skillgroups_model.h"
 #include "eve_api/eve_api_tokens.h"
 #include "update_timestamps.h"
-#include "character_skillgroups_model.h"
 
 
 class QDataStream;
@@ -211,6 +212,8 @@ public:
     //qint64 currentSkillSecondsLeft() const;
     //QDateTime currentSkillFinishDate() const;
     //QDateTime skillQueueFinishDate() const;
+    CharacterSkillQueue& skillQueue();
+    const CharacterSkillQueue& skillQueue() const;
     bool isSkillQueueEmpty() const;
 
     // skills and related - setters
@@ -225,6 +228,7 @@ public:
     void setTotalSp(quint64 sp);
     void setIsAlphaClone(bool alpha);
     void setSkills(const QVector<CharacterSkill> &vskills);
+    void setSkillQueue(const CharacterSkillQueue &queue);
 
     // auth info
     EveOAuthTokens getAuthTokens() const;
@@ -285,6 +289,7 @@ Q_SIGNALS:
     void isAlphaCloneChanged();
     // current training skill and queue info
     void skillsChanged();
+    void skillQueueChanged();
 
 protected:
     // general info
@@ -342,6 +347,8 @@ protected:
     bool m_isAlphaClone = false;
     QVector<CharacterSkill> m_skills;
     CharacterSkillGroupsModel m_skillGroupsModel;
+    // skill queue
+    CharacterSkillQueue m_skillQueue;
     QDateTime m_skillQueueFinishDate;
 
     // auth info

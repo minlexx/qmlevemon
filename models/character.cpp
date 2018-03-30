@@ -84,9 +84,7 @@ Character& Character::operator=(const Character& other)
     setTotalSp(other.m_totalSp);
     setIsAlphaClone(other.m_isAlphaClone);
     setSkills(other.m_skills);
-    // m_skillGroupsModel is calculated in setSkills()
-    // m_currentTrainingSkill is calculated in setSkills()
-    // (no Q_PROPERTY for these, so no need to to use setters and emit signals)
+    setSkillQueue(other.m_skillQueue);
     // auth info
     m_tokens = other.m_tokens;
     // last update date-times
@@ -146,9 +144,7 @@ Character& Character::operator=(Character&& other)
     setTotalSp(std::move(other.m_totalSp));
     setIsAlphaClone(std::move(other.m_isAlphaClone));
     setSkills(std::move(other.m_skills));
-    // m_skillGroupsModel is calculated in setSkills()
-    // m_currentTrainingSkill is calculated in setSkills()
-    // (no Q_PROPERTY for these, so no need to to use setters and emit signals)
+    setSkillQueue(std::move(other.m_skillQueue));
     // auth info
     m_tokens = std::move(other.m_tokens);
     // last update date-times
@@ -451,6 +447,9 @@ QObject *Character::skillGroupsModel()
     return static_cast<QObject *>(&m_skillGroupsModel);
 }
 
+CharacterSkillQueue &Character::skillQueue() { return m_skillQueue; }
+const CharacterSkillQueue &Character::skillQueue() const { return m_skillQueue; }
+
 //const QObject *Character::currentTrainingSkill() const
 //{
 //    return static_cast<const QObject *>(&m_currentTrainingSkill);
@@ -604,6 +603,12 @@ void Character::setSkills(const QVector<CharacterSkill> &vskills)
 
         Q_EMIT skillsChanged();
     }
+}
+
+void Character::setSkillQueue(const CharacterSkillQueue &queue)
+{
+    m_skillQueue = queue;
+    Q_EMIT skillQueueChanged();
 }
 
 // auth info
