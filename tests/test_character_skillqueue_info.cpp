@@ -3,7 +3,7 @@
 #include <QDateTime>
 #include <QtTest>
 
-#include "models/character_skillqueue_info.h"
+#include "models/character_skillqueue.h"
 
 
 class TestCharacterSkillQueueInfo: public QObject
@@ -12,12 +12,13 @@ class TestCharacterSkillQueueInfo: public QObject
 
 private:
     QDateTime dtCur;
-    EM::CharacterSkillQueueInfo qi1;
+    EM::CharacterSkillQueueItem qi1;
 
 private Q_SLOTS:
 
     void initTestCase() {
         dtCur = QDateTime::currentDateTime();
+        qi1.skillId = 123;
         qi1.levelStartSp = 10;
         qi1.levelEndSp = 100;
         qi1.startDate = dtCur;
@@ -26,17 +27,19 @@ private Q_SLOTS:
     void cleanupTestCase() { }
 
     void test_copyConstruct() {
-        EM::CharacterSkillQueueInfo qi2(qi1);
+        EM::CharacterSkillQueueItem qi2(qi1);
 
+        QVERIFY(qi2.skillId == qi1.skillId);
         QVERIFY(qi2.levelStartSp == qi1.levelStartSp);
         QVERIFY(qi2.levelEndSp == qi1.levelEndSp);
         QVERIFY(qi2.startDate == qi1.startDate);
     }
 
     void test_assign() {
-        EM::CharacterSkillQueueInfo qi2;
+        EM::CharacterSkillQueueItem qi2;
         qi2 = qi1;
 
+        QVERIFY(qi2.skillId == qi1.skillId);
         QVERIFY(qi2.levelStartSp == qi1.levelStartSp);
         QVERIFY(qi2.levelEndSp == qi1.levelEndSp);
         QVERIFY(qi2.startDate == qi1.startDate);
