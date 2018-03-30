@@ -9,6 +9,11 @@ CharacterSkillQueueItem::CharacterSkillQueueItem()
     //
 }
 
+CharacterSkillQueue::CharacterSkillQueue()
+{
+    //
+}
+
 void CharacterSkillQueue::clear()
 {
     m_queue.clear();
