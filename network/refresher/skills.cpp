@@ -144,6 +144,8 @@ int PeriodicalRefresherWorker::refresh_skills(Character &ch) {
         if (QThread::currentThread()->isInterruptionRequested()) return 0;
         // qCDebug(logRefresher) << replyArr;
 
+        ch.clearSkillQueue();
+
         // this array comes ordered by queue position acsending,
         // but "queue_position" in JSON sometimes does not start at 0
         // we can count position ourselves
@@ -162,26 +164,29 @@ int PeriodicalRefresherWorker::refresh_skills(Character &ch) {
             //   },
 
             const QJsonObject &itemObj = jqueueItem.toObject();
-            quint64 skill_id = itemObj.value(QLatin1String("skill_id")).toVariant().toULongLong();
 
-            CharacterSkillQueueItem qinfo;
-            qinfo.skillId = skill_id;
-            qinfo.trainingLevel = itemObj.value(QLatin1String("finished_level")).toInt();
-            qinfo.queuePosition = itemObj.value(QLatin1String("queue_position")).toInt();
-            qinfo.levelStartSp = itemObj.value(QLatin1String("level_start_sp")).toVariant().toULongLong();
-            qinfo.levelEndSp = itemObj.value(QLatin1String("level_end_sp")).toVariant().toULongLong();
-            qinfo.trainingStartSp = itemObj.value(QLatin1String("training_start_sp")).toVariant().toULongLong();
-            qinfo.startDate = QDateTime::fromString(itemObj.value(QLatin1String("start_date")).toString(), Qt::ISODate);
-            qinfo.finishDate = QDateTime::fromString(itemObj.value(QLatin1String("finish_date")).toString(), Qt::ISODate);
+            CharacterSkillQueueItem queueItem;
+            queueItem.skillId = itemObj.value(QLatin1String("skill_id")).toVariant().toULongLong();
+            queueItem.trainingLevel = itemObj.value(QLatin1String("finished_level")).toInt();
+            queueItem.queuePosition = itemObj.value(QLatin1String("queue_position")).toInt();
+            queueItem.levelStartSp = itemObj.value(QLatin1String("level_start_sp")).toVariant().toULongLong();
+            queueItem.levelEndSp = itemObj.value(QLatin1String("level_end_sp")).toVariant().toULongLong();
+            queueItem.trainingStartSp = itemObj.value(QLatin1String("training_start_sp")).toVariant().toULongLong();
+            queueItem.startDate = QDateTime::fromString(itemObj.value(QLatin1String("start_date")).toString(), Qt::ISODate);
+            queueItem.finishDate = QDateTime::fromString(itemObj.value(QLatin1String("finish_date")).toString(), Qt::ISODate);
 
             // force skill queue items to be numbered from zero
-            if (qinfo.queuePosition != real_qpos) {
+            if (queueItem.queuePosition != real_qpos) {
                 // qCDebug(logRefresher) << "    skillqueue: fixing qpos from" << qinfo.queuePosition << " to " << real_qpos;
-                qinfo.queuePosition = real_qpos;
+                queueItem.queuePosition = real_qpos;
             }
+
+            ch.skillQueue().addItem(std::move(queueItem));
 
             ++real_qpos;
         }
+
+        ch.calcSkillQueue();
 
         // qCDebug(logRefresher) << Q_FUNC_INFO << "parsed skillqueue";
     }

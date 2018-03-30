@@ -608,7 +608,7 @@ void Character::setSkills(const QVector<CharacterSkill> &vskills)
 void Character::setSkillQueue(const CharacterSkillQueue &queue)
 {
     m_skillQueue = queue;
-    Q_EMIT skillQueueChanged();
+    calcSkillQueue();
 }
 
 // auth info
@@ -650,6 +650,20 @@ QList<QObject *> Character::getSkillsForGroupId(quint64 groupId) const
         return sa->skillName() < sb->skillName();
     });
     return ret;
+}
+
+void Character::clearSkillQueue()
+{
+    m_skillQueue.clear();
+}
+
+void Character::calcSkillQueue()
+{
+    m_skillQueue.calc(); // TODO
+    Q_EMIT skillsChanged();
+    Q_EMIT skillQueueChanged(); // NOTE: this needs to be kept here probably,
+    // because this is called from setSkillQueue() and it needs to
+    // emit a signal
 }
 
 

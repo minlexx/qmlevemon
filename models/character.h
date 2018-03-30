@@ -249,6 +249,8 @@ public Q_SLOTS:
     // ^^ add more, if needed
 
     QList<QObject *> getSkillsForGroupId(quint64 groupId) const;
+    void clearSkillQueue();
+    void calcSkillQueue();
 
 Q_SIGNALS:
     // general info
