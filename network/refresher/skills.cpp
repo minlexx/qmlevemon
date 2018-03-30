@@ -130,7 +130,7 @@ int PeriodicalRefresherWorker::refresh_skills(Character &ch) {
             if (QThread::currentThread()->isInterruptionRequested()) return 0;
         }
 
-        qCDebug(logRefresher) << Q_FUNC_INFO << "parsed skills";
+        // qCDebug(logRefresher) << Q_FUNC_INFO << "parsed skills";
 
         // forcefully update character's alpha clone status
         ch.setIsAlphaClone(isAlphaClone);
@@ -183,7 +183,7 @@ int PeriodicalRefresherWorker::refresh_skills(Character &ch) {
             ++real_qpos;
         }
 
-        qCDebug(logRefresher) << Q_FUNC_INFO << "parsed skillqueue";
+        // qCDebug(logRefresher) << Q_FUNC_INFO << "parsed skillqueue";
     }
 
     ch.setUpdateTimestamp(UpdateTimestamps::UTST::SKILLS);
