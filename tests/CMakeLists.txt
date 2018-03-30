@@ -61,7 +61,7 @@ target_link_libraries(test_qtwebserver
 
 set(test_character_skillqueue_info_srcs
     "test_character_skillqueue_info.cpp"
-    "../models/character_skillqueue_info.cpp")
+    "../models/character_skillqueue.cpp")
 add_executable(test_character_skillqueue_info ${test_character_skillqueue_info_srcs})
 target_include_directories(test_character_skillqueue_info PRIVATE "../")
 target_link_libraries(test_character_skillqueue_info

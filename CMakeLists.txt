@@ -36,7 +36,7 @@ set(qmlevemon_srcs
     "models/character_model.cpp"
     "models/character_skill.cpp"
     "models/character_skillgroups_model.cpp"
-    "models/character_skillqueue_info.cpp"
+    "models/character_skillqueue.cpp"
     "models/character_skillqueue_model.cpp"
     "models/formulas.cpp"
     "models/model_manager.cpp"
