@@ -120,39 +120,39 @@ QVariant CharacterModel::data(const QModelIndex &index, int role) const
     case TotalSP: ret = ch->totalSp(); break;
     case TrainingSkill: {
             ret = QLatin1String("-");
-            if (!ch->isSkillQueueEmpty()) {
-                const CharacterSkill *sk = qobject_cast<const CharacterSkill *>(ch->currentTrainingSkill());
-                if (sk) {
-                    // "Large Pulse Laser Specialiation V"
-                    ret = QString(QLatin1String("%1 %2")).arg(sk->skillName()).arg(sk->trainingLevelRoman());
-                }
-            }
+//            if (!ch->isSkillQueueEmpty()) {
+//                const CharacterSkill *sk = qobject_cast<const CharacterSkill *>(ch->currentTrainingSkill());
+//                if (sk) {
+//                    // "Large Pulse Laser Specialiation V"
+//                    ret = QString(QLatin1String("%1 %2")).arg(sk->skillName()).arg(sk->trainingLevelRoman());
+//                }
+//            }
         } break;
     case TrainingSkillTimeLeft: {
             ret = QLatin1String("-");
-            if (!ch->isSkillQueueEmpty()) {
-                qint64 seconds_left = ch->currentSkillSecondsLeft();
-                ret = Utils::numberOfSecondsToTimeLeftString(seconds_left);
-            }
+//            if (!ch->isSkillQueueEmpty()) {
+//                qint64 seconds_left = ch->currentSkillSecondsLeft();
+//                ret = Utils::numberOfSecondsToTimeLeftString(seconds_left);
+//            }
         } break;
     case TrainingSkillEndDateTime: {
             ret = QLatin1String("-");
-            if (!ch->isSkillQueueEmpty()) {
-                ret = ch->currentSkillFinishDate();
-            }
+//            if (!ch->isSkillQueueEmpty()) {
+//                ret = ch->currentSkillFinishDate();
+//            }
         } break;
     case QueueTimeLeft: {
             ret = QLatin1String("-");
-            if (!ch->isSkillQueueEmpty()) {
-                QDateTime finishDt = ch->skillQueueFinishDate();
-                qint64 seconds_left = QDateTime::currentDateTimeUtc().msecsTo(finishDt) / 1000;
-                ret = Utils::numberOfSecondsToTimeLeftString(seconds_left);
-            }
+//            if (!ch->isSkillQueueEmpty()) {
+//                QDateTime finishDt = ch->skillQueueFinishDate();
+//                qint64 seconds_left = QDateTime::currentDateTimeUtc().msecsTo(finishDt) / 1000;
+//                ret = Utils::numberOfSecondsToTimeLeftString(seconds_left);
+//            }
         } break;
     case QueueFinishDateTime: {
-            if (!ch->isSkillQueueEmpty()) {
-                ret = ch->skillQueueFinishDate();
-            }
+//            if (!ch->isSkillQueueEmpty()) {
+//                ret = ch->skillQueueFinishDate();
+//            }
         } break;
     case IsQueueEmpty: ret = ch->isSkillQueueEmpty(); break;
     }

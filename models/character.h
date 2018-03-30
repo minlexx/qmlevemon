@@ -72,11 +72,12 @@ class Character: public QObject
     Q_PROPERTY(quint64    totalSp                  READ totalSp                  NOTIFY totalSpChanged)
     Q_PROPERTY(bool       isAlphaClone             READ isAlphaClone             NOTIFY isAlphaCloneChanged)
     Q_PROPERTY(QObject*   skillGroupsModel         READ skillGroupsModel         NOTIFY skillsChanged)
-    Q_PROPERTY(const QObject* currentTrainingSkill READ currentTrainingSkill     NOTIFY skillsChanged)
-    Q_PROPERTY(qint64     currentSkillSecondsLeft  READ currentSkillSecondsLeft  NOTIFY skillsChanged)
-    Q_PROPERTY(QDateTime  currentSkillFinishDate   READ currentSkillFinishDate   NOTIFY skillsChanged)
-    Q_PROPERTY(QDateTime  skillQueueFinishDate     READ skillQueueFinishDate     NOTIFY skillsChanged)
-    Q_PROPERTY(bool       isSkillQueueEmpty        READ isSkillQueueEmpty        NOTIFY skillsChanged)
+    // current training skill and queue info
+    //Q_PROPERTY(const QObject* currentTrainingSkill READ currentTrainingSkill     NOTIFY skillsChanged)
+    //Q_PROPERTY(qint64     currentSkillSecondsLeft  READ currentSkillSecondsLeft  NOTIFY skillsChanged)
+    //Q_PROPERTY(QDateTime  currentSkillFinishDate   READ currentSkillFinishDate   NOTIFY skillsChanged)
+    //Q_PROPERTY(QDateTime  skillQueueFinishDate     READ skillQueueFinishDate     NOTIFY skillsChanged)
+    //Q_PROPERTY(bool       isSkillQueueEmpty        READ isSkillQueueEmpty        NOTIFY skillsChanged)
 
 public:
     Character(QObject *parent = nullptr);
@@ -205,11 +206,13 @@ public:
     bool isAlphaClone() const;
     QVector<CharacterSkill> skills() const;
     QObject *skillGroupsModel();
-    const QObject  *currentTrainingSkill() const;
-    qint64 currentSkillSecondsLeft() const;
-    QDateTime currentSkillFinishDate() const;
-    QDateTime skillQueueFinishDate() const;
+    // current training skill and queue info
+    //const QObject  *currentTrainingSkill() const;
+    //qint64 currentSkillSecondsLeft() const;
+    //QDateTime currentSkillFinishDate() const;
+    //QDateTime skillQueueFinishDate() const;
     bool isSkillQueueEmpty() const;
+
     // skills and related - setters
     void setAttributeCharisma(int a);
     void setAttributeIntelligence(int a);
@@ -242,8 +245,6 @@ public Q_SLOTS:
     // ^^ add more, if needed
 
     QList<QObject *> getSkillsForGroupId(quint64 groupId) const;
-
-    void setSkillQueueInfo(quint64 skill_id, const CharacterSkillQueueItem &qinfo);
 
 Q_SIGNALS:
     // general info
@@ -282,6 +283,7 @@ Q_SIGNALS:
     void remapCooldownDateChanged();
     void totalSpChanged();
     void isAlphaCloneChanged();
+    // current training skill and queue info
     void skillsChanged();
 
 protected:
@@ -340,7 +342,6 @@ protected:
     bool m_isAlphaClone = false;
     QVector<CharacterSkill> m_skills;
     CharacterSkillGroupsModel m_skillGroupsModel;
-    CharacterSkill m_currentTrainingSkill;
     QDateTime m_skillQueueFinishDate;
 
     // auth info

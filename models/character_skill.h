@@ -5,7 +5,6 @@
 #include <QDateTime>
 #include <QDebug>
 #include "skill_template.h"
-#include "character_skillqueue_info.h"
 
 class QDataStream;
 
@@ -18,16 +17,16 @@ class CharacterSkill: public SkillTemplate
     Q_OBJECT
     Q_PROPERTY(int      trainedLevel       READ trainedLevel       WRITE setTrainedLevel       NOTIFY trainedLevelChanged)
     Q_PROPERTY(int      activeLevel        READ activeLevel        WRITE setActiveLevel        NOTIFY activeLevelChanged)
-    Q_PROPERTY(int      trainingLevel      READ trainingLevel      NOTIFY queueChanged)
+    //Q_PROPERTY(int      trainingLevel      READ trainingLevel      NOTIFY queueChanged)
     Q_PROPERTY(QString  trainingLevelRoman READ trainingLevelRoman NOTIFY activeLevelChanged)
     Q_PROPERTY(quint64  skillPointsInSkill READ skillPointsInSkill WRITE setSkillPointsInSkill NOTIFY skillPointsInSkillChanged)
     Q_PROPERTY(quint64  skillPointsInLevel READ skillPointsInLevel NOTIFY trainedLevelChanged)
     // properties from skill queue
-    Q_PROPERTY(bool       isInQueue        READ isInQueue          NOTIFY queueChanged)
-    Q_PROPERTY(int        positionInQueue  READ positionInQueue    NOTIFY queueChanged)
-    Q_PROPERTY(double     trainPercent     READ trainPercent       NOTIFY queueChanged)
-    Q_PROPERTY(QDateTime  trainStartDate   READ trainStartDate     NOTIFY queueChanged)
-    Q_PROPERTY(QDateTime  trainFinishDate  READ trainFinishDate    NOTIFY queueChanged)
+    //Q_PROPERTY(bool       isInQueue        READ isInQueue          NOTIFY queueChanged)
+    //Q_PROPERTY(int        positionInQueue  READ positionInQueue    NOTIFY queueChanged)
+    //Q_PROPERTY(double     trainPercent     READ trainPercent       NOTIFY queueChanged)
+    //Q_PROPERTY(QDateTime  trainStartDate   READ trainStartDate     NOTIFY queueChanged)
+    //Q_PROPERTY(QDateTime  trainFinishDate  READ trainFinishDate    NOTIFY queueChanged)
 
 public:
     CharacterSkill();
@@ -51,28 +50,24 @@ public Q_SLOTS:
 
     quint64 skillPointsInLevel() const;
 
-    CharacterSkillQueueItem queueInfo() const;
-    void setQueueInfo(const CharacterSkillQueueItem& qinfo);
-
-    bool isInQueue() const;
-    int positionInQueue() const;
-    double trainPercent() const;
-    QDateTime trainStartDate() const;
-    QDateTime trainFinishDate() const;
-    int trainingLevel() const;
+    //bool isInQueue() const;
+    //int positionInQueue() const;
+    //double trainPercent() const;
+    //QDateTime trainStartDate() const;
+    //QDateTime trainFinishDate() const;
+    //int trainingLevel() const;
 
 Q_SIGNALS:
     void trainedLevelChanged();
     void activeLevelChanged();
     void skillPointsInSkillChanged();
-    void queueChanged();
+    //void queueChanged();
 
 protected:
     int m_trainedLevel = 0;
     int m_activeLevel = 0;
     quint64 m_skillPointsInSkill = 0;
     quint64 m_skillPointsInLevel = 0;
-    CharacterSkillQueueItem m_qinfo;
 };
 
 

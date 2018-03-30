@@ -451,32 +451,33 @@ QObject *Character::skillGroupsModel()
     return static_cast<QObject *>(&m_skillGroupsModel);
 }
 
-const QObject *Character::currentTrainingSkill() const
-{
-    return static_cast<const QObject *>(&m_currentTrainingSkill);
-}
+//const QObject *Character::currentTrainingSkill() const
+//{
+//    return static_cast<const QObject *>(&m_currentTrainingSkill);
+//}
 
-qint64 Character::currentSkillSecondsLeft() const
-{
-    QDateTime curDtUtc = QDateTime::currentDateTimeUtc();
-    qint64 msecs_left = curDtUtc.msecsTo(m_currentTrainingSkill.queueInfo().finishDate);
-    msecs_left /= 1000;
-    return msecs_left;
-}
+//qint64 Character::currentSkillSecondsLeft() const
+//{
+//    QDateTime curDtUtc = QDateTime::currentDateTimeUtc();
+//    qint64 msecs_left = curDtUtc.msecsTo(m_currentTrainingSkill.queueInfo().finishDate);
+//    msecs_left /= 1000;
+//    return msecs_left;
+//}
 
-QDateTime Character::currentSkillFinishDate() const
-{
-    return m_currentTrainingSkill.queueInfo().finishDate;
-}
+//QDateTime Character::currentSkillFinishDate() const
+//{
+//    return m_currentTrainingSkill.queueInfo().finishDate;
+//}
 
-QDateTime Character::skillQueueFinishDate() const
-{
-    return m_skillQueueFinishDate;
-}
+//QDateTime Character::skillQueueFinishDate() const
+//{
+//    return m_skillQueueFinishDate;
+//}
 
 bool Character::isSkillQueueEmpty() const
 {
-    return m_currentTrainingSkill.skillId() == 0;
+    //return m_currentTrainingSkill.skillId() == 0;
+    return true;
 }
 
 void Character::setAttributeCharisma(int a) {
@@ -556,50 +557,50 @@ void Character::setSkills(const QVector<CharacterSkill> &vskills)
         // update skill groups model
         m_skillGroupsModel.setFromSkills(m_skills);
 
-        // find currently trained skill and last skill in queue
-        int indexInVector = 0;
-        int minQueuePos = INT_MAX;  // needed to find first skill in queue
-        int firstSkillIndex = -1;
-        int maxQueuePos = -1;  // needed to fins last skill in queue
-        int lastSkillIndex = -1;
-        for (const CharacterSkill &sk : qAsConst(m_skills)) {
-            int qpos = sk.queueInfo().queuePosition;
-            // is skill in queue?
-            if (qpos > 0) {
-                if (qpos < minQueuePos) {
-                    minQueuePos = qpos;
-                    firstSkillIndex = indexInVector;
-                }
-                if (qpos > maxQueuePos) {
-                    maxQueuePos = qpos;
-                    lastSkillIndex = indexInVector;
-                }
-            }
-            ++indexInVector;
-        }
+//        // find currently trained skill and last skill in queue
+//        int indexInVector = 0;
+//        int minQueuePos = INT_MAX;  // needed to find first skill in queue
+//        int firstSkillIndex = -1;
+//        int maxQueuePos = -1;  // needed to fins last skill in queue
+//        int lastSkillIndex = -1;
+//        for (const CharacterSkill &sk : qAsConst(m_skills)) {
+//            int qpos = sk.queueInfo().queuePosition;
+//            // is skill in queue?
+//            if (qpos > 0) {
+//                if (qpos < minQueuePos) {
+//                    minQueuePos = qpos;
+//                    firstSkillIndex = indexInVector;
+//                }
+//                if (qpos > maxQueuePos) {
+//                    maxQueuePos = qpos;
+//                    lastSkillIndex = indexInVector;
+//                }
+//            }
+//            ++indexInVector;
+//        }
 
-        if ((firstSkillIndex == -1) && (lastSkillIndex == -1)) {
-            // skill queue is empty!
-            qCWarning(logCharacter) << "Skill queue is empty!";
-            // zero out zurrent training skill skillId as indicator of empty queue
-            m_currentTrainingSkill.setSkillId(0);
-            m_currentTrainingSkill.setSkillName(QString());
-        } else {
-            // remember current training skill
-            const CharacterSkill &firstSkill = m_skills.at(firstSkillIndex);
-            m_currentTrainingSkill = firstSkill;
+//        if ((firstSkillIndex == -1) && (lastSkillIndex == -1)) {
+//            // skill queue is empty!
+//            qCWarning(logCharacter) << "Skill queue is empty!";
+//            // zero out zurrent training skill skillId as indicator of empty queue
+//            m_currentTrainingSkill.setSkillId(0);
+//            m_currentTrainingSkill.setSkillName(QString());
+//        } else {
+//            // remember current training skill
+//            const CharacterSkill &firstSkill = m_skills.at(firstSkillIndex);
+//            m_currentTrainingSkill = firstSkill;
 
-            // remember when the whole skill queue ends
-            const CharacterSkill &lastSkill = m_skills.at(lastSkillIndex);
-            m_skillQueueFinishDate = lastSkill.queueInfo().finishDate;
+//            // remember when the whole skill queue ends
+//            const CharacterSkill &lastSkill = m_skills.at(lastSkillIndex);
+//            m_skillQueueFinishDate = lastSkill.queueInfo().finishDate;
 
-            // qCDebug(logCharacter) << "    First skill:" << firstSkill;
-            // qCDebug(logCharacter) << "    Last skill:" << lastSkill;
-            // ^^ looks correct
+//            // qCDebug(logCharacter) << "    First skill:" << firstSkill;
+//            // qCDebug(logCharacter) << "    Last skill:" << lastSkill;
+//            // ^^ looks correct
 
-            // also update skill groups model, tell where current training skill is
-            m_skillGroupsModel.setActiveTrainingGroupId(firstSkill.skillGroupId());
-        }
+//            // also update skill groups model, tell where current training skill is
+//            m_skillGroupsModel.setActiveTrainingGroupId(firstSkill.skillGroupId());
+//        }
 
         Q_EMIT skillsChanged();
     }
@@ -644,20 +645,6 @@ QList<QObject *> Character::getSkillsForGroupId(quint64 groupId) const
         return sa->skillName() < sb->skillName();
     });
     return ret;
-}
-
-void Character::setSkillQueueInfo(quint64 skill_id, const CharacterSkillQueueItem &qinfo)
-{
-    // qCDebug(logCharacter) << "  skill queue info for id:" << skill_id
-    //                      << "qpos:" << qinfo.queuePosition
-    //                      << "tr.level:" << qinfo.trainingLevel;
-    for (CharacterSkill &sk : m_skills) {
-        if (sk.skillId() == skill_id) {
-            sk.setQueueInfo(qinfo);
-            return;
-        }
-    }
-    qCWarning(logCharacter) << "We do not have this skill! id:" << skill_id;
 }
 
 

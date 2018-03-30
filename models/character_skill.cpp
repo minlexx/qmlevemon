@@ -42,7 +42,6 @@ CharacterSkill &CharacterSkill::operator=(const CharacterSkill &other)
     m_activeLevel         = other.m_activeLevel;
     m_skillPointsInSkill  = other.m_skillPointsInSkill;
     m_skillPointsInLevel  = other.m_skillPointsInLevel;
-    m_qinfo               = other.m_qinfo;
     return (*this);
 }
 
@@ -54,7 +53,6 @@ CharacterSkill &CharacterSkill::operator=(CharacterSkill &&other)
     m_activeLevel         = std::move(other.m_activeLevel);
     m_skillPointsInSkill  = std::move(other.m_skillPointsInSkill);
     m_skillPointsInLevel  = std::move(other.m_skillPointsInLevel);
-    m_qinfo               = std::move(other.m_qinfo);
     return (*this);
 }
 
@@ -84,20 +82,21 @@ int CharacterSkill::activeLevel() const { return m_activeLevel; }
 
 QString CharacterSkill::trainingLevelRoman() const
 {
-    int training_level = trainingLevel();
-    if (training_level <= 0) {
-        return QString();
-    }
-    QString ret;
-    switch (training_level) {
-    case 1: ret = QLatin1String("I"); break;
-    case 2: ret = QLatin1String("II"); break;
-    case 3: ret = QLatin1String("III"); break;
-    case 4: ret = QLatin1String("IV"); break;
-    case 5: ret = QLatin1String("V"); break;
-    default: ret = QString::number(training_level, 10); break;
-    }
-    return ret;
+    return QLatin1String("<TODO>");
+//    int training_level = trainingLevel();
+//    if (training_level <= 0) {
+//        return QString();
+//    }
+//    QString ret;
+//    switch (training_level) {
+//    case 1: ret = QLatin1String("I"); break;
+//    case 2: ret = QLatin1String("II"); break;
+//    case 3: ret = QLatin1String("III"); break;
+//    case 4: ret = QLatin1String("IV"); break;
+//    case 5: ret = QLatin1String("V"); break;
+//    default: ret = QString::number(training_level, 10); break;
+//    }
+//    return ret;
 }
 
 void CharacterSkill::setActiveLevel(int lvl)
@@ -123,51 +122,40 @@ quint64 CharacterSkill::skillPointsInLevel() const
     return m_skillPointsInLevel;
 }
 
-CharacterSkillQueueItem CharacterSkill::queueInfo() const
-{
-    return m_qinfo;
-}
+//bool CharacterSkill::isInQueue() const
+//{
+//    return (m_qinfo.queuePosition >= 0);
+//}
 
-void CharacterSkill::setQueueInfo(const CharacterSkillQueueItem &qinfo)
-{
-    m_qinfo = qinfo;
-    Q_EMIT queueChanged();
-}
+//int CharacterSkill::positionInQueue() const
+//{
+//    return m_qinfo.queuePosition;
+//}
 
-bool CharacterSkill::isInQueue() const
-{
-    return (m_qinfo.queuePosition >= 0);
-}
+//double CharacterSkill::trainPercent() const
+//{
+//    double start_sp = static_cast<double>(m_qinfo.levelStartSp);
+//    double end_sp = static_cast<double>(m_qinfo.levelEndSp);
+//    double cur_sp = static_cast<double>(m_skillPointsInSkill);
+//    double dist_passed = cur_sp - start_sp;
+//    double dist_total = end_sp - start_sp;
+//    return dist_passed / dist_total;
+//}
 
-int CharacterSkill::positionInQueue() const
-{
-    return m_qinfo.queuePosition;
-}
+//QDateTime CharacterSkill::trainStartDate() const
+//{
+//    return m_qinfo.startDate;
+//}
 
-double CharacterSkill::trainPercent() const
-{
-    double start_sp = static_cast<double>(m_qinfo.levelStartSp);
-    double end_sp = static_cast<double>(m_qinfo.levelEndSp);
-    double cur_sp = static_cast<double>(m_skillPointsInSkill);
-    double dist_passed = cur_sp - start_sp;
-    double dist_total = end_sp - start_sp;
-    return dist_passed / dist_total;
-}
+//QDateTime CharacterSkill::trainFinishDate() const
+//{
+//    return m_qinfo.finishDate;
+//}
 
-QDateTime CharacterSkill::trainStartDate() const
-{
-    return m_qinfo.startDate;
-}
-
-QDateTime CharacterSkill::trainFinishDate() const
-{
-    return m_qinfo.finishDate;
-}
-
-int CharacterSkill::trainingLevel() const
-{
-    return m_qinfo.trainingLevel;
-}
+//int CharacterSkill::trainingLevel() const
+//{
+//    return m_qinfo.trainingLevel;
+//}
 
 
 }
@@ -187,7 +175,6 @@ QDataStream &operator<<(QDataStream &stream, const EM::CharacterSkill &skill)
     stream << skill.activeLevel();
     stream << skill.skillPointsInSkill();
     // stream << skill.skillPointsInLevel(); // <-- this field is calculated from trainedLevel, no need to save
-    stream << skill.queueInfo();
     return stream;
 }
 
@@ -199,7 +186,6 @@ QDataStream &operator>>(QDataStream &stream, EM::CharacterSkill &skill)
     QString s;
     quint64 skillId = 0;
     QString skillName;
-    EM::CharacterSkillQueueItem qinfo;
 
     // SkillTemplate properties
     stream >> skillId;
@@ -227,7 +213,6 @@ QDataStream &operator>>(QDataStream &stream, EM::CharacterSkill &skill)
     stream >> i;     skill.setTrainedLevel(i);  // also calculates skillPointsInLevel
     stream >> i;     skill.setActiveLevel(i);
     stream >> ui64;  skill.setSkillPointsInSkill(ui64);
-    stream >> qinfo; skill.setQueueInfo(qinfo);
     return stream;
 }
 
@@ -236,9 +221,9 @@ QDebug operator<<(QDebug stream, const EM::CharacterSkill &skill)
 {
     stream << "<CharacterSkill " << skill.skillName() << "/" << skill.skillId();
     stream << "/ lvl " << skill.activeLevel();
-    if (skill.trainingLevel() > 0) {
-        stream << " training lvl:" << skill.trainingLevel();
-    }
+    //if (skill.trainingLevel() > 0) {
+    //    stream << " training lvl:" << skill.trainingLevel();
+    //}
     stream << "/ rank:" << skill.skillTimeConstant();
     stream << ">";
     return stream;

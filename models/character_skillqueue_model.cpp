@@ -66,15 +66,15 @@ QVariant EM::CharacterSkillQueueModel::data(const QModelIndex &index, int role) 
     case SkillTimeConstant:   ret = skill.skillTimeConstant(); break;
     case TrainedLevel:        ret = skill.trainedLevel(); break;
     case ActiveLevel:         ret = skill.activeLevel(); break;
-    case TrainingLevel:       ret = skill.trainingLevel(); break;
+    //case TrainingLevel:       ret = skill.trainingLevel(); break;
     case TrainingLevelRoman:  ret = skill.trainingLevelRoman(); break;
     case SkillPointsInSkill:  ret = skill.skillPointsInSkill(); break;
     case SkillPointsInLevel:  ret = skill.skillPointsInLevel(); break;
-    case IsInQueue:           ret = skill.isInQueue(); break;
-    case PositionInQueue:     ret = skill.positionInQueue(); break;
-    case TrainPercent:        ret = skill.trainPercent(); break;
-    case TrainStartDate:      ret = skill.trainStartDate(); break;
-    case TrainFinishDate:     ret = skill.trainFinishDate(); break;
+    //case IsInQueue:           ret = skill.isInQueue(); break;
+    //case PositionInQueue:     ret = skill.positionInQueue(); break;
+    //case TrainPercent:        ret = skill.trainPercent(); break;
+    //case TrainStartDate:      ret = skill.trainStartDate(); break;
+    //case TrainFinishDate:     ret = skill.trainFinishDate(); break;
     }
 
     return ret;

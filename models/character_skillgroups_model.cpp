@@ -156,9 +156,9 @@ void EM::CharacterSkillGroupsModel::setFromSkills(const QVector<EM::CharacterSki
                 if (!skillsQueued.contains(groupId)) {
                     skillsQueued.insert(groupId, 0);
                 }
-                if (sk.isInQueue()) {
-                    ++skillsQueued[groupId];
-                }
+                //if (sk.isInQueue()) {
+                //    ++skillsQueued[groupId];
+                //}
 
             } else {
                 qCDebug(logCharSkillGroupsModel) << "Could not find a skill group for skill:" << sk;
