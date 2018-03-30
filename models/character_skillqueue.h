@@ -58,6 +58,7 @@ public:
 public:
     void clear();
     void addItem(const EM::CharacterSkillQueueItem &item);
+    void addItem(EM::CharacterSkillQueueItem &&item);
     void calc();
 
 protected:

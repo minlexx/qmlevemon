@@ -24,6 +24,11 @@ void CharacterSkillQueue::addItem(const EM::CharacterSkillQueueItem &item)
     m_queue.push_back(item);
 }
 
+void CharacterSkillQueue::addItem(CharacterSkillQueueItem &&item)
+{
+    m_queue.push_back(item);
+}
+
 void CharacterSkillQueue::calc()
 {
     //
