@@ -2,8 +2,22 @@
 #define H_CHARACTER_SKILLQUEUE_INFO
 
 #include <QString>
+#include <QVector>
 #include <QDateTime>
 #include <QDataStream>
+
+
+// forward-declare classes in a namespace
+namespace EM {
+    class CharacterSkillQueueItem;
+    class CharacterSkillQueue;
+}  // namespace EM
+
+
+// forward-declare QDataStream operators for CharacterSkillQueue for friend to work
+QDataStream& operator<<(QDataStream& stream, const EM::CharacterSkillQueue& queue);
+QDataStream& operator>>(QDataStream& stream, EM::CharacterSkillQueue& queue);
+
 
 namespace EM {
 
@@ -28,9 +42,30 @@ public:
     QDateTime finishDate;
 };
 
-}
 
-QDataStream& operator<<(QDataStream &stream, const EM::CharacterSkillQueueItem &info);
-QDataStream& operator>>(QDataStream &stream, EM::CharacterSkillQueueItem &info);
+class CharacterSkillQueue
+{
+    friend QDataStream& (::operator<<)(QDataStream& stream, const CharacterSkillQueue& queue);
+    friend QDataStream& (::operator>>)(QDataStream& stream, CharacterSkillQueue &queue);
+
+public:
+    CharacterSkillQueue();
+
+public:
+    void clear();
+    void addItem(const EM::CharacterSkillQueueItem &item);
+    void calc();
+
+protected:
+    QVector<EM::CharacterSkillQueueItem> m_queue;
+};
+
+
+}  // namespace EM
+
+
+QDataStream& operator<<(QDataStream& stream, const EM::CharacterSkillQueueItem& info);
+QDataStream& operator>>(QDataStream& stream, EM::CharacterSkillQueueItem& info);
+
 
 #endif
