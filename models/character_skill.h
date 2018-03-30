@@ -51,8 +51,8 @@ public Q_SLOTS:
 
     quint64 skillPointsInLevel() const;
 
-    CharacterSkillQueueInfo queueInfo() const;
-    void setQueueInfo(const CharacterSkillQueueInfo& qinfo);
+    CharacterSkillQueueItem queueInfo() const;
+    void setQueueInfo(const CharacterSkillQueueItem& qinfo);
 
     bool isInQueue() const;
     int positionInQueue() const;
@@ -72,7 +72,7 @@ protected:
     int m_activeLevel = 0;
     quint64 m_skillPointsInSkill = 0;
     quint64 m_skillPointsInLevel = 0;
-    CharacterSkillQueueInfo m_qinfo;
+    CharacterSkillQueueItem m_qinfo;
 };
 
 

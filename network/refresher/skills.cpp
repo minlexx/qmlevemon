@@ -163,7 +163,7 @@ int PeriodicalRefresherWorker::refresh_skills(Character &ch) {
             const QJsonObject &itemObj = jqueueItem.toObject();
             quint64 skill_id = itemObj.value(QLatin1String("skill_id")).toVariant().toULongLong();
 
-            CharacterSkillQueueInfo qinfo;
+            CharacterSkillQueueItem qinfo;
             qinfo.trainingLevel = itemObj.value(QLatin1String("finished_level")).toInt();
             qinfo.queuePosition = itemObj.value(QLatin1String("queue_position")).toInt();
             qinfo.levelStartSp = itemObj.value(QLatin1String("level_start_sp")).toVariant().toULongLong();

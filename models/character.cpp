@@ -646,7 +646,7 @@ QList<QObject *> Character::getSkillsForGroupId(quint64 groupId) const
     return ret;
 }
 
-void Character::setSkillQueueInfo(quint64 skill_id, const CharacterSkillQueueInfo &qinfo)
+void Character::setSkillQueueInfo(quint64 skill_id, const CharacterSkillQueueItem &qinfo)
 {
     // qCDebug(logCharacter) << "  skill queue info for id:" << skill_id
     //                      << "qpos:" << qinfo.queuePosition

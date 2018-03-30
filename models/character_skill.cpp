@@ -123,12 +123,12 @@ quint64 CharacterSkill::skillPointsInLevel() const
     return m_skillPointsInLevel;
 }
 
-CharacterSkillQueueInfo CharacterSkill::queueInfo() const
+CharacterSkillQueueItem CharacterSkill::queueInfo() const
 {
     return m_qinfo;
 }
 
-void CharacterSkill::setQueueInfo(const CharacterSkillQueueInfo &qinfo)
+void CharacterSkill::setQueueInfo(const CharacterSkillQueueItem &qinfo)
 {
     m_qinfo = qinfo;
     Q_EMIT queueChanged();
@@ -199,7 +199,7 @@ QDataStream &operator>>(QDataStream &stream, EM::CharacterSkill &skill)
     QString s;
     quint64 skillId = 0;
     QString skillName;
-    EM::CharacterSkillQueueInfo qinfo;
+    EM::CharacterSkillQueueItem qinfo;
 
     // SkillTemplate properties
     stream >> skillId;

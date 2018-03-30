@@ -8,16 +8,17 @@
 namespace EM {
 
 
-class CharacterSkillQueueInfo
+class CharacterSkillQueueItem
 {
 public:
-    CharacterSkillQueueInfo();
-    CharacterSkillQueueInfo(const CharacterSkillQueueInfo &other) = default;
-    CharacterSkillQueueInfo(CharacterSkillQueueInfo &&other) = default;
-    CharacterSkillQueueInfo &operator=(const CharacterSkillQueueInfo &other) = default;
-    CharacterSkillQueueInfo &operator=(CharacterSkillQueueInfo &&other) = default;
+    CharacterSkillQueueItem();
+    CharacterSkillQueueItem(const CharacterSkillQueueItem &other) = default;
+    CharacterSkillQueueItem(CharacterSkillQueueItem &&other) = default;
+    CharacterSkillQueueItem &operator=(const CharacterSkillQueueItem &other) = default;
+    CharacterSkillQueueItem &operator=(CharacterSkillQueueItem &&other) = default;
 
 public:
+    quint64 skillId = 0;
     int trainingLevel = 0;
     int queuePosition = -1; // -1 = not in queue
     quint64 levelStartSp = 0;
@@ -29,7 +30,7 @@ public:
 
 }
 
-QDataStream& operator<<(QDataStream &stream, const EM::CharacterSkillQueueInfo &info);
-QDataStream& operator>>(QDataStream &stream, EM::CharacterSkillQueueInfo &info);
+QDataStream& operator<<(QDataStream &stream, const EM::CharacterSkillQueueItem &info);
+QDataStream& operator>>(QDataStream &stream, EM::CharacterSkillQueueItem &info);
 
 #endif

@@ -1,16 +1,17 @@
-#include "character_skillqueue_info.h"
+#include "character_skillqueue.h"
 
 namespace EM {
 
-CharacterSkillQueueInfo::CharacterSkillQueueInfo()
+CharacterSkillQueueItem::CharacterSkillQueueItem()
 {
     //
 }
 
 } // namespace EM
 
-QDataStream &operator<<(QDataStream &stream, const EM::CharacterSkillQueueInfo &info)
+QDataStream &operator<<(QDataStream &stream, const EM::CharacterSkillQueueItem &info)
 {
+    stream << info.skillId;
     stream << info.trainingLevel;
     stream << info.queuePosition;
     stream << info.levelStartSp;
@@ -21,8 +22,9 @@ QDataStream &operator<<(QDataStream &stream, const EM::CharacterSkillQueueInfo &
     return stream;
 }
 
-QDataStream &operator>>(QDataStream &stream, EM::CharacterSkillQueueInfo &info)
+QDataStream &operator>>(QDataStream &stream, EM::CharacterSkillQueueItem &info)
 {
+    stream >> info.skillId;
     stream >> info.trainingLevel;
     stream >> info.queuePosition;
     stream >> info.levelStartSp;
