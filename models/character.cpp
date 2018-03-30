@@ -671,7 +671,7 @@ void Character::calcSkillQueue()
 
 
 // increase version number when savedata format changes
-static const int SAVEDATA_VERSION = 13;
+static const int SAVEDATA_VERSION = 14;
 
 
 QDataStream& operator<<(QDataStream &stream, const EM::Character &character)
@@ -726,6 +726,7 @@ QDataStream& operator<<(QDataStream &stream, const EM::Character &character)
     stream << character.totalSp();
     stream << character.isAlphaClone();
     stream << character.skills();
+    stream << character.skillQueue();
     // auth tokens
     stream << character.getAuthTokens();
     // update timestamps
@@ -804,6 +805,7 @@ QDataStream& operator>>(QDataStream &stream, EM::Character &character)
     stream >> ui64;   character.setTotalSp(ui64);
     stream >> b;      character.setIsAlphaClone(b);
     stream >> skills; character.setSkills(skills);
+    stream >> character.skillQueue();
     // auth tokens
     stream >> tokens; character.setAuthTokens(tokens);
     // update timestamps
