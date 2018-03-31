@@ -163,31 +163,29 @@ quint64 CharacterSkill::skillPointsInLevel() const
 QDataStream &operator<<(QDataStream &stream, const EM::CharacterSkill &skill)
 {
     // SkillTemplate properties
-    stream << skill.skillId();
-    stream << skill.skillName();
+    stream << skill.m_skillId;
+    stream << skill.m_skillName;
     stream << skill.skillGroupId();
     stream << skill.skillGroupName();
-    stream << skill.primaryAttribute();
-    stream << skill.secondaryAttribute();
-    stream << skill.skillTimeConstant();
+    stream << skill.m_primaryAttribute;
+    stream << skill.m_secondaryAttribute;
+    stream << skill.m_skillTimeConstant;
     // CharacterSkill properties
-    stream << skill.trainedLevel();
-    stream << skill.activeLevel();
-    stream << skill.skillPointsInSkill();
-    // stream << skill.skillPointsInLevel(); // <-- this field is calculated from trainedLevel, no need to save
+    stream << skill.m_trainedLevel;
+    stream << skill.m_activeLevel;
+    stream << skill.m_skillPointsInSkill;
+    stream << skill.m_skillPointsInLevel;
     return stream;
 }
 
 QDataStream &operator>>(QDataStream &stream, EM::CharacterSkill &skill)
 {
-    int i = 0;
-    quint64 ui64 = 0;
-    float f = 0.0f;
-    QString s;
     quint64 skillId = 0;
     QString skillName;
+    quint64 ui64 = 0;
+    QString s;
 
-    // SkillTemplate properties
+    // read SkillTemplate properties
     stream >> skillId;
     stream >> skillName;
     stream >> ui64;      // group id
@@ -206,13 +204,14 @@ QDataStream &operator>>(QDataStream &stream, EM::CharacterSkill &skill)
     skill.setSkillId(skillId);
     skill.setSkillName(skillName);
 
-    stream >> i;     skill.setPrimaryAttribute(i);
-    stream >> i;     skill.setSecondaryAttribute(i);
-    stream >> f;     skill.setSkillTimeConstant(f);
+    stream >> skill.m_primaryAttribute;
+    stream >> skill.m_secondaryAttribute;
+    stream >> skill.m_skillTimeConstant;
     // CharacterSkill properties
-    stream >> i;     skill.setTrainedLevel(i);  // also calculates skillPointsInLevel
-    stream >> i;     skill.setActiveLevel(i);
-    stream >> ui64;  skill.setSkillPointsInSkill(ui64);
+    stream >> skill.m_trainedLevel;
+    stream >> skill.m_activeLevel;
+    stream >> skill.m_skillPointsInSkill;
+    stream >> skill.m_skillPointsInLevel;
     return stream;
 }
 

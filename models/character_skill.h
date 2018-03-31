@@ -8,6 +8,11 @@
 
 class QDataStream;
 
+namespace EM { class CharacterSkill; }
+
+QDataStream& operator<<(QDataStream &stream, const EM::CharacterSkill &skill);
+QDataStream& operator>>(QDataStream &stream, EM::CharacterSkill &skill);
+
 
 namespace EM {
 
@@ -68,6 +73,9 @@ protected:
     int m_activeLevel = 0;
     quint64 m_skillPointsInSkill = 0;
     quint64 m_skillPointsInLevel = 0;
+
+    friend QDataStream& (::operator<<)(QDataStream &stream, const EM::CharacterSkill &skill);
+    friend QDataStream& (::operator>>)(QDataStream &stream, EM::CharacterSkill &skill);
 };
 
 
