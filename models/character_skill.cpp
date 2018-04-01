@@ -147,11 +147,9 @@ void CharacterSkill::setQueueInfo(bool inQueue, int pos, int trainLevel, double 
 
 QDataStream &operator<<(QDataStream &stream, const EM::CharacterSkill &skill)
 {
-    // SkillTemplate properties
+    // save SkillTemplate properties
     stream << skill.m_skillId;
     stream << skill.m_skillName;
-    stream << skill.skillGroupId();
-    stream << skill.skillGroupName();
     stream << skill.m_primaryAttribute;
     stream << skill.m_secondaryAttribute;
     stream << skill.m_skillTimeConstant;
@@ -167,14 +165,10 @@ QDataStream &operator>>(QDataStream &stream, EM::CharacterSkill &skill)
 {
     quint64 skillId = 0;
     QString skillName;
-    quint64 ui64 = 0;
-    QString s;
 
     // read SkillTemplate properties
     stream >> skillId;
     stream >> skillName;
-    stream >> ui64;      // group id
-    stream >> s;         // group name
 
     // fill in skill group
     EM::SkillTreeModel *skillTree = EM::ModelManager::instance()->skillTreeModel();
