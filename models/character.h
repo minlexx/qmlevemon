@@ -74,7 +74,7 @@ class Character: public QObject
     Q_PROPERTY(bool       isAlphaClone             READ isAlphaClone             NOTIFY isAlphaCloneChanged)
     Q_PROPERTY(QObject*   skillGroupsModel         READ skillGroupsModel         NOTIFY skillsChanged)
     // current training skill and queue info
-    //Q_PROPERTY(const QObject* currentTrainingSkill READ currentTrainingSkill     NOTIFY skillsChanged)
+    Q_PROPERTY(const QObject* currentTrainingSkill READ currentTrainingSkillObj    NOTIFY skillsChanged)
     //Q_PROPERTY(qint64     currentSkillSecondsLeft  READ currentSkillSecondsLeft  NOTIFY skillsChanged)
     //Q_PROPERTY(QDateTime  currentSkillFinishDate   READ currentSkillFinishDate   NOTIFY skillsChanged)
     //Q_PROPERTY(QDateTime  skillQueueFinishDate     READ skillQueueFinishDate     NOTIFY skillsChanged)
@@ -208,7 +208,9 @@ public:
     QVector<CharacterSkill> skills() const;
     QObject *skillGroupsModel();
     // current training skill and queue info
-    //const QObject  *currentTrainingSkill() const;
+    const QObject  *currentTrainingSkillObj() const;
+    CharacterSkill *currentTrainingSkill();
+    const CharacterSkill *currentTrainingSkill() const;
     //qint64 currentSkillSecondsLeft() const;
     //QDateTime currentSkillFinishDate() const;
     //QDateTime skillQueueFinishDate() const;

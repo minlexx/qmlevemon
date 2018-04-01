@@ -450,10 +450,44 @@ QObject *Character::skillGroupsModel()
 CharacterSkillQueue &Character::skillQueue() { return m_skillQueue; }
 const CharacterSkillQueue &Character::skillQueue() const { return m_skillQueue; }
 
-//const QObject *Character::currentTrainingSkill() const
-//{
-//    return static_cast<const QObject *>(&m_currentTrainingSkill);
-//}
+const QObject *Character::currentTrainingSkillObj() const
+{
+    const CharacterSkill *ret = currentTrainingSkill();
+    if (!ret) {
+        return nullptr;
+    }
+    return static_cast<const QObject *>(ret);
+}
+
+CharacterSkill *Character::currentTrainingSkill()
+{
+    const quint64 currentTrainingSkillId = m_skillQueue.currentTrainingSkillId();
+    if (currentTrainingSkillId == 0) {
+        // queue is empty
+        return nullptr;
+    }
+    for (CharacterSkill &skill : m_skills) {
+        if (skill.skillId() == currentTrainingSkillId) {
+            return &skill;
+        }
+    }
+    return nullptr;
+}
+
+const CharacterSkill *Character::currentTrainingSkill() const
+{
+    const quint64 currentTrainingSkillId = m_skillQueue.currentTrainingSkillId();
+    if (currentTrainingSkillId == 0) {
+        // queue is empty
+        return nullptr;
+    }
+    for (const CharacterSkill &skill : m_skills) {
+        if (skill.skillId() == currentTrainingSkillId) {
+            return &skill;
+        }
+    }
+    return nullptr;
+}
 
 //qint64 Character::currentSkillSecondsLeft() const
 //{
