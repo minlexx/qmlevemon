@@ -60,6 +60,7 @@ public:
     void addItem(const EM::CharacterSkillQueueItem &item);
     void addItem(EM::CharacterSkillQueueItem &&item);
     void calc();
+    quint64 currentTrainingSkillId() const;
 
 protected:
     QVector<EM::CharacterSkillQueueItem> m_queue;

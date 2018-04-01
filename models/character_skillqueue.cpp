@@ -34,6 +34,14 @@ void CharacterSkillQueue::calc()
     //
 }
 
+quint64 CharacterSkillQueue::currentTrainingSkillId() const
+{
+    if (m_queue.size() > 0) {
+        return m_queue.at(0).skillId;
+    }
+    return 0;
+}
+
 
 } // namespace EM
 
