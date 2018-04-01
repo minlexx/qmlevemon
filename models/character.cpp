@@ -686,7 +686,7 @@ void Character::calcSkillQueue()
 
 
 // increase version number when savedata format changes
-static const int SAVEDATA_VERSION = 14;
+static const int SAVEDATA_VERSION = 15;
 
 
 QDataStream& operator<<(QDataStream &stream, const EM::Character &character)
@@ -763,7 +763,7 @@ QDataStream& operator>>(QDataStream &stream, EM::Character &character)
                               << savedata_version;
         return stream;
     }
-    //
+    // general
     stream >> character.m_characterId;
     stream >> character.m_characterName;
     stream >> character.m_corporationId;
@@ -772,6 +772,7 @@ QDataStream& operator>>(QDataStream &stream, EM::Character &character)
     stream >> character.m_allianceId;
     stream >> character.m_allianceName;
     stream >> character.m_allianceTicker;
+    // general - origins
     stream >> character.m_raceId;
     stream >> character.m_raceName;
     stream >> character.m_ancestryId;
