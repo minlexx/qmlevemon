@@ -60,11 +60,9 @@ QVariant EM::CharacterSkillGroupsModel::data(const QModelIndex &index, int role)
     case Roles::SkillPointsInGroup:
         ret = item.m_skillPointsInGroup;
         break;
-    // TODO: currently not done, implement skill queues first
     case Roles::NumSkillsInQueue:
         ret = item.m_numSkillsInQueue;
         break;
-    // TODO: currently not done, implement skill queues first
     case Roles::NumSkillsInTraining:
         ret = item.m_numSkillsInTraining;
         break;
