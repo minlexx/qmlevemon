@@ -569,8 +569,7 @@ void Character::setSkills(const QVector<CharacterSkill> &vskills)
 {
     if (m_skills != vskills) {
         m_skills = vskills;
-        // update skill groups model
-        m_skillGroupsModel.setFromSkills(m_skills);
+        updateSkillGroupsModel();
 
 //        // find currently trained skill and last skill in queue
 //        int indexInVector = 0;
@@ -619,6 +618,12 @@ void Character::setSkills(const QVector<CharacterSkill> &vskills)
 
         Q_EMIT skillsChanged();
     }
+}
+
+
+void Character::updateSkillGroupsModel()
+{
+    m_skillGroupsModel.setFromSkills(m_skills);
 }
 
 void Character::setSkillQueue(const CharacterSkillQueue &queue)
@@ -817,6 +822,8 @@ QDataStream& operator>>(QDataStream &stream, EM::Character &character)
     stream >> character.m_tokens;
     // update timestamps
     stream >> character.m_update_timestamps;
+    // some final calculations
+    character.updateSkillGroupsModel();
     return stream;
 }
 

@@ -256,6 +256,9 @@ public Q_SLOTS:
     void clearSkillQueue();
     void calcSkillQueue();
 
+protected:
+    void updateSkillGroupsModel();
+
 Q_SIGNALS:
     // general info
     void characterIdChanged();
