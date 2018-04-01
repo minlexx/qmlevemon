@@ -18,6 +18,13 @@
 class QDataStream;
 
 
+// forward-declare class EM::Character
+namespace EM { class Character; }
+// forward-declare stream operators
+QDataStream& operator<<(QDataStream &stream, const EM::Character &character);
+QDataStream& operator>>(QDataStream &stream, EM::Character &character);
+
+
 namespace EM {
 
 
@@ -360,6 +367,9 @@ protected:
 
     // last update date-times
     UpdateTimestamps m_update_timestamps;
+
+    friend QDataStream& (::operator<<)(QDataStream &stream, const EM::Character &character);
+    friend QDataStream& (::operator>>)(QDataStream &stream, EM::Character &character);
 };
 
 

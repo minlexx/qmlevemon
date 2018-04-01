@@ -712,79 +712,69 @@ QDataStream& operator<<(QDataStream &stream, const EM::Character &character)
     // version
     stream << SAVEDATA_VERSION;
     // general
-    stream << character.characterId();
-    stream << character.characterName();
-    stream << character.corporationId();
-    stream << character.corporationName();
-    stream << character.corporationTicker();
-    stream << character.allianceId();
-    stream << character.allianceName();
-    stream << character.allianceTicker();
+    stream << character.m_characterId;
+    stream << character.m_characterName;
+    stream << character.m_corporationId;
+    stream << character.m_corporationName;
+    stream << character.m_corporationTicker;
+    stream << character.m_allianceId;
+    stream << character.m_allianceName;
+    stream << character.m_allianceTicker;
     // general - origins
-    stream << character.raceId();
-    stream << character.raceName();
-    stream << character.ancestryId();
-    stream << character.ancestryName();
-    stream << character.bloodlineId();
-    stream << character.bloodlineName();
-    stream << character.gender();
-    stream << character.birthday();
-    stream << character.securityStatus();
-    stream << character.bio();
+    stream << character.m_raceId;
+    stream << character.m_raceName;
+    stream << character.m_ancestryId;
+    stream << character.m_ancestryName;
+    stream << character.m_bloodlineId;
+    stream << character.m_bloodlineName;
+    stream << character.m_gender;
+    stream << character.m_birthday_dt;
+    stream << character.m_securityStatus;
+    stream << character.m_bio;
     // wallet info
-    stream << character.iskAmount();
+    stream << character.m_isk;
     // location info
-    stream << character.currentSolarSystemId();
-    stream << character.currentSolarSystemName();
-    stream << character.currentSolarSystemSecurity();
-    stream << character.currentConstellationId();
-    stream << character.currentConstellationName();
-    stream << character.currentRegionId();
-    stream << character.currentRegionName();
-    stream << character.currentStationId();
-    stream << character.currentStructureId();
-    stream << character.currentStructureName();
-    stream << character.currentShipTypeId();
-    stream << character.currentShipTypeName();
-    stream << character.currentShipFriendlyName();
+    stream << character.m_currentSolarSystemId;
+    stream << character.m_currentSolarSystemName;
+    stream << character.m_currentSolarSystemSecurity;
+    stream << character.m_currentConstellationId;
+    stream << character.m_currentConstellationName;
+    stream << character.m_currentRegionId;
+    stream << character.m_currentRegionName;
+    stream << character.m_currentStationId;
+    stream << character.m_currentStructureId;
+    stream << character.m_currentStructureName;
+    stream << character.m_currentShipTypeId;
+    stream << character.m_currentShipTypeName;
+    stream << character.m_currentShipFriendlyName;
     // skills and related
-    stream << character.attributeCharisma();
-    stream << character.attributeIntelligence();
-    stream << character.attributeMemory();
-    stream << character.attributePerception();
-    stream << character.attributeWillpower();
-    stream << character.numBonusRemaps();
-    stream << character.lastRemapDate();
-    stream << character.remapCooldownDate();
-    stream << character.totalSp();
-    stream << character.isAlphaClone();
-    stream << character.skills();
-    stream << character.skillQueue();
+    stream << character.m_attributeCharisma;
+    stream << character.m_attributeIntelligence;
+    stream << character.m_attributeMemory;
+    stream << character.m_attributePerception;
+    stream << character.m_attributeWillpower;
+    stream << character.m_numBonusRemaps;
+    stream << character.m_lastRemapDate;
+    stream << character.m_remapCooldownDate;
+    stream << character.m_totalSp;
+    stream << character.m_isAlphaClone;
+    stream << character.m_skills;
+    stream << character.m_skillQueue;
     // auth tokens
-    stream << character.getAuthTokens();
+    stream << character.m_tokens;
     // update timestamps
-    stream << character.updateTimestamps();
+    stream << character.m_update_timestamps;
     return stream;
 }
 
 
 QDataStream& operator>>(QDataStream &stream, EM::Character &character)
 {
-    int savedata_version = 0;
-    quint64 ui64 = 0;
-    int i = 0;
-    QString s;
-    float fl = 0.0f;
-    QDateTime dt;
-    EM::EveOAuthTokens tokens;
-    EM::UpdateTimestamps uts;
-    bool b = false;
-    QVector<EM::CharacterSkill> skills;
-
     // first read and check version
+    int savedata_version = 0;
     stream >> savedata_version;
     if (savedata_version != SAVEDATA_VERSION) {
-        // old versions not supported :(
+        // old versions are not supported :(
         character.setCharacterId(0);
         character.setCharacterName(QLatin1String("Not loaded"));
         qCDebug(logCharacter) << "Notice: skipped loading of old savedata version:"
@@ -792,57 +782,57 @@ QDataStream& operator>>(QDataStream &stream, EM::Character &character)
         return stream;
     }
     //
-    stream >> ui64;   character.setCharacterId(ui64);
-    stream >> s;      character.setCharacterName(s);
-    stream >> ui64;   character.setCorporationId(ui64);
-    stream >> s;      character.setCorporationName(s);
-    stream >> s;      character.setCorporationTicker(s);
-    stream >> ui64;   character.setAllianceId(ui64);
-    stream >> s;      character.setAllianceName(s);
-    stream >> s;      character.setAllianceTicker(s);
-    stream >> ui64;   character.setRaceId(ui64);
-    stream >> s;      character.setRaceName(s);
-    stream >> ui64;   character.setAncestryId(ui64);
-    stream >> s;      character.setAncestryName(s);
-    stream >> ui64;   character.setBloodlineId(ui64);
-    stream >> s;      character.setBloodlineName(s);
-    stream >> i;      character.setGender(i);
-    stream >> dt;     character.setBirthday(dt);
-    stream >> fl;     character.setSecurityStatus(fl);
-    stream >> s;      character.setBio(s);
+    stream >> character.m_characterId;
+    stream >> character.m_characterName;
+    stream >> character.m_corporationId;
+    stream >> character.m_corporationName;
+    stream >> character.m_corporationTicker;
+    stream >> character.m_allianceId;
+    stream >> character.m_allianceName;
+    stream >> character.m_allianceTicker;
+    stream >> character.m_raceId;
+    stream >> character.m_raceName;
+    stream >> character.m_ancestryId;
+    stream >> character.m_ancestryName;
+    stream >> character.m_bloodlineId;
+    stream >> character.m_bloodlineName;
+    stream >> character.m_gender;
+    stream >> character.m_birthday_dt;
+    stream >> character.m_securityStatus;
+    stream >> character.m_bio;
     // wallet info
-    stream >> fl;     character.setIskAmount(fl);
+    stream >> character.m_isk;
     // location info
-    stream >> ui64;   character.setCurrentSolarSystemId(ui64);
-    stream >> s;      character.setCurrentSolarSystemName(s);
-    stream >> fl;     character.setCurrentSolarSystemSecurity(fl);
-    stream >> ui64;   character.setCurrentConstellationId(ui64);
-    stream >> s;      character.setCurrentConstellationName(s);
-    stream >> ui64;   character.setCurrentRegionId(ui64);
-    stream >> s;      character.setCurrentRegionName(s);
-    stream >> ui64;   character.setCurrentStationId(ui64);
-    stream >> ui64;   character.setCurrentStructureId(ui64);
-    stream >> s;      character.setCurrentStructureName(s);
-    stream >> ui64;   character.setCurrentShipTypeId(ui64);
-    stream >> s;      character.setCurrentShipTypeName(s);
-    stream >> s;      character.setCurrentShipFriendlyName(s);
+    stream >> character.m_currentSolarSystemId;
+    stream >> character.m_currentSolarSystemName;
+    stream >> character.m_currentSolarSystemSecurity;
+    stream >> character.m_currentConstellationId;
+    stream >> character.m_currentConstellationName;
+    stream >> character.m_currentRegionId;
+    stream >> character.m_currentRegionName;
+    stream >> character.m_currentStationId;
+    stream >> character.m_currentStructureId;
+    stream >> character.m_currentStructureName;
+    stream >> character.m_currentShipTypeId;
+    stream >> character.m_currentShipTypeName;
+    stream >> character.m_currentShipFriendlyName;
     // skills and related
-    stream >> i;      character.setAttributeCharisma(i);
-    stream >> i;      character.setAttributeIntelligence(i);
-    stream >> i;      character.setAttributeMemory(i);
-    stream >> i;      character.setAttributePerception(i);
-    stream >> i;      character.setAttributeWillpower(i);
-    stream >> i;      character.setNumBonusRemaps(i);
-    stream >> dt;     character.setLastRemapDate(dt);
-    stream >> dt;     character.setRemapCooldownDate(dt);
-    stream >> ui64;   character.setTotalSp(ui64);
-    stream >> b;      character.setIsAlphaClone(b);
-    stream >> skills; character.setSkills(skills);
-    stream >> character.skillQueue();
+    stream >> character.m_attributeCharisma;
+    stream >> character.m_attributeIntelligence;
+    stream >> character.m_attributeMemory;
+    stream >> character.m_attributePerception;
+    stream >> character.m_attributeWillpower;
+    stream >> character.m_numBonusRemaps;
+    stream >> character.m_lastRemapDate;
+    stream >> character.m_remapCooldownDate;
+    stream >> character.m_totalSp;
+    stream >> character.m_isAlphaClone;
+    stream >> character.m_skills;
+    stream >> character.m_skillQueue;
     // auth tokens
-    stream >> tokens; character.setAuthTokens(tokens);
+    stream >> character.m_tokens;
     // update timestamps
-    stream >> uts;    character.setUpdateTimestamps(uts);
+    stream >> character.m_update_timestamps;
     return stream;
 }
 

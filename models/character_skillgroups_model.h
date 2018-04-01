@@ -48,11 +48,6 @@ class CharacterSkillGroupsModel: public QAbstractListModel
 
 public:
     explicit CharacterSkillGroupsModel(QObject *parent = nullptr);
-    // unlike bse class, we need to make this class copyable (bullshit!)
-    //CharacterSkillGroupsModel(const CharacterSkillGroupsModel &other);
-    //CharacterSkillGroupsModel(CharacterSkillGroupsModel &&other);
-    //CharacterSkillGroupsModel &operator=(const CharacterSkillGroupsModel &other);
-    //CharacterSkillGroupsModel &operator=(CharacterSkillGroupsModel &&other);
 
 public:  // reimplmented interface
     QHash<int, QByteArray> roleNames() const override;
