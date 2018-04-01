@@ -16,8 +16,8 @@ public:
     static Db* instance();
 
 public:
-    virtual bool loadCharacters(QList<Character *>& charList) override;
-    virtual bool saveCharacters(const QList<Character *>& charList) override;
+    virtual bool loadCharacters(QVector<Character *>& charList) override;
+    virtual bool saveCharacters(const QVector<Character *>& charList) override;
     virtual bool saveCharacter(const Character *character) override;
 
     virtual bool loadPortrait(quint64 char_id, QImage& img) override;

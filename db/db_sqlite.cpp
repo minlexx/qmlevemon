@@ -211,7 +211,7 @@ bool DbSqlite::execSqlFile(QSqlDatabase *db, const QString& filename)
 }
 
 
-bool DbSqlite::loadCharacters(QList<Character *>& charList)
+bool DbSqlite::loadCharacters(QVector<Character *>& charList)
 {
     if (!m_chars_db.isOpen()) return false;
     QSqlQuery q(m_chars_db);
@@ -227,7 +227,7 @@ bool DbSqlite::loadCharacters(QList<Character *>& charList)
         // check that character was loaded properly
         // this may fail if savedata format changed
         if (character->characterId() == char_id) {
-            charList.append(character);
+            charList.push_back(character);
         } else {
             qCDebug(logDb) << "Character id" << char_id
                            << " was not correctly loaded from dataabse; did save format change?";
@@ -237,7 +237,7 @@ bool DbSqlite::loadCharacters(QList<Character *>& charList)
 }
 
 
-bool DbSqlite::saveCharacters(const QList<Character *>& charList)
+bool DbSqlite::saveCharacters(const QVector<Character *>& charList)
 {
     if (!m_chars_db.isOpen()) return false;
     QSqlQuery q(m_chars_db);

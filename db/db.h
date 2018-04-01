@@ -3,7 +3,7 @@
 
 
 #include <QtGlobal>
-#include <QList>
+#include <QVector>
 #include <QImage>
 #include <QString>
 #include <QJsonObject>
@@ -26,8 +26,8 @@ public:
     virtual ~Db();
 
 public:
-    virtual bool loadCharacters(QList<Character *>& charList) = 0;
-    virtual bool saveCharacters(const QList<Character *>& charList) = 0;
+    virtual bool loadCharacters(QVector<Character *>& charList) = 0;
+    virtual bool saveCharacters(const QVector<Character *>& charList) = 0;
     virtual bool saveCharacter(const Character *character) = 0;
 
     virtual bool loadPortrait(quint64 char_id, QImage& img) = 0;

@@ -195,7 +195,7 @@ void CharacterModel::addNewCharacter(Character *character)
         QMutexLocker lock(&m_mutex);
         int firstRow = m_characterList.size();  // we will append to list
         beginInsertRows(QModelIndex(), firstRow, firstRow);
-        m_characterList.append(character);
+        m_characterList.push_back(character);
         Db *db = globalAppInstance()->database();
         if (db) {
             db->saveCharacters(m_characterList);
