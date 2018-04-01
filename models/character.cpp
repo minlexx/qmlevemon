@@ -489,24 +489,6 @@ const CharacterSkill *Character::currentTrainingSkill() const
     return nullptr;
 }
 
-//qint64 Character::currentSkillSecondsLeft() const
-//{
-//    QDateTime curDtUtc = QDateTime::currentDateTimeUtc();
-//    qint64 msecs_left = curDtUtc.msecsTo(m_currentTrainingSkill.queueInfo().finishDate);
-//    msecs_left /= 1000;
-//    return msecs_left;
-//}
-
-//QDateTime Character::currentSkillFinishDate() const
-//{
-//    return m_currentTrainingSkill.queueInfo().finishDate;
-//}
-
-//QDateTime Character::skillQueueFinishDate() const
-//{
-//    return m_skillQueueFinishDate;
-//}
-
 bool Character::isSkillQueueEmpty() const
 {
     return (m_skillQueue.currentTrainingSkillId() == 0);

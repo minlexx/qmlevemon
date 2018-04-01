@@ -82,9 +82,6 @@ class Character: public QObject
     Q_PROPERTY(QObject*   skillGroupsModel         READ skillGroupsModel         NOTIFY skillsChanged)
     // current training skill and queue info
     Q_PROPERTY(const QObject* currentTrainingSkill READ currentTrainingSkillObj    NOTIFY skillsChanged)
-    //Q_PROPERTY(qint64     currentSkillSecondsLeft  READ currentSkillSecondsLeft  NOTIFY skillsChanged)
-    //Q_PROPERTY(QDateTime  currentSkillFinishDate   READ currentSkillFinishDate   NOTIFY skillsChanged)
-    //Q_PROPERTY(QDateTime  skillQueueFinishDate     READ skillQueueFinishDate     NOTIFY skillsChanged)
     Q_PROPERTY(bool       isSkillQueueEmpty        READ isSkillQueueEmpty          NOTIFY skillsChanged)
 
 public:
@@ -218,9 +215,6 @@ public:
     const QObject  *currentTrainingSkillObj() const;
     CharacterSkill *currentTrainingSkill();
     const CharacterSkill *currentTrainingSkill() const;
-    //qint64 currentSkillSecondsLeft() const;
-    //QDateTime currentSkillFinishDate() const;
-    //QDateTime skillQueueFinishDate() const;
     CharacterSkillQueue& skillQueue();
     const CharacterSkillQueue& skillQueue() const;
     bool isSkillQueueEmpty() const;
