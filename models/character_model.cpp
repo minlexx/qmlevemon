@@ -88,7 +88,7 @@ QVariant CharacterModel::data(const QModelIndex &index, int role) const
     }
 
     QMutexLocker locker(&m_mutex);
-    int row = index.row();
+    const int row = index.row();
     if ((row < 0) || (row >= m_characterList.count())) {
         return ret;
     }
@@ -138,30 +138,34 @@ QVariant CharacterModel::data(const QModelIndex &index, int role) const
             if (!ch->isSkillQueueEmpty()) {
                 const CharacterSkill *sk = ch->currentTrainingSkill();
                 if (sk) {
-                    //const QDateTime endDt = sk->
-                    //qint64 seconds_left = sk->
-                    //ret = Utils::numberOfSecondsToTimeLeftString(seconds_left);
+                    const QDateTime endDt = sk->trainFinishDate();
+                    const qint64 seconds_left = curDt.secsTo(endDt);
+                    ret = Utils::numberOfSecondsToTimeLeftString(seconds_left);
                 }
             }
         } break;
     case TrainingSkillEndDateTime: {
             ret = QLatin1String("-");
-//            if (!ch->isSkillQueueEmpty()) {
-//                ret = ch->currentSkillFinishDate();
-//            }
+            if (!ch->isSkillQueueEmpty()) {
+                const CharacterSkill *sk = ch->currentTrainingSkill();
+                if (sk) {
+                    ret = sk->trainFinishDate();
+                }
+            }
         } break;
     case QueueTimeLeft: {
             ret = QLatin1String("-");
-//            if (!ch->isSkillQueueEmpty()) {
-//                QDateTime finishDt = ch->skillQueueFinishDate();
-//                qint64 seconds_left = QDateTime::currentDateTimeUtc().msecsTo(finishDt) / 1000;
-//                ret = Utils::numberOfSecondsToTimeLeftString(seconds_left);
-//            }
+            if (!ch->isSkillQueueEmpty()) {
+                const QDateTime finishDt = ch->skillQueue().queueFinishDate();
+                const qint64 seconds_left = curDt.secsTo(finishDt);
+                ret = Utils::numberOfSecondsToTimeLeftString(seconds_left);
+            }
         } break;
     case QueueFinishDateTime: {
-//            if (!ch->isSkillQueueEmpty()) {
-//                ret = ch->skillQueueFinishDate();
-//            }
+            ret = QLatin1String("-");
+            if (!ch->isSkillQueueEmpty()) {
+                ret = ch->skillQueue().queueFinishDate();
+            }
         } break;
     case IsQueueEmpty: ret = ch->isSkillQueueEmpty(); break;
     }
