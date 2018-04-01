@@ -1,4 +1,9 @@
+#include <QDateTime>
+#include <QLoggingCategory>
 #include "character_skillqueue.h"
+
+
+Q_LOGGING_CATEGORY(logSQ, "evemon.skillqueue")
 
 
 namespace EM {
@@ -19,7 +24,7 @@ void CharacterSkillQueue::clear()
     m_queue.clear();
 }
 
-void CharacterSkillQueue::addItem(const EM::CharacterSkillQueueItem &item)
+void CharacterSkillQueue::addItem(const CharacterSkillQueueItem &item)
 {
     m_queue.push_back(item);
 }
@@ -29,9 +34,13 @@ void CharacterSkillQueue::addItem(CharacterSkillQueueItem &&item)
     m_queue.push_back(item);
 }
 
-void CharacterSkillQueue::calc()
+QDateTime CharacterSkillQueue::queueFinishDate() const
 {
-    //
+    if (m_queue.isEmpty()) {
+        return QDateTime::currentDateTime();
+    }
+    // finish datetime of last skill in queue
+    return m_queue.at(m_queue.size() -1).finishDate;
 }
 
 quint64 CharacterSkillQueue::currentTrainingSkillId() const
@@ -43,13 +52,31 @@ quint64 CharacterSkillQueue::currentTrainingSkillId() const
     return 0;
 }
 
-QDateTime CharacterSkillQueue::queueFinishDate() const
+
+void CharacterSkillQueue::calc()
 {
-    if (m_queue.isEmpty()) {
-        return QDateTime::currentDateTime();
+    if (m_queue.size() < 1) {
+        // nothing to calculate
+        return;
     }
-    // finish datetime of last skill in queue
-    return m_queue.at(m_queue.size() -1).finishDate;
+
+    // ESI API returns times in UTC timezone
+    QDateTime dtCur = QDateTime::currentDateTimeUtc();
+
+    QVector<CharacterSkillQueueItem>::iterator iter = m_queue.begin();
+    // recalculate queue positions
+    int qpos = 0;
+    while(iter != m_queue.end()) {
+        // remove all skills that are finished already
+        if (iter->finishDate < dtCur) {
+            qCDebug(logSQ) << "  removing finished skill from queue:" << iter->skillId << iter->finishDate << " < " << dtCur;
+            iter = m_queue.erase(iter);
+        }
+        // overwrite queue pos
+        iter->queuePosition = qpos;
+        ++iter;
+        ++qpos;
+    }
 }
 
 

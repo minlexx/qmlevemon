@@ -57,14 +57,14 @@ public:
 
 public:
     void clear();
-    void addItem(const EM::CharacterSkillQueueItem &item);
-    void addItem(EM::CharacterSkillQueueItem &&item);
+    void addItem(const CharacterSkillQueueItem &item);
+    void addItem(CharacterSkillQueueItem &&item);
     void calc();
     quint64 currentTrainingSkillId() const;
     QDateTime queueFinishDate() const;
 
 protected:
-    QVector<EM::CharacterSkillQueueItem> m_queue;
+    QVector<CharacterSkillQueueItem> m_queue;
 };
 
 

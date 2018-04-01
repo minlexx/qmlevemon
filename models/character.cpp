@@ -680,7 +680,7 @@ void Character::clearSkillQueue()
 
 void Character::calcSkillQueue()
 {
-    m_skillQueue.calc(); // TODO
+    m_skillQueue.calc();
     Q_EMIT skillsChanged();
     Q_EMIT skillQueueChanged(); // NOTE: this needs to be kept here probably,
     // because this is called from setSkillQueue() and it needs to
