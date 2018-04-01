@@ -210,6 +210,7 @@ public:
     quint64 totalSp() const;
     bool isAlphaClone() const;
     QVector<CharacterSkill> skills() const;
+    const QVector<CharacterSkill> &skillsRef() const;
     QObject *skillGroupsModel();
     // current training skill and queue info
     const QObject  *currentTrainingSkillObj() const;

@@ -441,6 +441,7 @@ QDateTime Character::remapCooldownDate() const { return m_remapCooldownDate; }
 quint64 Character::totalSp() const { return m_totalSp; }
 bool Character::isAlphaClone() const { return m_isAlphaClone; }
 QVector<EM::CharacterSkill> Character::skills() const { return m_skills; }
+const QVector<CharacterSkill> &Character::skillsRef() const { return m_skills; }
 
 QObject *Character::skillGroupsModel()
 {
