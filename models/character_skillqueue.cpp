@@ -39,6 +39,7 @@ quint64 CharacterSkillQueue::currentTrainingSkillId() const
     if (m_queue.size() > 0) {
         return m_queue.at(0).skillId;
     }
+    // queue is empty
     return 0;
 }
 

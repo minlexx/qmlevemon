@@ -509,8 +509,7 @@ const CharacterSkill *Character::currentTrainingSkill() const
 
 bool Character::isSkillQueueEmpty() const
 {
-    //return m_currentTrainingSkill.skillId() == 0;
-    return true;
+    return (m_skillQueue.currentTrainingSkillId() == 0);
 }
 
 void Character::setAttributeCharisma(int a) {

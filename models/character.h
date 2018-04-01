@@ -78,7 +78,7 @@ class Character: public QObject
     //Q_PROPERTY(qint64     currentSkillSecondsLeft  READ currentSkillSecondsLeft  NOTIFY skillsChanged)
     //Q_PROPERTY(QDateTime  currentSkillFinishDate   READ currentSkillFinishDate   NOTIFY skillsChanged)
     //Q_PROPERTY(QDateTime  skillQueueFinishDate     READ skillQueueFinishDate     NOTIFY skillsChanged)
-    //Q_PROPERTY(bool       isSkillQueueEmpty        READ isSkillQueueEmpty        NOTIFY skillsChanged)
+    Q_PROPERTY(bool       isSkillQueueEmpty        READ isSkillQueueEmpty          NOTIFY skillsChanged)
 
 public:
     Character(QObject *parent = nullptr);
