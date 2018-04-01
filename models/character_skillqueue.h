@@ -61,6 +61,7 @@ public:
     void addItem(EM::CharacterSkillQueueItem &&item);
     void calc();
     quint64 currentTrainingSkillId() const;
+    QDateTime queueFinishDate() const;
 
 protected:
     QVector<EM::CharacterSkillQueueItem> m_queue;

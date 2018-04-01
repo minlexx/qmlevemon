@@ -43,6 +43,15 @@ quint64 CharacterSkillQueue::currentTrainingSkillId() const
     return 0;
 }
 
+QDateTime CharacterSkillQueue::queueFinishDate() const
+{
+    if (m_queue.isEmpty()) {
+        return QDateTime::currentDateTime();
+    }
+    // finish datetime of last skill in queue
+    return m_queue.at(m_queue.size() -1).finishDate;
+}
+
 
 } // namespace EM
 
