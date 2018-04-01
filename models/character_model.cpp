@@ -1,3 +1,4 @@
+#include <QDateTime>
 #include <QLocale>
 #include <QLoggingCategory>
 #include <QDebug>
@@ -85,12 +86,16 @@ QVariant CharacterModel::data(const QModelIndex &index, int role) const
     if (!index.isValid()) {
         return ret;
     }
+
     QMutexLocker locker(&m_mutex);
     int row = index.row();
     if ((row < 0) || (row >= m_characterList.count())) {
         return ret;
     }
+
+    const QDateTime curDt = QDateTime::currentDateTime();
     const Character * const ch = m_characterList.at(row);
+
     // return an appropriate role for QML
     switch (role) {
     case Qt::DisplayRole: ret = ch->toString(); break;
@@ -112,7 +117,7 @@ QVariant CharacterModel::data(const QModelIndex &index, int role) const
     case Bio: ret = ch->bio(); break;
         // wallet info
     case ISK: {
-            QLocale loc;
+            const QLocale loc;
             ret = loc.toCurrencyString(ch->iskAmount(), QStringLiteral("ISK"), 2);
         } break;
     case ISKAmountStr: ret = ch->iskAmountStr(); break;
@@ -120,20 +125,24 @@ QVariant CharacterModel::data(const QModelIndex &index, int role) const
     case TotalSP: ret = ch->totalSp(); break;
     case TrainingSkill: {
             ret = QLatin1String("-");
-//            if (!ch->isSkillQueueEmpty()) {
-//                const CharacterSkill *sk = qobject_cast<const CharacterSkill *>(ch->currentTrainingSkill());
-//                if (sk) {
-//                    // "Large Pulse Laser Specialiation V"
-//                    ret = QString(QLatin1String("%1 %2")).arg(sk->skillName()).arg(sk->trainingLevelRoman());
-//                }
-//            }
+            if (!ch->isSkillQueueEmpty()) {
+                const CharacterSkill *sk = ch->currentTrainingSkill();
+                if (sk) {
+                    // "Large Pulse Laser Specialiation V"
+                    ret = QString(QLatin1String("%1 %2")).arg(sk->skillName()).arg(sk->trainingLevelRoman());
+                }
+            }
         } break;
     case TrainingSkillTimeLeft: {
             ret = QLatin1String("-");
-//            if (!ch->isSkillQueueEmpty()) {
-//                qint64 seconds_left = ch->currentSkillSecondsLeft();
-//                ret = Utils::numberOfSecondsToTimeLeftString(seconds_left);
-//            }
+            if (!ch->isSkillQueueEmpty()) {
+                const CharacterSkill *sk = ch->currentTrainingSkill();
+                if (sk) {
+                    //const QDateTime endDt = sk->
+                    //qint64 seconds_left = sk->
+                    //ret = Utils::numberOfSecondsToTimeLeftString(seconds_left);
+                }
+            }
         } break;
     case TrainingSkillEndDateTime: {
             ret = QLatin1String("-");
