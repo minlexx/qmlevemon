@@ -467,12 +467,7 @@ CharacterSkill *Character::currentTrainingSkill()
         // queue is empty
         return nullptr;
     }
-    for (CharacterSkill &skill : m_skills) {
-        if (skill.skillId() == currentTrainingSkillId) {
-            return &skill;
-        }
-    }
-    return nullptr;
+    return int_findSkill(currentTrainingSkillId);
 }
 
 const CharacterSkill *Character::currentTrainingSkill() const
@@ -482,12 +477,7 @@ const CharacterSkill *Character::currentTrainingSkill() const
         // queue is empty
         return nullptr;
     }
-    for (const CharacterSkill &skill : m_skills) {
-        if (skill.skillId() == currentTrainingSkillId) {
-            return &skill;
-        }
-    }
-    return nullptr;
+    return int_findSkill(currentTrainingSkillId);
 }
 
 bool Character::isSkillQueueEmpty() const
@@ -570,52 +560,6 @@ void Character::setSkills(const QVector<CharacterSkill> &vskills)
     if (m_skills != vskills) {
         m_skills = vskills;
         updateSkillGroupsModel();
-
-//        // find currently trained skill and last skill in queue
-//        int indexInVector = 0;
-//        int minQueuePos = INT_MAX;  // needed to find first skill in queue
-//        int firstSkillIndex = -1;
-//        int maxQueuePos = -1;  // needed to fins last skill in queue
-//        int lastSkillIndex = -1;
-//        for (const CharacterSkill &sk : qAsConst(m_skills)) {
-//            int qpos = sk.queueInfo().queuePosition;
-//            // is skill in queue?
-//            if (qpos > 0) {
-//                if (qpos < minQueuePos) {
-//                    minQueuePos = qpos;
-//                    firstSkillIndex = indexInVector;
-//                }
-//                if (qpos > maxQueuePos) {
-//                    maxQueuePos = qpos;
-//                    lastSkillIndex = indexInVector;
-//                }
-//            }
-//            ++indexInVector;
-//        }
-
-//        if ((firstSkillIndex == -1) && (lastSkillIndex == -1)) {
-//            // skill queue is empty!
-//            qCWarning(logCharacter) << "Skill queue is empty!";
-//            // zero out zurrent training skill skillId as indicator of empty queue
-//            m_currentTrainingSkill.setSkillId(0);
-//            m_currentTrainingSkill.setSkillName(QString());
-//        } else {
-//            // remember current training skill
-//            const CharacterSkill &firstSkill = m_skills.at(firstSkillIndex);
-//            m_currentTrainingSkill = firstSkill;
-
-//            // remember when the whole skill queue ends
-//            const CharacterSkill &lastSkill = m_skills.at(lastSkillIndex);
-//            m_skillQueueFinishDate = lastSkill.queueInfo().finishDate;
-
-//            // qCDebug(logCharacter) << "    First skill:" << firstSkill;
-//            // qCDebug(logCharacter) << "    Last skill:" << lastSkill;
-//            // ^^ looks correct
-
-//            // also update skill groups model, tell where current training skill is
-//            m_skillGroupsModel.setActiveTrainingGroupId(firstSkill.skillGroupId());
-//        }
-
         Q_EMIT skillsChanged();
     }
 }
@@ -624,6 +568,26 @@ void Character::setSkills(const QVector<CharacterSkill> &vskills)
 void Character::updateSkillGroupsModel()
 {
     m_skillGroupsModel.setFromSkills(m_skills);
+}
+
+CharacterSkill *Character::int_findSkill(quint64 askillId)
+{
+    for (CharacterSkill &skill : m_skills) {
+        if (skill.skillId() == askillId) {
+            return &skill;
+        }
+    }
+    return nullptr;
+}
+
+const CharacterSkill *Character::int_findSkill(quint64 askillId) const
+{
+    for (const CharacterSkill &skill : m_skills) {
+        if (skill.skillId() == askillId) {
+            return &skill;
+        }
+    }
+    return nullptr;
 }
 
 void Character::setSkillQueue(const CharacterSkillQueue &queue)

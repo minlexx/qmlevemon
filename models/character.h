@@ -258,6 +258,8 @@ public Q_SLOTS:
 
 protected:
     void updateSkillGroupsModel();
+    CharacterSkill *int_findSkill(quint64 skillId);
+    const CharacterSkill *int_findSkill(quint64 skillId) const;
 
 Q_SIGNALS:
     // general info
