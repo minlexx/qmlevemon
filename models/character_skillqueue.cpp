@@ -74,6 +74,11 @@ QVector<CharacterSkillQueueItem>::const_iterator CharacterSkillQueue::end() cons
     return m_queue.end();
 }
 
+int CharacterSkillQueue::size() const
+{
+    return m_queue.size();
+}
+
 
 void CharacterSkillQueue::calc()
 {
