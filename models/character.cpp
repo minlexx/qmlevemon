@@ -666,14 +666,13 @@ void Character::calcSkillQueue()
     for (QVector<CharacterSkillQueueItem>::iterator iter = m_skillQueue.begin(); iter != m_skillQueue.end(); iter++) {
         // remove all skills that are finished already
         if (iter->finishDate < dtCur) {
-
             CharacterSkill *sk = int_findSkill(iter->skillId);
             if (sk) {
-                qCDebug(logCharacter) << toString() << ": removing finished skill from queue and leveling it up:"
+                qCDebug(logCharacter) << "    " << toString()
+                                      << ": removing finished skill from queue and leveling it up:"
                                       << (*sk) << iter->finishDate << "<" << dtCur;
                 sk->trainLevelUp();
             }
-
             iter = m_skillQueue.erase(iter);
         }
         // overwrite queue pos
