@@ -149,6 +149,14 @@ void CharacterSkill::clearQueueInfo()
     m_trainFinishDate = QDateTime();
 }
 
+void CharacterSkill::trainLevelUp()
+{
+    // setters properly emit all signals
+    // and recalculate m_skillPointsInLevel
+    setActiveLevel(m_activeLevel + 1);
+    setTrainedLevel(m_trainedLevel + 1);
+}
+
 
 } // namespace EM
 

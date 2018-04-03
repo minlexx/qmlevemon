@@ -62,9 +62,12 @@ public Q_SLOTS:
     double    trainPercent() const;
     QDateTime trainStartDate() const;
     QDateTime trainFinishDate() const;
+
+public:
     void      setQueueInfo(int pos, int trainLevel, double trainPercent,
                            const QDateTime &startDt, const QDateTime &endDt);
     void      clearQueueInfo();
+    void      trainLevelUp();
 
 Q_SIGNALS:
     void trainedLevelChanged();
