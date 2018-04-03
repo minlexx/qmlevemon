@@ -63,6 +63,12 @@ public:
     quint64 currentTrainingSkillId() const;
     QDateTime queueFinishDate() const;
 
+    // container-like interface
+    QVector<CharacterSkillQueueItem>::iterator begin();
+    QVector<CharacterSkillQueueItem>::const_iterator begin() const;
+    QVector<CharacterSkillQueueItem>::iterator end();
+    QVector<CharacterSkillQueueItem>::const_iterator end() const;
+
 protected:
     QVector<CharacterSkillQueueItem> m_queue;
 };

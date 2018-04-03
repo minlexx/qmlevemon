@@ -53,6 +53,28 @@ quint64 CharacterSkillQueue::currentTrainingSkillId() const
 }
 
 
+// container-like interface
+QVector<CharacterSkillQueueItem>::iterator CharacterSkillQueue::begin()
+{
+    return m_queue.begin();
+}
+
+QVector<CharacterSkillQueueItem>::const_iterator CharacterSkillQueue::begin() const
+{
+    return m_queue.begin();
+}
+
+QVector<CharacterSkillQueueItem>::iterator CharacterSkillQueue::end()
+{
+    return m_queue.end();
+}
+
+QVector<CharacterSkillQueueItem>::const_iterator CharacterSkillQueue::end() const
+{
+    return m_queue.end();
+}
+
+
 void CharacterSkillQueue::calc()
 {
     if (m_queue.size() < 1) {
