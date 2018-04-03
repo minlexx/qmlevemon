@@ -79,6 +79,19 @@ int CharacterSkillQueue::size() const
     return m_queue.size();
 }
 
+QVector<CharacterSkillQueueItem>::iterator CharacterSkillQueue::erase(
+        QVector<CharacterSkillQueueItem>::iterator ibegin,
+        QVector<CharacterSkillQueueItem>::iterator iend)
+{
+    return m_queue.erase(ibegin, iend);
+}
+
+QVector<CharacterSkillQueueItem>::iterator CharacterSkillQueue::erase(
+        QVector<CharacterSkillQueueItem>::iterator pos)
+{
+    return m_queue.erase(pos);
+}
+
 
 void CharacterSkillQueue::calc()
 {

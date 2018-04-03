@@ -69,6 +69,9 @@ public:
     QVector<CharacterSkillQueueItem>::iterator end();
     QVector<CharacterSkillQueueItem>::const_iterator end() const;
     int size() const;
+    QVector<CharacterSkillQueueItem>::iterator erase(QVector<CharacterSkillQueueItem>::iterator ibegin,
+                                                     QVector<CharacterSkillQueueItem>::iterator iend);
+    QVector<CharacterSkillQueueItem>::iterator erase(QVector<CharacterSkillQueueItem>::iterator pos);
 
 protected:
     QVector<CharacterSkillQueueItem> m_queue;
