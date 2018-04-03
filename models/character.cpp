@@ -667,10 +667,13 @@ void Character::calcSkillQueue()
         // remove all skills that are finished already
         if (iter->finishDate < dtCur) {
 
-            // TODO: since this skill is considered trained now, increase its level in character
+            CharacterSkill *sk = int_findSkill(iter->skillId);
+            if (sk) {
+                qCDebug(logCharacter) << toString() << ": removing finished skill from queue and leveling it up:"
+                                      << (*sk) << iter->finishDate << "<" << dtCur;
+                sk->trainLevelUp();
+            }
 
-            qCDebug(logCharacter) << toString() << ": removing finished skill from queue:"
-                                  << iter->skillId << iter->finishDate << "<" << dtCur;
             iter = m_skillQueue.erase(iter);
         }
         // overwrite queue pos
