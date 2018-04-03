@@ -644,14 +644,41 @@ void Character::clearSkillQueue()
 
 void Character::calcSkillQueue()
 {
-    m_skillQueue.calc();
-
     // clear all skills queue info
     for (CharacterSkill &sk : m_skills) {
         sk.clearQueueInfo();
     }
 
-    // loop through all skills in queue
+    if (m_skillQueue.size() < 1) {
+        // nothing to calculate
+        // but skills may have been modified by clearQueueInfo() above
+        Q_EMIT skillsChanged();
+        Q_EMIT skillQueueChanged();
+        return;
+    }
+
+    // Remove all skills that may be already finished
+    //   ... ESI API returns times in UTC timezone
+    QDateTime dtCur = QDateTime::currentDateTimeUtc();
+
+    // recalculate queue positions
+    int qpos = 0;
+    for (QVector<CharacterSkillQueueItem>::iterator iter = m_skillQueue.begin(); iter != m_skillQueue.end(); iter++) {
+        // remove all skills that are finished already
+        if (iter->finishDate < dtCur) {
+
+            // TODO: since this skill is considered trained now, increase its level in character
+
+            qCDebug(logCharacter) << toString() << ": removing finished skill from queue:"
+                                  << iter->skillId << iter->finishDate << "<" << dtCur;
+            iter = m_skillQueue.erase(iter);
+        }
+        // overwrite queue pos
+        iter->queuePosition = qpos;
+        ++qpos;
+    }
+
+    // loop through all skills in queue and update their queue info
     for (const CharacterSkillQueueItem &qitem: qAsConst(m_skillQueue)) {
         // update skill's queue info form skillQueueItem
         CharacterSkill *sk = int_findSkill(qitem.skillId);
