@@ -645,6 +645,24 @@ void Character::clearSkillQueue()
 void Character::calcSkillQueue()
 {
     m_skillQueue.calc();
+
+    // clear all skills queue info
+    for (CharacterSkill &sk : m_skills) {
+        sk.clearQueueInfo();
+    }
+
+    // loop through all skills in queue
+    for (const CharacterSkillQueueItem &qitem: qAsConst(m_skillQueue)) {
+        // update skill's queue info form skillQueueItem
+        CharacterSkill *sk = int_findSkill(qitem.skillId);
+        if (!sk) continue;
+        double skillPointsTrainedSinceLevel = static_cast<double>(sk->skillPointsInSkill() - qitem.levelStartSp);
+        double skillPointsNeededTotal = static_cast<double>(qitem.levelEndSp - qitem.levelStartSp);
+        double trainPercent = skillPointsTrainedSinceLevel / skillPointsNeededTotal;
+        sk->setQueueInfo(qitem.queuePosition, qitem.trainingLevel, trainPercent,
+                         qitem.startDate, qitem.finishDate);
+    }
+
     Q_EMIT skillsChanged();
     Q_EMIT skillQueueChanged(); // NOTE: this needs to be kept here probably,
     // because this is called from setSkillQueue() and it needs to
