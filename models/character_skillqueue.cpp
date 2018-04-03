@@ -93,33 +93,6 @@ QVector<CharacterSkillQueueItem>::iterator CharacterSkillQueue::erase(
 }
 
 
-void CharacterSkillQueue::calc()
-{
-    if (m_queue.size() < 1) {
-        // nothing to calculate
-        return;
-    }
-
-    // ESI API returns times in UTC timezone
-    QDateTime dtCur = QDateTime::currentDateTimeUtc();
-
-    QVector<CharacterSkillQueueItem>::iterator iter = m_queue.begin();
-    // recalculate queue positions
-    int qpos = 0;
-    while(iter != m_queue.end()) {
-        // remove all skills that are finished already
-        if (iter->finishDate < dtCur) {
-            qCDebug(logSQ) << "  removing finished skill from queue:" << iter->skillId << iter->finishDate << " < " << dtCur;
-            iter = m_queue.erase(iter);
-        }
-        // overwrite queue pos
-        iter->queuePosition = qpos;
-        ++iter;
-        ++qpos;
-    }
-}
-
-
 } // namespace EM
 
 

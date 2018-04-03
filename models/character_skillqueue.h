@@ -59,7 +59,7 @@ public:
     void clear();
     void addItem(const CharacterSkillQueueItem &item);
     void addItem(CharacterSkillQueueItem &&item);
-    void calc();
+
     quint64 currentTrainingSkillId() const;
     QDateTime queueFinishDate() const;
 
