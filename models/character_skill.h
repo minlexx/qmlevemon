@@ -62,7 +62,9 @@ public Q_SLOTS:
     double    trainPercent() const;
     QDateTime trainStartDate() const;
     QDateTime trainFinishDate() const;
-    void      setQueueInfo(bool inQueue, int pos, int trainLevel, double trainPercent, const QDateTime &startDt, const QDateTime &endDt);
+    void      setQueueInfo(int pos, int trainLevel, double trainPercent,
+                           const QDateTime &startDt, const QDateTime &endDt);
+    void      clearQueueInfo();
 
 Q_SIGNALS:
     void trainedLevelChanged();
@@ -77,7 +79,6 @@ protected:
     quint64 m_skillPointsInLevel = 0;
 
     // members to store info about training queue
-    bool m_isInQueue = false;
     int m_positionInQueue = -1;
     int m_trainingLevel = 0;
     double m_trainPercent = 0.0;

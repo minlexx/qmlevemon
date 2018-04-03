@@ -100,7 +100,7 @@ void CharacterSkill::setSkillPointsInSkill(quint64 sp) {
 
 quint64 CharacterSkill::skillPointsInLevel() const { return m_skillPointsInLevel; }
 
-bool CharacterSkill::isInQueue() const { return m_isInQueue; }
+bool CharacterSkill::isInQueue() const { return m_positionInQueue >= 0; }
 
 int CharacterSkill::positionInQueue() const { return m_positionInQueue; }
 
@@ -129,15 +129,24 @@ QDateTime CharacterSkill::trainStartDate() const { return m_trainStartDate; }
 
 QDateTime CharacterSkill::trainFinishDate() const { return m_trainFinishDate; }
 
-void CharacterSkill::setQueueInfo(bool inQueue, int pos, int trainLevel, double trainPercent, const QDateTime &startDt, const QDateTime &endDt)
+void CharacterSkill::setQueueInfo(int pos, int trainLevel, double trainPercent,
+                                  const QDateTime &startDt, const QDateTime &endDt)
 {
-    m_isInQueue = inQueue;
     m_positionInQueue = pos;
     m_trainingLevel = trainLevel;
     m_trainPercent = trainPercent;
     m_trainStartDate = startDt;
     m_trainFinishDate = endDt;
     Q_EMIT queueInfoChanged();
+}
+
+void CharacterSkill::clearQueueInfo()
+{
+    m_positionInQueue = -1; // -1 - not in queue
+    m_trainingLevel = 0;
+    m_trainPercent = 0.0;
+    m_trainStartDate = QDateTime();
+    m_trainFinishDate = QDateTime();
 }
 
 
