@@ -661,20 +661,25 @@ void Character::calcSkillQueue()
     //   ... ESI API returns times in UTC timezone
     QDateTime dtCur = QDateTime::currentDateTimeUtc();
 
-    // recalculate queue positions
-    int qpos = 0;
+    // "compact" queue by removing finished skills
     for (QVector<CharacterSkillQueueItem>::iterator iter = m_skillQueue.begin(); iter != m_skillQueue.end(); iter++) {
         // remove all skills that are finished already
         if (iter->finishDate < dtCur) {
             CharacterSkill *sk = int_findSkill(iter->skillId);
-            if (sk) {
+            if (Q_LIKELY(sk)) {
                 qCDebug(logCharacter) << "    " << toString()
                                       << ": removing finished skill from queue and leveling it up:"
                                       << (*sk) << iter->finishDate << "<" << dtCur;
                 sk->trainLevelUp();
             }
             iter = m_skillQueue.erase(iter);
+            --iter;
         }
+    }
+
+    // recalculate queue positions
+    int qpos = 0;
+    for (QVector<CharacterSkillQueueItem>::iterator iter = m_skillQueue.begin(); iter != m_skillQueue.end(); iter++) {
         // overwrite queue pos
         iter->queuePosition = qpos;
         ++qpos;
@@ -685,11 +690,15 @@ void Character::calcSkillQueue()
         // update skill's queue info form skillQueueItem
         CharacterSkill *sk = int_findSkill(qitem.skillId);
         if (!sk) continue;
-        double skillPointsTrainedSinceLevel = static_cast<double>(sk->skillPointsInSkill() - qitem.levelStartSp);
-        double skillPointsNeededTotal = static_cast<double>(qitem.levelEndSp - qitem.levelStartSp);
-        double trainPercent = skillPointsTrainedSinceLevel / skillPointsNeededTotal;
-        sk->setQueueInfo(qitem.queuePosition, qitem.trainingLevel, trainPercent,
-                         qitem.startDate, qitem.finishDate);
+
+        // be smart and overwrite queue info only for skill that is not already queued
+        if (!sk->isInQueue()) {
+            double skillPointsTrainedSinceLevel = static_cast<double>(sk->skillPointsInSkill() - qitem.levelStartSp);
+            double skillPointsNeededTotal = static_cast<double>(qitem.levelEndSp - qitem.levelStartSp);
+            double trainPercent = skillPointsTrainedSinceLevel / skillPointsNeededTotal;
+            sk->setQueueInfo(qitem.queuePosition, qitem.trainingLevel, trainPercent,
+                            qitem.startDate, qitem.finishDate);
+        }
     }
 
     updateSkillGroupsModel();
