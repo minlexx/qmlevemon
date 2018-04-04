@@ -835,6 +835,7 @@ QDataStream& operator>>(QDataStream &stream, EM::Character &character)
     stream >> character.m_update_timestamps;
     // some final calculations
     character.updateSkillGroupsModel();
+    character.calcSkillQueue();
     return stream;
 }
 
