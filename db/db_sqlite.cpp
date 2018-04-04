@@ -229,7 +229,7 @@ bool DbSqlite::loadCharacters(QVector<Character *>& charList)
         if (character->characterId() == char_id) {
             charList.push_back(character);
         } else {
-            qCDebug(logDb) << "Character id" << char_id
+            qCWarning(logDb) << "Character id" << char_id
                            << " was not correctly loaded from dataabse; did save format change?";
         }
     }
