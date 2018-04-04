@@ -52,7 +52,7 @@ QVariant CharacterSkillQueueModel::data(const QModelIndex &index, int role) cons
     QMutexLocker lock(&m_mutex);
 
     int row = index.row();
-    if ((row <= 0) || (row >= m_data.size())) {
+    if ((row < 0) || (row >= m_data.size())) {
         return ret;
     }
 
