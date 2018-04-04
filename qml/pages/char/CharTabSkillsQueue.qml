@@ -11,5 +11,29 @@ Rectangle {
     color: AppStyle.bgColor
     clip: true
 
-    Text { text: "Skills queue" }
+    ListView {
+        id: lvSkillQueue
+        anchors.fill: parent
+        anchors.margins: 1
+        model: curChar.skillQueueModel
+        currentIndex: -1
+        interactive: true
+
+        delegate: SkillProgressBar {
+            id: skillPB
+            skillQueueNum: model.positionInQueue + 1 // 0
+            skillName: model.skillName
+            skillId: model.skillId
+            skillRank: model.skillTimeConstant
+            skillLevelActive: model.activeLevel
+            skillLevelTrained: model.trainedLevel
+            skillSpCurrent: model.skillPointsInSkill
+            skillSpTotal: model.skillPointsInLevel
+            isInProgress: (model.positionInQueue === 0)
+            isQueued: model.isInQueue
+
+            width: lvSkillQueue.width
+            useAltBackColor: (model.positionInQueue % 2 == 1)
+        }
+    }
 }
