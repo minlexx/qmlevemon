@@ -485,6 +485,8 @@ bool Character::isSkillQueueEmpty() const
     return (m_skillQueue.currentTrainingSkillId() == 0);
 }
 
+QObject *Character::skillQueueModel() { return static_cast<QObject *>(&m_skillQueueModel); }
+
 void Character::setAttributeCharisma(int a) {
     if (m_attributeCharisma != a) {
         m_attributeCharisma = a;
@@ -568,6 +570,11 @@ void Character::setSkills(const QVector<CharacterSkill> &vskills)
 void Character::updateSkillGroupsModel()
 {
     m_skillGroupsModel.setFromSkills(m_skills);
+}
+
+void Character::updateSkillQueueModel()
+{
+    m_skillQueueModel.setModelData(m_skills, m_skillQueue);
 }
 
 CharacterSkill *Character::int_findSkill(quint64 askillId)
@@ -702,6 +709,7 @@ void Character::calcSkillQueue()
     }
 
     updateSkillGroupsModel();
+    updateSkillQueueModel();
 
     Q_EMIT skillsChanged();
     Q_EMIT skillQueueChanged(); // NOTE: this needs to be kept here probably,

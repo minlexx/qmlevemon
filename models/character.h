@@ -11,6 +11,7 @@
 #include "character_skill.h"
 #include "character_skillqueue.h"
 #include "character_skillgroups_model.h"
+#include "character_skillqueue_model.h"
 #include "eve_api/eve_api_tokens.h"
 #include "update_timestamps.h"
 
@@ -81,8 +82,9 @@ class Character: public QObject
     Q_PROPERTY(bool       isAlphaClone             READ isAlphaClone             NOTIFY isAlphaCloneChanged)
     Q_PROPERTY(QObject*   skillGroupsModel         READ skillGroupsModel         NOTIFY skillsChanged)
     // current training skill and queue info
-    Q_PROPERTY(const QObject* currentTrainingSkill READ currentTrainingSkillObj    NOTIFY skillsChanged)
-    Q_PROPERTY(bool       isSkillQueueEmpty        READ isSkillQueueEmpty          NOTIFY skillsChanged)
+    Q_PROPERTY(const QObject* currentTrainingSkill READ currentTrainingSkillObj    NOTIFY skillQueueChanged)
+    Q_PROPERTY(bool       isSkillQueueEmpty        READ isSkillQueueEmpty          NOTIFY skillQueueChanged)
+    Q_PROPERTY(QObject*   skillQueueModel          READ skillQueueModel            NOTIFY skillQueueChanged)
 
 public:
     Character(QObject *parent = nullptr);
@@ -219,6 +221,7 @@ public:
     CharacterSkillQueue& skillQueue();
     const CharacterSkillQueue& skillQueue() const;
     bool isSkillQueueEmpty() const;
+    QObject *skillQueueModel();
 
     // skills and related - setters
     void setAttributeCharisma(int a);
@@ -258,6 +261,7 @@ public Q_SLOTS:
 
 protected:
     void updateSkillGroupsModel();
+    void updateSkillQueueModel();
     CharacterSkill *int_findSkill(quint64 skillId);
     const CharacterSkill *int_findSkill(quint64 skillId) const;
 
@@ -360,7 +364,7 @@ protected:
     CharacterSkillGroupsModel m_skillGroupsModel;
     // skill queue
     CharacterSkillQueue m_skillQueue;
-    QDateTime m_skillQueueFinishDate;
+    CharacterSkillQueueModel m_skillQueueModel;
 
     // auth info
     EveOAuthTokens m_tokens;
