@@ -54,15 +54,17 @@ public:
     void loadCharacters();
     void addNewCharacter(Character *character);
     void removeCharacter(quint64 char_id);
-    QList<Character> getCharacters() const;
+    QList<Character *> getCharacters() const;
     // emit signal to model clients that some character has changed data
-    void updateCharacter(const Character &character);
     Character *findCharacterById(quint64 char_id);
 
 public:  // reimplmented interface
     QHash<int, QByteArray> roleNames() const override;
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+
+public Q_SLOTS:
+    void updateCharacter(const Character *character);
 
 Q_SIGNALS:
     void newCharacterAdded();

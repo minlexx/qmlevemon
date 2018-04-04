@@ -247,19 +247,23 @@ void CharacterModel::removeCharacter(quint64 char_id)
  * @brief CharacterModel::getCharacters
  * @return an explicitly copied characters objects list
  */
-QList<Character> CharacterModel::getCharacters() const
+QList<Character *> CharacterModel::getCharacters() const
 {
-    QList<Character> ret_list;
+    QList<Character *> ret_list;
     QMutexLocker lock(&m_mutex);
     for (const Character *ch: m_characterList) {
-        ret_list << Character(*ch); // copy-construct into returning list
+        ret_list.append(new Character(*ch)); // copy-construct into returning list
     }
     return ret_list;
 }
 
 
-// emit signal to model clients that some character has changed data
-void CharacterModel::updateCharacter(const Character &updatedCharacter)
+/**
+ * Tries to find an existing character to update with data from received.
+ * Emits signal to model clients that some character has changed data.
+ * Deletes its argument.
+ **/
+void CharacterModel::updateCharacter(const Character *updatedCharacter)
 {
     int row = -1;
     {
@@ -269,7 +273,7 @@ void CharacterModel::updateCharacter(const Character &updatedCharacter)
         Character *to_modify = nullptr;
         int cindex = 0; // count index
         for (Character *existingCharacter: m_characterList) {
-            if (existingCharacter->characterId() == updatedCharacter.characterId()) {
+            if (existingCharacter->characterId() == updatedCharacter->characterId()) {
                 to_modify = existingCharacter;
                 // row = m_characterList.indexOf(existingCharacter); // whaaat
                 row = cindex;
@@ -280,12 +284,13 @@ void CharacterModel::updateCharacter(const Character &updatedCharacter)
         if ((row == -1) || (!to_modify)) {
             // not found
             qCWarning(logCharacterModel) << "updateCharacter(): Character not found after updating "
-                    "from network, is it already deleted?" << updatedCharacter.toString();
+                    "from network, is it already deleted?" << updatedCharacter->toString();
+            delete updatedCharacter;
             return;
         }
 
         // actually update character
-        (*to_modify) = updatedCharacter;  // call lots of operator=()
+        (*to_modify) = (*updatedCharacter);  // call lots of operator=()
 
         // save in DB
         Db *db = globalAppInstance()->database();
@@ -295,6 +300,9 @@ void CharacterModel::updateCharacter(const Character &updatedCharacter)
 
         // unlock mutex before emitting any signals
     }
+
+    delete updatedCharacter;
+
     // emit signal for model clients
     QModelIndex topLeft = index(row);
     Q_EMIT dataChanged(topLeft, topLeft); // one item changed only ;)
