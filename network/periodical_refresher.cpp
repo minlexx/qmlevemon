@@ -16,6 +16,7 @@
 #include "models/character_model.h"
 #include "models/character_skill.h"
 #include "models/model_manager.h"
+#include "models/character_model.h"
 #include "models/skill_tree_model.h"
 #include "eve_api/eve_api.h"
 #include "qmlevemon_app.h"
@@ -42,6 +43,11 @@ PeriodicalRefresher::PeriodicalRefresher(QObject *parent):
                      Qt::QueuedConnection);
     QObject::connect(this, &PeriodicalRefresher::refresh,
                      m_worker, &PeriodicalRefresherWorker::refresh,
+                     Qt::QueuedConnection);
+
+    CharacterModel *characterModel = ModelManager::instance()->characterModel();
+    QObject::connect(m_worker, &PeriodicalRefresherWorker::characterUpdated,
+                     characterModel, &CharacterModel::updateCharacter,
                      Qt::QueuedConnection);
 
     m_thread.start(QThread::LowPriority);

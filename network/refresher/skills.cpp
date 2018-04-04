@@ -15,9 +15,9 @@
 namespace EM {
 
 
-int PeriodicalRefresherWorker::refresh_skills(Character &ch) {
-    if (!ch.updateTimestamps().isUpdateNeeded(UpdateTimestamps::UTST::SKILLS)) {
-        qCDebug(logRefresher) << " no need to refresh skills for" << ch.toString();
+int PeriodicalRefresherWorker::refresh_skills(Character *ch) {
+    if (!ch->updateTimestamps().isUpdateNeeded(UpdateTimestamps::UTST::SKILLS)) {
+        qCDebug(logRefresher) << " no need to refresh skills for" << ch->toString();
         return 0;  // no update needed, too early
     }
     // check if tokens needs refresing
@@ -30,8 +30,8 @@ int PeriodicalRefresherWorker::refresh_skills(Character &ch) {
     QJsonArray replyArr;
 
     // refresh character attributes
-    qCDebug(logRefresher) << " refreshing attributes for" << ch.toString();
-    if (m_api->get_character_attributes(reply, ch.characterId(), ch.getAuthTokens().access_token)) {
+    qCDebug(logRefresher) << " refreshing attributes for" << ch->toString();
+    if (m_api->get_character_attributes(reply, ch->characterId(), ch->getAuthTokens().access_token)) {
         if (QThread::currentThread()->isInterruptionRequested()) return 0;
 
         num_updates++;
@@ -56,29 +56,29 @@ int PeriodicalRefresherWorker::refresh_skills(Character &ch) {
         QDateTime last_remap_date = QDateTime::fromString(slast_remap_date, Qt::ISODate);
         QDateTime remap_cooldown_date = QDateTime::fromString(sremap_cooldown_date, Qt::ISODate);
 
-        if (ch.attributeCharisma() != charisma) {
-            ch.setAttributeCharisma(charisma);
+        if (ch->attributeCharisma() != charisma) {
+            ch->setAttributeCharisma(charisma);
         }
-        if (ch.attributeIntelligence() != intelligence) {
-            ch.setAttributeIntelligence(intelligence);
+        if (ch->attributeIntelligence() != intelligence) {
+            ch->setAttributeIntelligence(intelligence);
         }
-        if (ch.attributeMemory() != memory) {
-            ch.setAttributeMemory(memory);
+        if (ch->attributeMemory() != memory) {
+            ch->setAttributeMemory(memory);
         }
-        if (ch.attributePerception() != perception) {
-            ch.setAttributePerception(perception);
+        if (ch->attributePerception() != perception) {
+            ch->setAttributePerception(perception);
         }
-        if (ch.attributeWillpower() != willpower) {
-            ch.setAttributeWillpower(willpower);
+        if (ch->attributeWillpower() != willpower) {
+            ch->setAttributeWillpower(willpower);
         }
-        if (ch.numBonusRemaps() != bonus_remaps) {
-            ch.setNumBonusRemaps(bonus_remaps);
+        if (ch->numBonusRemaps() != bonus_remaps) {
+            ch->setNumBonusRemaps(bonus_remaps);
         }
-        if (ch.lastRemapDate() != last_remap_date) {
-            ch.setLastRemapDate(last_remap_date);
+        if (ch->lastRemapDate() != last_remap_date) {
+            ch->setLastRemapDate(last_remap_date);
         }
-        if (ch.remapCooldownDate() != remap_cooldown_date) {
-            ch.setRemapCooldownDate(remap_cooldown_date);
+        if (ch->remapCooldownDate() != remap_cooldown_date) {
+            ch->setRemapCooldownDate(remap_cooldown_date);
         }
     }
     if (QThread::currentThread()->isInterruptionRequested()) return 0;
@@ -86,15 +86,15 @@ int PeriodicalRefresherWorker::refresh_skills(Character &ch) {
     // refresh character skills
     SkillTreeModel *skillTree = ModelManager::instance()->skillTreeModel();
     // get ALL character's skills
-    qCDebug(logRefresher) << " refreshing skills for" << ch.toString();
-    if (m_api->get_character_skills(reply, ch.characterId(), ch.getAuthTokens().access_token)) {
+    qCDebug(logRefresher) << " refreshing skills for" << ch->toString();
+    if (m_api->get_character_skills(reply, ch->characterId(), ch->getAuthTokens().access_token)) {
         if (QThread::currentThread()->isInterruptionRequested()) return 0;
 
         bool isAlphaClone = false;
         QVector<CharacterSkill> charSkills;
 
         quint64 totalSp = reply.value(QLatin1String("total_sp")).toVariant().toULongLong();
-        ch.setTotalSp(totalSp);
+        ch->setTotalSp(totalSp);
 
         const QJsonArray jskills = reply.value(QLatin1String("skills")).toArray();
         for (auto jskillvalue: jskills) {
@@ -134,17 +134,17 @@ int PeriodicalRefresherWorker::refresh_skills(Character &ch) {
         // qCDebug(logRefresher) << Q_FUNC_INFO << "parsed skills";
 
         // forcefully update character's alpha clone status
-        ch.setIsAlphaClone(isAlphaClone);
-        ch.setSkills(charSkills);
+        ch->setIsAlphaClone(isAlphaClone);
+        ch->setSkills(charSkills);
     }
 
     // refresh character skillqueue
-    qCDebug(logRefresher) << " refreshing skill queue for" << ch.toString();
-    if (m_api->get_character_skillqueue(replyArr, ch.characterId(), ch.getAuthTokens().access_token)) {
+    qCDebug(logRefresher) << " refreshing skill queue for" << ch->toString();
+    if (m_api->get_character_skillqueue(replyArr, ch->characterId(), ch->getAuthTokens().access_token)) {
         if (QThread::currentThread()->isInterruptionRequested()) return 0;
         // qCDebug(logRefresher) << replyArr;
 
-        ch.clearSkillQueue();
+        ch->clearSkillQueue();
 
         // this array comes ordered by queue position acsending,
         // but "queue_position" in JSON sometimes does not start at 0
@@ -181,17 +181,17 @@ int PeriodicalRefresherWorker::refresh_skills(Character &ch) {
                 queueItem.queuePosition = real_qpos;
             }
 
-            ch.skillQueue().addItem(std::move(queueItem));
+            ch->skillQueue().addItem(std::move(queueItem));
 
             ++real_qpos;
         }
 
-        ch.calcSkillQueue();
+        ch->calcSkillQueue();
 
         // qCDebug(logRefresher) << Q_FUNC_INFO << "parsed skillqueue";
     }
 
-    ch.setUpdateTimestamp(UpdateTimestamps::UTST::SKILLS);
+    ch->setUpdateTimestamp(UpdateTimestamps::UTST::SKILLS);
     return num_updates;
 }
 

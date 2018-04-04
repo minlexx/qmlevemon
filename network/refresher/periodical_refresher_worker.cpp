@@ -44,8 +44,8 @@ void PeriodicalRefresherWorker::refresh()
     // get a copied list of characters and do all modifications to copies
     // after all data was updated, return modified copy to model
     CharacterModel *cmodel = ModelManager::instance()->characterModel();
-    QList<Character> clist = cmodel->getCharacters();
-    for (Character &ch: clist) {
+    QList<Character *> clist = cmodel->getCharacters();
+    for (Character *ch: clist) {
         int num_updates = 0;
 
         // public data
@@ -67,7 +67,25 @@ void PeriodicalRefresherWorker::refresh()
         // in the case of any updates were made to this character,
         // after all data was updated, return modified copy to model
         if (num_updates > 0) {
-            cmodel->updateCharacter(ch);
+            // cmodel->updateCharacter(ch); // <<=- We cannot do that, because
+            //  it would cause model to be updated from different thread
+            //  and model qould emit its dataChanged() from the wrong thread.
+            // It causes the foolowing problem:
+            //  QObject::connect: Cannot queue arguments of type 'QQmlChangeSet'
+            //  (Make sure 'QQmlChangeSet' is registered using qRegisterMetaType().)
+            //  as Q_EMIT dataChanged() inside model would become QueuedConnection type
+            //  and due to impossibility of queueing 'QQmlChangeSet' this change will be
+            //  ignored and QML UI will not be updated.
+
+            // That's why we need to emit a queued signal that only sends a pointer
+            //  and slot should be handled in model, in main thread, so no thread
+            //  ownership problem exists.
+            Q_EMIT characterUpdated(ch);
+            // ^^ slot connected to this signal will delete ch's memory
+        } else {
+            // character was not updated, so its memory will not be freed in slot,
+            //  we need to manually delete it here
+            delete ch;
         }
 
         if (QThread::currentThread()->isInterruptionRequested()) break;  // break early
@@ -107,15 +125,15 @@ void PeriodicalRefresherWorker::setNetworkActive(bool active)
  * @param ch - Character pointer whose tokens to refresh
  * @return true if refresh is not needed, ot refresh was OK. false on refresh error
  */
-bool PeriodicalRefresherWorker::check_refresh_token(Character &ch) {
+bool PeriodicalRefresherWorker::check_refresh_token(Character *ch) {
     // not all functions require access_token, but for some...
-    EveOAuthTokens tokens = ch.getAuthTokens();
+    EveOAuthTokens tokens = ch->getAuthTokens();
     if (tokens.needsRefresh()) {
-        qCDebug(logRefresher) << "  tokens for" << ch.toString()
+        qCDebug(logRefresher) << "  tokens for" << ch->toString()
                               << " need refreshing...";
         if (eveapi_refresh_access_token(tokens)) {
             // qCDebug(logRefresher) << "  tokens refresh OK.";
-            ch.setAuthTokens(tokens);
+            ch->setAuthTokens(tokens);
         } else {
             qCWarning(logRefresher) << "  tokens refreshing failed!";
             return false;
