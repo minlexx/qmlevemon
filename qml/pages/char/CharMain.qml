@@ -330,15 +330,30 @@ Rectangle {
             interactive: false // This QML property was introduced in QtQuick.Controls 2.1 (Qt 5.8).
             currentIndex: subInfoTabBar.currentIndex
 
-            CharTabSkills { }
+            CharTabSkills {
+                width: subInfoSwipeView.width
+                height: subInfoSwipeView.height
+            }
 
-            CharTabSkillsQueue { }
+            CharTabSkillsQueue {
+                width: subInfoSwipeView.width
+                height: subInfoSwipeView.height
+            }
 
-            CharTabClones { }
+            CharTabClones {
+                width: subInfoSwipeView.width
+                height: subInfoSwipeView.height
+            }
 
-            CharTabWallet { }
+            CharTabWallet {
+                width: subInfoSwipeView.width
+                height: subInfoSwipeView.height
+            }
 
-            CharTabAssets { }
+            CharTabAssets {
+                width: subInfoSwipeView.width
+                height: subInfoSwipeView.height
+            }
         }
     }
 

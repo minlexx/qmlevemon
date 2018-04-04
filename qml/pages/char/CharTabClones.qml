@@ -9,8 +9,6 @@ Rectangle {
     id: container
     border { width: 1; color: AppStyle.mainColor }
     color: AppStyle.bgColor
-    width: subInfoSwipeView.width
-    height: subInfoSwipeView.height
     clip: true
 
     Text { text: "Clones" }
