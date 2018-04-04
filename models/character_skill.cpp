@@ -41,6 +41,12 @@ CharacterSkill &CharacterSkill::operator=(const CharacterSkill &other)
     m_activeLevel         = other.m_activeLevel;
     m_skillPointsInSkill  = other.m_skillPointsInSkill;
     m_skillPointsInLevel  = other.m_skillPointsInLevel;
+    // queue info
+    m_positionInQueue     = other.m_positionInQueue;
+    m_trainingLevel       = other.m_trainingLevel;
+    m_trainPercent        = other.m_trainPercent;
+    m_trainStartDate      = other.m_trainStartDate;
+    m_trainFinishDate     = other.m_trainFinishDate;
     return (*this);
 }
 
@@ -52,6 +58,12 @@ CharacterSkill &CharacterSkill::operator=(CharacterSkill &&other)
     m_activeLevel         = std::move(other.m_activeLevel);
     m_skillPointsInSkill  = std::move(other.m_skillPointsInSkill);
     m_skillPointsInLevel  = std::move(other.m_skillPointsInLevel);
+    // queue info
+    m_positionInQueue     = std::move(other.m_positionInQueue);
+    m_trainingLevel       = std::move(other.m_trainingLevel);
+    m_trainPercent        = std::move(other.m_trainPercent);
+    m_trainStartDate      = std::move(other.m_trainStartDate);
+    m_trainFinishDate     = std::move(other.m_trainFinishDate);
     return (*this);
 }
 
