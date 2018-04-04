@@ -56,7 +56,6 @@ public:  // reimplmented interface
 
 public:
     void setFromSkills(const QVector<CharacterSkill> &skills);
-    void setActiveTrainingGroupId(quint64 groupId);
 
 private:
     QHash<int, QByteArray> m_roles;

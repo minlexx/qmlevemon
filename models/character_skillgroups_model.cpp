@@ -82,6 +82,7 @@ void EM::CharacterSkillGroupsModel::setFromSkills(const QVector<EM::CharacterSki
         QHash<quint64, int> skillsInGroup; // <group_id, num_skills>
         QHash<quint64, quint64> skillPointsGroup; // <group_id, num_skillpoints>
         QHash<quint64, int> skillsQueued; // <group_id, num_skills>
+        QHash<quint64, int> skillsInTraining; // <group_id, num_skills>
 
         m_data.clear();
         int numAdded = 0;
@@ -121,6 +122,14 @@ void EM::CharacterSkillGroupsModel::setFromSkills(const QVector<EM::CharacterSki
                     ++skillsQueued[groupId];
                 }
 
+                // count skills in training in this group
+                if (!skillsInTraining.contains(groupId)) {
+                    skillsInTraining.insert(groupId, 0);
+                }
+                if (sk.positionInQueue() == 0) {
+                    ++skillsInTraining[groupId];
+                }
+
             } else {
                 qCDebug(logCharSkillGroupsModel) << "Could not find a skill group for skill:" << sk;
             }
@@ -135,21 +144,11 @@ void EM::CharacterSkillGroupsModel::setFromSkills(const QVector<EM::CharacterSki
             md.m_skillsInGroupTrained = skillsInGroup[md.m_id];
             md.m_skillPointsInGroup = skillPointsGroup[md.m_id];
             md.m_numSkillsInQueue = skillsQueued[md.m_id];
+            md.m_numSkillsInTraining = skillsInTraining[md.m_id];
         }
     }
 
     endResetModel();
-}
-
-void EM::CharacterSkillGroupsModel::setActiveTrainingGroupId(quint64 groupId)
-{
-    // update modeldata
-    for (ModelData &md: m_data) {
-        if (md.m_id == groupId) {
-            md.m_numSkillsInTraining = 1;
-            return;
-        }
-    }
 }
 
 bool EM::CharacterSkillGroupsModel::ModelData::operator<(const EM::CharacterSkillGroupsModel::ModelData &o) const
