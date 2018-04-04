@@ -8,6 +8,7 @@
 #include <QVector>
 
 #include "character_skill.h"
+#include "character_skillqueue.h"
 
 
 namespace EM {
@@ -29,13 +30,13 @@ class CharacterSkillQueueModel: public QAbstractListModel
         // properties from skill
         TrainedLevel,
         ActiveLevel,
-        TrainingLevel,
-        TrainingLevelRoman,
         SkillPointsInSkill,
         SkillPointsInLevel,
         // properties from skill queue
         IsInQueue,
         PositionInQueue,
+        TrainingLevel,
+        TrainingLevelRoman,
         TrainPercent,
         TrainStartDate,
         TrainFinishDate
@@ -51,7 +52,7 @@ public:  // reimplmented interface
 
 public:
     // other funcs
-    void setSkillQueue(const QVector<CharacterSkill> &queue);
+    void setModelData(const QVector<CharacterSkill> skills, const CharacterSkillQueue& queue);
 
 private:
     QHash<int, QByteArray> m_roles;

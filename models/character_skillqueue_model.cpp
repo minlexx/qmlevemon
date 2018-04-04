@@ -1,6 +1,8 @@
 #include "character_skillqueue_model.h"
 
-EM::CharacterSkillQueueModel::CharacterSkillQueueModel(QObject *parent)
+namespace EM {
+
+CharacterSkillQueueModel::CharacterSkillQueueModel(QObject *parent)
     : QAbstractListModel(parent)
 {
     m_roles = {
@@ -15,32 +17,32 @@ EM::CharacterSkillQueueModel::CharacterSkillQueueModel(QObject *parent)
         //
         {TrainedLevel,       QByteArrayLiteral("trainedLevel")},
         {ActiveLevel,        QByteArrayLiteral("activeLevel")},
-        {TrainingLevel,      QByteArrayLiteral("trainingLevel")},
-        {TrainingLevelRoman, QByteArrayLiteral("trainingLevelRoman")},
         {SkillPointsInSkill, QByteArrayLiteral("skillPointsInSkill")},
         {SkillPointsInLevel, QByteArrayLiteral("skillPointsInLevel")},
         //
         {IsInQueue,          QByteArrayLiteral("isInQueue")},
         {PositionInQueue,    QByteArrayLiteral("positionInQueue")},
+        {TrainingLevel,      QByteArrayLiteral("trainingLevel")},
+        {TrainingLevelRoman, QByteArrayLiteral("trainingLevelRoman")},
         {TrainPercent,       QByteArrayLiteral("trainPercent")},
         {TrainStartDate,     QByteArrayLiteral("trainStartDate")},
         {TrainFinishDate,    QByteArrayLiteral("trainFinishDate")},
     };
 }
 
-QHash<int, QByteArray> EM::CharacterSkillQueueModel::roleNames() const
+QHash<int, QByteArray> CharacterSkillQueueModel::roleNames() const
 {
     return m_roles;
 }
 
-int EM::CharacterSkillQueueModel::rowCount(const QModelIndex &parent) const
+int CharacterSkillQueueModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
     QMutexLocker lock(&m_mutex);
     return m_data.count();
 }
 
-QVariant EM::CharacterSkillQueueModel::data(const QModelIndex &index, int role) const
+QVariant CharacterSkillQueueModel::data(const QModelIndex &index, int role) const
 {
     QVariant ret;
     if (!index.isValid()) {
@@ -56,36 +58,50 @@ QVariant EM::CharacterSkillQueueModel::data(const QModelIndex &index, int role) 
 
     const CharacterSkill &skill = m_data.at(row);
     switch(role) {
-    case Qt::DisplayRole:     ret = skill.skillName(); break;
-    case SkillId:             ret = skill.skillId(); break;
-    case SkillName:           ret = skill.skillName(); break;
-    case SkillGroupName:      ret = skill.skillGroupName(); break;
-    case SkillGroupId:        ret = skill.skillGroupId(); break;
-    case PrimaryAttribute:    ret = skill.primaryAttribute(); break;
+    case Qt::DisplayRole:     ret = skill.skillName();          break;
+    case SkillId:             ret = skill.skillId();            break;
+    case SkillName:           ret = skill.skillName();          break;
+    case SkillGroupName:      ret = skill.skillGroupName();     break;
+    case SkillGroupId:        ret = skill.skillGroupId();       break;
+    case PrimaryAttribute:    ret = skill.primaryAttribute();   break;
     case SecondaryAttribute:  ret = skill.secondaryAttribute(); break;
-    case SkillTimeConstant:   ret = skill.skillTimeConstant(); break;
-    case TrainedLevel:        ret = skill.trainedLevel(); break;
-    case ActiveLevel:         ret = skill.activeLevel(); break;
-    case TrainingLevel:       ret = skill.trainingLevel(); break;
-    case TrainingLevelRoman:  ret = skill.trainingLevelRoman(); break;
+    case SkillTimeConstant:   ret = skill.skillTimeConstant();  break;
+    case TrainedLevel:        ret = skill.trainedLevel();       break;
+    case ActiveLevel:         ret = skill.activeLevel();        break;
     case SkillPointsInSkill:  ret = skill.skillPointsInSkill(); break;
     case SkillPointsInLevel:  ret = skill.skillPointsInLevel(); break;
-    case IsInQueue:           ret = skill.isInQueue(); break;
-    case PositionInQueue:     ret = skill.positionInQueue(); break;
-    case TrainPercent:        ret = skill.trainPercent(); break;
-    case TrainStartDate:      ret = skill.trainStartDate(); break;
-    case TrainFinishDate:     ret = skill.trainFinishDate(); break;
+    case IsInQueue:           ret = skill.isInQueue();          break;
+    case PositionInQueue:     ret = skill.positionInQueue();    break;
+    case TrainingLevel:       ret = skill.trainingLevel();      break;
+    case TrainingLevelRoman:  ret = skill.trainingLevelRoman(); break;
+    case TrainPercent:        ret = skill.trainPercent();       break;
+    case TrainStartDate:      ret = skill.trainStartDate();     break;
+    case TrainFinishDate:     ret = skill.trainFinishDate();    break;
     }
 
     return ret;
 }
 
-void EM::CharacterSkillQueueModel::setSkillQueue(const QVector<EM::CharacterSkill> &queue)
+void CharacterSkillQueueModel::setModelData(const QVector<CharacterSkill> skills, const CharacterSkillQueue &queue)
 {
     {
         QMutexLocker lock(&m_mutex);
         beginResetModel();
-        m_data = queue;
+        m_data.clear();
+        // fill m_data - loop over a skill queue in order, and add all skills in it to model
+        // we expect skillqueue to be already compacted here, and skills vector prepared
+        // after Character::calcSkillQueue()
+        for (const CharacterSkillQueueItem &qitem: queue) {
+            // find corresponding skill in skills vector
+            for (const CharacterSkill &sk: skills) {
+                if (sk.skillId() == qitem.skillId) {
+                    m_data.push_back(sk);
+                    break;
+                }
+            }
+        }
     }
     endResetModel();
 }
+
+} // namespace EM
