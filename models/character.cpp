@@ -692,6 +692,8 @@ void Character::calcSkillQueue()
                          qitem.startDate, qitem.finishDate);
     }
 
+    updateSkillGroupsModel();
+
     Q_EMIT skillsChanged();
     Q_EMIT skillQueueChanged(); // NOTE: this needs to be kept here probably,
     // because this is called from setSkillQueue() and it needs to
@@ -834,8 +836,7 @@ QDataStream& operator>>(QDataStream &stream, EM::Character &character)
     // update timestamps
     stream >> character.m_update_timestamps;
     // some final calculations
-    character.updateSkillGroupsModel();
-    character.calcSkillQueue();
+    character.calcSkillQueue(); // now calls updateSkillGroupsModel()
     return stream;
 }
 
