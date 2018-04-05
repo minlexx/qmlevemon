@@ -114,8 +114,8 @@ int PeriodicalRefresherWorker::refresh_skills(Character *ch) {
             // warning detection
             if (chSkill.activeLevel() == 0) {
                 // whaat, how canthis be
-                qCWarning(logRefresher) << "    We got a skill with active level = 0!" << chSkill.skillName();
-                qCWarning(logRefresher) << "    " << jskill;
+                qCWarning(logRefresher) << "    We got a skill with active level = 0!" << chSkill.skillId() << chSkill.skillName();
+                // qCWarning(logRefresher) << "    " << jskill;
             }
 
             // detect alpha clone
