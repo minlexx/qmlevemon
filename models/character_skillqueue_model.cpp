@@ -95,7 +95,16 @@ void CharacterSkillQueueModel::setModelData(const QVector<CharacterSkill> skills
             // find corresponding skill in skills vector
             for (const CharacterSkill &sk: skills) {
                 if (sk.skillId() == qitem.skillId) {
-                    m_data.push_back(sk);
+                    // create a copy of CharacterSkill object
+                    CharacterSkill queueSkill(sk);
+                    // and update it with new skill queue info parameters
+                    queueSkill.clearQueueInfo();
+                    double skillPointsTrainedSinceLevel = static_cast<double>(queueSkill.skillPointsInSkill() - qitem.levelStartSp);
+                    double skillPointsNeededTotal = static_cast<double>(qitem.levelEndSp - qitem.levelStartSp);
+                    double trainPercent = skillPointsTrainedSinceLevel / skillPointsNeededTotal;
+                    queueSkill.setQueueInfo(qitem.queuePosition, qitem.trainingLevel, trainPercent,
+                                            qitem.startDate, qitem.finishDate);
+                    m_data.push_back(queueSkill);
                     break;
                 }
             }
