@@ -152,6 +152,7 @@ Rectangle {
                             skillRank: modelData.skillTimeConstant
                             skillLevelActive: modelData.activeLevel
                             skillLevelTrained: modelData.trainedLevel
+                            skillLevelTraining: modelData.trainingLevel
                             skillSpCurrent: modelData.skillPointsInSkill
                             skillSpTotal: modelData.skillPointsInLevel
                             isInProgress: modelData.isInQueue ? (modelData.positionInQueue === 0) : false
