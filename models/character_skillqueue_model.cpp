@@ -27,6 +27,8 @@ CharacterSkillQueueModel::CharacterSkillQueueModel(QObject *parent)
         {TrainPercent,       QByteArrayLiteral("trainPercent")},
         {TrainStartDate,     QByteArrayLiteral("trainStartDate")},
         {TrainFinishDate,    QByteArrayLiteral("trainFinishDate")},
+        //
+        {SkillPointsPerHour, QByteArrayLiteral("skillPointsPerHour")},
     };
 }
 
@@ -77,6 +79,7 @@ QVariant CharacterSkillQueueModel::data(const QModelIndex &index, int role) cons
     case TrainPercent:        ret = skill.trainPercent();       break;
     case TrainStartDate:      ret = skill.trainStartDate();     break;
     case TrainFinishDate:     ret = skill.trainFinishDate();    break;
+    case SkillPointsPerHour:  ret = skill.skillPointsPerHour(); break;
     }
 
     return ret;
