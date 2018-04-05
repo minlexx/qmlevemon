@@ -7,6 +7,10 @@ Rectangle {
 
     // public interface
 
+    // set to true, if used to display skills in queue
+    // set to false, if used to display skills list
+    property bool modeSkillQueue: false
+
     property int skillId: 0
     property int skillQueueNum: 1
     property int skillRank: 1
@@ -17,8 +21,8 @@ Rectangle {
     property string skillSpTotal: "1000"
     property int skillSpPerHour: 2200
     property string skillTrainingTimeLeft: "" // "1d 12h 56s"
-    property bool isInProgress: true
-    property bool isQueued: false
+    property bool isInProgress: true  // is currently in training
+    property bool isQueued: false     // is in queue at all
 
     property double progressStart: 0.0
     property double progressEnd: 0.5
@@ -35,7 +39,7 @@ Rectangle {
     property color levelIndicatorColor: "black"
 
     // private part
-    color: isInProgress ? backColorTrainingNow : (useAltBackColor ? backColorAlt : backColor)
+    color: (!modeSkillQueue && isInProgress) ? backColorTrainingNow : (useAltBackColor ? backColorAlt : backColor)
     implicitHeight: txtSkillName.height + txtSp.height + 3*AppStyle.marginSmall
     implicitWidth: txtSp.width + txtSpPerHour.width + txtTrainingTime.width + rcLevelIndicator.width + 4*AppStyle.marginBig + 5
     property int index: 0
@@ -136,7 +140,7 @@ Rectangle {
             pointSize: fontSize
         }
         text: ((skillQueueNum > 0) ? (skillQueueNum + ". " + skillName) : skillName) + "   " + qsTr("lv.") + " " + skillLevelActive
-        color: isQueued ? textQueuedColor : textColor
+        color: modeSkillQueue ? textColor : ( isQueued ? textQueuedColor : textColor )
     }
 
     Text {
@@ -151,7 +155,7 @@ Rectangle {
             pointSize: fontSize
         }
         text: "(" + qsTr("Rank") + " " + skillRank + ")"
-        color: isQueued ? textQueuedColor : textColor
+        color: modeSkillQueue ? textColor : ( isQueued ? textQueuedColor : textColor )
     }
 
     Text {
@@ -169,7 +173,7 @@ Rectangle {
             pointSize: fontSize
         }
         text: "SP: " + Number(skillSpCurrent).toLocaleString(Qt.locale(),'f',0) + " / " + Number(skillSpTotal).toLocaleString(Qt.locale(),'f',0)
-        color: isQueued ? textQueuedColor : textColor
+        color: modeSkillQueue ? textColor : ( isQueued ? textQueuedColor : textColor )
     }
 
     Text {
@@ -187,7 +191,7 @@ Rectangle {
             pointSize: fontSize
         }
         text: qsTr("SP/Hour") + ": " + skillSpPerHour
-        color: isQueued ? textQueuedColor : textColor
+        color: modeSkillQueue ? textColor : ( isQueued ? textQueuedColor : textColor )
         visible: isInProgress
     }
 
@@ -206,7 +210,7 @@ Rectangle {
             pointSize: fontSize
         }
         text: qsTr("Training time") + ": " + skillTrainingTimeLeft
-        color: isQueued ? textQueuedColor : textColor
+        color: modeSkillQueue ? textColor : ( isQueued ? textQueuedColor : textColor )
         visible: isInProgress
     }
 }

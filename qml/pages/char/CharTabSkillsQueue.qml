@@ -21,6 +21,7 @@ Rectangle {
 
         delegate: SkillProgressBar {
             id: skillPB
+            modeSkillQueue: true
             skillQueueNum: model.positionInQueue + 1 // 0
             skillName: model.skillName
             skillId: model.skillId
