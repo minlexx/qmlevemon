@@ -32,6 +32,8 @@ class CharacterSkill: public SkillTemplate
     Q_PROPERTY(double     trainPercent       READ trainPercent       NOTIFY queueInfoChanged)
     Q_PROPERTY(QDateTime  trainStartDate     READ trainStartDate     NOTIFY queueInfoChanged)
     Q_PROPERTY(QDateTime  trainFinishDate    READ trainFinishDate    NOTIFY queueInfoChanged)
+    // some calculated stats
+    Q_PROPERTY(int        skillPointsPerHour READ skillPointsPerHour NOTIFY skillPointsPerHourChanged)
 
 public:
     CharacterSkill();
@@ -63,6 +65,10 @@ public Q_SLOTS:
     QDateTime trainStartDate() const;
     QDateTime trainFinishDate() const;
 
+    // some calculated stats
+    int       skillPointsPerHour() const;
+    void      setSkillPointsPerHour(int sph);
+
 public:
     void      setQueueInfo(int pos, int trainLevel, double trainPercent,
                            const QDateTime &startDt, const QDateTime &endDt);
@@ -75,6 +81,7 @@ Q_SIGNALS:
     void activeLevelChanged();
     void skillPointsInSkillChanged();
     void queueInfoChanged();
+    void skillPointsPerHourChanged();
 
 protected:
     int m_trainedLevel = 0;
@@ -88,6 +95,9 @@ protected:
     double m_trainPercent = 0.0;
     QDateTime m_trainStartDate;
     QDateTime m_trainFinishDate;
+
+    // calculated stats
+    int m_skillPointsPerHour = 0;
 
     friend QDataStream& (::operator<<)(QDataStream &stream, const EM::CharacterSkill &skill);
     friend QDataStream& (::operator>>)(QDataStream &stream, EM::CharacterSkill &skill);

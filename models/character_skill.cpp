@@ -47,6 +47,8 @@ CharacterSkill &CharacterSkill::operator=(const CharacterSkill &other)
     m_trainPercent        = other.m_trainPercent;
     m_trainStartDate      = other.m_trainStartDate;
     m_trainFinishDate     = other.m_trainFinishDate;
+    // copy stats also
+    m_skillPointsPerHour  = other.m_skillPointsPerHour;
     return (*this);
 }
 
@@ -64,6 +66,8 @@ CharacterSkill &CharacterSkill::operator=(CharacterSkill &&other)
     m_trainPercent        = std::move(other.m_trainPercent);
     m_trainStartDate      = std::move(other.m_trainStartDate);
     m_trainFinishDate     = std::move(other.m_trainFinishDate);
+    // copy stats also
+    m_skillPointsPerHour  = std::move(other.m_skillPointsPerHour);
     return (*this);
 }
 
@@ -141,6 +145,16 @@ QDateTime CharacterSkill::trainStartDate() const { return m_trainStartDate; }
 
 QDateTime CharacterSkill::trainFinishDate() const { return m_trainFinishDate; }
 
+int CharacterSkill::skillPointsPerHour() const { return m_skillPointsPerHour; }
+
+void CharacterSkill::setSkillPointsPerHour(int sph)
+{
+    if (m_skillPointsPerHour != sph) {
+        m_skillPointsPerHour = sph;
+        Q_EMIT skillPointsPerHourChanged();
+    }
+}
+
 void CharacterSkill::setQueueInfo(int pos, int trainLevel, double trainPercent,
                                   const QDateTime &startDt, const QDateTime &endDt)
 {
@@ -173,6 +187,11 @@ void CharacterSkill::trainLevelUp()
     // and recalculate m_skillPointsInLevel
     setActiveLevel(m_activeLevel + 1);
     setTrainedLevel(m_trainedLevel + 1);
+    // level up also skill points in skill (very rough fix, need exact calculation anyway)
+    //  at least it fixes negative values and division by zero, etc
+    if (m_skillPointsInSkill < m_skillPointsInLevel) {
+        m_skillPointsInSkill = m_skillPointsInLevel;
+    }
 }
 
 
