@@ -66,6 +66,7 @@ public Q_SLOTS:
 public:
     void      setQueueInfo(int pos, int trainLevel, double trainPercent,
                            const QDateTime &startDt, const QDateTime &endDt);
+    void      setQueueTrainingLevel(int atrainingLevel);
     void      clearQueueInfo();
     void      trainLevelUp();
 

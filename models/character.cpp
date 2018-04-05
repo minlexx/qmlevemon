@@ -705,6 +705,11 @@ void Character::calcSkillQueue()
             double trainPercent = skillPointsTrainedSinceLevel / skillPointsNeededTotal;
             sk->setQueueInfo(qitem.queuePosition, qitem.trainingLevel, trainPercent,
                             qitem.startDate, qitem.finishDate);
+        } else {
+            // only update training level
+            if (sk->trainingLevel() < qitem.trainingLevel) {
+                sk->setQueueTrainingLevel(qitem.trainingLevel);
+            }
         }
     }
 

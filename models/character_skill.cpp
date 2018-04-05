@@ -152,6 +152,12 @@ void CharacterSkill::setQueueInfo(int pos, int trainLevel, double trainPercent,
     Q_EMIT queueInfoChanged();
 }
 
+void CharacterSkill::setQueueTrainingLevel(int atrainingLevel)
+{
+    m_trainingLevel = atrainingLevel;
+    Q_EMIT queueInfoChanged();
+}
+
 void CharacterSkill::clearQueueInfo()
 {
     m_positionInQueue = -1; // -1 - not in queue
