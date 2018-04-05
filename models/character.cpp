@@ -8,6 +8,7 @@
 #include <QDebug>
 
 #include "character.h"
+#include "formulas.h"
 
 
 Q_LOGGING_CATEGORY(logCharacter, "evemon.character")
@@ -435,6 +436,22 @@ int Character::attributeIntelligence() const { return m_attributeIntelligence; }
 int Character::attributeMemory() const { return m_attributeMemory; }
 int Character::attributePerception() const { return m_attributePerception; }
 int Character::attributeWillpower() const { return m_attributeWillpower; }
+
+int Character::getAttributeValueByAttributeCode(int code) const
+{
+    int ret = 0;
+    CharacterAttributeID attributeId = charAttributeFromID(code);
+    switch (attributeId) {
+    case CharacterAttributeID::CHARISMA:     ret = attributeCharisma();     break;
+    case CharacterAttributeID::INTELLIGENCE: ret = attributeIntelligence(); break;
+    case CharacterAttributeID::MEMORY:       ret = attributeMemory();       break;
+    case CharacterAttributeID::PERCEPTION:   ret = attributePerception();   break;
+    case CharacterAttributeID::WILLPOWER:    ret = attributeWillpower();    break;
+    case CharacterAttributeID::INVALID: break;
+    }
+    return ret;
+}
+
 int Character::numBonusRemaps() const { return m_numBonusRemaps; }
 QDateTime Character::lastRemapDate() const { return m_lastRemapDate; }
 QDateTime Character::remapCooldownDate() const { return m_remapCooldownDate; }
@@ -692,7 +709,7 @@ void Character::calcSkillQueue()
         ++qpos;
     }
 
-    // loop through all skills in queue and update their queue info
+    // loop over all skills in queue and update their queue info
     for (const CharacterSkillQueueItem &qitem: qAsConst(m_skillQueue)) {
         // update skill's queue info form skillQueueItem
         CharacterSkill *sk = int_findSkill(qitem.skillId);
@@ -705,6 +722,13 @@ void Character::calcSkillQueue()
             double trainPercent = skillPointsTrainedSinceLevel / skillPointsNeededTotal;
             sk->setQueueInfo(qitem.queuePosition, qitem.trainingLevel, trainPercent,
                             qitem.startDate, qitem.finishDate);
+
+            // calculate SP/Hour
+            int primaryAttributeValue = getAttributeValueByAttributeCode(sk->primaryAttribute());
+            int secondaryAttributeValue = getAttributeValueByAttributeCode(sk->secondaryAttribute());
+            float spPerMinute = skill_points_per_minute(primaryAttributeValue, secondaryAttributeValue);
+            int spPerHour = static_cast<int>(spPerMinute * 60.0f);
+            sk->setSkillPointsPerHour(spPerHour);
         } else {
             // only update training level
             if (sk->trainingLevel() < qitem.trainingLevel) {

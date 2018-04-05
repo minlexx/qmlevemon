@@ -206,6 +206,7 @@ public:
     int attributeMemory() const;
     int attributePerception() const;
     int attributeWillpower() const;
+    int getAttributeValueByAttributeCode(int code) const;
     int numBonusRemaps() const;
     QDateTime lastRemapDate() const;
     QDateTime remapCooldownDate() const;
