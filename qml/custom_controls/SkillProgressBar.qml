@@ -193,7 +193,7 @@ Rectangle {
         }
         text: qsTr("SP/Hour") + ": " + skillSpPerHour
         color: modeSkillQueue ? textColor : ( isQueued ? textQueuedColor : textColor )
-        visible: isInProgress
+        visible: isQueued
     }
 
     Text {
@@ -212,6 +212,6 @@ Rectangle {
         }
         text: qsTr("Training time") + ": " + skillTrainingTimeLeft
         color: modeSkillQueue ? textColor : ( isQueued ? textQueuedColor : textColor )
-        visible: isInProgress
+        visible: isQueued && modeSkillQueue
     }
 }
