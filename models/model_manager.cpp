@@ -28,6 +28,12 @@ ModelManager::ModelManager(QObject *parent)
     , m_skillTreeModel(new SkillTreeModel(this))
 {
     qCDebug(logModels) << "ModelManager ctor";
+
+    m_characterModelRecalcTimer.setSingleShot(false);
+    m_characterModelRecalcTimer.setInterval(5000);
+
+    QObject::connect(&m_characterModelRecalcTimer, &QTimer::timeout,
+                     m_characterModel, &CharacterModel::calcCharactersSkillQueue);
 }
 
 

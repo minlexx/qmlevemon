@@ -65,6 +65,7 @@ public:  // reimplmented interface
 
 public Q_SLOTS:
     void updateCharacter(const Character *character);
+    void calcCharactersSkillQueue();
 
 Q_SIGNALS:
     void newCharacterAdded();

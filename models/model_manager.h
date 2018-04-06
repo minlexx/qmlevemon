@@ -2,6 +2,7 @@
 #define H_EM_MODEL_MANAGER
 
 #include <QObject>
+#include <QTimer>
 
 namespace EM {
 
@@ -26,6 +27,8 @@ public:
 private:
     CharacterModel *m_characterModel = nullptr;
     SkillTreeModel *m_skillTreeModel = nullptr;
+
+    QTimer m_characterModelRecalcTimer;
 };
 
 

@@ -308,6 +308,11 @@ void CharacterModel::updateCharacter(const Character *updatedCharacter)
     Q_EMIT dataChanged(topLeft, topLeft); // one item changed only ;)
 }
 
+void CharacterModel::calcCharactersSkillQueue()
+{
+    // TODO: implement calcCharactersSkillQueue()
+}
+
 
 Character *CharacterModel::findCharacterById(quint64 char_id)
 {
