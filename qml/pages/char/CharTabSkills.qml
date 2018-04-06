@@ -158,6 +158,7 @@ Rectangle {
                             skillSpPerHour: modelData.skillPointsPerHour
                             isInProgress: modelData.isInQueue ? (modelData.positionInQueue === 0) : false
                             isQueued: modelData.isInQueue
+                            skillTrainingTimeLeft: modelData.trainingTimeLeft
 
                             width: skillsInGroupColumn.width
                             useAltBackColor: (index % 2 == 1)

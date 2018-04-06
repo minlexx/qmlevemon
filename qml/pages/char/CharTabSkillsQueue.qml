@@ -34,6 +34,7 @@ Rectangle {
             skillSpPerHour: model.skillPointsPerHour
             isInProgress: (model.positionInQueue === 0)
             isQueued: model.isInQueue
+            skillTrainingTimeLeft: model.trainingTimeLeft
 
             width: lvSkillQueue.width
             useAltBackColor: (model.positionInQueue % 2 == 1)
