@@ -154,7 +154,7 @@ Rectangle {
                             skillLevelTrained: modelData.trainedLevel
                             skillLevelTraining: modelData.trainingLevel
                             skillSpCurrent: modelData.skillPointsInSkill
-                            skillSpTotal: modelData.skillPointsInLevel
+                            skillSpTotal: modelData.skillPointsForNextLevel
                             skillSpPerHour: modelData.skillPointsPerHour
                             isInProgress: modelData.isInQueue ? (modelData.positionInQueue === 0) : false
                             isQueued: modelData.isInQueue

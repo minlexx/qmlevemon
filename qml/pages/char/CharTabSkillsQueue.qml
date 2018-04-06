@@ -30,7 +30,7 @@ Rectangle {
             skillLevelTrained: model.trainedLevel
             skillLevelTraining: model.trainingLevel
             skillSpCurrent: model.skillPointsInSkill
-            skillSpTotal: model.skillPointsInLevel
+            skillSpTotal: model.skillPointsForNextLevel
             skillSpPerHour: model.skillPointsPerHour
             isInProgress: (model.positionInQueue === 0)
             isQueued: model.isInQueue
