@@ -37,18 +37,19 @@ CharacterSkill &CharacterSkill::operator=(const CharacterSkill &other)
 {
     if (this == &other) return (*this);
     static_cast<SkillTemplate *>(this)->operator=(other);
-    m_trainedLevel        = other.m_trainedLevel;
-    m_activeLevel         = other.m_activeLevel;
-    m_skillPointsInSkill  = other.m_skillPointsInSkill;
-    m_skillPointsInLevel  = other.m_skillPointsInLevel;
+    m_trainedLevel            = other.m_trainedLevel;
+    m_activeLevel             = other.m_activeLevel;
+    m_skillPointsInSkill      = other.m_skillPointsInSkill;
+    m_skillPointsInLevel      = other.m_skillPointsInLevel;
+    m_skillPointsForNextLevel = other.m_skillPointsForNextLevel;
     // queue info
-    m_positionInQueue     = other.m_positionInQueue;
-    m_trainingLevel       = other.m_trainingLevel;
-    m_trainPercent        = other.m_trainPercent;
-    m_trainStartDate      = other.m_trainStartDate;
-    m_trainFinishDate     = other.m_trainFinishDate;
+    m_positionInQueue         = other.m_positionInQueue;
+    m_trainingLevel           = other.m_trainingLevel;
+    m_trainPercent            = other.m_trainPercent;
+    m_trainStartDate          = other.m_trainStartDate;
+    m_trainFinishDate         = other.m_trainFinishDate;
     // copy stats also
-    m_skillPointsPerHour  = other.m_skillPointsPerHour;
+    m_skillPointsPerHour      = other.m_skillPointsPerHour;
     return (*this);
 }
 
@@ -56,18 +57,19 @@ CharacterSkill &CharacterSkill::operator=(CharacterSkill &&other)
 {
     //SkillTemplate::operator=(std::move(other));
     static_cast<SkillTemplate *>(this)->operator=(std::move(other));
-    m_trainedLevel        = std::move(other.m_trainedLevel);
-    m_activeLevel         = std::move(other.m_activeLevel);
-    m_skillPointsInSkill  = std::move(other.m_skillPointsInSkill);
-    m_skillPointsInLevel  = std::move(other.m_skillPointsInLevel);
+    m_trainedLevel            = std::move(other.m_trainedLevel);
+    m_activeLevel             = std::move(other.m_activeLevel);
+    m_skillPointsInSkill      = std::move(other.m_skillPointsInSkill);
+    m_skillPointsInLevel      = std::move(other.m_skillPointsInLevel);
+    m_skillPointsForNextLevel = std::move(other.m_skillPointsForNextLevel);
     // queue info
-    m_positionInQueue     = std::move(other.m_positionInQueue);
-    m_trainingLevel       = std::move(other.m_trainingLevel);
-    m_trainPercent        = std::move(other.m_trainPercent);
-    m_trainStartDate      = std::move(other.m_trainStartDate);
-    m_trainFinishDate     = std::move(other.m_trainFinishDate);
+    m_positionInQueue         = std::move(other.m_positionInQueue);
+    m_trainingLevel           = std::move(other.m_trainingLevel);
+    m_trainPercent            = std::move(other.m_trainPercent);
+    m_trainStartDate          = std::move(other.m_trainStartDate);
+    m_trainFinishDate         = std::move(other.m_trainFinishDate);
     // copy stats also
-    m_skillPointsPerHour  = std::move(other.m_skillPointsPerHour);
+    m_skillPointsPerHour      = std::move(other.m_skillPointsPerHour);
     return (*this);
 }
 
@@ -89,6 +91,12 @@ void CharacterSkill::setTrainedLevel(int lvl)
         // calculate skillpoints total needed for this skill level
         int skill_rank = static_cast<int>(skillTimeConstant());
         m_skillPointsInLevel = skill_points_needed_for_skill_level(skill_rank, trainedLevel());
+        // calculate skill points needed for next level of this skill
+        int nextLevel = m_trainedLevel + 1;
+        if (nextLevel > 5) {
+            nextLevel = 5;
+        }
+        m_skillPointsForNextLevel = skill_points_needed_for_skill_level(skill_rank, nextLevel);
         Q_EMIT trainedLevelChanged();
     }
 }
@@ -115,6 +123,8 @@ void CharacterSkill::setSkillPointsInSkill(quint64 sp) {
 
 
 quint64 CharacterSkill::skillPointsInLevel() const { return m_skillPointsInLevel; }
+
+quint64 CharacterSkill::skillPointsForNextLevel() const { return m_skillPointsForNextLevel; }
 
 bool CharacterSkill::isInQueue() const { return m_positionInQueue >= 0; }
 
@@ -212,6 +222,7 @@ QDataStream &operator<<(QDataStream &stream, const EM::CharacterSkill &skill)
     stream << skill.m_activeLevel;
     stream << skill.m_skillPointsInSkill;
     stream << skill.m_skillPointsInLevel;
+    stream << skill.m_skillPointsForNextLevel;
     return stream;
 }
 
@@ -245,6 +256,7 @@ QDataStream &operator>>(QDataStream &stream, EM::CharacterSkill &skill)
     stream >> skill.m_activeLevel;
     stream >> skill.m_skillPointsInSkill;
     stream >> skill.m_skillPointsInLevel;
+    stream >> skill.m_skillPointsForNextLevel;
     return stream;
 }
 

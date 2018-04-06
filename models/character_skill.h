@@ -20,10 +20,11 @@ namespace EM {
 class CharacterSkill: public SkillTemplate
 {
     Q_OBJECT
-    Q_PROPERTY(int      trainedLevel         READ trainedLevel       WRITE setTrainedLevel       NOTIFY trainedLevelChanged)
-    Q_PROPERTY(int      activeLevel          READ activeLevel        WRITE setActiveLevel        NOTIFY activeLevelChanged)
-    Q_PROPERTY(quint64  skillPointsInSkill   READ skillPointsInSkill WRITE setSkillPointsInSkill NOTIFY skillPointsInSkillChanged)
-    Q_PROPERTY(quint64  skillPointsInLevel   READ skillPointsInLevel NOTIFY trainedLevelChanged)
+    Q_PROPERTY(int      trainedLevel            READ trainedLevel            WRITE setTrainedLevel       NOTIFY trainedLevelChanged)
+    Q_PROPERTY(int      activeLevel             READ activeLevel             WRITE setActiveLevel        NOTIFY activeLevelChanged)
+    Q_PROPERTY(quint64  skillPointsInSkill      READ skillPointsInSkill      WRITE setSkillPointsInSkill NOTIFY skillPointsInSkillChanged)
+    Q_PROPERTY(quint64  skillPointsInLevel      READ skillPointsInLevel      NOTIFY trainedLevelChanged)
+    Q_PROPERTY(quint64  skillPointsForNextLevel READ skillPointsForNextLevel NOTIFY trainedLevelChanged)
     // properties from skill queue
     Q_PROPERTY(bool       isInQueue          READ isInQueue          NOTIFY queueInfoChanged)
     Q_PROPERTY(int        positionInQueue    READ positionInQueue    NOTIFY queueInfoChanged)
@@ -55,6 +56,7 @@ public Q_SLOTS:
     void      setSkillPointsInSkill(quint64 sp);
 
     quint64   skillPointsInLevel() const;
+    quint64   skillPointsForNextLevel() const;
 
     // properties from skill queue
     bool      isInQueue() const;
@@ -88,6 +90,7 @@ protected:
     int m_activeLevel = 0;
     quint64 m_skillPointsInSkill = 0;
     quint64 m_skillPointsInLevel = 0;
+    quint64 m_skillPointsForNextLevel = 0;
 
     // members to store info about training queue
     int m_positionInQueue = -1;

@@ -32,6 +32,7 @@ class CharacterSkillQueueModel: public QAbstractListModel
         ActiveLevel,
         SkillPointsInSkill,
         SkillPointsInLevel,
+        SkillPointsForNextLevel,
         // properties from skill queue
         IsInQueue,
         PositionInQueue,

@@ -19,6 +19,7 @@ CharacterSkillQueueModel::CharacterSkillQueueModel(QObject *parent)
         {ActiveLevel,        QByteArrayLiteral("activeLevel")},
         {SkillPointsInSkill, QByteArrayLiteral("skillPointsInSkill")},
         {SkillPointsInLevel, QByteArrayLiteral("skillPointsInLevel")},
+        {SkillPointsForNextLevel, QByteArrayLiteral("skillPointsForNextLevel")},
         //
         {IsInQueue,          QByteArrayLiteral("isInQueue")},
         {PositionInQueue,    QByteArrayLiteral("positionInQueue")},
@@ -72,6 +73,7 @@ QVariant CharacterSkillQueueModel::data(const QModelIndex &index, int role) cons
     case ActiveLevel:         ret = skill.activeLevel();        break;
     case SkillPointsInSkill:  ret = skill.skillPointsInSkill(); break;
     case SkillPointsInLevel:  ret = skill.skillPointsInLevel(); break;
+    case SkillPointsForNextLevel: ret = skill.skillPointsForNextLevel(); break;
     case IsInQueue:           ret = skill.isInQueue();          break;
     case PositionInQueue:     ret = skill.positionInQueue();    break;
     case TrainingLevel:       ret = skill.trainingLevel();      break;
