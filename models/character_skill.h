@@ -35,6 +35,7 @@ class CharacterSkill: public SkillTemplate
     Q_PROPERTY(QDateTime  trainFinishDate    READ trainFinishDate    NOTIFY queueInfoChanged)
     // some calculated stats
     Q_PROPERTY(int        skillPointsPerHour READ skillPointsPerHour NOTIFY skillPointsPerHourChanged)
+    Q_PROPERTY(QString    trainingTimeLeft   READ trainingTimeLeft   NOTIFY queueInfoChanged)
 
 public:
     CharacterSkill();
@@ -70,6 +71,7 @@ public Q_SLOTS:
     // some calculated stats
     int       skillPointsPerHour() const;
     void      setSkillPointsPerHour(int sph);
+    QString   trainingTimeLeft() const;
 
 public:
     void      setQueueInfo(int pos, int trainLevel, double trainPercent,

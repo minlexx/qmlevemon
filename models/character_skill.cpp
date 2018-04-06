@@ -5,6 +5,7 @@
 #include "model_manager.h"
 #include "skill_tree_model.h"
 #include "formulas.h"
+#include "utils/str_utils.h"
 
 
 namespace EM {
@@ -163,6 +164,24 @@ void CharacterSkill::setSkillPointsPerHour(int sph)
         m_skillPointsPerHour = sph;
         Q_EMIT skillPointsPerHourChanged();
     }
+}
+
+QString CharacterSkill::trainingTimeLeft() const
+{
+    if (!isInQueue()) {
+        return QString();
+    }
+    // for first skill in queue, count time left from current time
+    QDateTime startDt = QDateTime::currentDateTime();
+    if (m_positionInQueue > 0) {
+        // not first in queue
+        startDt = m_trainStartDate;
+    }
+    const qint64 secondsLeft = startDt.secsTo(m_trainFinishDate);
+    if (secondsLeft < 0) {
+        return QString();
+    }
+    return Utils::numberOfSecondsToTimeLeftString(secondsLeft);
 }
 
 void CharacterSkill::setQueueInfo(int pos, int trainLevel, double trainPercent,
