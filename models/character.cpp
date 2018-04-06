@@ -729,6 +729,15 @@ void Character::calcSkillQueue()
             float spPerMinute = skill_points_per_minute(primaryAttributeValue, secondaryAttributeValue);
             int spPerHour = static_cast<int>(spPerMinute * 60.0f);
             sk->setSkillPointsPerHour(spPerHour);
+
+            // calculate real SP in skill for currently training skill
+            if (qitem.queuePosition == 0) {
+                qint64 secondsPassedSinceTrainingStarted = qitem.startDate.secsTo(dtCur);
+                float minutesPassedSinceTrainingStarted = static_cast<float>(secondsPassedSinceTrainingStarted) / 60.0f;
+                quint64 skillPointsWereTrained = static_cast<quint64>(minutesPassedSinceTrainingStarted * spPerMinute);
+                quint64 currentSkillPointsInSkill = sk->skillPointsInLevel() + skillPointsWereTrained;
+                sk->setSkillPointsInSkill(currentSkillPointsInSkill);
+            }
         } else {
             // only update training level
             if (sk->trainingLevel() < qitem.trainingLevel) {
