@@ -140,7 +140,9 @@ Rectangle {
             family: fontFamily
             pointSize: fontSize
         }
-        text: ((skillQueueNum > 0) ? (skillQueueNum + ". " + skillName) : skillName) + "   " + qsTr("lv.") + " " + skillLevelActive
+        text: ((skillQueueNum > 0) ? (skillQueueNum + ". " + skillName) : skillName)
+              + "   " + qsTr("lv.") + " " + skillLevelActive
+              + (modeSkillQueue ? (" -> " + skillLevelTraining) : "")
         color: modeSkillQueue ? textColor : ( isQueued ? textQueuedColor : textColor )
     }
 
