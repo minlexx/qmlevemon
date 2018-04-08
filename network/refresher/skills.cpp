@@ -113,7 +113,7 @@ int PeriodicalRefresherWorker::refresh_skills(Character *ch) {
 
             // warning detection
             if (chSkill.activeLevel() == 0) {
-                // whaat, how canthis be
+                // whaat, how canthis be (it can be if skill was injected but not traiend)
                 qCWarning(logRefresher) << "    We got a skill with active level = 0!" << chSkill.skillId() << chSkill.skillName();
                 // qCWarning(logRefresher) << "    " << jskill;
             }
@@ -121,6 +121,7 @@ int PeriodicalRefresherWorker::refresh_skills(Character *ch) {
             // detect alpha clone
             // if any skill has activeLevel < trainedLevel, this is alpha
             if (chSkill.activeLevel() < chSkill.trainedLevel()) {
+                qCDebug(logRefresher) << "    << Alpha clone detected >>";
                 isAlphaClone = true;
             }
 
