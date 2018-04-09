@@ -676,6 +676,7 @@ void Character::calcSkillQueue()
     if (m_skillQueue.size() < 1) {
         // nothing to calculate
         // but skills may have been modified by clearQueueInfo() above
+        updateSkillGroupsModel();
         Q_EMIT skillsChanged();
         Q_EMIT skillQueueChanged();
         return;
