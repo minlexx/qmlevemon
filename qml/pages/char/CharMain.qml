@@ -165,7 +165,7 @@ Rectangle {
         fontPointSize: AppStyle.textSizeH4
         keyText: qsTr("Account:")
         valueText: curChar.isAlphaClone ? qsTr("Alpha") : qsTr("Omega")
-        valueTextColor: curChar.isAlphaClone ? AppStyle.textDefaultColor : "green"
+        valueTextColor: curChar.isAlphaClone ? "red" : "green"
     }
 
     Flow {
