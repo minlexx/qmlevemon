@@ -29,16 +29,17 @@ class CharacterSkillGroupsModel: public QAbstractListModel
     public:
         ModelData() {}
         ModelData(quint64 id, const QString &name, int numSkillInGroup):
-            m_id(id), m_name(name), m_skillsInGroupTotal(numSkillInGroup)  {}
+            m_groupId(id), m_groupName(name), m_skillsInGroupTotal(numSkillInGroup)  {}
         ModelData(const ModelData &) = default;
         ModelData(ModelData &&) = default;
         ModelData &operator=(const ModelData &) = default;
         ModelData &operator=(ModelData &&) = default;
         bool operator<(const ModelData &o) const;
+        bool operator==(const ModelData &o) const;
 
     public:
-        quint64 m_id = 0;
-        QString m_name;
+        quint64 m_groupId = 0;
+        QString m_groupName;
         int m_skillsInGroupTrained = 0;
         int m_skillsInGroupTotal = 0;
         quint64 m_skillPointsInGroup = 0;
@@ -56,6 +57,9 @@ public:  // reimplmented interface
 
 public:
     void setFromSkills(const QVector<CharacterSkill> &skills);
+
+protected:
+    void mergeModelData(const QVector<ModelData> &newData);
 
 private:
     QHash<int, QByteArray> m_roles;
