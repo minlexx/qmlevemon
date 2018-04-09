@@ -22,7 +22,7 @@ Rectangle {
         border.color: AppStyle.infoPopupBorderColor
         color: AppStyle.infoPopupBgColor
 
-        QQC1.TreeView {
+        /* QQC1.TreeView {
             anchors.fill: parent
             anchors.margins: 20
             model: skillTreeModel
@@ -37,6 +37,33 @@ Rectangle {
                 width: 100
                 role: "id"
                 title: qsTr("Id")
+            }
+        } */
+
+        Rectangle {
+            id: rc1
+            width: 100
+            height: 100
+            anchors.centerIn: parent
+            color: "red"
+
+            SequentialAnimation {
+                running: true
+                loops: Animation.Infinite
+                ColorAnimation {
+                    target: rc1
+                    property: "color"
+                    from: "white"
+                    to: "black"
+                    duration: 1000
+                }
+                ColorAnimation {
+                    target: rc1
+                    property: "color"
+                    from: "black"
+                    to: "white"
+                    duration: 1000
+                }
             }
         }
     }

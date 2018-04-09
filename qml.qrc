@@ -3,6 +3,7 @@
         <file>qml/qmldir</file>
         <file>qml/AppStyle.qml</file>
         <file>qml/main.qml</file>
+        <file>qml/custom_controls/BlinkingRectangle.qml</file>
         <file>qml/custom_controls/CharacterAttributesView.qml</file>
         <file>qml/custom_controls/CharacterAttributeLine.qml</file>
         <file>qml/custom_controls/CharacterPickerSidebar.qml</file>
