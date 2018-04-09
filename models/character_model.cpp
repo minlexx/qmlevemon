@@ -22,36 +22,38 @@ CharacterModel::CharacterModel(QObject *parent):
 {
     // init role names for QML
     // general info
-    m_roles.insert(Qt::DisplayRole, "displayName");
-    m_roles.insert(Roles::CharacterId, "characterId");
-    m_roles.insert(Roles::CharacterName, "characterName");
-    m_roles.insert(Roles::CorporationId, "corporationId");
-    m_roles.insert(Roles::CorporationName, "corporationName");
-    m_roles.insert(Roles::CorporationTicker, "corporationTicker");
-    m_roles.insert(Roles::AllianceId, "allianceId");
-    m_roles.insert(Roles::AllianceName, "allianceName");
-    m_roles.insert(Roles::AllianceTicker, "allianceTicker");
-    m_roles.insert(Roles::Race, "race");
-    m_roles.insert(Roles::Ancestry, "ancestry");
-    m_roles.insert(Roles::Bloodline, "bloodline");
-    m_roles.insert(Roles::Gender, "gender"); // 0 for male
-    m_roles.insert(Roles::Birthday, "birthday"); // 0 for male
-    m_roles.insert(Roles::SecurityStatus, "securityStatus");
-    m_roles.insert(Roles::Bio, "bio");
-    // wallet info
-    m_roles.insert(Roles::ISK, "isk");
-    m_roles.insert(Roles::ISKAmountStr, "iskAmountStr");
-    // skills info
-    m_roles.insert(Roles::TotalSP, "totalSp");
-    m_roles.insert(Roles::TrainingSkill, "trainingSkill");
-    m_roles.insert(Roles::TrainingSkillTimeLeft, "trainingSkillTimeLeft");
-    m_roles.insert(Roles::TrainingSkillEndDateTime, "trainingSkillEndDateTime");
-    m_roles.insert(Roles::QueueTimeLeft, "queueTimeLeft");
-    m_roles.insert(Roles::QueueFinishDateTime, "queueFinishDateTime");
-    m_roles.insert(Roles::IsQueueEmpty, "isQueueEmpty");
+    m_roles = {
+        {Qt::DisplayRole,                 "displayName"},
+        {Roles::CharacterId,              "characterId"},
+        {Roles::CharacterName,            "characterName"},
+        {Roles::CorporationId,            "corporationId"},
+        {Roles::CorporationName,          "corporationName"},
+        {Roles::CorporationTicker,        "corporationTicker"},
+        {Roles::AllianceId,               "allianceId"},
+        {Roles::AllianceName,             "allianceName"},
+        {Roles::AllianceTicker,           "allianceTicker"},
+        {Roles::Race,                     "race"},
+        {Roles::Ancestry,                 "ancestry"},
+        {Roles::Bloodline,                "bloodline"},
+        {Roles::Gender,                   "gender"}, // 0 for male
+        {Roles::Birthday,                 "birthday"}, // 0 for male
+        {Roles::SecurityStatus,           "securityStatus"},
+        {Roles::Bio,                      "bio"},
+        // wallet info
+        {Roles::ISK,                      "isk"},
+        {Roles::ISKAmountStr,             "iskAmountStr"},
+        // skills info
+        {Roles::TotalSP,                  "totalSp"},
+        {Roles::TrainingSkill,            "trainingSkill"},
+        {Roles::TrainingSkillTimeLeft,    "trainingSkillTimeLeft"},
+        {Roles::TrainingSkillEndDateTime, "trainingSkillEndDateTime"},
+        {Roles::QueueTimeLeft,            "queueTimeLeft"},
+        {Roles::QueueFinishDateTime,      "queueFinishDateTime"},
+        {Roles::IsQueueEmpty,             "isQueueEmpty"}
+    };
 
     // model init
-    m_characterList.clear();
+    m_characters.clear();
 }
 
 
@@ -59,10 +61,10 @@ CharacterModel::~CharacterModel()
 {
     // delete all characters
     QMutexLocker locker(&m_mutex);
-    for (Character *ch: m_characterList) {
+    for (Character *ch: m_characters) {
         if (ch) delete ch;
     }
-    m_characterList.clear();
+    m_characters.clear();
 }
 
 
@@ -76,7 +78,7 @@ int CharacterModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     QMutexLocker locker(&m_mutex);
-    return m_characterList.size();
+    return m_characters.size();
 }
 
 
@@ -89,12 +91,12 @@ QVariant CharacterModel::data(const QModelIndex &index, int role) const
 
     QMutexLocker locker(&m_mutex);
     const int row = index.row();
-    if ((row < 0) || (row >= m_characterList.count())) {
+    if ((row < 0) || (row >= m_characters.count())) {
         return ret;
     }
 
     const QDateTime curDt = QDateTime::currentDateTime();
-    const Character * const ch = m_characterList.at(row);
+    const Character * const ch = m_characters.at(row);
 
     // return an appropriate role for QML
     switch (role) {
@@ -177,11 +179,11 @@ void CharacterModel::loadCharacters()
 {
     {
         QMutexLocker locker(&m_mutex);
-        m_characterList.clear();
+        m_characters.clear();
         beginResetModel();
         Db *db = globalAppInstance()->database();
         if (db) {
-            db->loadCharacters(m_characterList);
+            db->loadCharacters(m_characters);
         }
         // unlock mutex before emitting any signals
     }
@@ -193,12 +195,12 @@ void CharacterModel::addNewCharacter(Character *character)
 {
     {
         QMutexLocker lock(&m_mutex);
-        int firstRow = m_characterList.size();  // we will append to list
+        int firstRow = m_characters.size();  // we will append to list
         beginInsertRows(QModelIndex(), firstRow, firstRow);
-        m_characterList.push_back(character);
+        m_characters.push_back(character);
         Db *db = globalAppInstance()->database();
         if (db) {
-            db->saveCharacters(m_characterList);
+            db->saveCharacters(m_characters);
         }
         // unlock mutex before emitting any signals
     }
@@ -214,8 +216,8 @@ void CharacterModel::removeCharacter(quint64 char_id)
         QMutexLocker lock(&m_mutex);
 
         int toRemoveRow = -1;
-        for (int i = 0; i < m_characterList.size(); i++) {
-            Character *ch = m_characterList.at(i);
+        for (int i = 0; i < m_characters.size(); i++) {
+            Character *ch = m_characters.at(i);
             if (ch && ch->characterId() == char_id) {
                 toRemoveRow = i;
                 break;
@@ -227,13 +229,13 @@ void CharacterModel::removeCharacter(quint64 char_id)
         }
 
         beginRemoveRows(QModelIndex(), toRemoveRow, toRemoveRow);
-        Character *toRemoveCh = m_characterList.takeAt(toRemoveRow);
+        Character *toRemoveCh = m_characters.takeAt(toRemoveRow);
         delete toRemoveCh;
 
         Db *db = globalAppInstance()->database();
         if (db) {
             db->deletePortrait(char_id);
-            db->saveCharacters(m_characterList);
+            db->saveCharacters(m_characters);
         }
     }
     // unlock mutex here, before signals emission
@@ -251,7 +253,7 @@ QList<Character *> CharacterModel::getCharacters() const
 {
     QList<Character *> ret_list;
     QMutexLocker lock(&m_mutex);
-    for (const Character *ch: m_characterList) {
+    for (const Character *ch: m_characters) {
         ret_list.append(new Character(*ch)); // copy-construct into returning list
     }
     return ret_list;
@@ -272,7 +274,7 @@ void CharacterModel::updateCharacter(const Character *updatedCharacter)
         // find index of character with this char_id
         Character *to_modify = nullptr;
         int cindex = 0; // count index
-        for (Character *existingCharacter: m_characterList) {
+        for (Character *existingCharacter: m_characters) {
             if (existingCharacter->characterId() == updatedCharacter->characterId()) {
                 to_modify = existingCharacter;
                 // row = m_characterList.indexOf(existingCharacter); // whaaat
@@ -310,7 +312,27 @@ void CharacterModel::updateCharacter(const Character *updatedCharacter)
 
 void CharacterModel::calcCharactersSkillQueue()
 {
-    // TODO: implement calcCharactersSkillQueue()
+    // lock model during recalculation
+    {
+        QMutexLocker lock(&m_mutex);
+        for (Character *ch : m_characters) {
+            ch->calcSkillQueue();
+        }
+
+        // notify model clients of data change
+        QModelIndex first = index(0);
+        QModelIndex last  = index(m_characters.size() - 1);
+        QVector<int> changedRoles{
+            Roles::TotalSP,
+            Roles::TrainingSkill,
+            Roles::TrainingSkillTimeLeft,
+            Roles::TrainingSkillEndDateTime,
+            Roles::QueueTimeLeft,
+            Roles::QueueFinishDateTime,
+            Roles::IsQueueEmpty
+        };
+        Q_EMIT dataChanged(first, last, changedRoles);
+    }
 }
 
 
@@ -320,7 +342,7 @@ Character *CharacterModel::findCharacterById(quint64 char_id)
 
     {
         QMutexLocker lock(&m_mutex);
-        for (Character *ch: m_characterList) {
+        for (Character *ch: m_characters) {
             if (ch && ch->characterId() == char_id) {
                 ret = ch;
                 break;

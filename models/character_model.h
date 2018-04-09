@@ -73,7 +73,7 @@ Q_SIGNALS:
 
 private:
     QHash<int, QByteArray> m_roles;
-    QVector<Character *> m_characterList;
+    QVector<Character *> m_characters;
     mutable QMutex m_mutex;
 };
 
