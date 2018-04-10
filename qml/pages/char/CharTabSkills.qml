@@ -161,6 +161,7 @@ Rectangle {
                             skillTrainingTimeLeft: modelData.trainingTimeLeft
                             skillPrimaryAttribute: modelData.primaryAttribute
                             skillSecondaryAttribute: modelData.secondaryAttribute
+                            trainPercent: modelData.trainPercent
 
                             width: skillsInGroupColumn.width
                             useAltBackColor: (index % 2 == 1)

@@ -37,6 +37,7 @@ Rectangle {
             skillTrainingTimeLeft: model.trainingTimeLeft
             skillPrimaryAttribute: model.primaryAttribute
             skillSecondaryAttribute: model.secondaryAttribute
+            trainPercent: model.trainPercent
 
             width: lvSkillQueue.width
             useAltBackColor: (model.positionInQueue % 2 == 1)
