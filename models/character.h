@@ -81,6 +81,8 @@ class Character: public QObject
     Q_PROPERTY(quint64    totalSp                  READ totalSp                  NOTIFY totalSpChanged)
     Q_PROPERTY(bool       isAlphaClone             READ isAlphaClone             NOTIFY isAlphaCloneChanged)
     Q_PROPERTY(QObject*   skillGroupsModel         READ skillGroupsModel         NOTIFY skillsChanged)
+    Q_PROPERTY(int        totalSkills              READ totalSkills              NOTIFY skillsChanged)
+    Q_PROPERTY(int        totalSkills5             READ totalSkills5             NOTIFY skillsChanged)
     // current training skill and queue info
     Q_PROPERTY(const QObject* currentTrainingSkill READ currentTrainingSkillObj    NOTIFY skillQueueChanged)
     Q_PROPERTY(bool       isSkillQueueEmpty        READ isSkillQueueEmpty          NOTIFY skillQueueChanged)
@@ -211,6 +213,8 @@ public:
     QDateTime lastRemapDate() const;
     QDateTime remapCooldownDate() const;
     quint64 totalSp() const;
+    int totalSkills() const;
+    int totalSkills5() const;
     bool isAlphaClone() const;
     QVector<CharacterSkill> skills() const;
     const QVector<CharacterSkill> &skillsRef() const;
@@ -360,6 +364,8 @@ protected:
     QDateTime m_lastRemapDate;
     QDateTime m_remapCooldownDate;
     quint64 m_totalSp = 0;
+    int m_totalSkills = 0;
+    int m_totalSkills5 = 0; // skills at level 5
     bool m_isAlphaClone = false;
     QVector<CharacterSkill> m_skills;
     CharacterSkillGroupsModel m_skillGroupsModel;

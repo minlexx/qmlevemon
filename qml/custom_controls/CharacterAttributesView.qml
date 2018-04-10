@@ -17,8 +17,11 @@ Item {
     property date lastRemapDate
     property date remapCooldownDate
     property int totalSp: 0
+    property int totalSkills: 0
+    property int totalSkillsAt5: 0
 
-    property int iconWidth: 64
+    property int iconWidth: 26
+    property int text2ndHeight: 20
 
     property int fontSize: AppStyle.textSizeH4
     property string fontFamily: AppStyle.fontFamily
@@ -28,7 +31,7 @@ Item {
 
         CharacterAttributeLine {
             id: attrIntelligence
-            iconWidth: iconWidth
+            iconWidth: container.iconWidth
             attributeValue: intelligence
             iconSourceUrl: "qrc:///img/char_attributes/intelligence.png"
             font.pointSize: fontSize
@@ -37,7 +40,7 @@ Item {
         }
         CharacterAttributeLine {
             id: attrMemory
-            iconWidth: iconWidth
+            iconWidth: container.iconWidth
             attributeValue: memory
             iconSourceUrl: "qrc:///img/char_attributes/memory.png"
             font.pointSize: fontSize
@@ -46,7 +49,7 @@ Item {
         }
         CharacterAttributeLine {
             id: attrPerception
-            iconWidth: iconWidth
+            iconWidth: container.iconWidth
             attributeValue: perception
             iconSourceUrl: "qrc:///img/char_attributes/perception.png"
             font.pointSize: fontSize
@@ -55,7 +58,7 @@ Item {
         }
         CharacterAttributeLine {
             id: attrWillpower
-            iconWidth: iconWidth
+            iconWidth: container.iconWidth
             attributeValue: willpower
             iconSourceUrl: "qrc:///img/char_attributes/willpower.png"
             font.pointSize: fontSize
@@ -64,7 +67,7 @@ Item {
         }
         CharacterAttributeLine {
             id: attrCharisma
-            iconWidth: iconWidth
+            iconWidth: container.iconWidth
             attributeValue: charisma
             iconSourceUrl: "qrc:///img/char_attributes/charisma.png"
             font.pointSize: fontSize
@@ -78,35 +81,48 @@ Item {
         anchors {
             left: col1.right
             top: parent.top
-            topMargin: 3
             leftMargin: AppStyle.marginBig
         }
 
         TextKeyValue {
-            height: 32
+            height: text2ndHeight
             keyText: qsTr("Bonus remaps:")
             valueText: numBonusRemaps
             fontPointSize: container.fontSize
             fontFamily: container.fontFamily
         }
         TextKeyValue {
-            height: 32
+            height: text2ndHeight
             keyText: qsTr("Last remap date:")
             valueText: Qt.formatDate(lastRemapDate)
             fontPointSize: container.fontSize
             fontFamily: container.fontFamily
         }
         TextKeyValue {
-            height: 32
+            height: text2ndHeight
             keyText: qsTr("Remap cooldown:")
             valueText: Qt.formatDate(remapCooldownDate)
             fontPointSize: container.fontSize
             fontFamily: container.fontFamily
         }
         TextKeyValue {
-            height: 32
+            height: text2ndHeight
             keyText: qsTr("Total SP:")
             valueText: Number(totalSp).toLocaleString(Qt.locale(), 'f', 0)
+            fontPointSize: container.fontSize
+            fontFamily: container.fontFamily
+        }
+        TextKeyValue {
+            height: text2ndHeight
+            keyText: qsTr("Total skills:")
+            valueText: totalSkills
+            fontPointSize: container.fontSize
+            fontFamily: container.fontFamily
+        }
+        TextKeyValue {
+            height: text2ndHeight
+            keyText: qsTr("Skills at level V:")
+            valueText: totalSkillsAt5
             fontPointSize: container.fontSize
             fontFamily: container.fontFamily
         }

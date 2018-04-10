@@ -286,6 +286,8 @@ Rectangle {
             lastRemapDate: curChar.lastRemapDate
             remapCooldownDate: curChar.remapCooldownDate
             totalSp: curChar.totalSp
+            totalSkills: curChar.totalSkills
+            totalSkillsAt5: curChar.totalSkills5
         }
     }
 

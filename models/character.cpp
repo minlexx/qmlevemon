@@ -456,6 +456,8 @@ int Character::numBonusRemaps() const { return m_numBonusRemaps; }
 QDateTime Character::lastRemapDate() const { return m_lastRemapDate; }
 QDateTime Character::remapCooldownDate() const { return m_remapCooldownDate; }
 quint64 Character::totalSp() const { return m_totalSp; }
+int Character::totalSkills() const { return m_totalSkills; }
+int Character::totalSkills5() const { return m_totalSkills5; }
 bool Character::isAlphaClone() const { return m_isAlphaClone; }
 QVector<EM::CharacterSkill> Character::skills() const { return m_skills; }
 const QVector<CharacterSkill> &Character::skillsRef() const { return m_skills; }
@@ -668,10 +670,15 @@ void Character::clearSkillQueue()
 
 void Character::calcSkillQueue()
 {
-    // clear all skills queue info
+    // clear all skills queue info and count skills
+    m_totalSkills5 = 0;
     for (CharacterSkill &sk : m_skills) {
         sk.clearQueueInfo();
+        if (sk.trainedLevel() == 5) {
+            ++m_totalSkills5;
+        }
     }
+    m_totalSkills = m_skills.size();
 
     if (m_skillQueue.size() < 1) {
         // nothing to calculate

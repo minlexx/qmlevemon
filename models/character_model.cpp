@@ -44,6 +44,8 @@ CharacterModel::CharacterModel(QObject *parent):
         {Roles::ISKAmountStr,             "iskAmountStr"},
         // skills info
         {Roles::TotalSP,                  "totalSp"},
+        {Roles::TotalSkills,              "totalSkills"},
+        {Roles::TotalSkillsAtV,           "totalSkillsAt5"},
         {Roles::TrainingSkill,            "trainingSkill"},
         {Roles::TrainingSkillTimeLeft,    "trainingSkillTimeLeft"},
         {Roles::TrainingSkillEndDateTime, "trainingSkillEndDateTime"},
@@ -125,6 +127,8 @@ QVariant CharacterModel::data(const QModelIndex &index, int role) const
     case ISKAmountStr: ret = ch->iskAmountStr(); break;
         // skills info
     case TotalSP: ret = ch->totalSp(); break;
+    case TotalSkills: ret = ch->totalSkills(); break;
+    case TotalSkillsAtV: ret = ch->totalSkills5(); break;
     case TrainingSkill: {
             ret = QLatin1String("-");
             if (!ch->isSkillQueueEmpty()) {
