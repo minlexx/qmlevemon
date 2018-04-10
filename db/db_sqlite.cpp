@@ -495,13 +495,21 @@ QJsonArray DbSqlite::loadSkillsInGroup(quint64 group_id)
                 float valueFloat = q.value(2).toFloat();
                 switch (attributeID) {
                 case 180:
-                    skill_obj.insert(QLatin1String("primaryAttribute"), valueInt);
+                    if (valueInt > 0) {
+                        skill_obj.insert(QLatin1String("primaryAttribute"), valueInt);
+                    } else {
+                        skill_obj.insert(QLatin1String("primaryAttribute"), static_cast<int>(valueFloat));
+                    }
                     break;
                 case 181:
-                    skill_obj.insert(QLatin1String("secondaryAttribute"), valueInt);
+                    if (valueInt > 0) {
+                        skill_obj.insert(QLatin1String("secondaryAttribute"), valueInt);
+                    } else {
+                        skill_obj.insert(QLatin1String("secondaryAttribute"), static_cast<int>(valueFloat));
+                    }
                     break;
                 case 275:
-                    skill_obj.insert(QLatin1String("skillTimeConstant"), valueFloat);
+                    skill_obj.insert(QLatin1String("skillTimeConstant"), static_cast<double>(valueFloat));
                     break;
                 }
             }
