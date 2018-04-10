@@ -238,9 +238,9 @@ Rectangle {
     Image {
         id: imgPrimaryAttr
         anchors {
-            left: txtTrainingTime.right
+            right: imgSecondaryAttr.left
+            rightMargin: AppStyle.marginSmall
             top: parent.top
-            leftMargin: AppStyle.marginBig
             topMargin: AppStyle.marginSmall
         }
         visible: skillPrimaryAttribute > 0
@@ -251,9 +251,9 @@ Rectangle {
     Image {
         id: imgSecondaryAttr
         anchors {
-            left: imgPrimaryAttr.right
+            right: rcLevelIndicator.left
+            rightMargin: AppStyle.marginBig
             top: parent.top
-            leftMargin: AppStyle.marginSmall
             topMargin: AppStyle.marginSmall
         }
         visible: skillSecondaryAttribute > 0
