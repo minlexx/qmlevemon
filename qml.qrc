@@ -10,6 +10,7 @@
         <file>qml/custom_controls/EMPopupMenuItem.qml</file>
         <file>qml/custom_controls/HamburgerIcon.qml</file>
         <file>qml/custom_controls/HamburgerMenuBackIcon.qml</file>
+        <file>qml/custom_controls/SkillLevelIndicatorRect.qml</file>
         <file>qml/custom_controls/SkillProgressBar.qml</file>
         <file>qml/custom_controls/TextKeyValue.qml</file>
         <file>qml/pages/About.qml</file>

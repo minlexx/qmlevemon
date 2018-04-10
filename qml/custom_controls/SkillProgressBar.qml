@@ -58,70 +58,85 @@ Rectangle {
             margins: lvlIndSmallSpacing
         }
 
-        Rectangle {
+        SkillLevelIndicatorRect {
             id: rclv5
-            width: lvlIndSmallRectSize
-            height: lvlIndSmallRectSize
-            color: (isQueued && (skillLevelTraining == 5)) ? textQueuedColor : "black"
+            size: lvlIndSmallRectSize
             anchors {
                 right: parent.right
                 rightMargin: lvlIndSmallSpacing
                 top: parent.top
                 topMargin: lvlIndSmallSpacing
             }
-            visible: (skillLevelTraining >= 5) || (skillLevelTrained >= 5)
+            rectLevel: 5
+            skillLevelTraining: root.skillLevelTraining
+            skillLevelTrained: root.skillLevelTrained
+            skillLevelActive: root.skillLevelActive
+            isQueued: root.isQueued
+            isInProgress: root.isInProgress
         }
-        Rectangle {
+        SkillLevelIndicatorRect {
             id: rclv4
-            width: lvlIndSmallRectSize
-            height: lvlIndSmallRectSize
-            color: (isQueued && (skillLevelTraining >= 4) && (skillLevelTrained < 4)) ? textQueuedColor : "black"
+            size: lvlIndSmallRectSize
             anchors {
                 right: rclv5.left
                 rightMargin: lvlIndSmallSpacing
                 top: parent.top
                 topMargin: lvlIndSmallSpacing
             }
-            visible: (skillLevelTraining >= 4) || (skillLevelTrained >= 4)
+            rectLevel: 4
+            skillLevelTraining: root.skillLevelTraining
+            skillLevelTrained: root.skillLevelTrained
+            skillLevelActive: root.skillLevelActive
+            isQueued: root.isQueued
+            isInProgress: root.isInProgress
         }
-        Rectangle {
+        SkillLevelIndicatorRect {
             id: rclv3
-            width: lvlIndSmallRectSize
-            height: lvlIndSmallRectSize
-            color: (isQueued && (skillLevelTraining >= 3) && (skillLevelTrained < 3)) ? textQueuedColor : "black"
+            size: lvlIndSmallRectSize
             anchors {
                 right: rclv4.left
                 rightMargin: lvlIndSmallSpacing
                 top: parent.top
                 topMargin: lvlIndSmallSpacing
             }
-            visible: (skillLevelTraining >= 3) || (skillLevelTrained >= 3)
+            rectLevel: 3
+            skillLevelTraining: root.skillLevelTraining
+            skillLevelTrained: root.skillLevelTrained
+            skillLevelActive: root.skillLevelActive
+            isQueued: root.isQueued
+            isInProgress: root.isInProgress
         }
-        Rectangle {
+        SkillLevelIndicatorRect {
             id: rclv2
-            width: lvlIndSmallRectSize
-            height: lvlIndSmallRectSize
-            color: (isQueued && (skillLevelTraining >= 2) && (skillLevelTrained < 2)) ? textQueuedColor : "black"
+            size: lvlIndSmallRectSize
             anchors {
                 right: rclv3.left
                 rightMargin: lvlIndSmallSpacing
                 top: parent.top
                 topMargin: lvlIndSmallSpacing
             }
-            visible: (skillLevelTraining >= 2) || (skillLevelTrained >= 2)
+            rectLevel: 2
+            skillLevelTraining: root.skillLevelTraining
+            skillLevelTrained: root.skillLevelTrained
+            skillLevelActive: root.skillLevelActive
+            isQueued: root.isQueued
+            isInProgress: root.isInProgress
         }
-        Rectangle {
+        SkillLevelIndicatorRect {
             id: rclv1
-            width: lvlIndSmallRectSize
-            height: lvlIndSmallRectSize
-            color: (isQueued && (skillLevelTraining >= 1) && (skillLevelTrained < 1)) ? textQueuedColor : "black"
+            size: lvlIndSmallRectSize
             anchors {
                 right: rclv2.left
                 rightMargin: lvlIndSmallSpacing
                 top: parent.top
                 topMargin: lvlIndSmallSpacing
             }
-            visible: (skillLevelTraining >= 1) || (skillLevelTrained >= 1)
+            rectLevel: 1
+            skillLevelTraining: root.skillLevelTraining
+            skillLevelTrained: root.skillLevelTrained
+            skillLevelActive: root.skillLevelActive
+            isQueued: root.isQueued
+            isInProgress: root.isInProgress
         }
     }
 
