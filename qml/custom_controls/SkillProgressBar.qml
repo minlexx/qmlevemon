@@ -30,6 +30,7 @@ Rectangle {
 
     property double progressStart: 0.0
     property double progressEnd: 0.5
+    property double trainPercent: 0.0
 
     property color textColor: AppStyle.textDefaultColor
     property color textQueuedColor: "#6595ea"
@@ -140,6 +141,30 @@ Rectangle {
             skillLevelActive: root.skillLevelActive
             isQueued: root.isQueued
             isInProgress: root.isInProgress
+        }
+    }
+
+    Rectangle {
+        id: rcLevelProgress
+        height: 10
+        anchors {
+            top: rcLevelIndicator.bottom
+            left: rcLevelIndicator.left
+            right: parent.right
+            topMargin: lvlIndSmallSpacing
+            rightMargin: lvlIndSmallSpacing
+        }
+        border { width: 1; color: levelIndicatorColor }
+
+        Rectangle {
+            visible: trainPercent > 0.0
+            anchors {
+                top: parent.top
+                left: parent.left
+            }
+            width: (parent.width - 2) * trainPercent
+            height: parent.height - 1
+            color: levelIndicatorColor
         }
     }
 
