@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import "../"
+import "../utils.js" as Utils
 
 Rectangle {
     id: root
@@ -22,6 +23,8 @@ Rectangle {
     property string skillSpTotal: "1000"
     property int skillSpPerHour: 2200
     property string skillTrainingTimeLeft: "" // "1d 12h 56s"
+    property int skillPrimaryAttribute: 0
+    property int skillSecondaryAttribute: 0
     property bool isInProgress: true  // is currently in training
     property bool isQueued: false     // is in queue at all
 
@@ -230,5 +233,32 @@ Rectangle {
         text: qsTr("Training time") + ": " + skillTrainingTimeLeft
         color: modeSkillQueue ? textColor : ( isQueued ? textQueuedColor : textColor )
         visible: isQueued && modeSkillQueue
+    }
+
+    Image {
+        id: imgPrimaryAttr
+        anchors {
+            left: txtTrainingTime.right
+            top: parent.top
+            leftMargin: AppStyle.marginBig
+            topMargin: AppStyle.marginSmall
+        }
+        visible: skillPrimaryAttribute > 0
+        source: "qrc:///img/char_attributes/" + Utils.getAttributePicture(skillPrimaryAttribute) + ".png"
+        width: 32
+        height: 32
+    }
+    Image {
+        id: imgSecondaryAttr
+        anchors {
+            left: imgPrimaryAttr.right
+            top: parent.top
+            leftMargin: AppStyle.marginSmall
+            topMargin: AppStyle.marginSmall
+        }
+        visible: skillSecondaryAttribute > 0
+        source: "qrc:///img/char_attributes/" + Utils.getAttributePicture(skillSecondaryAttribute) + ".png"
+        width: 32
+        height: 32
     }
 }

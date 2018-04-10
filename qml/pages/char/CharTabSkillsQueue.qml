@@ -35,6 +35,8 @@ Rectangle {
             isInProgress: (model.positionInQueue === 0)
             isQueued: model.isInQueue
             skillTrainingTimeLeft: model.trainingTimeLeft
+            skillPrimaryAttribute: model.primaryAttribute
+            skillSecondaryAttribute: model.secondaryAttribute
 
             width: lvSkillQueue.width
             useAltBackColor: (model.positionInQueue % 2 == 1)

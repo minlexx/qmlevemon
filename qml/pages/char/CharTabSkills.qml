@@ -159,6 +159,8 @@ Rectangle {
                             isInProgress: modelData.isInQueue ? (modelData.positionInQueue === 0) : false
                             isQueued: modelData.isInQueue
                             skillTrainingTimeLeft: modelData.trainingTimeLeft
+                            skillPrimaryAttribute: modelData.primaryAttribute
+                            skillSecondaryAttribute: modelData.secondaryAttribute
 
                             width: skillsInGroupColumn.width
                             useAltBackColor: (index % 2 == 1)

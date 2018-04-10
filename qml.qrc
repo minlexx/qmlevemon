@@ -23,5 +23,6 @@
         <file>qml/pages/char/CharTabWallet.qml</file>
         <file>qml/pages/Home.qml</file>
         <file>qml/pages/TestPage.qml</file>
+        <file>qml/utils.js</file>
     </qresource>
 </RCC>
