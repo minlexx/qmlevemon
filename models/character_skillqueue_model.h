@@ -43,7 +43,9 @@ class CharacterSkillQueueModel: public QAbstractListModel
         TrainFinishDate,
         // calculated properties
         SkillPointsPerHour,
-        TrainingTimeLeft
+        TrainingTimeLeft,
+        LadderPercentStart,
+        LadderPercentEnd
     };
 
 public:
