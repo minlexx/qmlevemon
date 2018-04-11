@@ -51,6 +51,8 @@ CharacterSkill &CharacterSkill::operator=(const CharacterSkill &other)
     m_trainFinishDate         = other.m_trainFinishDate;
     // copy stats also
     m_skillPointsPerHour      = other.m_skillPointsPerHour;
+    m_ladderPercentStart      = other.m_ladderPercentStart;
+    m_ladderPercentEnd        = other.m_ladderPercentEnd;
     return (*this);
 }
 
@@ -71,6 +73,8 @@ CharacterSkill &CharacterSkill::operator=(CharacterSkill &&other)
     m_trainFinishDate         = std::move(other.m_trainFinishDate);
     // copy stats also
     m_skillPointsPerHour      = std::move(other.m_skillPointsPerHour);
+    m_ladderPercentStart      = std::move(other.m_ladderPercentStart);
+    m_ladderPercentEnd        = std::move(other.m_ladderPercentEnd);
     return (*this);
 }
 
