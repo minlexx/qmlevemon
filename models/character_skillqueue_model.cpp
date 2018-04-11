@@ -1,3 +1,4 @@
+#include <QDateTime>
 #include "character_skillqueue_model.h"
 
 namespace EM {
@@ -98,6 +99,8 @@ void CharacterSkillQueueModel::setModelData(const QVector<CharacterSkill> skills
         // fill m_data - loop over a skill queue in order, and add all skills in it to model
         // we expect skillqueue to be already compacted here, and skills vector prepared
         // after Character::calcSkillQueue()
+        QDateTime dtCur = QDateTime::currentDateTime();
+        double dtotalSecondsToQueueEnd = static_cast<double>(dtCur.secsTo(queue.queueFinishDate()));
         for (const CharacterSkillQueueItem &qitem: queue) {
             // find corresponding skill in skills vector
             for (const CharacterSkill &sk: skills) {
@@ -109,8 +112,14 @@ void CharacterSkillQueueModel::setModelData(const QVector<CharacterSkill> skills
                     double skillPointsTrainedSinceLevel = static_cast<double>(queueSkill.skillPointsInSkill() - qitem.levelStartSp);
                     double skillPointsNeededTotal = static_cast<double>(qitem.levelEndSp - qitem.levelStartSp);
                     double trainPercent = skillPointsTrainedSinceLevel / skillPointsNeededTotal;
+                    double ladderStart = 0.0;
+                    if (qitem.queuePosition > 0) {
+                        ladderStart = static_cast<double>(dtCur.secsTo(qitem.startDate)) / dtotalSecondsToQueueEnd;
+                    }
+                    double ladderEnd = static_cast<double>(dtCur.secsTo(qitem.finishDate)) / dtotalSecondsToQueueEnd;
                     queueSkill.setQueueInfo(qitem.queuePosition, qitem.trainingLevel, trainPercent,
-                                            qitem.startDate, qitem.finishDate);
+                                            qitem.startDate, qitem.finishDate,
+                                            ladderStart, ladderEnd);
                     m_data.push_back(queueSkill);
                     break;
                 }

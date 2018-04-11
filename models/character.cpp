@@ -717,6 +717,8 @@ void Character::calcSkillQueue()
         ++qpos;
     }
 
+    double dtotalSecondsInQueue = static_cast<double>(dtCur.secsTo(m_skillQueue.queueFinishDate()));
+
     // loop over all skills in queue and update their queue info
     for (const CharacterSkillQueueItem &qitem: qAsConst(m_skillQueue)) {
         // update skill's queue info form skillQueueItem
@@ -728,8 +730,20 @@ void Character::calcSkillQueue()
             double skillPointsTrainedSinceLevel = static_cast<double>(sk->skillPointsInSkill() - qitem.levelStartSp);
             double skillPointsNeededTotal = static_cast<double>(qitem.levelEndSp - qitem.levelStartSp);
             double trainPercent = skillPointsTrainedSinceLevel / skillPointsNeededTotal;
+
+            double ladderStart = 0.0;
+            double ladderEnd = 0.0;
+
+            // calc ladder start percent
+            if (qitem.queuePosition > 0) {
+                ladderStart = static_cast<double>(dtCur.secsTo(qitem.startDate)) / dtotalSecondsInQueue;
+            }
+            // calc ladder end percent
+            ladderEnd = static_cast<double>(dtCur.secsTo(qitem.finishDate)) / dtotalSecondsInQueue;
+
             sk->setQueueInfo(qitem.queuePosition, qitem.trainingLevel, trainPercent,
-                            qitem.startDate, qitem.finishDate);
+                            qitem.startDate, qitem.finishDate,
+                             ladderStart, ladderEnd);
 
             // calculate SP/Hour
             int primaryAttributeValue = getAttributeValueByAttributeCode(sk->primaryAttribute());

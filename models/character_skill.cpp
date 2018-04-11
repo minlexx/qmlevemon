@@ -184,14 +184,21 @@ QString CharacterSkill::trainingTimeLeft() const
     return Utils::numberOfSecondsToTimeLeftString(secondsLeft);
 }
 
+double CharacterSkill::ladderPercentStart() const { return m_ladderPercentStart; }
+
+double CharacterSkill::ladderPercentEnd() const { return m_ladderPercentEnd; }
+
 void CharacterSkill::setQueueInfo(int pos, int trainLevel, double trainPercent,
-                                  const QDateTime &startDt, const QDateTime &endDt)
+                                  const QDateTime &startDt, const QDateTime &endDt,
+                                  double ladderStart, double ladderEnd)
 {
     m_positionInQueue = pos;
     m_trainingLevel = trainLevel;
     m_trainPercent = trainPercent;
     m_trainStartDate = startDt;
     m_trainFinishDate = endDt;
+    m_ladderPercentStart = ladderStart;
+    m_ladderPercentEnd = ladderEnd;
     Q_EMIT queueInfoChanged();
 }
 
