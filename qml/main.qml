@@ -45,6 +45,15 @@ ApplicationWindow {
                 font.pointSize: AppStyle.textSizeH3
             }
 
+            CharacterPickerSidebar {
+                id: toolbarCharacterPicker
+                isVertical: false
+                visible: evemonapp.isPortrait
+                onCharacterSelected: {
+                    nav_to("select_character", char_id);
+                }
+            }
+
             // spacer
             Item { Layout.fillWidth: true }
 
@@ -53,11 +62,6 @@ ApplicationWindow {
                 text: "TQ: " + refresher.serverPlayersOnline + qsTr(" players")
                 font.pointSize: AppStyle.textSizeH3
             }
-
-            //Switch {
-            //    checked: true
-            //    text: qsTr("Notifications")
-            //}
 
             BusyIndicator {
                 id: networkActivityIndicator
