@@ -146,6 +146,7 @@ Rectangle {
                         id: skillsInGroupRepeater
                         model: null
                         delegate: SkillProgressBar {
+                            modeSkillQueue: false
                             skillQueueNum: modelData.positionInQueue + 1 // 0
                             skillName: modelData.skillName
                             skillId: modelData.skillId

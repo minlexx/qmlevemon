@@ -38,6 +38,8 @@ Rectangle {
             skillPrimaryAttribute: model.primaryAttribute
             skillSecondaryAttribute: model.secondaryAttribute
             trainPercent: model.trainPercent
+            ladderPercentStart: model.ladderPercentStart
+            ladderPercentEnd: model.ladderPercentEnd
 
             width: lvSkillQueue.width
             useAltBackColor: (model.positionInQueue % 2 == 1)
