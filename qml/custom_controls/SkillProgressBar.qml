@@ -12,6 +12,7 @@ Rectangle {
     // set to false, if used to display skills list
     property bool modeSkillQueue: false
 
+    // required parameters
     property int skillId: 0
     property int skillQueueNum: 0
     property int skillRank: 0
@@ -27,22 +28,28 @@ Rectangle {
     property int skillSecondaryAttribute: 0
     property bool isInProgress: true  // is currently in training
     property bool isQueued: false     // is in queue at all
-
     property double trainPercent: 0.0  // to display progress bar under level indicator
     property double ladderPercentStart: 0.0  // to display ladder under container rect
     property double ladderPercentEnd: 1.0
 
+    // customizable colors
     property color textColor: AppStyle.textDefaultColor
     property color textQueuedColor: "#6595ea"
     property color backColor: AppStyle.bgColor
     property color backColorAlt: "#d3d3d3"
     property color backColorTrainingNow: "#EEFFEE"
     property bool useAltBackColor: false
+    property color alphaColor: "orange"
+    property color levelIndicatorColor: "black"
+    // customizable fonts
     property string fontFamily: AppStyle.fontFamily
     property int fontSize: AppStyle.textSizeH4
-
-    property color levelIndicatorColor: "black"
+    // customizable sizes
     property int ladderRectHeight: 7
+    property int lvlIndSmallRectSize: 15
+    property int lvlIndSmallSpacing: 3
+    property int lvlIndProgressHeight: 10
+    property int attributeIconSize: 32
 
     // private part
     color: (!modeSkillQueue && isInProgress) ? backColorTrainingNow : (useAltBackColor ? backColorAlt : backColor)
@@ -50,8 +57,6 @@ Rectangle {
                     + (modeSkillQueue ? ladderRectHeight : 0)
     implicitWidth: txtSp.width + txtSpPerHour.width + txtTrainingTime.width + rcLevelIndicator.width + 4*AppStyle.marginBig + 5
     property int index: 0
-    property int lvlIndSmallRectSize: 15
-    property int lvlIndSmallSpacing: 3
 
     Rectangle {
         id: rcLevelIndicator
@@ -79,6 +84,9 @@ Rectangle {
             skillLevelActive: root.skillLevelActive
             isQueued: root.isQueued
             isInProgress: root.isInProgress
+            queuedColor: textQueuedColor
+            normalColor: textColor
+            alphaColor: root.alphaColor
         }
         SkillLevelIndicatorRect {
             id: rclv4
@@ -95,6 +103,9 @@ Rectangle {
             skillLevelActive: root.skillLevelActive
             isQueued: root.isQueued
             isInProgress: root.isInProgress
+            queuedColor: textQueuedColor
+            normalColor: textColor
+            alphaColor: root.alphaColor
         }
         SkillLevelIndicatorRect {
             id: rclv3
@@ -111,6 +122,9 @@ Rectangle {
             skillLevelActive: root.skillLevelActive
             isQueued: root.isQueued
             isInProgress: root.isInProgress
+            queuedColor: textQueuedColor
+            normalColor: textColor
+            alphaColor: root.alphaColor
         }
         SkillLevelIndicatorRect {
             id: rclv2
@@ -127,6 +141,9 @@ Rectangle {
             skillLevelActive: root.skillLevelActive
             isQueued: root.isQueued
             isInProgress: root.isInProgress
+            queuedColor: textQueuedColor
+            normalColor: textColor
+            alphaColor: root.alphaColor
         }
         SkillLevelIndicatorRect {
             id: rclv1
@@ -143,12 +160,15 @@ Rectangle {
             skillLevelActive: root.skillLevelActive
             isQueued: root.isQueued
             isInProgress: root.isInProgress
+            queuedColor: textQueuedColor
+            normalColor: textColor
+            alphaColor: root.alphaColor
         }
     }
 
     Rectangle {
         id: rcLevelProgress
-        height: 10
+        height: lvlIndProgressHeight
         anchors {
             top: rcLevelIndicator.bottom
             left: rcLevelIndicator.left
@@ -272,21 +292,21 @@ Rectangle {
         }
         visible: skillPrimaryAttribute > 0
         source: "qrc:///img/char_attributes/" + Utils.getAttributePicture(skillPrimaryAttribute) + ".png"
-        width: 32
-        height: 32
+        width: attributeIconSize
+        height: attributeIconSize
     }
     Image {
         id: imgSecondaryAttr
         anchors {
             right: rcLevelIndicator.left
-            rightMargin: AppStyle.marginBig
+            rightMargin: evemonapp.isDesktopPlatform ? AppStyle.marginBig : AppStyle.marginSmall
             top: parent.top
             topMargin: AppStyle.marginSmall
         }
         visible: skillSecondaryAttribute > 0
         source: "qrc:///img/char_attributes/" + Utils.getAttributePicture(skillSecondaryAttribute) + ".png"
-        width: 32
-        height: 32
+        width: attributeIconSize
+        height: attributeIconSize
     }
 
     Rectangle {
