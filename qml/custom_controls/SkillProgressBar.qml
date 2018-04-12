@@ -28,9 +28,9 @@ Rectangle {
     property bool isInProgress: true  // is currently in training
     property bool isQueued: false     // is in queue at all
 
-    property double progressStart: 0.0
-    property double progressEnd: 0.5
-    property double trainPercent: 0.0
+    property double trainPercent: 0.0  // to display progress bar under level indicator
+    property double ladderPercentStart: 0.0  // to display ladder under container rect
+    property double ladderPercentEnd: 1.0
 
     property color textColor: AppStyle.textDefaultColor
     property color textQueuedColor: "#6595ea"
@@ -42,10 +42,12 @@ Rectangle {
     property int fontSize: AppStyle.textSizeH4
 
     property color levelIndicatorColor: "black"
+    property int ladderRectHeight: 7
 
     // private part
     color: (!modeSkillQueue && isInProgress) ? backColorTrainingNow : (useAltBackColor ? backColorAlt : backColor)
     implicitHeight: txtSkillName.height + txtSp.height + 3*AppStyle.marginSmall
+                    + (modeSkillQueue ? ladderRectHeight : 0)
     implicitWidth: txtSp.width + txtSpPerHour.width + txtTrainingTime.width + rcLevelIndicator.width + 4*AppStyle.marginBig + 5
     property int index: 0
     property int lvlIndSmallRectSize: 15
@@ -285,5 +287,14 @@ Rectangle {
         source: "qrc:///img/char_attributes/" + Utils.getAttributePicture(skillSecondaryAttribute) + ".png"
         width: 32
         height: 32
+    }
+
+    Rectangle {
+        id: ladderRect
+        height: ladderRectHeight
+        x: parent.x + parent.width * ladderPercentStart
+        anchors.bottom: parent.bottom
+        width: parent.width * (ladderPercentEnd - ladderPercentStart)
+        color: textQueuedColor
     }
 }
