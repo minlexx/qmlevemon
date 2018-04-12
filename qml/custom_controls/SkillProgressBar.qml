@@ -286,9 +286,9 @@ Rectangle {
         id: imgPrimaryAttr
         anchors {
             right: imgSecondaryAttr.left
-            rightMargin: AppStyle.marginSmall
+            rightMargin: evemonapp.isDesktopPlatform ? AppStyle.marginSmall : 2
             top: parent.top
-            topMargin: AppStyle.marginSmall
+            topMargin: evemonapp.isDesktopPlatform ? AppStyle.marginSmall : 2
         }
         visible: skillPrimaryAttribute > 0
         source: "qrc:///img/char_attributes/" + Utils.getAttributePicture(skillPrimaryAttribute) + ".png"
@@ -301,7 +301,7 @@ Rectangle {
             right: rcLevelIndicator.left
             rightMargin: evemonapp.isDesktopPlatform ? AppStyle.marginBig : AppStyle.marginSmall
             top: parent.top
-            topMargin: AppStyle.marginSmall
+            topMargin: evemonapp.isDesktopPlatform ? AppStyle.marginSmall : 2
         }
         visible: skillSecondaryAttribute > 0
         source: "qrc:///img/char_attributes/" + Utils.getAttributePicture(skillSecondaryAttribute) + ".png"

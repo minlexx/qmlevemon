@@ -43,6 +43,13 @@ Rectangle {
 
             width: lvSkillQueue.width
             useAltBackColor: (model.positionInQueue % 2 == 1)
+            // alphaColor: curChar.isAlphaClone ? "orange" : AppStyle.textDefaultColor
+
+            lvlIndSmallRectSize: evemonapp.isDesktopPlatform ? 15 : 10
+            lvlIndSmallSpacing: evemonapp.isDesktopPlatform ? 3 : 1
+            lvlIndProgressHeight: evemonapp.isDesktopPlatform ? 10: 7
+            ladderRectHeight: evemonapp.isDesktopPlatform ? 7 : 5
+            attributeIconSize: evemonapp.isDesktopPlatform ? 32 : 20
         }
     }
 }
