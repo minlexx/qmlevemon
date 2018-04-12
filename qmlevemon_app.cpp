@@ -3,6 +3,7 @@
 #include <QQmlContext>
 #include <QQuickWindow>
 #include <QStandardPaths>
+#include <QScreen>
 #include <QDir>
 #include <QDebug>
 
@@ -41,6 +42,15 @@ QmlEvemonApp::QmlEvemonApp(int& argc, char **argv):
     m_portraitCache = new PortraitCache();
     m_refresher = new PeriodicalRefresher(this);
 
+    QScreen *appScreen = primaryScreen();
+    if (Q_LIKELY(appScreen)) {
+        Qt::ScreenOrientation orientation = appScreen->primaryOrientation();
+        m_isPortraitOrientation = (orientation == Qt::PortraitOrientation
+                                   || orientation == Qt::InvertedPortraitOrientation);
+        QObject::connect(appScreen, &QScreen::primaryOrientationChanged,
+                         this, &QmlEvemonApp::onPrimaryOrientationChanged);
+    }
+
     this->initStorageDirectory();
 }
 
@@ -65,6 +75,10 @@ bool QmlEvemonApp::isDesktopPlatform() const
 #endif
     return true;
 }
+
+bool QmlEvemonApp::isPortrait() const { return m_isPortraitOrientation; }
+
+bool QmlEvemonApp::isLandscape() const { return !m_isPortraitOrientation; }
 
 
 // setup QML root context's properties, creates image providers, etc
@@ -156,6 +170,22 @@ void QmlEvemonApp::initStorageDirectory()
 quint64 QmlEvemonApp::curCharId() const
 {
     return m_curCharId;
+}
+
+void QmlEvemonApp::onPrimaryOrientationChanged(Qt::ScreenOrientation orientation)
+{
+    switch (orientation) {
+    case Qt::PortraitOrientation:
+    case Qt::InvertedPortraitOrientation:
+    case Qt::LandscapeOrientation:
+    case Qt::InvertedLandscapeOrientation:
+        m_isPortraitOrientation = (orientation == Qt::PortraitOrientation
+                                   || orientation == Qt::InvertedPortraitOrientation);
+        Q_EMIT isPortraitChanged();
+        Q_EMIT isLandscapeChanged();
+        break;
+    default: break;
+    }
 }
 
 
