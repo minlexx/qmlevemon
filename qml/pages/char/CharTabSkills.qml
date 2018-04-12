@@ -166,7 +166,7 @@ Rectangle {
 
                             width: skillsInGroupColumn.width
                             useAltBackColor: (index % 2 == 1)
-                            // alphaColor: curChar.isAlphaClone ? "orange" : AppStyle.textDefaultColor
+                            alphaColor: curChar.isAlphaClone ? AppStyle.textAlphaSkillColor : AppStyle.textQueuedSkillColor
 
                             lvlIndSmallRectSize: evemonapp.isDesktopPlatform ? 15 : 10
                             lvlIndSmallSpacing: evemonapp.isDesktopPlatform ? 3 : 1
