@@ -60,11 +60,11 @@ Rectangle {
                     font.bold: false
                     anchors {
                         left: txtSkillGroupName.right
-                        leftMargin: AppStyle.marginBig
+                        leftMargin: evemonapp.isDesktopPlatform ? AppStyle.marginBig : AppStyle.marginSmall
                         top: parent.top
                     }
                     height: txtSkillGroupName.height
-                    width: 110
+                    width: evemonapp.isDesktopPlatform ? 110 : 10
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignRight
                     color: skillListItem.ListView.isCurrentItem ? AppStyle.textDefaultColor : AppStyle.textInvertedColor
@@ -78,7 +78,7 @@ Rectangle {
                     font.bold: false
                     anchors {
                         left: txtSkillsInGroupCounters.right
-                        leftMargin: AppStyle.marginBig*2
+                        leftMargin: evemonapp.isDesktopPlatform ? AppStyle.marginBig*2 : AppStyle.marginSmall
                         top: parent.top
                     }
                     height: txtSkillGroupName.height
