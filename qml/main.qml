@@ -59,7 +59,7 @@ ApplicationWindow {
 
             Text {
                 id: serverPlayersOnline
-                text: "TQ: " + refresher.serverPlayersOnline + qsTr(" players")
+                text: "TQ: " + refresher.serverPlayersOnline + qsTr(" players") + " "
                 font.pointSize: AppStyle.textSizeH3
                 visible: !refresher.networkActivity
                 anchors.rightMargin: AppStyle.marginSmall
