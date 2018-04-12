@@ -16,6 +16,8 @@ QtObject {
     property color textSecondaryColor: "#333333"
     property color textLightColor: "#666666"
     property color textUrlColor: "#EFC247"
+    property color textQueuedSkillColor: "#6595ea"
+    property color textAlphaSkillColor: "orange"
 
     property int textSizeH1: 17
     property int textSizeH2: 13
