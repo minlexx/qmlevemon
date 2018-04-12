@@ -94,7 +94,7 @@ Rectangle {
 
     Image {
         id: profilePic
-        anchors.left: charPickSidebar.right
+        anchors.left: evemonapp.isLandscape ? charPickSidebar.right : parent.left
         anchors.leftMargin: AppStyle.marginNormal
         anchors.top: parent.top
         anchors.topMargin: AppStyle.marginNormal
