@@ -34,13 +34,13 @@ Rectangle {
 
     // customizable colors
     property color textColor: AppStyle.textDefaultColor
-    property color textQueuedColor: "#6595ea"
+    property color textQueuedColor: AppStyle.textQueuedSkillColor
     property color backColor: AppStyle.bgColor
-    property color backColorAlt: "#d3d3d3"
-    property color backColorTrainingNow: "#EEFFEE"
+    property color backColorAlt: AppStyle.bgLightColor
+    property color backColorTrainingNow: AppStyle.bgColorTrainingNow
     property bool useAltBackColor: false
-    property color alphaColor: "orange"
-    property color levelIndicatorColor: "black"
+    property color alphaColor: AppStyle.textAlphaSkillColor
+    property color levelIndicatorColor: AppStyle.textDefaultColor
     // customizable fonts
     property string fontFamily: AppStyle.fontFamily
     property int fontSize: AppStyle.textSizeH4
