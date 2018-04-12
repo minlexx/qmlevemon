@@ -291,6 +291,7 @@ Rectangle {
 
     Rectangle {
         id: ladderRect
+        visible: modeSkillQueue
         height: ladderRectHeight
         x: parent.x + parent.width * ladderPercentStart
         anchors.bottom: parent.bottom
