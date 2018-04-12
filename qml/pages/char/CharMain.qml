@@ -20,7 +20,8 @@ Rectangle {
         id: charPickSidebar
         anchors.top: parent.top
         anchors.left: parent.left
-        width: 48
+        isVertical: true
+        visible: evemonapp.isLandscape
 
         onCharacterSelected: {
             container.selectCharacterRequest(char_id);
