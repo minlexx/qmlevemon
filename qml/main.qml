@@ -61,6 +61,8 @@ ApplicationWindow {
                 id: serverPlayersOnline
                 text: "TQ: " + refresher.serverPlayersOnline + qsTr(" players")
                 font.pointSize: AppStyle.textSizeH3
+                visible: !refresher.networkActivity
+                anchors.rightMargin: AppStyle.marginSmall
             }
 
             BusyIndicator {
@@ -68,6 +70,7 @@ ApplicationWindow {
                 implicitWidth: 48
                 implicitHeight: 48
                 running: refresher.networkActivity
+                visible: refresher.networkActivity
             }
         }
     }
