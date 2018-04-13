@@ -5,6 +5,7 @@ namespace EM {
 
 CharacterSkillQueueModel::CharacterSkillQueueModel(QObject *parent)
     : QAbstractListModel(parent)
+    , m_mutex(QMutex::Recursive)
 {
     m_roles = {
         {Qt::DisplayRole,    QByteArrayLiteral("display")},
@@ -96,41 +97,77 @@ QVariant CharacterSkillQueueModel::data(const QModelIndex &index, int role) cons
 
 void CharacterSkillQueueModel::setModelData(const QVector<CharacterSkill> skills, const CharacterSkillQueue &queue)
 {
-    {
-        QMutexLocker lock(&m_mutex);
-        beginResetModel();
-        m_data.clear();
-        // fill m_data - loop over a skill queue in order, and add all skills in it to model
-        // we expect skillqueue to be already compacted here, and skills vector prepared
-        // after Character::calcSkillQueue()
-        QDateTime dtCur = QDateTime::currentDateTime();
-        double dtotalSecondsToQueueEnd = static_cast<double>(dtCur.secsTo(queue.queueFinishDate()));
-        for (const CharacterSkillQueueItem &qitem: queue) {
-            // find corresponding skill in skills vector
-            for (const CharacterSkill &sk: skills) {
-                if (sk.skillId() == qitem.skillId) {
-                    // create a copy of CharacterSkill object
-                    CharacterSkill queueSkill(sk);
-                    // and update it with new skill queue info parameters
-                    queueSkill.clearQueueInfo();
-                    double skillPointsTrainedSinceLevel = static_cast<double>(queueSkill.skillPointsInSkill() - qitem.levelStartSp);
-                    double skillPointsNeededTotal = static_cast<double>(qitem.levelEndSp - qitem.levelStartSp);
-                    double trainPercent = skillPointsTrainedSinceLevel / skillPointsNeededTotal;
-                    double ladderStart = 0.0;
-                    if (qitem.queuePosition > 0) {
-                        ladderStart = static_cast<double>(dtCur.secsTo(qitem.startDate)) / dtotalSecondsToQueueEnd;
-                    }
-                    double ladderEnd = static_cast<double>(dtCur.secsTo(qitem.finishDate)) / dtotalSecondsToQueueEnd;
-                    queueSkill.setQueueInfo(qitem.queuePosition, qitem.trainingLevel, trainPercent,
-                                            qitem.startDate, qitem.finishDate,
-                                            ladderStart, ladderEnd);
-                    m_data.push_back(queueSkill);
-                    break;
+    QVector<CharacterSkill> newData;
+    // Loop over a skill queue in order, and add all skills in it to model
+    // we expect skillqueue to be already compacted here, and skills vector prepared
+    // after Character::calcSkillQueue()
+    QDateTime dtCur = QDateTime::currentDateTime();
+    double dtotalSecondsToQueueEnd = static_cast<double>(dtCur.secsTo(queue.queueFinishDate()));
+    for (const CharacterSkillQueueItem &qitem: queue) {
+        // find corresponding skill in skills vector
+        for (const CharacterSkill &sk: skills) {
+            if (sk.skillId() == qitem.skillId) {
+                // create a copy of CharacterSkill object
+                CharacterSkill queueSkill(sk);
+                // and update it with new skill queue info parameters
+                queueSkill.clearQueueInfo();
+                double skillPointsTrainedSinceLevel = static_cast<double>(queueSkill.skillPointsInSkill() - qitem.levelStartSp);
+                double skillPointsNeededTotal = static_cast<double>(qitem.levelEndSp - qitem.levelStartSp);
+                double trainPercent = skillPointsTrainedSinceLevel / skillPointsNeededTotal;
+                double ladderStart = 0.0;
+                if (qitem.queuePosition > 0) {
+                    ladderStart = static_cast<double>(dtCur.secsTo(qitem.startDate)) / dtotalSecondsToQueueEnd;
                 }
+                double ladderEnd = static_cast<double>(dtCur.secsTo(qitem.finishDate)) / dtotalSecondsToQueueEnd;
+                queueSkill.setQueueInfo(qitem.queuePosition, qitem.trainingLevel, trainPercent,
+                                        qitem.startDate, qitem.finishDate,
+                                        ladderStart, ladderEnd);
+                newData.push_back(queueSkill);
+                break;
             }
         }
     }
-    endResetModel();
+
+    mergeNewData(newData);
+}
+
+void CharacterSkillQueueModel::mergeNewData(const QVector<CharacterSkill> &newData)
+{
+    QMutexLocker lock(&m_mutex);
+
+    // loop over new data; replace first existing data items with new ones
+    for (int i = 0; i < newData.size(); i++) {
+        const CharacterSkill &newSkill = newData.at(i);
+        if (i < m_data.size()) {
+            m_data.replace(i, newSkill);
+        }
+    }
+
+    if (newData.size() <= m_data.size()) {
+        // new data is shorter than existing or equal, and
+        // first NEW_SIZE existing items were replaced
+        //  new       {N N N N}
+        //  existing  {E E E E E E E E}
+        Q_EMIT dataChanged(index(0), index(newData.size() - 1));
+        // now we need to remove extra existing data
+        beginRemoveRows(QModelIndex(), newData.size(), m_data.size() - 1);
+        m_data.remove(newData.size(), m_data.size() - newData.size());
+        endRemoveRows();
+    } else {
+        // new data is larger than existing
+        // first EXISTING_SIZE items were replaced
+        //  new       {N N N N N N N N}
+        //  existing  {E E E E}
+        if (m_data.size() > 0) {
+            Q_EMIT dataChanged(index(0), index(m_data.size() - 1));
+        }
+        // insert newer rows from new data to the end of existing
+        beginInsertRows(QModelIndex(), m_data.size(), newData.size() - 1);
+        for (int i = m_data.size(); i < newData.size(); i++) {
+            m_data.append(newData[i]);
+        }
+        endInsertRows();
+    }
 }
 
 } // namespace EM

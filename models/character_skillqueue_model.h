@@ -60,6 +60,9 @@ public:
     // other funcs
     void setModelData(const QVector<CharacterSkill> skills, const CharacterSkillQueue& queue);
 
+protected:
+    void mergeNewData(const QVector<CharacterSkill> &newData);
+
 private:
     QHash<int, QByteArray> m_roles;
     QVector<CharacterSkill> m_data;
