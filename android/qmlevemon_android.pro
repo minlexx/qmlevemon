@@ -56,7 +56,8 @@ SOURCES += \
     ../qtwebserver/http/httpheaders.cpp \
     ../qtwebserver/util/utildataurlcodec.cpp \
     ../qtwebserver/util/utilformurlcodec.cpp \
-    ../qtwebserver/weblayout.cpp
+    ../qtwebserver/weblayout.cpp \
+    ../network/refresher/clones.cpp
 
 HEADERS += \
     ../qmlevemon_app.h \

@@ -41,6 +41,7 @@ protected:
     int refresh_public_data(Character *ch);
     int refresh_location(Character *ch);
     int refresh_skills(Character *ch);
+    int resresh_clones(Character *ch);
     int refresh_wallet(Character *ch);
 
 protected:

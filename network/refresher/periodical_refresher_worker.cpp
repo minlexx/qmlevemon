@@ -60,6 +60,10 @@ void PeriodicalRefresherWorker::refresh()
         num_updates += this->refresh_location(ch);
         if (QThread::currentThread()->isInterruptionRequested()) break; // break early
 
+        // clones
+        num_updates += this->resresh_clones(ch);
+        if (QThread::currentThread()->isInterruptionRequested()) break; // break early
+
         // wallet data
         num_updates += this->refresh_wallet(ch);
         if (QThread::currentThread()->isInterruptionRequested()) break; // break early
