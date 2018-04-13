@@ -25,6 +25,7 @@ SOURCES += \
     ../models/character_skillqueue.cpp \
     ../models/character_skillqueue_model.cpp \
     ../models/formulas.cpp \
+    ../models/invtype.cpp \
     ../models/model_manager.cpp \
     ../models/skill_group.cpp \
     ../models/skill_template.cpp \
@@ -32,6 +33,7 @@ SOURCES += \
     ../models/update_timestamps.cpp \
     ../network/periodical_refresher.cpp \
     ../network/refresher/periodical_refresher_worker.cpp \
+    ../network/refresher/clones.cpp \
     ../network/refresher/location.cpp \
     ../network/refresher/public_data.cpp \
     ../network/refresher/server_status.cpp \
@@ -56,8 +58,7 @@ SOURCES += \
     ../qtwebserver/http/httpheaders.cpp \
     ../qtwebserver/util/utildataurlcodec.cpp \
     ../qtwebserver/util/utilformurlcodec.cpp \
-    ../qtwebserver/weblayout.cpp \
-    ../network/refresher/clones.cpp
+    ../qtwebserver/weblayout.cpp
 
 HEADERS += \
     ../qmlevemon_app.h \
@@ -74,6 +75,7 @@ HEADERS += \
     ../models/character_skillqueue.h \
     ../models/character_skillqueue_model.h \
     ../models/formulas.h \
+    ../models/invtype.h \
     ../models/model_manager.h \
     ../models/skill_group.h \
     ../models/skill_template.h \
