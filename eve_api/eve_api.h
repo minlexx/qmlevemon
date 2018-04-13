@@ -43,8 +43,10 @@ public:
 public:
     // character
     bool get_character_attributes(QJsonObject& reply, quint64 char_id, const QByteArray& access_token);
-    bool get_character_public_info(QJsonObject& reply, quint64 char_id);
+    bool get_character_clones(QJsonObject& reply, quint64 char_id, const QByteArray& access_token);
+    bool get_character_implants(QJsonArray& reply, quint64 char_id, const QByteArray& access_token);
     bool get_character_location(QJsonObject& reply, quint64 char_id, const QByteArray& access_token);
+    bool get_character_public_info(QJsonObject& reply, quint64 char_id);
     bool get_character_ship(QJsonObject& reply, quint64 char_id, const QByteArray& access_token);
     bool get_character_skillqueue(QJsonArray& reply, quint64 char_id, const QByteArray& access_token);
     bool get_character_skills(QJsonObject& reply, quint64 char_id, const QByteArray& access_token);
