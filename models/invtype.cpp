@@ -1,7 +1,51 @@
+#include <QVariant>
 #include "invtype.h"
 
 namespace EM {
 
+
+InvTypeAttribute InvTypeAttribute::fromDatabaseJson(const QJsonObject &jobj)
+{
+    InvTypeAttribute ret;
+    if (!jobj.isEmpty()) {
+        ret.attributeId = jobj.value(QLatin1String("attributeid")).toVariant().toULongLong();
+        ret.attributeName = jobj.value(QLatin1String("attributename")).toString();
+        ret.valueInt = jobj.value(QLatin1String("valueInt")).toInt();
+        ret.valueFloat = jobj.value(QLatin1String("valueFloat")).toDouble();
+    }
+    return ret;
+}
+
+
+InvType InvType::fromDatabaseJson(const QJsonObject &jobj)
+{
+    InvType ret;
+    if (!jobj.isEmpty()) {
+        ret.setTypeId(jobj.value(QLatin1String("typeid")).toVariant().toULongLong());
+        ret.setTypeName(jobj.value(QLatin1String("typename")).toString());
+        ret.setGroupId(jobj.value(QLatin1String("groupid")).toVariant().toULongLong());
+        ret.setGroupName(jobj.value(QLatin1String("groupname")).toString());
+        ret.setCategoryId(jobj.value(QLatin1String("categoryid")).toVariant().toULongLong());
+        ret.setCategoryName(jobj.value(QLatin1String("categoryname")).toString());
+    }
+    return ret;
+}
+
+InvType InvType::fromDatabaseJson(const QJsonObject &jobj, const QJsonArray &jattrs)
+{
+    InvType ret = InvType::fromDatabaseJson(jobj);
+    if (jattrs.count() > 0) {
+        // also load attributes
+        QVector<InvTypeAttribute> newAttrs;
+        newAttrs.reserve(jattrs.count());
+        for (const QJsonValue &jval : jattrs) {
+            const QJsonObject &jattr = jval.toObject();
+            newAttrs.append(InvTypeAttribute::fromDatabaseJson(jattr));
+        }
+        ret.setAttributes(newAttrs);
+    }
+    return ret;
+}
 
 InvType::InvType(QObject *parent)
     : QObject(parent)
@@ -28,6 +72,7 @@ const InvType &InvType::operator=(const InvType &other)
     m_groupName     = other.m_groupName;
     m_categoryId    = other.m_categoryId;
     m_categoryName  = other.m_categoryName;
+    m_attrs         = other.m_attrs;
     return (*this);
 }
 
@@ -40,6 +85,7 @@ const InvType &InvType::operator=(InvType &&other)
     m_groupName     = std::move(other.m_groupName);
     m_categoryId    = std::move(other.m_categoryId);
     m_categoryName  = std::move(other.m_categoryName);
+    m_attrs         = std::move(other.m_attrs);
     return (*this);
 }
 
@@ -56,6 +102,8 @@ quint64 InvType::groupId() const { return m_groupId; }
 QString InvType::groupName() const { return m_groupName; }
 quint64 InvType::categoryId() const { return m_categoryId; }
 QString InvType::categoryName() const { return m_categoryName; }
+const QVector<InvTypeAttribute> &InvType::attributes() const { return m_attrs; }
+QVector<InvTypeAttribute> &InvType::attributes() { return m_attrs; }
 
 void InvType::setTypeId(quint64 typeId)
 {
@@ -97,6 +145,12 @@ void InvType::setCategoryName(QString categoryName)
     if (m_categoryName == categoryName) return;
     m_categoryName = categoryName;
     Q_EMIT categoryNameChanged(m_categoryName);
+}
+
+void InvType::setAttributes(const QVector<InvTypeAttribute> attrs)
+{
+    m_attrs = attrs;
+    Q_EMIT attribtesChanged();
 }
 
 

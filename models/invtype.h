@@ -2,8 +2,28 @@
 #define INVTYPE_H
 
 #include <QObject>
+#include <QVector>
+#include <QJsonObject>
+#include <QJsonArray>
 
 namespace EM {
+
+
+class InvTypeAttribute
+{
+public:
+    InvTypeAttribute() {}
+    InvTypeAttribute(const InvTypeAttribute&) = default;
+    InvTypeAttribute(InvTypeAttribute&&) = default;
+    InvTypeAttribute &operator=(const InvTypeAttribute&) = default;
+    InvTypeAttribute &operator=(InvTypeAttribute&&) = default;
+    static InvTypeAttribute fromDatabaseJson(const QJsonObject &jobj);
+public:
+    quint64 attributeId = 0;
+    QString attributeName;
+    int valueInt = 0;
+    double valueFloat = 0.0;
+};
 
 
 class InvType : public QObject
@@ -17,6 +37,8 @@ class InvType : public QObject
     Q_PROPERTY(QString categoryName  READ categoryName  WRITE setCategoryName  NOTIFY categoryNameChanged)
 
 public:
+    static InvType fromDatabaseJson(const QJsonObject &jobj);
+    static InvType fromDatabaseJson(const QJsonObject &jobj, const QJsonArray &jattrs);
     InvType(QObject *parent = nullptr);
     InvType(const InvType &other);
     InvType(InvType &&other);
@@ -32,6 +54,8 @@ public:
     QString groupName() const;
     quint64 categoryId() const;
     QString categoryName() const;
+    const QVector<InvTypeAttribute> &attributes() const;
+    QVector<InvTypeAttribute> &attributes();
 
 public Q_SLOTS:
     void setTypeId(quint64 typeId);
@@ -40,6 +64,7 @@ public Q_SLOTS:
     void setGroupName(QString groupName);
     void setCategoryId(quint64 categoryId);
     void setCategoryName(QString categoryName);
+    void setAttributes(const QVector<InvTypeAttribute> attrs);
 
 Q_SIGNALS:
     void typeIdChanged(quint64 typeId);
@@ -48,6 +73,7 @@ Q_SIGNALS:
     void groupNameChanged(QString groupName);
     void categoryIdChanged(quint64 categoryId);
     void categoryNameChanged(QString categoryName);
+    void attribtesChanged();
 
 private:
     quint64 m_typeId = 0;
@@ -56,6 +82,7 @@ private:
     QString m_groupName;
     quint64 m_categoryId = 0;
     QString m_categoryName;
+    QVector<InvTypeAttribute> m_attrs;
 };
 
 
