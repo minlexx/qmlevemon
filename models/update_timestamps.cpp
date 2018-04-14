@@ -50,12 +50,12 @@ bool UpdateTimestamps::isUpdateNeeded(UTST kind)
 QDateTime& UpdateTimestamps::p_get_ts(UTST kind)
 {
     switch (kind) {
-    case UTST::PUBLIC: return dt_public; break;
-    case UTST::SKILLS: return dt_skills; break;
-    case UTST::WALLET: return dt_wallet; break;
-    case UTST::LOCATION: return dt_location; break;
-    case UTST::CLONES: return dt_clones; break;
-    case UTST::ASSETS: return dt_assets; break;
+    case UTST::PUBLIC:   return dt_public;
+    case UTST::SKILLS:   return dt_skills;
+    case UTST::WALLET:   return dt_wallet;
+    case UTST::LOCATION: return dt_location;
+    case UTST::CLONES:   return dt_clones;
+    case UTST::ASSETS:   return dt_assets;
     }
     return *new QDateTime(); // should never happen
 }
@@ -64,12 +64,12 @@ QDateTime& UpdateTimestamps::p_get_ts(UTST kind)
 qint64 UpdateTimestamps::p_get_cache_seconds(UTST kind)
 {
     switch (kind) {
-    case UTST::PUBLIC: return 3600; break;
-    case UTST::SKILLS: return 3600; break;
-    case UTST::WALLET: return 120; break;
-    case UTST::LOCATION: return 60; break;
-    case UTST::CLONES: return 3600; break;
-    case UTST::ASSETS: return 3600; break;
+    case UTST::PUBLIC:   return 3600;
+    case UTST::SKILLS:   return 3600;
+    case UTST::WALLET:   return 120;
+    case UTST::LOCATION: return 60;
+    case UTST::CLONES:   return 3600;
+    case UTST::ASSETS:   return 3600;
     }
     return 0; // should never happen
 }
