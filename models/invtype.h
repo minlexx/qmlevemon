@@ -75,7 +75,7 @@ Q_SIGNALS:
     void groupNameChanged(QString groupName);
     void categoryIdChanged(quint64 categoryId);
     void categoryNameChanged(QString categoryName);
-    void attribtesChanged();
+    void attributesChanged();
 
 private:
     quint64 m_typeId = 0;

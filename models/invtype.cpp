@@ -175,7 +175,7 @@ void InvType::setCategoryName(QString categoryName)
 void InvType::setAttributes(const QVector<InvTypeAttribute> attrs)
 {
     m_attrs = attrs;
-    Q_EMIT attribtesChanged();
+    Q_EMIT attributesChanged();
 }
 
 
