@@ -54,6 +54,7 @@ InvType::InvType(QObject *parent)
 
 
 InvType::InvType(const InvType &other)
+    : QObject(other.parent())
 {
     (*this) = other;
 }
@@ -104,6 +105,30 @@ quint64 InvType::categoryId() const { return m_categoryId; }
 QString InvType::categoryName() const { return m_categoryName; }
 const QVector<InvTypeAttribute> &InvType::attributes() const { return m_attrs; }
 QVector<InvTypeAttribute> &InvType::attributes() { return m_attrs; }
+
+const InvTypeAttribute *InvType::getAttribute(const QString &attributeName) const
+{
+    const InvTypeAttribute *ret = nullptr;
+    for (const InvTypeAttribute &attr: m_attrs) {
+        if (attr.attributeName == attributeName) {
+            ret = &attr;
+            break;
+        }
+    }
+    return ret;
+}
+
+const InvTypeAttribute *InvType::getAttribute(quint64 attributeId) const
+{
+    const InvTypeAttribute *ret = nullptr;
+    for (const InvTypeAttribute &attr: m_attrs) {
+        if (attr.attributeId == attributeId) {
+            ret = &attr;
+            break;
+        }
+    }
+    return ret;
+}
 
 void InvType::setTypeId(quint64 typeId)
 {

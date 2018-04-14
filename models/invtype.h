@@ -56,6 +56,8 @@ public:
     QString categoryName() const;
     const QVector<InvTypeAttribute> &attributes() const;
     QVector<InvTypeAttribute> &attributes();
+    const InvTypeAttribute *getAttribute(const QString &attributeName) const;
+    const InvTypeAttribute *getAttribute(quint64 attributeId) const;
 
 public Q_SLOTS:
     void setTypeId(quint64 typeId);
