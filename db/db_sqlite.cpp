@@ -414,6 +414,31 @@ QString DbSqlite::typeName(quint64 type_id)
     return ret;
 }
 
+QJsonObject DbSqlite::typeInfo(quint64 type_id)
+{
+    QJsonObject ret;
+    if (!m_eve_sde_db.isOpen()) {
+        return ret;
+    }
+    QSqlQuery q(m_eve_sde_db);
+    q.prepare(QLatin1String("SELECT it.typeName, it.groupID, ig.groupName, ig.categoryID, ic.categoryName, it.iconID "
+                            " FROM invTypes it, invGroups ig, invCategories ic "
+                            " WHERE it.typeID = ? AND ig.groupID=it.groupID AND ic.categoryID=ig.categoryID"));
+    q.addBindValue(type_id, QSql::In);
+    if (q.exec()) {
+        if (q.next()) {
+            ret.insert(QLatin1String("typeid"), static_cast<qint64>(type_id));
+            ret.insert(QLatin1String("typename"),     q.value(0).toString());
+            ret.insert(QLatin1String("groupid"),      q.value(1).toLongLong());
+            ret.insert(QLatin1String("groupname"),    q.value(2).toString());
+            ret.insert(QLatin1String("categoryid"),   q.value(3).toLongLong());
+            ret.insert(QLatin1String("categoryname"), q.value(4).toString());
+            ret.insert(QLatin1String("iconid"),       q.value(5).toLongLong());
+        }
+    }
+    return ret;
+}
+
 
 QJsonArray DbSqlite::loadSkillGroups()
 {

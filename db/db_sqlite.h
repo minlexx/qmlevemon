@@ -29,6 +29,7 @@ public:
     virtual QString ancestryName(quint64 ancestry_id) override;
     virtual QString factionName(quint64 faction_id) override;
     virtual QString typeName(quint64 type_id) override;
+    virtual QJsonObject typeInfo(quint64 type_id) override;
 
     virtual QJsonArray loadSkillGroups() override;
     virtual QJsonArray loadSkillsInGroup(quint64 group_id) override;
