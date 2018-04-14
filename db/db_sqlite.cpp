@@ -439,6 +439,30 @@ QJsonObject DbSqlite::typeInfo(quint64 type_id)
     return ret;
 }
 
+QJsonArray DbSqlite::typeAttributes(quint64 type_id)
+{
+    QJsonArray ret;
+    if (!m_eve_sde_db.isOpen()) {
+        return ret;
+    }
+    QSqlQuery q(m_eve_sde_db);
+    q.prepare(QLatin1String("SELECT ta.attributeID, ta.valueInt, ta.valueFloat, at.attributeName "
+                            " FROM dgmTypeAttributes ta, dgmAttributeTypes at "
+                            " WHERE ta.typeID = ? AND at.attributeID=ta.attributeID"));
+    q.addBindValue(type_id, QSql::In);
+    if (q.exec()) {
+        while (q.next()) {
+            QJsonObject jattr;
+            jattr.insert(QLatin1String("attributeid"), q.value(0).toLongLong());
+            jattr.insert(QLatin1String("attributename"), q.value(3).toString());
+            jattr.insert(QLatin1String("valueInt"), q.value(1).toInt());
+            jattr.insert(QLatin1String("valueFloat"), q.value(2).toDouble());
+            ret.append(jattr);
+        }
+    }
+    return ret;
+}
+
 
 QJsonArray DbSqlite::loadSkillGroups()
 {
