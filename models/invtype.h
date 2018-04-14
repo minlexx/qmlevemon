@@ -5,6 +5,16 @@
 #include <QVector>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QDataStream>
+
+
+// forward declare class, for friend statement
+namespace EM { class InvType; }
+
+// forward declare operators, for friend statement
+QDataStream &operator<<(QDataStream &stream, const EM::InvType &item);
+QDataStream &operator>>(QDataStream &stream, EM::InvType &item);
+
 
 namespace EM {
 
@@ -85,9 +95,19 @@ private:
     quint64 m_categoryId = 0;
     QString m_categoryName;
     QVector<InvTypeAttribute> m_attrs;
+
+    friend QDataStream& (::operator<<)(QDataStream &stream, const InvType &item);
+    friend QDataStream& (::operator>>)(QDataStream &stream, InvType &item);
 };
 
 
 } // namespace
+
+
+QDataStream &operator<<(QDataStream &stream, const EM::InvTypeAttribute &attr);
+QDataStream &operator>>(QDataStream &stream, EM::InvTypeAttribute &attr);
+QDataStream &operator<<(QDataStream &stream, const EM::InvType &item);
+QDataStream &operator>>(QDataStream &stream, EM::InvType &item);
+
 
 #endif // INVTYPE_H

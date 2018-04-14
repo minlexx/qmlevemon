@@ -180,3 +180,47 @@ void InvType::setAttributes(const QVector<InvTypeAttribute> attrs)
 
 
 } // namespace EM
+
+
+QDataStream &operator<<(QDataStream &stream, const EM::InvTypeAttribute &attr)
+{
+    stream << attr.attributeId;
+    stream << attr.attributeName;
+    stream << attr.valueInt;
+    stream << attr.valueFloat;
+    return stream;
+}
+
+QDataStream &operator>>(QDataStream &stream, EM::InvTypeAttribute &attr)
+{
+    stream >> attr.attributeId;
+    stream >> attr.attributeName;
+    stream >> attr.valueInt;
+    stream >> attr.valueFloat;
+    return stream;
+}
+
+
+QDataStream &operator<<(QDataStream &stream, const EM::InvType &item)
+{
+    stream << item.m_typeId;
+    stream << item.m_typeName;
+    stream << item.m_groupId;
+    stream << item.m_groupName;
+    stream << item.m_categoryId;
+    stream << item.m_categoryName;
+    stream << item.m_attrs;
+    return stream;
+}
+
+QDataStream &operator>>(QDataStream &stream, EM::InvType &item)
+{
+    stream >> item.m_typeId;
+    stream >> item.m_typeName;
+    stream >> item.m_groupId;
+    stream >> item.m_groupName;
+    stream >> item.m_categoryId;
+    stream >> item.m_categoryName;
+    stream >> item.m_attrs;
+    return stream;
+}
