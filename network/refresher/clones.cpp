@@ -64,9 +64,13 @@ int PeriodicalRefresherWorker::resresh_clones(Character *ch)
     // if (QThread::currentThread()->isInterruptionRequested()) break; // break early
 
     // 2, refresh implants
-    // example response : [ 22107, 22108, 22111, 22109, 22110, 13229, 13249 ]
+    QJsonArray replyArr;
+    if (m_api->get_character_implants(replyArr, ch->characterId(), ch->getAuthTokens().access_token)) {
+        qCDebug(logRefresher) << replyArr;
+        // example response : [ 22107, 22108, 22111, 22109, 22110, 13229, 13249 ]
+    }
 
-    ch->setUpdateTimestamp(UpdateTimestamps::UTST::LOCATION);
+    //ch->setUpdateTimestamp(UpdateTimestamps::UTST::CLONES);
     return 1; // 1 - there was an update
 }
 
