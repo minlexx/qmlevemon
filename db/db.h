@@ -39,13 +39,13 @@ public:
     virtual QString ancestryName(quint64 ancestry_id) = 0;
     virtual QString factionName(quint64 faction_id) = 0;
     virtual QString typeName(quint64 type_id) = 0;
+    virtual QJsonObject typeInfo(quint64 type_id) = 0;
 
     virtual QJsonArray loadSkillGroups() = 0;
     virtual QJsonArray loadSkillsInGroup(quint64 group_id) = 0;
 
 protected:
-    Db(const Db &other);
-    Db& operator=(const Db& other);
+    Q_DISABLE_COPY(Db)
 };
 
 
