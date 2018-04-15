@@ -15,6 +15,8 @@ class CharacterImplantsGroup : public QObject
 public:
     explicit CharacterImplantsGroup(QObject *parent = nullptr);
 
+    void getAttributeBonuses(int *intelligence, int *memory, int *perception, int *willpower, int *charisma);
+
 private:
     QVector<InvType> m_implants;
 };
