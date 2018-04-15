@@ -33,6 +33,7 @@ set(qmlevemon_srcs
     "eve_api/eve_api.cpp"
     "eve_api/eve_api_tokens.cpp"
     "models/character.cpp"
+    "models/character_implants_group.cpp"
     "models/character_model.cpp"
     "models/character_skill.cpp"
     "models/character_skillgroups_model.cpp"
