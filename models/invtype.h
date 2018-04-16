@@ -6,6 +6,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QDataStream>
+#include <QDebug>
 
 
 // forward declare class, for friend statement
@@ -14,6 +15,7 @@ namespace EM { class InvType; }
 // forward declare operators, for friend statement
 QDataStream &operator<<(QDataStream &stream, const EM::InvType &item);
 QDataStream &operator>>(QDataStream &stream, EM::InvType &item);
+QDebug operator<<(QDebug stream, const EM::InvType &item);
 
 
 namespace EM {
@@ -98,6 +100,7 @@ private:
 
     friend QDataStream& (::operator<<)(QDataStream &stream, const InvType &item);
     friend QDataStream& (::operator>>)(QDataStream &stream, InvType &item);
+    friend QDebug (::operator<<)(QDebug stream, const EM::InvType &item);
 };
 
 

@@ -111,9 +111,14 @@ void CharacterSkillQueueModel::setModelData(const QVector<CharacterSkill> skills
                 CharacterSkill queueSkill(sk);
                 // and update it with new skill queue info parameters
                 queueSkill.clearQueueInfo();
-                double skillPointsTrainedSinceLevel = static_cast<double>(queueSkill.skillPointsInSkill() - qitem.levelStartSp);
+                double skillPointsTrainedSinceLevel = 0.0;
+                double skillPointsInSkill = static_cast<double>(queueSkill.skillPointsInSkill());
+                if (skillPointsInSkill > qitem.levelStartSp) {
+                    skillPointsTrainedSinceLevel = skillPointsInSkill - static_cast<double>(qitem.levelStartSp);
+                }
                 double skillPointsNeededTotal = static_cast<double>(qitem.levelEndSp - qitem.levelStartSp);
                 double trainPercent = skillPointsTrainedSinceLevel / skillPointsNeededTotal;
+
                 double ladderStart = 0.0;
                 if (qitem.queuePosition > 0) {
                     ladderStart = static_cast<double>(dtCur.secsTo(qitem.startDate)) / dtotalSecondsToQueueEnd;

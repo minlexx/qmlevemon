@@ -727,7 +727,11 @@ void Character::calcSkillQueue()
 
         // be smart and overwrite queue info only for skill that is not already queued
         if (!sk->isInQueue()) {
-            double skillPointsTrainedSinceLevel = static_cast<double>(sk->skillPointsInSkill() - qitem.levelStartSp);
+            double skillPointsTrainedSinceLevel = 0.0;
+            double skillPointsInSkill = static_cast<double>(sk->skillPointsInSkill());
+            if (skillPointsInSkill > qitem.levelStartSp) {
+                skillPointsTrainedSinceLevel = skillPointsInSkill - static_cast<double>(qitem.levelStartSp);
+            }
             double skillPointsNeededTotal = static_cast<double>(qitem.levelEndSp - qitem.levelStartSp);
             double trainPercent = skillPointsTrainedSinceLevel / skillPointsNeededTotal;
 
