@@ -224,3 +224,9 @@ QDataStream &operator>>(QDataStream &stream, EM::InvType &item)
     stream >> item.m_attrs;
     return stream;
 }
+
+QDebug operator<<(QDebug stream, const EM::InvType &item)
+{
+    stream.nospace() << "InvType [" << item.m_typeName << "/" << item.m_typeId << "]";
+    return stream;
+}
