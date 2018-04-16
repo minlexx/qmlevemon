@@ -28,7 +28,13 @@ public:
     CharacterImplantsGroup &operator=(const CharacterImplantsGroup &other);
     CharacterImplantsGroup &operator=(CharacterImplantsGroup &&other);
 
-    void getAttributeBonuses(int *intelligence, int *memory, int *perception, int *willpower, int *charisma);
+public:
+    void addImplant(const InvType &imp);
+    void addImplant(InvType &&imp);
+    void clearImplants();
+    int count() const;
+    const InvType &at(int i) const;
+    //void getAttributeBonuses(int *intelligence, int *memory, int *perception, int *willpower, int *charisma);
 
 private:
     QVector<InvType> m_implants;

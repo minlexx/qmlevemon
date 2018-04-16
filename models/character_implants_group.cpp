@@ -33,6 +33,31 @@ CharacterImplantsGroup &CharacterImplantsGroup::operator=(CharacterImplantsGroup
     return (*this);
 }
 
+void CharacterImplantsGroup::addImplant(const InvType &imp)
+{
+    m_implants.append(imp);
+}
+
+void CharacterImplantsGroup::addImplant(InvType &&imp)
+{
+    m_implants.append(std::move(imp));
+}
+
+void CharacterImplantsGroup::clearImplants()
+{
+    m_implants.clear();
+}
+
+int CharacterImplantsGroup::count() const
+{
+    return m_implants.count();
+}
+
+const InvType &CharacterImplantsGroup::at(int i) const
+{
+    return m_implants.at(i);
+}
+
 
 } // namespace EM
 
