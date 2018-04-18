@@ -10,6 +10,7 @@
 #include <QJsonValue>
 #include <QJsonParseError>
 #include <QScopedPointer>
+#include <QNetworkProxy>
 #include <QLoggingCategory>
 #include <QDebug>
 
@@ -226,6 +227,12 @@ EveApi::EveApi(QObject *parent):
     m_nam(new QNetworkAccessManager(this))
 {
     m_esi_base_url = QLatin1String("https://esi.tech.ccp.is/latest");
+#if 0
+    QNetworkProxy proxy(QNetworkProxy::Socks5Proxy,
+                        QLatin1String("hostname"), 1080,
+                        QLatin1String("user"), QLatin1String("password"));
+    m_nam->setProxy(proxy);
+#endif
 }
 
 
@@ -354,6 +361,7 @@ bool EveApi::send_general_esi_request_json(
         qCWarning(logApi) << "ESI request: " << api_url
                           << "; JSON parse error:" << parse_error.errorString()
                           << "; HTTP status:" << reply_http_status;
+        qCWarning(logApi) << "Reply was:" << replyBa;
         return false;
     }
     return true;
