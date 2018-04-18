@@ -154,10 +154,12 @@ void CharacterSkillQueueModel::mergeNewData(const QVector<CharacterSkill> &newDa
         //  new       {N N N N}
         //  existing  {E E E E E E E E}
         Q_EMIT dataChanged(index(0), index(newData.size() - 1));
-        // now we need to remove extra existing data
-        beginRemoveRows(QModelIndex(), newData.size(), m_data.size() - 1);
-        m_data.remove(newData.size(), m_data.size() - newData.size());
-        endRemoveRows();
+        // now we need to remove extra existing data, if it exists
+        if (m_data.size() > newData.size()) {
+            beginRemoveRows(QModelIndex(), newData.size(), m_data.size() - 1);
+            m_data.remove(newData.size(), m_data.size() - newData.size());
+            endRemoveRows();
+        }
     } else {
         // new data is larger than existing
         // first EXISTING_SIZE items were replaced
