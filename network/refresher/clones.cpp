@@ -70,6 +70,11 @@ int PeriodicalRefresherWorker::resresh_clones(Character *ch)
         // example response : [ 22107, 22108, 22111, 22109, 22110, 13229, 13249 ]
     }
 
+    // example request into eve_sde db:
+    // select it.typeName, ta.*, at.attributeName, at.description
+    //  from dgmtypeattributes ta, dgmAttributeTypes at, invTypes it
+    //  where ta.typeid=13229 and at.attributeid=ta.attributeid and ta.typeID=it.typeID;
+
     //ch->setUpdateTimestamp(UpdateTimestamps::UTST::CLONES);
     return 1; // 1 - there was an update
 }
