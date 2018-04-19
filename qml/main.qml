@@ -112,6 +112,7 @@ ApplicationWindow {
             model: ListModel {
                 id: mainMenuModel
                 ListElement { title: qsTr("Add character"); action: "add_character" }
+                ListElement { title: qsTr("Settings"); action: "settings" }
                 ListElement { title: qsTr("About"); action: "about" }
                 ListElement { title: qsTr("Test page"); action: "test_page" }
                 ListElement { title: qsTr("Quit"); action: "quit" }
@@ -152,6 +153,11 @@ ApplicationWindow {
                 nav_back();
             }
         }
+    }
+
+    Component {
+        id: pageSettings
+        Settings { }
     }
 
     Component {
@@ -242,7 +248,7 @@ ApplicationWindow {
             var characterId = p1;
             // console.log("Select character: " + characterId);
             // already selected as current - do nothing
-            if (evemonapp.curCharId() === characterId) {
+            if (evemonapp.curCharId === characterId) {
                 return;
             }
             // current page is viewing other character - navigate back first
@@ -253,8 +259,12 @@ ApplicationWindow {
             mainStack.push(pageCharacterMain);
             nav_title = qsTr("Char: ") + curChar.characterName
             handled = true;
+        } else if (page === "settings") {
+            nav_title = qsTr("Settings")
+            mainStack.push(pageSettings);
+            handled = true;
         } else if (page === "about") {
-            nav_title = qsTr("About...")
+            nav_title = qsTr("About QMLEveMon")
             mainStack.push(pageAbout);
             handled = true;
         } else if (page === "test_page") {
