@@ -67,6 +67,7 @@ public Q_SLOTS:
     void requestDeleteCharacter(quint64 characterId);
 
 Q_SIGNALS:
+    void settingsChanged();
     void curCharIdChanged();
     void isPortraitChanged();
     void isLandscapeChanged();
@@ -75,7 +76,7 @@ private:
     void initStorageDirectory();
 
 protected:
-    AppSettings m_settings;
+    AppSettings *m_settings = nullptr;
     QQmlApplicationEngine m_engine;
     QQuickWindow *m_mainWindow = nullptr;
     PortraitCache *m_portraitCache = nullptr;

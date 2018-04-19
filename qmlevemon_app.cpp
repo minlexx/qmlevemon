@@ -39,6 +39,10 @@ QmlEvemonApp::QmlEvemonApp(int& argc, char **argv):
     setApplicationDisplayName(QLatin1String("QML EVEMon"));
     setApplicationVersion(QLatin1String(QMLEVEMON_VERSION));
 
+    m_settings = new AppSettings(this);
+    QObject::connect(m_settings, &AppSettings::settingsChanged,
+                     this, &QmlEvemonApp::settingsChanged);
+
     m_portraitCache = new PortraitCache();
     m_refresher = new PeriodicalRefresher(this);
 
@@ -150,12 +154,12 @@ QQuickWindow *QmlEvemonApp::mainWindow() const
 
 QObject *QmlEvemonApp::settingsO()
 {
-    return static_cast<QObject *>(&m_settings);
+    return static_cast<QObject *>(m_settings);
 }
 
 AppSettings *QmlEvemonApp::settings()
 {
-    return &m_settings;
+    return m_settings;
 }
 
 
