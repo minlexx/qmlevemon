@@ -77,7 +77,6 @@ int PeriodicalRefresherWorker::resresh_clones(Character *ch)
     // 2, refresh implants
     QJsonArray replyArr;
     if (m_api->get_character_implants(replyArr, ch->characterId(), ch->getAuthTokens().access_token)) {
-        qCDebug(logRefresher) << replyArr;
         // example response : [ 22107, 22108, 22111, 22109, 22110, 13229, 13249 ]
         CharacterImplantsGroup currentCloneImps;
         for (const QJsonValue& jval: replyArr) {
@@ -93,7 +92,6 @@ int PeriodicalRefresherWorker::resresh_clones(Character *ch)
             }
         }
 
-        //qCDebug(logRefresher) << Q_FUNC_INFO << currentCloneImps;
         ch->currentClone()->setImplantsGroup(std::move(currentCloneImps));
 
         nChanges++;
