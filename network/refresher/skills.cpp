@@ -112,16 +112,17 @@ int PeriodicalRefresherWorker::refresh_skills(Character *ch) {
             chSkill.setSkillPointsInSkill(jskill.value(QLatin1String("skillpoints_in_skill")).toVariant().toULongLong());
 
             // warning detection
-            if (chSkill.activeLevel() == 0) {
-                // whaat, how canthis be (it can be if skill was injected but not traiend)
-                qCWarning(logRefresher) << "    We got a skill with active level = 0!" << chSkill.skillId() << chSkill.skillName();
-                // qCWarning(logRefresher) << "    " << jskill;
-            }
+            // if (chSkill.activeLevel() == 0) {
+            //    // qCWarning(logRefresher) << "    We got a skill with active level = 0!" << chSkill.skillId() << chSkill.skillName();
+            //    // qCWarning(logRefresher) << "    " << jskill;
+            // }
+            // ^^ disable this warning, it is normal to have skill trained at 0 (injected but not trained yet / in queue),
+            //    and alpha accounts can have plenty of those.
 
             // detect alpha clone
             // if any skill has activeLevel < trainedLevel, this is alpha
             if (chSkill.activeLevel() < chSkill.trainedLevel()) {
-                qCDebug(logRefresher) << "    << Alpha clone detected >>";
+                // qCDebug(logRefresher) << "    << Alpha clone detected >>";
                 isAlphaClone = true;
             }
 
