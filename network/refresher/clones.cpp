@@ -7,7 +7,9 @@
 #include "../periodical_refresher.h"
 #include "eve_api/eve_api.h"
 #include "models/character.h"
+#include "models/character_implants_group.h"
 #include "db/db.h"
+#include "qmlevemon_app.h"
 
 namespace EM {
 
@@ -22,6 +24,13 @@ int PeriodicalRefresherWorker::resresh_clones(Character *ch)
     if (!this->check_refresh_token(ch)) {
         return 0;
     }
+
+    QmlEvemonApp *gApp = globalAppInstance();
+    if (!gApp) return 0;
+    Db *db = gApp->database();
+    if (!db) return 0;
+
+    int nChanges = 0;
 
     qCDebug(logRefresher) << " refreshing clones for" << ch->toString();
     QJsonObject reply;
@@ -59,6 +68,8 @@ int PeriodicalRefresherWorker::resresh_clones(Character *ch)
         //          "location_type": "station"
         //        }
         //      }
+
+        nChanges++;
     }
 
     // if (QThread::currentThread()->isInterruptionRequested()) break; // break early
@@ -68,15 +79,34 @@ int PeriodicalRefresherWorker::resresh_clones(Character *ch)
     if (m_api->get_character_implants(replyArr, ch->characterId(), ch->getAuthTokens().access_token)) {
         qCDebug(logRefresher) << replyArr;
         // example response : [ 22107, 22108, 22111, 22109, 22110, 13229, 13249 ]
+        CharacterImplantsGroup currentCloneImps;
+        for (const QJsonValue& jval: replyArr) {
+            const quint64 implantTypeID = jval.toVariant().toULongLong();
+            if (implantTypeID > 0) {
+                // load type info from database
+                const QJsonObject dbJson = db->typeInfo(implantTypeID);
+                const QJsonArray dbJsonAttrs = db->typeAttributes(implantTypeID);
+                // cosntruct implant inventory item
+                const InvType implantItem = InvType::fromDatabaseJson(dbJson, dbJsonAttrs);
+                // store it in implant set
+                currentCloneImps.addImplant(std::move(implantItem));
+            }
+        }
+
+        qCDebug(logRefresher) << Q_FUNC_INFO << currentCloneImps;
+
+        nChanges++;
     }
 
     // example request into eve_sde db:
-    // select it.typeName, ta.*, at.attributeName, at.description
-    //  from dgmtypeattributes ta, dgmAttributeTypes at, invTypes it
-    //  where ta.typeid=13229 and at.attributeid=ta.attributeid and ta.typeID=it.typeID;
+    // SELECT it.typeName, ta.*, at.attributeName, at.description
+    //  FROM dgmtypeattributes ta, dgmAttributeTypes at, invTypes it
+    //  WHERE ta.typeid=13229 AND at.attributeid=ta.attributeid AND ta.typeID=it.typeID;
 
-    //ch->setUpdateTimestamp(UpdateTimestamps::UTST::CLONES);
-    return 1; // 1 - there was an update
+    if (nChanges > 0) {
+        ch->setUpdateTimestamp(UpdateTimestamps::UTST::CLONES);
+    }
+    return nChanges; // >0 : there was an update
 }
 
 
