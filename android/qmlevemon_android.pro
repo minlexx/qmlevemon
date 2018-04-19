@@ -12,6 +12,7 @@ INCLUDEPATH += ../ ../qtwebserver
 SOURCES += \
     ../main.cpp \
     ../qmlevemon_app.cpp \
+    ../settings.cpp \
     ../db/db.cpp \
     ../db/db_sqlite.cpp \
     ../db/portrait_cache.cpp \
@@ -63,6 +64,7 @@ SOURCES += \
 
 HEADERS += \
     ../qmlevemon_app.h \
+    ../settings.h \
     ../db/db.h \
     ../db/db_sqlite.h \
     ../db/portrait_cache.h \

@@ -25,6 +25,7 @@ option(BUILD_TESTING "Build tests (for developers)" OFF)
 
 set(qmlevemon_srcs
     "main.cpp"
+    "settings.cpp"
     "qmlevemon_app.cpp"
     "db/db.cpp"
     "db/db_sqlite.cpp"
