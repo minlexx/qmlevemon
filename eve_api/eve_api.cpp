@@ -54,6 +54,15 @@ bool eveapi_request_first_access_token(const QString& code,
     QEventLoop local_event_loop;
     QNetworkAccessManager nam;
 
+    // check for proxy settings
+    QmlEvemonApp *gApp = globalAppInstance();
+    if (gApp) {
+        AppSettings *settings = gApp->settings();
+        if (settings->isProxyEnabled()) {
+            nam.setProxy(settings->proxySettings());
+        }
+    }
+
     QObject::connect(&nam, &QNetworkAccessManager::finished,
                      &local_event_loop, &QEventLoop::quit);
     QObject::connect(&req_timer, &QTimer::timeout,
@@ -157,6 +166,15 @@ bool eveapi_refresh_access_token(EveOAuthTokens& tokens)
     QEventLoop local_event_loop;
     QNetworkAccessManager nam;
 
+    // check for proxy settings
+    QmlEvemonApp *gApp = globalAppInstance();
+    if (gApp) {
+        AppSettings *settings = gApp->settings();
+        if (settings->isProxyEnabled()) {
+            nam.setProxy(settings->proxySettings());
+        }
+    }
+
     QObject::connect(&nam, &QNetworkAccessManager::finished,
                      &local_event_loop, &QEventLoop::quit);
     QObject::connect(&req_timer, &QTimer::timeout,
@@ -227,18 +245,34 @@ EveApi::EveApi(QObject *parent):
     m_nam(new QNetworkAccessManager(this))
 {
     m_esi_base_url = QLatin1String("https://esi.tech.ccp.is/latest");
-#if 0
-    QNetworkProxy proxy(QNetworkProxy::Socks5Proxy,
-                        QLatin1String("hostname"), 1080,
-                        QLatin1String("user"), QLatin1String("password"));
-    m_nam->setProxy(proxy);
-#endif
+
+    // check for proxy settings
+    QmlEvemonApp *gApp = globalAppInstance();
+    if (gApp) {
+        QObject::connect(gApp, &QmlEvemonApp::settingsChanged,
+                         this, &EveApi::onProxySettingsChanged);
+    }
+    // call slot to update proxy settings
+    onProxySettingsChanged();
 }
 
 
 EveApi::~EveApi()
 {
     // nothing?
+}
+
+void EveApi::onProxySettingsChanged()
+{
+    QmlEvemonApp *gApp = globalAppInstance();
+    if (gApp) {
+        AppSettings *settings = gApp->settings();
+        if (settings->isProxyEnabled()) {
+            m_nam->setProxy(settings->proxySettings());
+        } else {
+            m_nam->setProxy(QNetworkProxy::NoProxy);
+        }
+    }
 }
 
 

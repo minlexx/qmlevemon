@@ -40,6 +40,9 @@ public:
     explicit EveApi(QObject *parent = Q_NULLPTR);
     virtual ~EveApi();
 
+protected Q_SLOTS:
+    void onProxySettingsChanged();
+
 public:
     // character
     bool get_character_attributes(QJsonObject& reply, quint64 char_id, const QByteArray& access_token);
