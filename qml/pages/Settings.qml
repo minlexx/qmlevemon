@@ -97,8 +97,9 @@ Rectangle {
                         }
                         TextField {
                             id: teProxyHost
-                            width: 100
+                            width: 120
                             text: evemonapp.settings.proxyHost
+                            inputMethodHints: Qt.ImhNoAutoUppercase
                             onEditingFinished: evemonapp.settings.proxyHost = text;
                         }
                         Label {
@@ -107,8 +108,9 @@ Rectangle {
                         }
                         TextField {
                             id: teProxyPort
-                            width: 50
+                            width: 60
                             text: evemonapp.settings.proxyPort
+                            inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhDigitsOnly
                             onEditingFinished: evemonapp.settings.proxyPort = text;
                             validator: IntValidator {
                                 bottom: 1
@@ -132,8 +134,9 @@ Rectangle {
                         }
                         TextField {
                             id: teProxyLogin
-                            width: 100
+                            width: 120
                             text: evemonapp.settings.proxyUser
+                            inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhSensitiveData | Qt.ImhNoPredictiveText
                             onEditingFinished: evemonapp.settings.proxyUser = text;
                         }
                     }
@@ -153,9 +156,10 @@ Rectangle {
                         }
                         TextField {
                             id: teProxyPass
-                            width: 100
+                            width: 120
                             echoMode: TextInput.Password
                             text: evemonapp.settings.proxyPassword
+                            inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhSensitiveData | Qt.ImhNoPredictiveText
                             onEditingFinished: evemonapp.settings.proxyPassword = text;
                         }
                     }
