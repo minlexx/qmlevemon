@@ -148,6 +148,16 @@ QQuickWindow *QmlEvemonApp::mainWindow() const
     return m_mainWindow;
 }
 
+QObject *QmlEvemonApp::settingsO()
+{
+    return static_cast<QObject *>(&m_settings);
+}
+
+AppSettings *QmlEvemonApp::settings()
+{
+    return &m_settings;
+}
+
 
 void QmlEvemonApp::initStorageDirectory()
 {

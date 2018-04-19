@@ -4,6 +4,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QLoggingCategory>
+#include "settings.h"
 
 class QQuickWindow;
 
@@ -20,10 +21,11 @@ class PeriodicalRefresher;
 class QmlEvemonApp: public QGuiApplication
 {
     Q_OBJECT
-    Q_PROPERTY(quint64 cruCharId       READ curCharId          NOTIFY curCharIdChanged)
+    Q_PROPERTY(quint64 curCharId       READ curCharId          NOTIFY curCharIdChanged)
     Q_PROPERTY(bool isDesktopPlatform  READ isDesktopPlatform  CONSTANT)
     Q_PROPERTY(bool isPortrait         READ isPortrait         NOTIFY isPortraitChanged)
     Q_PROPERTY(bool isLandscape        READ isLandscape        NOTIFY isLandscapeChanged)
+    Q_PROPERTY(QObject* settings       READ settingsO          CONSTANT)
 
 public:
     QmlEvemonApp(int& argc, char **argv);
@@ -47,6 +49,9 @@ public:
     PortraitCache *portraitCache() const;
     // returns a pointer to app main window
     QQuickWindow *mainWindow() const;
+    // returns a pointer to settings
+    QObject *settingsO();
+    AppSettings *settings();
 
 public Q_SLOTS:
     quint64 curCharId() const;
@@ -70,6 +75,7 @@ private:
     void initStorageDirectory();
 
 protected:
+    AppSettings m_settings;
     QQmlApplicationEngine m_engine;
     QQuickWindow *m_mainWindow = nullptr;
     PortraitCache *m_portraitCache = nullptr;
