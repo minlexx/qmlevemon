@@ -15,6 +15,7 @@ bool EM::AppSettings::isProxyEnabled() const
 void EM::AppSettings::setProxyEnabled(bool b)
 {
     setValue(QLatin1String("proxyEnabled"), b);
+    Q_EMIT proxyConfigChanged();
 }
 
 QNetworkProxy EM::AppSettings::proxySettings() const
