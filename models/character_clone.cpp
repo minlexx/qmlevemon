@@ -45,6 +45,16 @@ CharacterClone &CharacterClone::operator=(CharacterClone &&other)
     return (*this);
 }
 
+bool CharacterClone::operator==(const CharacterClone &other) const
+{
+    return m_cloneId == other.m_cloneId;
+}
+
+bool CharacterClone::operator!=(const CharacterClone &other) const
+{
+    return m_cloneId != other.m_cloneId;
+}
+
 
 QString CharacterClone::cloneName() const { return m_cloneName; }
 

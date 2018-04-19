@@ -36,6 +36,8 @@ public:
     CharacterClone(CharacterClone &&other);
     CharacterClone &operator=(const CharacterClone &other);
     CharacterClone &operator=(CharacterClone &&other);
+    bool operator==(const CharacterClone &other) const;
+    bool operator!=(const CharacterClone &other) const;
 
 public:
     QString cloneName() const;
