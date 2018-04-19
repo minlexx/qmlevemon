@@ -39,6 +39,7 @@ public Q_SLOTS:
     void setProxyPassword(const QString &password);
 
 Q_SIGNALS:
+    void settingsChanged();
     void proxyConfigChanged();
 };
 
