@@ -18,6 +18,13 @@ namespace EM {
 Character::Character(QObject *parent)
     : QObject(parent)
 {
+    // setup clones vector
+    m_clones.reserve(10);  // I think character can have up to 10 clones max?
+    // current clone (always exists as first element)
+    CharacterClone currentCloneStub;
+    currentCloneStub.setCloneId(1);
+    currentCloneStub.setCloneName(tr("Current clone"));
+    m_clones.push_back(std::move(currentCloneStub));
 }
 
 
@@ -86,6 +93,12 @@ Character& Character::operator=(const Character& other)
     setIsAlphaClone(other.m_isAlphaClone);
     setSkills(other.m_skills);
     setSkillQueue(other.m_skillQueue);
+    // clones, implants, home station
+    setClones(other.m_clones);
+    setLastCloneJumpDate(other.m_lastCloneJumpDate);
+    setHomeLocationId(other.m_homeLocationId);
+    setHomeLocationType(other.m_homeLocationType);
+    setHomeLocationName(other.m_homeLocationName);
     // auth info
     m_tokens = other.m_tokens;
     // last update date-times
@@ -146,6 +159,12 @@ Character& Character::operator=(Character&& other)
     setIsAlphaClone(std::move(other.m_isAlphaClone));
     setSkills(std::move(other.m_skills));
     setSkillQueue(std::move(other.m_skillQueue));
+    // clones, implants, home station
+    setClones(std::move(other.m_clones));
+    setLastCloneJumpDate(std::move(other.m_lastCloneJumpDate));
+    setHomeLocationId(std::move(other.m_homeLocationId));
+    setHomeLocationType(std::move(other.m_homeLocationType));
+    setHomeLocationName(std::move(other.m_homeLocationName));
     // auth info
     m_tokens = std::move(other.m_tokens);
     // last update date-times
@@ -622,6 +641,64 @@ void Character::setSkillQueue(const CharacterSkillQueue &queue)
     calcSkillQueue();
 }
 
+QObject *Character::currentCloneObj() { return static_cast<QObject *>(currentClone()); }
+
+CharacterClone *Character::currentClone() { return &m_clones[0]; }
+
+void Character::setCurrentClone(const CharacterClone &clon)
+{
+    if (m_clones[0] != clon) {
+        m_clones[0] = clon;
+        Q_EMIT currentCloneChanged();
+    }
+}
+
+void Character::setClones(const QVector<CharacterClone> &clones)
+{
+    m_clones = clones;
+    Q_EMIT clonesChanged();
+}
+
+QDateTime Character::lastCloneJumpDate() const { return m_lastCloneJumpDate; }
+
+void Character::setLastCloneJumpDate(const QDateTime &dt)
+{
+    if (m_lastCloneJumpDate != dt) {
+        m_lastCloneJumpDate = dt;
+        Q_EMIT lastCloneJumpDateChanged();
+    }
+}
+
+quint64 Character::homeLocationId() const { return m_homeLocationId; }
+
+void Character::setHomeLocationId(quint64 id)
+{
+    if (m_homeLocationId != id) {
+        m_homeLocationId = id;
+        Q_EMIT homeLocationIdChanged();
+    }
+}
+
+QString Character::homeLocationType() const { return m_homeLocationType; }
+
+void Character::setHomeLocationType(const QString &s)
+{
+    if (m_homeLocationType != s) {
+        m_homeLocationType = s;
+        Q_EMIT homeLocationTypeChanged();
+    }
+}
+
+QString Character::homeLocationName() const { return m_homeLocationName; }
+
+void Character::setHomeLocationName(const QString &s)
+{
+    if (m_homeLocationName != s) {
+        m_homeLocationName = s;
+        Q_EMIT homeLocationNameChanged();
+    }
+}
+
 // auth info
 EveOAuthTokens Character::getAuthTokens() const { return m_tokens; }
 void Character::setAuthTokens(const EveOAuthTokens& tokens) { m_tokens = tokens; }
@@ -786,7 +863,7 @@ void Character::calcSkillQueue()
 
 
 // increase version number when savedata format changes
-static const int SAVEDATA_VERSION = 16;
+static const int SAVEDATA_VERSION = 17;
 
 
 QDataStream& operator<<(QDataStream &stream, const EM::Character &character)
@@ -842,6 +919,12 @@ QDataStream& operator<<(QDataStream &stream, const EM::Character &character)
     stream << character.m_isAlphaClone;
     stream << character.m_skills;
     stream << character.m_skillQueue;
+    // clones, implants, home station
+    stream << character.m_clones;
+    stream << character.m_lastCloneJumpDate;
+    stream << character.m_homeLocationId;
+    stream << character.m_homeLocationType;
+    stream << character.m_homeLocationName;
     // auth tokens
     stream << character.m_tokens;
     // update timestamps
@@ -912,6 +995,12 @@ QDataStream& operator>>(QDataStream &stream, EM::Character &character)
     stream >> character.m_isAlphaClone;
     stream >> character.m_skills;
     stream >> character.m_skillQueue;
+    // clones, implants, home station
+    stream >> character.m_clones;
+    stream >> character.m_lastCloneJumpDate;
+    stream >> character.m_homeLocationId;
+    stream >> character.m_homeLocationType;
+    stream >> character.m_homeLocationName;
     // auth tokens
     stream >> character.m_tokens;
     // update timestamps

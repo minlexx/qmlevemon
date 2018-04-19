@@ -12,6 +12,7 @@
 #include "character_skillqueue.h"
 #include "character_skillgroups_model.h"
 #include "character_skillqueue_model.h"
+#include "character_clone.h"
 #include "eve_api/eve_api_tokens.h"
 #include "update_timestamps.h"
 
@@ -84,9 +85,16 @@ class Character: public QObject
     Q_PROPERTY(int        totalSkills              READ totalSkills              NOTIFY skillsChanged)
     Q_PROPERTY(int        totalSkills5             READ totalSkills5             NOTIFY skillsChanged)
     // current training skill and queue info
-    Q_PROPERTY(const QObject* currentTrainingSkill READ currentTrainingSkillObj    NOTIFY skillQueueChanged)
-    Q_PROPERTY(bool       isSkillQueueEmpty        READ isSkillQueueEmpty          NOTIFY skillQueueChanged)
-    Q_PROPERTY(QObject*   skillQueueModel          READ skillQueueModel            NOTIFY skillQueueChanged)
+    Q_PROPERTY(const QObject* currentTrainingSkill READ currentTrainingSkillObj  NOTIFY skillQueueChanged)
+    Q_PROPERTY(bool       isSkillQueueEmpty        READ isSkillQueueEmpty        NOTIFY skillQueueChanged)
+    Q_PROPERTY(QObject*   skillQueueModel          READ skillQueueModel          NOTIFY skillQueueChanged)
+    // clones, implants, home station
+    Q_PROPERTY(QObject*   currentClone             READ currentCloneObj          NOTIFY currentCloneChanged)
+    // TODO: property for clones model, with signal clonesChanged()
+    Q_PROPERTY(QDateTime  lastCloneJumpDate        READ lastCloneJumpDate        NOTIFY lastCloneJumpDateChanged)
+    Q_PROPERTY(quint64    homeLocationId           READ homeLocationId           NOTIFY homeLocationIdChanged)
+    Q_PROPERTY(QString    homeLocationType         READ homeLocationType         NOTIFY homeLocationTypeChanged)
+    Q_PROPERTY(QString    homeLocationName         READ homeLocationName         NOTIFY homeLocationNameChanged)
 
 public:
     Character(QObject *parent = nullptr);
@@ -242,6 +250,26 @@ public:
     void setSkills(const QVector<CharacterSkill> &vskills);
     void setSkillQueue(const CharacterSkillQueue &queue);
 
+    // clones, implants, home station
+    QObject *currentCloneObj();
+    CharacterClone *currentClone();
+    void setCurrentClone(const CharacterClone &clon);
+
+    // CharacterClonesModel *clonesListModel() // TODO
+    void setClones(const QVector<CharacterClone> &clones);
+
+    QDateTime lastCloneJumpDate() const;
+    void setLastCloneJumpDate(const QDateTime &dt);
+
+    quint64 homeLocationId() const;
+    void setHomeLocationId(quint64 id);
+
+    QString homeLocationType() const;
+    void setHomeLocationType(const QString &s);
+
+    QString homeLocationName() const;
+    void setHomeLocationName(const QString &s);
+
     // auth info
     EveOAuthTokens getAuthTokens() const;
     void setAuthTokens(const EveOAuthTokens& tokens);
@@ -310,6 +338,13 @@ Q_SIGNALS:
     // current training skill and queue info
     void skillsChanged();
     void skillQueueChanged();
+    // clones, home station
+    void currentCloneChanged();
+    void clonesChanged();
+    void lastCloneJumpDateChanged();
+    void homeLocationIdChanged();
+    void homeLocationTypeChanged();
+    void homeLocationNameChanged();
 
 protected:
     // general info
@@ -372,6 +407,13 @@ protected:
     // skill queue
     CharacterSkillQueue m_skillQueue;
     CharacterSkillQueueModel m_skillQueueModel;
+
+    // clones, implants, home station
+    QVector<CharacterClone> m_clones;
+    QDateTime m_lastCloneJumpDate;
+    quint64 m_homeLocationId = 0;
+    QString m_homeLocationType;
+    QString m_homeLocationName;
 
     // auth info
     EveOAuthTokens m_tokens;
