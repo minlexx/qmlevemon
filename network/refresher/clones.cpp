@@ -93,7 +93,8 @@ int PeriodicalRefresherWorker::resresh_clones(Character *ch)
             }
         }
 
-        qCDebug(logRefresher) << Q_FUNC_INFO << currentCloneImps;
+        //qCDebug(logRefresher) << Q_FUNC_INFO << currentCloneImps;
+        ch->currentClone()->setImplantsGroup(std::move(currentCloneImps));
 
         nChanges++;
     }
