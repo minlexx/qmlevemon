@@ -21,6 +21,7 @@ SOURCES += \
     ../eve_api/eve_api_tokens.cpp \
     ../models/character.cpp \
     ../models/character_clone.cpp \
+    ../models/character_clones_model.cpp \
     ../models/character_implants_group.cpp \
     ../models/character_model.cpp \
     ../models/character_skill.cpp \
@@ -75,6 +76,7 @@ HEADERS += \
     ../eve_api/eve_sso.h \
     ../models/character.h \
     ../models/character_clone.h \
+    ../models/character_clones_model.h \
     ../models/character_implants_group.h \
     ../models/character_model.h \
     ../models/character_skill.h \
