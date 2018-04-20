@@ -641,6 +641,16 @@ QObject *Character::currentCloneObj() { return static_cast<QObject *>(currentClo
 
 CharacterClone *Character::currentClone() { return &m_clones[0]; }
 
+const CharacterClone *Character::findCloneById(quint64 cloneId) const
+{
+    for (const CharacterClone &cl : m_clones) {
+        if (cl.cloneId() == cloneId) {
+            return &cl;
+        }
+    }
+    return nullptr;
+}
+
 void Character::setCurrentClone(const CharacterClone &clon)
 {
     if (m_clones[0] != clon) {

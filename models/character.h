@@ -252,6 +252,7 @@ public:
     // clones, implants, home station
     QObject *currentCloneObj();
     CharacterClone *currentClone();
+    const CharacterClone *findCloneById(quint64 cloneId) const;
     void setCurrentClone(const CharacterClone &clon);
 
     // CharacterClonesModel *clonesListModel() // TODO
