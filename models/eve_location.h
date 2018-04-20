@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QDebug>
+#include <QJsonObject>
 
 class QDataStream;
 
@@ -36,6 +37,9 @@ public:
     EveLocation &operator=(EveLocation &&other);
     bool operator==(const EveLocation &other) const;
     bool operator!=(const EveLocation &other) const;
+
+    // fabric
+    static EveLocation fromESIUniverseJson(const QJsonObject &jobj);
 
 public Q_SLOTS:
     quint64 locationId() const;

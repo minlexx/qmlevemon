@@ -152,6 +152,37 @@ void EveLocation::setCoords(double x_, double y_, double z_)
 }
 
 
+// static
+EveLocation EveLocation::fromESIUniverseJson(const QJsonObject &jobj)
+{
+    EveLocation ret;
+    // location name
+    QString s = jobj.value(QLatin1String("name")).toString();
+    ret.setName(s);
+    // solarsystem
+    // in get_universe_station() it is called "system_id",
+    // in get_universe_structure() it is called "solar_system_id"
+    quint64 u64 = jobj.value(QLatin1String("solar_system_id")).toVariant().toULongLong();
+    if (u64 == 0) {
+        u64 = jobj.value(QLatin1String("system_id")).toVariant().toULongLong();
+    }
+    ret.setSolarSystemId(u64);
+    // type_id
+    u64 = jobj.value(QLatin1String("type_id")).toVariant().toULongLong();
+    ret.setTypeId(u64);
+    // position
+    QJsonObject jpos = jobj.value(QLatin1String("position")).toObject();
+    if (!jpos.isEmpty()) {
+        double x, y, z;
+        x = jpos.value(QLatin1String("x")).toDouble();
+        y = jpos.value(QLatin1String("y")).toDouble();
+        z = jpos.value(QLatin1String("z")).toDouble();
+        ret.setCoords(x, y, z);
+    }
+    return ret;
+}
+
+
 } // namespace EM
 
 
