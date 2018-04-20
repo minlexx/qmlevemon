@@ -252,11 +252,11 @@ public:
     // clones, implants, home station
     QObject *currentCloneObj();
     CharacterClone *currentClone();
-    const CharacterClone *findCloneById(quint64 cloneId) const;
+    //const CharacterClone *findCloneById(quint64 cloneId) const;
     void setCurrentClone(const CharacterClone &clon);
 
-    // CharacterClonesModel *clonesListModel() // TODO
-    void setClones(const QVector<CharacterClone> &clones);
+    //CharacterClonesModel *clonesListModel() // TODO
+    //void setClones(const QVector<CharacterClone> &clones);
 
     QDateTime lastCloneJumpDate() const;
     void setLastCloneJumpDate(const QDateTime &dt);
@@ -402,7 +402,8 @@ protected:
     CharacterSkillQueueModel m_skillQueueModel;
 
     // clones, implants, home station
-    QVector<CharacterClone> m_clones;
+    CharacterClone m_currentClone;
+    //QVector<CharacterClone> m_clones;
     QDateTime m_lastCloneJumpDate;
     EveLocation m_homeLocation;
 

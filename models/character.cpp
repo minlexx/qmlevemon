@@ -18,13 +18,9 @@ namespace EM {
 Character::Character(QObject *parent)
     : QObject(parent)
 {
-    // setup clones vector
-    m_clones.reserve(10);  // I think character can have up to 10 clones max?
-    // current clone (always exists as first element)
-    CharacterClone currentCloneStub;
-    currentCloneStub.setCloneId(1);
-    currentCloneStub.setCloneName(tr("Current clone"));
-    m_clones.push_back(std::move(currentCloneStub));
+    // setup current clone
+    m_currentClone.setCloneId(1);
+    m_currentClone.setCloneName(tr("Current clone"));
 }
 
 
@@ -94,7 +90,8 @@ Character& Character::operator=(const Character& other)
     setSkills(other.m_skills);
     setSkillQueue(other.m_skillQueue);
     // clones, implants, home station
-    setClones(other.m_clones);
+    setCurrentClone(other.m_currentClone);
+    //setClones(other.m_clones);
     setLastCloneJumpDate(other.m_lastCloneJumpDate);
     setHomeLocation(other.m_homeLocation);
     // auth info
@@ -158,7 +155,8 @@ Character& Character::operator=(Character&& other)
     setSkills(std::move(other.m_skills));
     setSkillQueue(std::move(other.m_skillQueue));
     // clones, implants, home station
-    setClones(std::move(other.m_clones));
+    setCurrentClone(other.m_currentClone);
+    //setClones(std::move(other.m_clones));
     setLastCloneJumpDate(std::move(other.m_lastCloneJumpDate));
     setHomeLocation(std::move(other.m_homeLocation));
     // auth info
@@ -639,31 +637,32 @@ void Character::setSkillQueue(const CharacterSkillQueue &queue)
 
 QObject *Character::currentCloneObj() { return static_cast<QObject *>(currentClone()); }
 
-CharacterClone *Character::currentClone() { return &m_clones[0]; }
+CharacterClone *Character::currentClone() { return &m_currentClone; }
 
-const CharacterClone *Character::findCloneById(quint64 cloneId) const
-{
-    for (const CharacterClone &cl : m_clones) {
-        if (cl.cloneId() == cloneId) {
-            return &cl;
-        }
-    }
-    return nullptr;
-}
+//const CharacterClone *Character::findCloneById(quint64 cloneId) const
+//{
+//    for (const CharacterClone &cl : m_clones) {
+//        if (cl.cloneId() == cloneId) {
+//            return &cl;
+//        }
+//    }
+//    return nullptr;
+//}
 
 void Character::setCurrentClone(const CharacterClone &clon)
 {
-    if (m_clones[0] != clon) {
-        m_clones[0] = clon;
+    if (m_currentClone != clon) {
+        m_currentClone = clon;
         Q_EMIT currentCloneChanged();
     }
 }
 
-void Character::setClones(const QVector<CharacterClone> &clones)
-{
-    m_clones = clones;
-    Q_EMIT clonesChanged();
-}
+//void Character::setClones(const QVector<CharacterClone> &clones)
+//{
+//    //m_clones = clones;
+//    // TODO: implement
+//    Q_EMIT clonesChanged();
+//}
 
 QDateTime Character::lastCloneJumpDate() const { return m_lastCloneJumpDate; }
 
@@ -908,7 +907,8 @@ QDataStream& operator<<(QDataStream &stream, const EM::Character &character)
     stream << character.m_skills;
     stream << character.m_skillQueue;
     // clones, implants, home station
-    stream << character.m_clones;
+    stream << character.m_currentClone;
+    //stream << character.m_clones;
     stream << character.m_lastCloneJumpDate;
     stream << character.m_homeLocation;
     // auth tokens
@@ -982,7 +982,8 @@ QDataStream& operator>>(QDataStream &stream, EM::Character &character)
     stream >> character.m_skills;
     stream >> character.m_skillQueue;
     // clones, implants, home station
-    stream >> character.m_clones;
+    stream >> character.m_currentClone;
+    //stream >> character.m_clones;
     stream >> character.m_lastCloneJumpDate;
     stream >> character.m_homeLocation;
     // auth tokens
