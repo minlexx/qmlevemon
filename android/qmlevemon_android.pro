@@ -27,6 +27,7 @@ SOURCES += \
     ../models/character_skillgroups_model.cpp \
     ../models/character_skillqueue.cpp \
     ../models/character_skillqueue_model.cpp \
+    ../models/eve_location.cpp \
     ../models/formulas.cpp \
     ../models/invtype.cpp \
     ../models/model_manager.cpp \
@@ -80,6 +81,7 @@ HEADERS += \
     ../models/character_skillgroups_model.h \
     ../models/character_skillqueue.h \
     ../models/character_skillqueue_model.h \
+    ../models/eve_location.h \
     ../models/formulas.h \
     ../models/invtype.h \
     ../models/model_manager.h \
