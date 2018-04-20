@@ -13,6 +13,7 @@
 #include "character_skillgroups_model.h"
 #include "character_skillqueue_model.h"
 #include "character_clone.h"
+#include "character_clones_model.h"
 #include "eve_location.h"
 #include "eve_api/eve_api_tokens.h"
 #include "update_timestamps.h"
@@ -91,7 +92,7 @@ class Character: public QObject
     Q_PROPERTY(QObject*   skillQueueModel          READ skillQueueModel          NOTIFY skillQueueChanged)
     // clones, implants, home station
     Q_PROPERTY(QObject*   currentClone             READ currentCloneObj          NOTIFY currentCloneChanged)
-    // TODO: property for clones model, with signal clonesChanged()
+    Q_PROPERTY(QObject*   clonesModel              READ clonesModelObj           CONSTANT)
     Q_PROPERTY(QDateTime  lastCloneJumpDate        READ lastCloneJumpDate        NOTIFY lastCloneJumpDateChanged)
     Q_PROPERTY(QObject*   homeLocation             READ homeLocationObj          NOTIFY homeLocationChanged)
 
@@ -252,11 +253,13 @@ public:
     // clones, implants, home station
     QObject *currentCloneObj();
     CharacterClone *currentClone();
-    //const CharacterClone *findCloneById(quint64 cloneId) const;
+    const CharacterClone *findCloneById(quint64 cloneId) const;
     void setCurrentClone(const CharacterClone &clon);
 
-    //CharacterClonesModel *clonesListModel() // TODO
-    //void setClones(const QVector<CharacterClone> &clones);
+    CharacterClonesModel *clonesModel();
+    const CharacterClonesModel *clonesModel() const;
+    QObject *clonesModelObj();
+    void setClones(const QVector<CharacterClone> &clones);
 
     QDateTime lastCloneJumpDate() const;
     void setLastCloneJumpDate(const QDateTime &dt);
@@ -335,7 +338,6 @@ Q_SIGNALS:
     void skillQueueChanged();
     // clones, home station
     void currentCloneChanged();
-    void clonesChanged();
     void lastCloneJumpDateChanged();
     void homeLocationChanged();
 
@@ -403,7 +405,7 @@ protected:
 
     // clones, implants, home station
     CharacterClone m_currentClone;
-    //QVector<CharacterClone> m_clones;
+    CharacterClonesModel m_clonesModel;
     QDateTime m_lastCloneJumpDate;
     EveLocation m_homeLocation;
 

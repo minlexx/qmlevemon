@@ -91,7 +91,7 @@ Character& Character::operator=(const Character& other)
     setSkillQueue(other.m_skillQueue);
     // clones, implants, home station
     setCurrentClone(other.m_currentClone);
-    //setClones(other.m_clones);
+    setClones(other.clonesModel()->clones());
     setLastCloneJumpDate(other.m_lastCloneJumpDate);
     setHomeLocation(other.m_homeLocation);
     // auth info
@@ -156,7 +156,7 @@ Character& Character::operator=(Character&& other)
     setSkillQueue(std::move(other.m_skillQueue));
     // clones, implants, home station
     setCurrentClone(other.m_currentClone);
-    //setClones(std::move(other.m_clones));
+    setClones(std::move(other.clonesModel()->clones()));
     setLastCloneJumpDate(std::move(other.m_lastCloneJumpDate));
     setHomeLocation(std::move(other.m_homeLocation));
     // auth info
@@ -639,15 +639,16 @@ QObject *Character::currentCloneObj() { return static_cast<QObject *>(currentClo
 
 CharacterClone *Character::currentClone() { return &m_currentClone; }
 
-//const CharacterClone *Character::findCloneById(quint64 cloneId) const
-//{
-//    for (const CharacterClone &cl : m_clones) {
-//        if (cl.cloneId() == cloneId) {
-//            return &cl;
-//        }
-//    }
-//    return nullptr;
-//}
+const CharacterClone *Character::findCloneById(quint64 cloneId) const
+{
+    const QVector<CharacterClone> &clones = clonesModel()->clones();
+    for (const CharacterClone &cl : clones) {
+        if (cl.cloneId() == cloneId) {
+            return &cl;
+        }
+    }
+    return nullptr;
+}
 
 void Character::setCurrentClone(const CharacterClone &clon)
 {
@@ -657,12 +658,17 @@ void Character::setCurrentClone(const CharacterClone &clon)
     }
 }
 
-//void Character::setClones(const QVector<CharacterClone> &clones)
-//{
-//    //m_clones = clones;
-//    // TODO: implement
-//    Q_EMIT clonesChanged();
-//}
+CharacterClonesModel *Character::clonesModel() { return &m_clonesModel; }
+
+const CharacterClonesModel *Character::clonesModel() const { return &m_clonesModel; }
+
+QObject *Character::clonesModelObj() { return static_cast<QObject *>(&m_clonesModel); }
+
+void Character::setClones(const QVector<CharacterClone> &clones)
+{
+    m_clonesModel.setClones(clones);
+    // Q_EMIT clonesChanged(); // ned needed, model should emit all signals itself
+}
 
 QDateTime Character::lastCloneJumpDate() const { return m_lastCloneJumpDate; }
 
@@ -850,7 +856,7 @@ void Character::calcSkillQueue()
 
 
 // increase version number when savedata format changes
-static const int SAVEDATA_VERSION = 17;
+static const int SAVEDATA_VERSION = 18;
 
 
 QDataStream& operator<<(QDataStream &stream, const EM::Character &character)
@@ -908,7 +914,7 @@ QDataStream& operator<<(QDataStream &stream, const EM::Character &character)
     stream << character.m_skillQueue;
     // clones, implants, home station
     stream << character.m_currentClone;
-    //stream << character.m_clones;
+    stream << character.m_clonesModel.clones();
     stream << character.m_lastCloneJumpDate;
     stream << character.m_homeLocation;
     // auth tokens
@@ -983,7 +989,7 @@ QDataStream& operator>>(QDataStream &stream, EM::Character &character)
     stream >> character.m_skillQueue;
     // clones, implants, home station
     stream >> character.m_currentClone;
-    //stream >> character.m_clones;
+    stream >> character.m_clonesModel.clones();
     stream >> character.m_lastCloneJumpDate;
     stream >> character.m_homeLocation;
     // auth tokens
