@@ -13,6 +13,7 @@
 #include "character_skillgroups_model.h"
 #include "character_skillqueue_model.h"
 #include "character_clone.h"
+#include "eve_location.h"
 #include "eve_api/eve_api_tokens.h"
 #include "update_timestamps.h"
 
@@ -92,9 +93,7 @@ class Character: public QObject
     Q_PROPERTY(QObject*   currentClone             READ currentCloneObj          NOTIFY currentCloneChanged)
     // TODO: property for clones model, with signal clonesChanged()
     Q_PROPERTY(QDateTime  lastCloneJumpDate        READ lastCloneJumpDate        NOTIFY lastCloneJumpDateChanged)
-    Q_PROPERTY(quint64    homeLocationId           READ homeLocationId           NOTIFY homeLocationIdChanged)
-    Q_PROPERTY(QString    homeLocationType         READ homeLocationType         NOTIFY homeLocationTypeChanged)
-    Q_PROPERTY(QString    homeLocationName         READ homeLocationName         NOTIFY homeLocationNameChanged)
+    Q_PROPERTY(QObject*   homeLocation             READ homeLocationObj          NOTIFY homeLocationChanged)
 
 public:
     Character(QObject *parent = nullptr);
@@ -261,14 +260,9 @@ public:
     QDateTime lastCloneJumpDate() const;
     void setLastCloneJumpDate(const QDateTime &dt);
 
-    quint64 homeLocationId() const;
-    void setHomeLocationId(quint64 id);
-
-    QString homeLocationType() const;
-    void setHomeLocationType(const QString &s);
-
-    QString homeLocationName() const;
-    void setHomeLocationName(const QString &s);
+    QObject *homeLocationObj();
+    EveLocation *homeLocation();
+    void setHomeLocation(const EveLocation &loc);
 
     // auth info
     EveOAuthTokens getAuthTokens() const;
@@ -342,9 +336,7 @@ Q_SIGNALS:
     void currentCloneChanged();
     void clonesChanged();
     void lastCloneJumpDateChanged();
-    void homeLocationIdChanged();
-    void homeLocationTypeChanged();
-    void homeLocationNameChanged();
+    void homeLocationChanged();
 
 protected:
     // general info
@@ -411,9 +403,7 @@ protected:
     // clones, implants, home station
     QVector<CharacterClone> m_clones;
     QDateTime m_lastCloneJumpDate;
-    quint64 m_homeLocationId = 0;
-    QString m_homeLocationType;
-    QString m_homeLocationName;
+    EveLocation m_homeLocation;
 
     // auth info
     EveOAuthTokens m_tokens;

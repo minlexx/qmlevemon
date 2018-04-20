@@ -96,9 +96,7 @@ Character& Character::operator=(const Character& other)
     // clones, implants, home station
     setClones(other.m_clones);
     setLastCloneJumpDate(other.m_lastCloneJumpDate);
-    setHomeLocationId(other.m_homeLocationId);
-    setHomeLocationType(other.m_homeLocationType);
-    setHomeLocationName(other.m_homeLocationName);
+    setHomeLocation(other.m_homeLocation);
     // auth info
     m_tokens = other.m_tokens;
     // last update date-times
@@ -162,9 +160,7 @@ Character& Character::operator=(Character&& other)
     // clones, implants, home station
     setClones(std::move(other.m_clones));
     setLastCloneJumpDate(std::move(other.m_lastCloneJumpDate));
-    setHomeLocationId(std::move(other.m_homeLocationId));
-    setHomeLocationType(std::move(other.m_homeLocationType));
-    setHomeLocationName(std::move(other.m_homeLocationName));
+    setHomeLocation(std::move(other.m_homeLocation));
     // auth info
     m_tokens = std::move(other.m_tokens);
     // last update date-times
@@ -669,33 +665,15 @@ void Character::setLastCloneJumpDate(const QDateTime &dt)
     }
 }
 
-quint64 Character::homeLocationId() const { return m_homeLocationId; }
+QObject *Character::homeLocationObj() { return static_cast<QObject *>(&m_homeLocation); }
 
-void Character::setHomeLocationId(quint64 id)
+EveLocation *Character::homeLocation() { return &m_homeLocation; }
+
+void Character::setHomeLocation(const EveLocation &loc)
 {
-    if (m_homeLocationId != id) {
-        m_homeLocationId = id;
-        Q_EMIT homeLocationIdChanged();
-    }
-}
-
-QString Character::homeLocationType() const { return m_homeLocationType; }
-
-void Character::setHomeLocationType(const QString &s)
-{
-    if (m_homeLocationType != s) {
-        m_homeLocationType = s;
-        Q_EMIT homeLocationTypeChanged();
-    }
-}
-
-QString Character::homeLocationName() const { return m_homeLocationName; }
-
-void Character::setHomeLocationName(const QString &s)
-{
-    if (m_homeLocationName != s) {
-        m_homeLocationName = s;
-        Q_EMIT homeLocationNameChanged();
+    if (m_homeLocation != loc) {
+        m_homeLocation = loc;
+        Q_EMIT homeLocationChanged();
     }
 }
 
@@ -922,9 +900,7 @@ QDataStream& operator<<(QDataStream &stream, const EM::Character &character)
     // clones, implants, home station
     stream << character.m_clones;
     stream << character.m_lastCloneJumpDate;
-    stream << character.m_homeLocationId;
-    stream << character.m_homeLocationType;
-    stream << character.m_homeLocationName;
+    stream << character.m_homeLocation;
     // auth tokens
     stream << character.m_tokens;
     // update timestamps
@@ -998,9 +974,7 @@ QDataStream& operator>>(QDataStream &stream, EM::Character &character)
     // clones, implants, home station
     stream >> character.m_clones;
     stream >> character.m_lastCloneJumpDate;
-    stream >> character.m_homeLocationId;
-    stream >> character.m_homeLocationType;
-    stream >> character.m_homeLocationName;
+    stream >> character.m_homeLocation;
     // auth tokens
     stream >> character.m_tokens;
     // update timestamps
