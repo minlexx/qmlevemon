@@ -30,6 +30,7 @@ EveLocation &EveLocation::operator=(const EveLocation &other)
     m_typeId        = other.m_typeId;
     m_solarSystemId = other.m_solarSystemId;
     m_name          = other.m_name;
+    m_type          = other.m_type;
     m_x             = other.m_x;
     m_y             = other.m_y;
     m_z             = other.m_z;
@@ -43,6 +44,7 @@ EveLocation &EveLocation::operator=(EveLocation &&other)
     m_typeId        = std::move(other.m_typeId);
     m_solarSystemId = std::move(other.m_solarSystemId);
     m_name          = std::move(other.m_name);
+    m_type          = std::move(other.m_type);
     m_x             = std::move(other.m_x);
     m_y             = std::move(other.m_y);
     m_z             = std::move(other.m_z);
@@ -111,6 +113,19 @@ void EveLocation::setName(const QString &s)
     }
 }
 
+QString EveLocation::type() const
+{
+    return m_type;
+}
+
+void EveLocation::setType(const QString &s)
+{
+    if (m_type != s) {
+        m_type = s;
+        Q_EMIT typeChanged();
+    }
+}
+
 double EveLocation::x() const
 {
     return m_x;
@@ -146,6 +161,7 @@ QDataStream &operator<<(QDataStream &stream, const EM::EveLocation &loc)
     stream << loc.m_typeId;
     stream << loc.m_solarSystemId;
     stream << loc.m_name;
+    stream << loc.m_type;
     stream << loc.m_x;
     stream << loc.m_y;
     stream << loc.m_z;
@@ -159,6 +175,7 @@ QDataStream &operator>>(QDataStream &stream, EM::EveLocation &loc)
     stream >> loc.m_typeId;
     stream >> loc.m_solarSystemId;
     stream >> loc.m_name;
+    stream >> loc.m_type;
     stream >> loc.m_x;
     stream >> loc.m_y;
     stream >> loc.m_z;
@@ -168,6 +185,8 @@ QDataStream &operator>>(QDataStream &stream, EM::EveLocation &loc)
 
 QDebug operator<<(QDebug &stream, const EM::EveLocation &loc)
 {
-    stream.nospace() << "[Location " << loc.m_name << "/" << loc.m_locationId << "]";
+    stream.nospace() << "[Location " << loc.m_name << "/"
+                     << loc.m_locationId << ", "
+                     << loc.m_type << "]";
     return stream;
 }

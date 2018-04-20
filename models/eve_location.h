@@ -23,6 +23,7 @@ class EveLocation : public QObject
     Q_PROPERTY(quint64 typeId READ typeId WRITE setTypeId NOTIFY typeIdChanged)
     Q_PROPERTY(quint64 solarSystemId READ solarSystemId WRITE setSolarSystemId NOTIFY solarSystemIdChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+    Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged)
     Q_PROPERTY(double x READ x NOTIFY coordsChanged)
     Q_PROPERTY(double y READ y NOTIFY coordsChanged)
     Q_PROPERTY(double z READ z NOTIFY coordsChanged)
@@ -49,6 +50,9 @@ public Q_SLOTS:
     QString name() const;
     void setName(const QString &s);
 
+    QString type() const;
+    void setType(const QString &s);
+
     double x() const;
     double y() const;
     double z() const;
@@ -59,6 +63,7 @@ Q_SIGNALS:
     void typeIdChanged();
     void solarSystemIdChanged();
     void nameChanged();
+    void typeChanged();
     void coordsChanged();
 
 private:
@@ -66,6 +71,7 @@ private:
     quint64 m_typeId = 0;
     quint64 m_solarSystemId = 0;
     QString m_name;
+    QString m_type;
     double m_x = 0.0;
     double m_y = 0.0;
     double m_z = 0.0;
