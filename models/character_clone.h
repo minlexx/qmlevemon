@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QDebug>
 #include "character_implants_group.h"
+#include "eve_location.h"
 
 class QDataStream;
 
@@ -23,12 +24,8 @@ class CharacterClone : public QObject
     Q_OBJECT
     Q_PROPERTY(QString cloneName      READ cloneName     WRITE setCloneName     NOTIFY cloneChanged)
     Q_PROPERTY(quint64 cloneId        READ cloneId       WRITE setCloneId       NOTIFY cloneChanged)
-    Q_PROPERTY(quint64 locationId     READ locationId    WRITE setLocationId    NOTIFY locationChanged)
-    Q_PROPERTY(QString locationName   READ locationName  WRITE setLocationName  NOTIFY locationChanged)
-    Q_PROPERTY(QString locationType   READ locationType  WRITE setLocationType  NOTIFY locationChanged)
-    Q_PROPERTY(QObject* implantsModel READ implantsModel NOTIFY implantsChanged)
-    // TODO: maybe make implantsModel CONSTANT and no need for signal implantsChanged
-    // model will update itself and emit signals?
+    Q_PROPERTY(QObject* location      READ locationObj   NOTIFY locationChanged)
+    Q_PROPERTY(QObject* implantsModel READ implantsModel CONSTANT)
 
 public:
     CharacterClone(QObject *parent = nullptr);
@@ -42,18 +39,15 @@ public:
 public:
     QString cloneName() const;
     quint64 cloneId() const;
-    quint64 locationId() const;
-    QString locationName() const;
-    QString locationType() const;
+    QObject *locationObj();
+    EveLocation *location();
     QObject* implantsModel();
     CharacterImplantsGroup *implants();
 
 public Q_SLOTS:
     void setCloneName(const QString &name);
     void setCloneId(quint64 id);
-    void setLocationId(quint64 id);
-    void setLocationName(const QString &name);
-    void setLocationType(const QString &typ);
+    void setLocation(const EveLocation &loc);
     void setImplantsGroup(const CharacterImplantsGroup &imps);
     void setImplantsGroup(CharacterImplantsGroup &&imps);
 
@@ -65,9 +59,7 @@ Q_SIGNALS:
 private:
     QString m_cloneName;
     quint64 m_cloneId = 0;
-    quint64 m_locationId = 0;
-    QString m_locationName;
-    QString m_locationType;
+    EveLocation m_location;
     CharacterImplantsGroup m_implants;
 
     // friends
