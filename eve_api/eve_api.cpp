@@ -651,6 +651,41 @@ bool EveApi::get_universe_station(QJsonObject& reply, quint64 station_id)
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!jdoc.isObject()) return false;
     reply = jdoc.object();
+    /* Example reply: (station_id = 60003466)
+        {
+          "station_id": 60003466,
+          "name": "Jita IV - Moon 4 - Caldari Business Tribunal Bureau Offices",
+          "type_id": 1529,
+          "position": {
+            "x": -107302625280,
+            "y": -18745221120,
+            "z": 436489789440
+          },
+          "system_id": 30000142,
+          "reprocessing_efficiency": 0.5,
+          "reprocessing_stations_take": 0.05,
+          "max_dockable_ship_volume": 50000000,
+          "office_rental_cost": 41727534,
+          "services": [
+            "bounty-missions",
+            "courier-missions",
+            "interbus",
+            "reprocessing-plant",
+            "market",
+            "stock-exchange",
+            "cloning",
+            "fitting",
+            "news",
+            "insurance",
+            "docking",
+            "office-rental",
+            "loyalty-point-store",
+            "navy-offices"
+          ],
+          "owner": 1000033,
+          "race_id": 1
+        }
+     * */
     return true;
 }
 
@@ -666,6 +701,17 @@ bool EveApi::get_universe_structure(QJsonObject& reply, quint64 structure_id, co
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!jdoc.isObject()) return false;
     reply = jdoc.object();
+    /* Example reply: (structure_id = 1021551599501)
+     * {
+     *   "name": "J215758 - Tiamat",
+     *   "solar_system_id": 31001668,
+     *   "type_id": 35833,
+     *   "position": {
+     *      "x": -81264264086,
+     *      "y": -2002654044,
+     *      "z": 107567112590
+     *    }
+     * } */
     return true;
 }
 
