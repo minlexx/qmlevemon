@@ -58,11 +58,15 @@ quint64 CharacterClone::cloneId() const { return m_cloneId; }
 
 QObject *CharacterClone::locationObj() { return static_cast<QObject *>(&m_location); }
 
+const QObject *CharacterClone::locationObj() const { return static_cast<const QObject *>(&m_location); }
+
 EveLocation *CharacterClone::location() { return &m_location; }
 
 const EveLocation *CharacterClone::location() const { return &m_location; }
 
 QObject *CharacterClone::implantsModel() { return static_cast<QObject *>(&m_implants); }
+
+const QObject *CharacterClone::implantsModel() const { return static_cast<const QObject *>(&m_implants); }
 
 CharacterImplantsGroup *CharacterClone::implants() { return &m_implants; }
 

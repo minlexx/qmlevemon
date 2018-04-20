@@ -40,9 +40,11 @@ public:
     QString cloneName() const;
     quint64 cloneId() const;
     QObject *locationObj();
+    const QObject *locationObj() const;
     EveLocation *location();
     const EveLocation *location() const;
     QObject* implantsModel();
+    const QObject* implantsModel() const;
     CharacterImplantsGroup *implants();
 
 public Q_SLOTS:
