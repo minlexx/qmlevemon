@@ -69,6 +69,67 @@ int PeriodicalRefresherWorker::resresh_clones(Character *ch)
         //        }
         //      }
 
+        QDateTime dtLastCloneJump = reply.value(QLatin1String("last_clone_jump_date")).toVariant().toDateTime();
+        QJsonObject homeLocationObject = reply.value(QLatin1String("home_location")).toObject();
+        QJsonArray jjump_clones = reply.value(QLatin1String("jump_clones")).toArray();
+        // parse home location
+        if (!homeLocationObject.isEmpty()) {
+            quint64 locationId = homeLocationObject.value(QLatin1String("location_id")).toVariant().toULongLong();
+            QString locationType = homeLocationObject.value(QLatin1String("location_type")).toString();
+
+            // check if character's home station has changed;
+            // if not, do not send new ESI requests
+            if (ch->currentClone()->location()->locationId() != locationId) {
+                // need to query ESI about new location
+                EveLocation loc;
+                if (locationType == QLatin1String("station")) {
+                    QJsonObject jstation;
+                    if (m_api->get_universe_station(jstation, locationId)) {
+                        qCDebug(logRefresher) << "station info:" << jstation;
+                        loc = EveLocation::fromESIUniverseJson(jstation);
+
+                    }
+                } else if (locationType == QLatin1String("structure")) {
+                    QJsonObject jstructure;
+                    if (m_api->get_universe_structure(jstructure, locationId, ch->getAuthTokens().access_token)) {
+                        qCDebug(logRefresher) << "structure info:" << jstructure;
+                        loc = EveLocation::fromESIUniverseJson(jstructure);
+                    }
+                }
+                // forcefully set location id/type, because factory does not do that
+                loc.setLocationId(locationId);
+                loc.setType(locationType);
+                qCDebug(logRefresher) << "location info:" << loc;
+                ch->setHomeLocation(loc);
+            }
+        }
+
+        ch->setLastCloneJumpDate(dtLastCloneJump);
+
+        // parse jump clones
+        for (const QJsonValue &jval: jjump_clones) {
+            const QJsonObject jobj = jval.toObject();
+            QString name = jobj.value(QLatin1String("name")).toString();
+            quint64 jumpCloneId = jobj.value(QLatin1String("jump_clone_id")).toVariant().toULongLong();
+            quint64 locationId = jobj.value(QLatin1String("location_id")).toVariant().toULongLong();
+            QString locationType = jobj.value(QLatin1String("location_type")).toString();
+            QJsonArray implants = jobj.value(QLatin1String("implants")).toArray();
+
+            bool needs_update = true;
+            //const CharacterClone *existingClone = ch->findCloneById(jumpCloneId);
+            //if (existingClone) {
+            //    if (existingClone->location()->locationId() == locationId) {
+            //        needs_update = false;
+            //    }
+            //}
+
+            if (!needs_update) {
+                // this clone is already known in chafacter, and is located
+                // in the same location. No need to send extra requests
+                continue;
+            }
+        }
+
         nChanges++;
     }
 
