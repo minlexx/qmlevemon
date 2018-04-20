@@ -41,6 +41,7 @@ public:
     quint64 cloneId() const;
     QObject *locationObj();
     EveLocation *location();
+    const EveLocation *location() const;
     QObject* implantsModel();
     CharacterImplantsGroup *implants();
 
