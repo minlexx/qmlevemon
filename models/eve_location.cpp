@@ -1,3 +1,4 @@
+#include <QDataStream>
 #include "eve_location.h"
 
 
@@ -137,3 +138,36 @@ void EveLocation::setCoords(double x_, double y_, double z_)
 
 
 } // namespace EM
+
+
+QDataStream &operator<<(QDataStream &stream, const EM::EveLocation &loc)
+{
+    stream << loc.m_locationId;
+    stream << loc.m_typeId;
+    stream << loc.m_solarSystemId;
+    stream << loc.m_name;
+    stream << loc.m_x;
+    stream << loc.m_y;
+    stream << loc.m_z;
+    return stream;
+}
+
+
+QDataStream &operator>>(QDataStream &stream, EM::EveLocation &loc)
+{
+    stream >> loc.m_locationId;
+    stream >> loc.m_typeId;
+    stream >> loc.m_solarSystemId;
+    stream >> loc.m_name;
+    stream >> loc.m_x;
+    stream >> loc.m_y;
+    stream >> loc.m_z;
+    return stream;
+}
+
+
+QDebug operator<<(QDebug &stream, const EM::EveLocation &loc)
+{
+    stream.nospace() << "[Location " << loc.m_name << "/" << loc.m_locationId << "]";
+    return stream;
+}

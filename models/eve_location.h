@@ -2,6 +2,15 @@
 #define EVE_LOCATION_H
 
 #include <QObject>
+#include <QDebug>
+
+class QDataStream;
+
+namespace EM { class EveLocation; }
+
+QDataStream &operator<<(QDataStream &stream, const EM::EveLocation &loc);
+QDataStream &operator>>(QDataStream &stream, EM::EveLocation &loc);
+QDebug operator<<(QDebug &stream, const EM::EveLocation &loc);
 
 
 namespace EM {
@@ -60,6 +69,11 @@ private:
     double m_x = 0.0;
     double m_y = 0.0;
     double m_z = 0.0;
+
+    // friends
+    friend QDataStream &(::operator<<)(QDataStream &stream, const EM::EveLocation &loc);
+    friend QDataStream &(::operator>>)(QDataStream &stream, EM::EveLocation &loc);
+    friend QDebug (::operator<<)(QDebug &stream, const EM::EveLocation &loc);
 };
 
 
