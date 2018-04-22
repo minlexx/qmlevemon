@@ -38,7 +38,7 @@ public:
         setAutoDelete(false);
     }
 
-    virtual ~PortraitCacheAsyncImageResponse()
+    virtual ~PortraitCacheAsyncImageResponse() override
     {
         //qCDebug(logPcache) << Q_FUNC_INFO;
     }
