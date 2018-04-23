@@ -40,7 +40,7 @@ Rectangle {
             }
         } */
 
-        Rectangle {
+        /*Rectangle {
             id: rc1
             width: 100
             height: 100
@@ -65,6 +65,14 @@ Rectangle {
                     duration: 1000
                 }
             }
+        } */
+
+        Image {
+            id: testIcon
+            anchors.centerIn: parent
+            sourceSize.width: 32
+            sourceSize.height: 32;
+            source: "image://typeid/14264"
         }
     }
 }
