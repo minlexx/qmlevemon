@@ -13,8 +13,9 @@ Q_DECLARE_LOGGING_CATEGORY(logApp)
 
 namespace EM {
 
-class PortraitCache;
 class Db;
+class PortraitCache;
+class TypeIconsProvider;
 class PeriodicalRefresher;
 
 
@@ -80,6 +81,7 @@ protected:
     QQmlApplicationEngine m_engine;
     QQuickWindow *m_mainWindow = nullptr;
     PortraitCache *m_portraitCache = nullptr;
+    TypeIconsProvider *m_typeIconsProvider = nullptr;
     PeriodicalRefresher *m_refresher = nullptr;
     quint64 m_curCharId = 0;
     bool m_isPortraitOrientation = true;

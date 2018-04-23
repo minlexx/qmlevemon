@@ -9,6 +9,7 @@
 
 #include "db/db_sqlite.h"
 #include "db/portrait_cache.h"
+#include "db/type_icons_provider.h"
 #include "models/character.h"
 #include "models/character_model.h"
 #include "models/skill_tree_model.h"
@@ -28,11 +29,7 @@ static QmlEvemonApp *g_globalAppInstance = nullptr;
 
 
 QmlEvemonApp::QmlEvemonApp(int& argc, char **argv):
-    QGuiApplication(argc, argv),
-    m_mainWindow(nullptr),
-    m_portraitCache(nullptr),
-    m_refresher(nullptr),
-    m_curCharId(0)
+    QGuiApplication(argc, argv)
 {
     g_globalAppInstance = this;
     setApplicationName(QLatin1String("qmlevemon"));
@@ -44,6 +41,7 @@ QmlEvemonApp::QmlEvemonApp(int& argc, char **argv):
                      this, &QmlEvemonApp::settingsChanged);
 
     m_portraitCache = new PortraitCache();
+    m_typeIconsProvider = new TypeIconsProvider();
     m_refresher = new PeriodicalRefresher(this);
 
     QScreen *appScreen = primaryScreen();
@@ -107,6 +105,7 @@ bool QmlEvemonApp::initQmlEngine()
     // engine takes ownership of the image provider!
     // so we should not and cannot delete m_portraitCache
     m_engine.addImageProvider(QLatin1String("portrait"), m_portraitCache);
+    m_engine.addImageProvider(QLatin1String("typeid"), m_typeIconsProvider);
 
     QObject::connect(ModelManager::instance()->characterModel(),
                      &CharacterModel::newCharacterAdded,
