@@ -13,7 +13,7 @@ class PortraitCache: public QQuickAsyncImageProvider
 {
 public:
     PortraitCache();
-    virtual ~PortraitCache();
+    virtual ~PortraitCache() override;
     virtual QQuickImageResponse *requestImageResponse(const QString &id,
                                                       const QSize &requestedSize) override;
 
