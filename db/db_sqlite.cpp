@@ -180,6 +180,15 @@ bool DbSqlite::open_cache(const QString &db_filename)
                "    location_json TEXT)"));
         q.clear();
     }
+
+    if (!existing_tables.contains(QLatin1String("type_icons"))) {
+        qCDebug(logDb) << "Creating table type_icons...";
+        q.exec(QLatin1String("CREATE TABLE type_icons("
+               "    type_id INTEGER PRIMARY KEY NOT NULL,"
+               "    picture BLOB)"));
+        q.clear();
+    }
+
     return true;
 }
 
@@ -648,6 +657,43 @@ bool DbSqlite::saveCachedLocation(quint64 location_id, const QJsonObject &locati
     q.addBindValue(location_id, QSql::In);
     q.addBindValue(location_json, QSql::In);
     return q.exec();
+}
+
+bool DbSqlite::loadTypeIcon(quint64 type_id, QImage &img)
+{
+    if (!m_cache_db.isOpen()) {
+        return false;
+    }
+    QSqlQuery q(m_cache_db);
+    q.prepare(QLatin1String("SELECT type_id, picture FROM type_icons WHERE type_id=?"));
+    q.addBindValue(type_id, QSql::In);
+    if (q.exec()) {
+        if (q.next()) {
+            QByteArray data = q.value(1).toByteArray();
+            QBuffer buf(&data);
+            buf.open(QIODevice::ReadOnly);
+            bool ret = img.load(&buf, "JPG");
+            return ret;
+        }
+    }
+    return false;
+}
+
+bool DbSqlite::saveTypeIcon(quint64 type_id, const QImage &img)
+{
+    if (!m_cache_db.isOpen() || img.isNull()) {
+        return false;
+    }
+    QSqlQuery q(m_cache_db);
+    QBuffer buf;
+    buf.open(QIODevice::WriteOnly);
+    if (img.save(&buf, "JPG")) {
+        q.prepare(QLatin1String("INSERT OR REPLACE INTO type_icons(type_id, picture) VALUES (?, ?)"));
+        q.addBindValue(type_id, QSql::In);
+        q.addBindValue(buf.buffer(), QSql::In | QSql::Binary);
+        return q.exec();
+    }
+    return false;
 }
 
 } // namespace

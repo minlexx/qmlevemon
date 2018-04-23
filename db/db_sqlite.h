@@ -38,6 +38,9 @@ public:
     virtual QJsonObject loadCachedLocation(quint64 location_id) override;
     virtual bool saveCachedLocation(quint64 location_id, const QJsonObject &location) override;
 
+    virtual bool loadTypeIcon(quint64 type_id, QImage& img) override;
+    virtual bool saveTypeIcon(quint64 type_id, const QImage& img) override;
+
 protected:
     bool open(const QString& db_filename);
     bool open_sde(const QString& db_filename);
