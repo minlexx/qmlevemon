@@ -45,6 +45,9 @@ public:
     virtual QJsonArray loadSkillGroups() = 0;
     virtual QJsonArray loadSkillsInGroup(quint64 group_id) = 0;
 
+    virtual QJsonObject loadCachedLocation(quint64 location_id) = 0;
+    virtual bool saveCachedLocation(quint64 location_id, const QJsonObject &location) = 0;
+
 protected:
     Q_DISABLE_COPY(Db)
 };

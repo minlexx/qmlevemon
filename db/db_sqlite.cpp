@@ -8,6 +8,7 @@
 #include <QTextStream>
 #include <QLoggingCategory>
 #include <QDebug>
+#include <QJsonDocument>
 
 #include "db_sqlite.h"
 #include "models/character.h"
@@ -27,8 +28,10 @@ DbSqlite::DbSqlite()
     QString appdata_dirname = globalAppInstance()->storageDirectory();
     QString db_filename = appdata_dirname + QLatin1String("/characters.db");
     QString sde_db_filename = appdata_dirname + QLatin1String("/eve_sde.db");
+    QString cache_db_filename = appdata_dirname + QLatin1String("/cache.db");
     this->open(db_filename);
     this->open_sde(sde_db_filename);
+    this->open_cache(cache_db_filename);
 }
 
 
@@ -142,6 +145,44 @@ bool DbSqlite::open_sde(const QString& db_filename)
     return ok;
 }
 
+bool DbSqlite::open_cache(const QString &db_filename)
+{
+    if (m_cache_db.isOpen()) {
+        qCWarning(logDb) << "cannot open cache DB: already opened!";
+        return false;
+    }
+    m_cache_db = QSqlDatabase::addDatabase(QLatin1String("QSQLITE"), QLatin1String("cache"));
+    if (!m_cache_db.isValid()) {
+        qCWarning(logDb) << "cannot open cache DB: failed to load sqlite driver?!";
+        return false;
+    }
+    m_cache_db.setDatabaseName(db_filename);
+    if (!m_cache_db.open()) {
+        qCWarning(logDb) << "cannot open cache DB: failed to open file:" << db_filename;
+        return false;
+    }
+    qCDebug(logDb) << "Opened cache database:" << db_filename;
+
+    // check for missing tables
+    QStringList existing_tables;
+    QSqlQuery q(m_cache_db);
+    if (q.exec(QLatin1String("SELECT name FROM sqlite_master WHERE type='table'"))) {
+        while(q.next()) {
+            existing_tables << q.value(0).toString();
+        }
+    }
+    q.clear();
+
+    if (!existing_tables.contains(QLatin1String("location_cache"))) {
+        qCDebug(logDb) << "Creating table location_cache...";
+        q.exec(QLatin1String("CREATE TABLE location_cache("
+               "    location_id INTEGER PRIMARY KEY NOT NULL,"
+               "    location_json TEXT)"));
+        q.clear();
+    }
+    return true;
+}
+
 
 void DbSqlite::close()
 {
@@ -152,6 +193,10 @@ void DbSqlite::close()
     if (m_eve_sde_db.isOpen()) {
         m_eve_sde_db.close();
         qCDebug(logDb) << "Closed SDE database.";
+    }
+    if (m_cache_db.isOpen()) {
+        m_cache_db.close();
+        qCDebug(logDb) << "Closed cache database.";
     }
 }
 
@@ -569,6 +614,40 @@ QJsonArray DbSqlite::loadSkillsInGroup(quint64 group_id)
     }
 
     return ret;
+}
+
+QJsonObject DbSqlite::loadCachedLocation(quint64 location_id)
+{
+    QJsonObject ret;
+    if (!m_cache_db.isOpen()) {
+        return ret;
+    }
+    QSqlQuery q(m_cache_db);
+    q.prepare(QLatin1String("SELECT location_json FROM location_cache "
+                            "WHERE location_id = ?"));
+    q.addBindValue(location_id, QSql::In);
+    if (q.exec()) {
+        if(q.next()) {
+            ret = QJsonDocument::fromJson(q.value(0).toByteArray()).object();
+        }
+    }
+    q.clear();
+    return ret;
+}
+
+bool DbSqlite::saveCachedLocation(quint64 location_id, const QJsonObject &location)
+{
+    QJsonObject ret;
+    if (!m_cache_db.isOpen()) {
+        return false;
+    }
+    QSqlQuery q(m_cache_db);
+    QByteArray location_json = QJsonDocument(location).toJson(QJsonDocument::Compact);
+    q.prepare(QLatin1String("INSERT OR REPLACE INTO location_cache(location_id, location_json) "
+                            "VALUES (?, ?)"));
+    q.addBindValue(location_id, QSql::In);
+    q.addBindValue(location_json, QSql::In);
+    return q.exec();
 }
 
 } // namespace

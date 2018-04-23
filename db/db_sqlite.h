@@ -35,15 +35,20 @@ public:
     virtual QJsonArray loadSkillGroups() override;
     virtual QJsonArray loadSkillsInGroup(quint64 group_id) override;
 
+    virtual QJsonObject loadCachedLocation(quint64 location_id) override;
+    virtual bool saveCachedLocation(quint64 location_id, const QJsonObject &location) override;
+
 protected:
     bool open(const QString& db_filename);
     bool open_sde(const QString& db_filename);
+    bool open_cache(const QString& db_filename);
     void close();
     bool execSqlFile(QSqlDatabase *db, const QString& filename);
 
 protected:
     QSqlDatabase m_chars_db;
     QSqlDatabase m_eve_sde_db;
+    QSqlDatabase m_cache_db;
 };
 
 
