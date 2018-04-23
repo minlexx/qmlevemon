@@ -69,8 +69,9 @@ EveLocation PeriodicalRefresherWorker::resolve_location(quint64 locationId, cons
     }
     // if not in cache, send request
     const EveLocation loc = send_location_request(locationId, locationType, accessToken);
-    // save in cache
-    if (gApp) {
+    // save in cache, only if network request was successful
+    //   prevent empty locations to get into the cache :(
+    if (gApp && (loc.typeId() != 0) && (!loc.name().isEmpty()) && (loc.solarSystemId() != 0)) {
         Db *db = gApp->database();
         if (db) {
             db->saveCachedLocation(locationId, loc.toJson());
