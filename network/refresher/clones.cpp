@@ -14,6 +14,72 @@
 namespace EM {
 
 
+/**
+ * Depending on locationType sends proepr request to ESI API
+ * and parses the result.
+ * @brief PeriodicalRefresherWorker::send_location_request
+ * @param locationId - quint64 location id from ESI
+ * @param locationType - "station", "structure" as in ESI
+ * @param accessToken - Character access token to query structures from ESI
+ * @return EveLocation object
+ */
+EveLocation PeriodicalRefresherWorker::send_location_request(quint64 locationId, const QString &locationType, const QByteArray &accessToken)
+{
+    EveLocation loc;
+    if (locationType == QLatin1String("station")) {
+        QJsonObject jstation;
+        if (m_api->get_universe_station(jstation, locationId)) {
+            loc = EveLocation::fromJson(jstation);
+        }
+    } else if (locationType == QLatin1String("structure")) {
+        QJsonObject jstructure;
+        if (m_api->get_universe_structure(jstructure, locationId, accessToken)) {
+            loc = EveLocation::fromJson(jstructure);
+        }
+    }
+    // forcefully set location id/type, because factory does not do that
+    loc.setLocationId(locationId);
+    loc.setType(locationType);
+    return loc;
+}
+
+
+/**
+ * First tries to load cached location;
+ * If not in cache, requests from ESI, saves into cache.
+ * @brief PeriodicalRefresherWorker::resolve_location
+ * @param locationId - quint64 id of location
+ * @param locationType - "station", "structure" as in ESI
+ * @param accessToken - Character access token to query structures from ESI
+ * @return EveLocation object
+ */
+EveLocation PeriodicalRefresherWorker::resolve_location(quint64 locationId, const QString &locationType, const QByteArray &accessToken)
+{
+    // try to load from cache
+    QmlEvemonApp *gApp = globalAppInstance();
+    if (gApp) {
+        Db *db = gApp->database();
+        if (db) {
+            QJsonObject locationObj = db->loadCachedLocation(locationId);
+            if (!locationObj.isEmpty()) {
+                // loaded from cache OK
+                return EveLocation::fromJson(locationObj);
+            }
+        }
+    }
+    // if not in cache, send request
+    const EveLocation loc = send_location_request(locationId, locationType, accessToken);
+    // save in cache
+    if (gApp) {
+        Db *db = gApp->database();
+        if (db) {
+            db->saveCachedLocation(locationId, loc.toJson());
+        }
+    }
+    return loc;
+}
+
+
 int PeriodicalRefresherWorker::resresh_clones(Character *ch)
 {
     if (!ch->updateTimestamps().isUpdateNeeded(UpdateTimestamps::UTST::CLONES)) {
@@ -69,36 +135,18 @@ int PeriodicalRefresherWorker::resresh_clones(Character *ch)
         //        }
         //      }
 
-        QDateTime dtLastCloneJump = reply.value(QLatin1String("last_clone_jump_date")).toVariant().toDateTime();
-        QJsonObject homeLocationObject = reply.value(QLatin1String("home_location")).toObject();
-        QJsonArray jjump_clones = reply.value(QLatin1String("jump_clones")).toArray();
+        const QDateTime dtLastCloneJump = reply.value(QLatin1String("last_clone_jump_date")).toVariant().toDateTime();
+        const QJsonObject homeLocationObject = reply.value(QLatin1String("home_location")).toObject();
+        const QJsonArray jjump_clones = reply.value(QLatin1String("jump_clones")).toArray();
         // parse home location
         if (!homeLocationObject.isEmpty()) {
-            quint64 locationId = homeLocationObject.value(QLatin1String("location_id")).toVariant().toULongLong();
-            QString locationType = homeLocationObject.value(QLatin1String("location_type")).toString();
+            const quint64 locationId = homeLocationObject.value(QLatin1String("location_id")).toVariant().toULongLong();
+            const QString locationType = homeLocationObject.value(QLatin1String("location_type")).toString();
 
             // check if character's home station has changed;
-            // if not, do not send new ESI requests
             if (ch->currentClone()->location()->locationId() != locationId) {
-                // need to query ESI about new location
-                EveLocation loc;
-                if (locationType == QLatin1String("station")) {
-                    QJsonObject jstation;
-                    if (m_api->get_universe_station(jstation, locationId)) {
-                        qCDebug(logRefresher) << "station info:" << jstation;
-                        loc = EveLocation::fromESIUniverseJson(jstation);
-
-                    }
-                } else if (locationType == QLatin1String("structure")) {
-                    QJsonObject jstructure;
-                    if (m_api->get_universe_structure(jstructure, locationId, ch->getAuthTokens().access_token)) {
-                        qCDebug(logRefresher) << "structure info:" << jstructure;
-                        loc = EveLocation::fromESIUniverseJson(jstructure);
-                    }
-                }
-                // forcefully set location id/type, because factory does not do that
-                loc.setLocationId(locationId);
-                loc.setType(locationType);
+                // need load info about new location
+                const EveLocation loc = resolve_location(locationId, locationType, ch->getAuthTokens().access_token);
                 qCDebug(logRefresher) << "location info:" << loc;
                 ch->setHomeLocation(loc);
             }
@@ -107,28 +155,43 @@ int PeriodicalRefresherWorker::resresh_clones(Character *ch)
         ch->setLastCloneJumpDate(dtLastCloneJump);
 
         // parse jump clones
+        QVector<CharacterClone> newClones;
         for (const QJsonValue &jval: jjump_clones) {
             const QJsonObject jobj = jval.toObject();
-            QString name = jobj.value(QLatin1String("name")).toString();
-            quint64 jumpCloneId = jobj.value(QLatin1String("jump_clone_id")).toVariant().toULongLong();
-            quint64 locationId = jobj.value(QLatin1String("location_id")).toVariant().toULongLong();
-            QString locationType = jobj.value(QLatin1String("location_type")).toString();
-            QJsonArray implants = jobj.value(QLatin1String("implants")).toArray();
+            const QString cloneName = jobj.value(QLatin1String("name")).toString();
+            const quint64 jumpCloneId = jobj.value(QLatin1String("jump_clone_id")).toVariant().toULongLong();
+            const quint64 locationId = jobj.value(QLatin1String("location_id")).toVariant().toULongLong();
+            const QString locationType = jobj.value(QLatin1String("location_type")).toString();
+            const QJsonArray jimplants = jobj.value(QLatin1String("implants")).toArray();
 
-            bool needs_update = true;
-            //const CharacterClone *existingClone = ch->findCloneById(jumpCloneId);
-            //if (existingClone) {
-            //    if (existingClone->location()->locationId() == locationId) {
-            //        needs_update = false;
-            //    }
-            //}
-
-            if (!needs_update) {
-                // this clone is already known in chafacter, and is located
-                // in the same location. No need to send extra requests
-                continue;
+            // first, load implants
+            CharacterImplantsGroup newCloneImplants;
+            for (const QJsonValue& jval: jimplants) {
+                const quint64 implantTypeID = jval.toVariant().toULongLong();
+                if (implantTypeID > 0) {
+                    // load type info from database
+                    const QJsonObject dbJson = db->typeInfo(implantTypeID);
+                    const QJsonArray dbJsonAttrs = db->typeAttributes(implantTypeID);
+                    // cosntruct implant inventory item
+                    const InvType implantItem = InvType::fromDatabaseJson(dbJson, dbJsonAttrs);
+                    // store it in implant set
+                    newCloneImplants.addImplant(std::move(implantItem));
+                }
             }
+
+            // load location
+            const EveLocation loc = resolve_location(locationId, locationType, ch->getAuthTokens().access_token);
+
+            // construct clone object
+            CharacterClone newClone;
+            newClone.setCloneId(jumpCloneId);
+            newClone.setCloneName(cloneName);
+            newClone.setImplantsGroup(newCloneImplants);
+
+            newClones.append(std::move(newClone));
         }
+
+        ch->setClones(newClones);
 
         nChanges++;
     }

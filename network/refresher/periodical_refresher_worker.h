@@ -1,5 +1,6 @@
 #include <QObject>
 #include <QAtomicInteger>
+#include "models/eve_location.h"
 
 namespace EM {
 
@@ -43,6 +44,10 @@ protected:
     int refresh_skills(Character *ch);
     int resresh_clones(Character *ch);
     int refresh_wallet(Character *ch);
+
+    // utility
+    EveLocation send_location_request(quint64 locationId, const QString &locationType, const QByteArray &accessToken);
+    EveLocation resolve_location(quint64 locationId, const QString &locationType, const QByteArray &accessToken);
 
 protected:
     PeriodicalRefresher *m_owner = nullptr;
