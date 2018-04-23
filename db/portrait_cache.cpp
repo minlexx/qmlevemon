@@ -17,7 +17,7 @@
 #include "portrait_cache.h"
 #include "db.h"
 #include "qmlevemon_app.h"
-#include "eve_api/eve_api.h"
+#include "eve_api/eve_api.h"  // for evesso_user_agent()
 
 
 Q_LOGGING_CATEGORY(logPcache, "evemon.portrait_cache")
