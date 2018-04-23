@@ -687,7 +687,7 @@ bool DbSqlite::saveTypeIcon(quint64 type_id, const QImage &img)
     QSqlQuery q(m_cache_db);
     QBuffer buf;
     buf.open(QIODevice::WriteOnly);
-    if (img.save(&buf, "JPG")) {
+    if (img.save(&buf, "PNG")) {
         q.prepare(QLatin1String("INSERT OR REPLACE INTO type_icons(type_id, picture) VALUES (?, ?)"));
         q.addBindValue(type_id, QSql::In);
         q.addBindValue(buf.buffer(), QSql::In | QSql::Binary);
