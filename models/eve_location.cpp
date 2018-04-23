@@ -153,7 +153,7 @@ void EveLocation::setCoords(double x_, double y_, double z_)
 
 
 // static
-EveLocation EveLocation::fromESIUniverseJson(const QJsonObject &jobj)
+EveLocation EveLocation::fromJson(const QJsonObject &jobj)
 {
     EveLocation ret;
     // location name
@@ -179,6 +179,20 @@ EveLocation EveLocation::fromESIUniverseJson(const QJsonObject &jobj)
         z = jpos.value(QLatin1String("z")).toDouble();
         ret.setCoords(x, y, z);
     }
+    return ret;
+}
+
+QJsonObject EveLocation::toJson() const
+{
+    QJsonObject ret;
+    ret.insert(QLatin1String("name"), m_name);
+    ret.insert(QLatin1String("solar_system_id"), static_cast<qint64>(m_solarSystemId));
+    ret.insert(QLatin1String("type_id"), static_cast<qint64>(m_typeId));
+    QJsonObject position;
+    position.insert(QLatin1String("x"), m_x);
+    position.insert(QLatin1String("y"), m_y);
+    position.insert(QLatin1String("z"), m_z);
+    ret.insert(QLatin1String("position"), position);
     return ret;
 }
 

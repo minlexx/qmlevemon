@@ -39,7 +39,8 @@ public:
     bool operator!=(const EveLocation &other) const;
 
     // fabric
-    static EveLocation fromESIUniverseJson(const QJsonObject &jobj);
+    static EveLocation fromJson(const QJsonObject &jobj);
+    QJsonObject toJson() const;
 
 public Q_SLOTS:
     quint64 locationId() const;
