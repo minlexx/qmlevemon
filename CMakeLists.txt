@@ -30,6 +30,7 @@ set(qmlevemon_srcs
     "db/db.cpp"
     "db/db_sqlite.cpp"
     "db/portrait_cache.cpp"
+    "db/type_icons_provider.cpp"
     "eve_api/eve_sso.cpp"
     "eve_api/eve_api.cpp"
     "eve_api/eve_api_tokens.cpp"

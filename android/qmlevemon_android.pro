@@ -16,6 +16,7 @@ SOURCES += \
     ../db/db.cpp \
     ../db/db_sqlite.cpp \
     ../db/portrait_cache.cpp \
+    ../db/type_icons_provider.cpp \
     ../eve_api/eve_sso.cpp \
     ../eve_api/eve_api.cpp \
     ../eve_api/eve_api_tokens.cpp \
@@ -71,6 +72,7 @@ HEADERS += \
     ../db/db.h \
     ../db/db_sqlite.h \
     ../db/portrait_cache.h \
+    ../db/type_icons_provider.h \
     ../eve_api/eve_api.h \
     ../eve_api/eve_api_tokens.h \
     ../eve_api/eve_sso.h \
