@@ -11,5 +11,6 @@
         <file>img/char_attributes/memory.png</file>
         <file>img/char_attributes/perception.png</file>
         <file>img/char_attributes/willpower.png</file>
+        <file>img/unknown_type.png</file>
     </qresource>
 </RCC>
