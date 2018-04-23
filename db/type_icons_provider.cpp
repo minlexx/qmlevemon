@@ -84,7 +84,7 @@ public:
 
                 // https://imageserver.eveonline.com/Type/14264_32.png
                 QString url = QString(QLatin1String("https://imageserver.eveonline.com/"
-                                      "Type/%1_32.jpg")).arg(type_id);
+                                      "Type/%1_32.png")).arg(type_id);
                 req.setUrl(QUrl(url));
                 req.setHeader(QNetworkRequest::UserAgentHeader, evesso_user_agent());
 
