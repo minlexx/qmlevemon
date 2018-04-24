@@ -63,7 +63,10 @@ EveLocation PeriodicalRefresherWorker::resolve_location(quint64 locationId, cons
             QJsonObject locationObj = db->loadCachedLocation(locationId);
             if (!locationObj.isEmpty()) {
                 // loaded from cache OK
-                return EveLocation::fromJson(locationObj);
+                EveLocation loc = EveLocation::fromJson(locationObj);
+                loc.setLocationId(locationId);
+                loc.setType(locationType);
+                return loc;
             }
         }
     }
@@ -104,7 +107,6 @@ int PeriodicalRefresherWorker::resresh_clones(Character *ch)
 
     // 1. refresh clones
     if (m_api->get_character_clones(reply, ch->characterId(), ch->getAuthTokens().access_token)) {
-        qCDebug(logRefresher) << reply;
         // example response:
         //      {
         //        "jump_clones": [
