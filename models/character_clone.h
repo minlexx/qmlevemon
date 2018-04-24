@@ -46,6 +46,7 @@ public:
     QObject* implantsModel();
     const QObject* implantsModel() const;
     CharacterImplantsGroup *implants();
+    const CharacterImplantsGroup *implants() const;
 
 public Q_SLOTS:
     void setCloneName(const QString &name);
