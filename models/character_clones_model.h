@@ -6,6 +6,7 @@
 #include <QVector>
 #include <QHash>
 #include <QByteArray>
+#include <QMutex>
 #include "character_clone.h"
 
 
@@ -39,6 +40,7 @@ public:
 private:
     QHash<int, QByteArray>  m_roles;
     QVector<CharacterClone> m_clones;
+    mutable QMutex m_mutex;
 };
 
 
