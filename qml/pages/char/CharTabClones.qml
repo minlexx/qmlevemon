@@ -11,5 +11,28 @@ Rectangle {
     color: AppStyle.bgColor
     clip: true
 
-    Text { text: "Clones" }
+    Column {
+        width: parent.width
+
+        TextKeyValue {
+            keyText: qsTr("Home location:")
+            valueText: curChar.homeLocation.name
+        }
+
+        TextKeyValue {
+            keyText: qsTr("Last clone jump date:")
+            valueText: Qt.formatDateTime(curChar.lastCloneJumpDate)
+        }
+
+        ListView {
+            width: parent.width
+            model: curChar.clonesModel
+
+            delegate: Item {
+                Label {
+                    text: model.cloneName
+                }
+            }
+        }
+    }
 }
