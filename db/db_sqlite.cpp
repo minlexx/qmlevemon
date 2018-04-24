@@ -29,7 +29,7 @@ DbSqlite::DbSqlite()
     QString db_filename = appdata_dirname + QLatin1String("/characters.db");
     QString sde_db_filename = appdata_dirname + QLatin1String("/eve_sde.db");
     QString cache_db_filename = appdata_dirname + QLatin1String("/cache.db");
-    this->open(db_filename);
+    this->open_chars(db_filename);
     this->open_sde(sde_db_filename);
     this->open_cache(cache_db_filename);
 }
@@ -47,8 +47,9 @@ Db* DbSqlite::instance()
 }
 
 
-bool DbSqlite::open(const QString& db_filename)
+bool DbSqlite::open_chars(const QString& db_filename)
 {
+    QMutexLocker lock(&m_chars_mutex);
     if (m_chars_db.isOpen()) {
         qCWarning(logDb) << "cannot open DB: already opened!";
         return false;
@@ -97,6 +98,7 @@ bool DbSqlite::open(const QString& db_filename)
 
 bool DbSqlite::open_sde(const QString& db_filename)
 {
+    QMutexLocker lock(&m_sde_mutex);
     if (m_eve_sde_db.isOpen()) {
         qCWarning(logDb) << "cannot open SDE DB: already opened!";
         return false;
@@ -147,6 +149,7 @@ bool DbSqlite::open_sde(const QString& db_filename)
 
 bool DbSqlite::open_cache(const QString &db_filename)
 {
+    QMutexLocker lock(&m_cache_mutex);
     if (m_cache_db.isOpen()) {
         qCWarning(logDb) << "cannot open cache DB: already opened!";
         return false;
@@ -195,6 +198,9 @@ bool DbSqlite::open_cache(const QString &db_filename)
 
 void DbSqlite::close()
 {
+    QMutexLocker lock1(&m_chars_mutex);
+    QMutexLocker lock2(&m_sde_mutex);
+    QMutexLocker lock3(&m_cache_mutex);
     if (m_chars_db.isOpen()) {
         m_chars_db.close();
         qCDebug(logDb) << "Closed chars database.";
@@ -267,7 +273,10 @@ bool DbSqlite::execSqlFile(QSqlDatabase *db, const QString& filename)
 
 bool DbSqlite::loadCharacters(QVector<Character *>& charList)
 {
-    if (!m_chars_db.isOpen()) return false;
+    QMutexLocker lock(&m_chars_mutex);
+    if (!m_chars_db.isOpen()) {
+        return false;
+    }
     QSqlQuery q(m_chars_db);
     if (!q.exec(QLatin1String("SELECT char_id, char_data FROM characters"))) {
         return false;
@@ -293,7 +302,10 @@ bool DbSqlite::loadCharacters(QVector<Character *>& charList)
 
 bool DbSqlite::saveCharacters(const QVector<Character *>& charList)
 {
-    if (!m_chars_db.isOpen()) return false;
+    QMutexLocker lock(&m_chars_mutex);
+    if (!m_chars_db.isOpen()) {
+        return false;
+    }
     QSqlQuery q(m_chars_db);
     q.exec(QLatin1String("DELETE FROM characters"));
     q.clear();
@@ -313,8 +325,13 @@ bool DbSqlite::saveCharacters(const QVector<Character *>& charList)
 
 bool DbSqlite::saveCharacter(const Character *character)
 {
-    if (!character) return false;
-    if (!m_chars_db.isOpen()) return false;
+    if (!character) {
+        return false;
+    }
+    QMutexLocker lock(&m_chars_mutex);
+    if (!m_chars_db.isOpen()) {
+        return false;
+    }
     // serialize character to BLOB
     QByteArray char_data;
     QDataStream stream(&char_data, QIODevice::WriteOnly);
@@ -330,6 +347,7 @@ bool DbSqlite::saveCharacter(const Character *character)
 
 bool DbSqlite::loadPortrait(quint64 char_id, QImage& img)
 {
+    QMutexLocker lock(&m_chars_mutex);
     if (!m_chars_db.isOpen()) {
         return false;
     }
@@ -351,6 +369,7 @@ bool DbSqlite::loadPortrait(quint64 char_id, QImage& img)
 
 bool DbSqlite::savePortrait(quint64 char_id, const QImage& img)
 {
+    QMutexLocker lock(&m_chars_mutex);
     if (!m_chars_db.isOpen() || img.isNull()) {
         return false;
     }
@@ -369,6 +388,7 @@ bool DbSqlite::savePortrait(quint64 char_id, const QImage& img)
 
 bool DbSqlite::deletePortrait(quint64 char_id)
 {
+    QMutexLocker lock(&m_chars_mutex);
     if (!m_chars_db.isOpen()) {
         return false;
     }
@@ -381,6 +401,7 @@ bool DbSqlite::deletePortrait(quint64 char_id)
 
 QString DbSqlite::raceName(quint64 race_id)
 {
+    QMutexLocker lock(&m_sde_mutex);
     QString ret;
     if (!m_eve_sde_db.isOpen()) {
         return ret;
@@ -399,6 +420,7 @@ QString DbSqlite::raceName(quint64 race_id)
 
 QString DbSqlite::bloodlineName(quint64 bloodline_id)
 {
+    QMutexLocker lock(&m_sde_mutex);
     QString ret;
     if (!m_eve_sde_db.isOpen()) {
         return ret;
@@ -417,6 +439,7 @@ QString DbSqlite::bloodlineName(quint64 bloodline_id)
 
 QString DbSqlite::ancestryName(quint64 ancestry_id)
 {
+    QMutexLocker lock(&m_sde_mutex);
     QString ret;
     if (!m_eve_sde_db.isOpen()) {
         return ret;
@@ -435,6 +458,7 @@ QString DbSqlite::ancestryName(quint64 ancestry_id)
 
 QString DbSqlite::factionName(quint64 faction_id)
 {
+    QMutexLocker lock(&m_sde_mutex);
     QString ret;
     if (!m_eve_sde_db.isOpen()) {
         return ret;
@@ -453,6 +477,7 @@ QString DbSqlite::factionName(quint64 faction_id)
 
 QString DbSqlite::typeName(quint64 type_id)
 {
+    QMutexLocker lock(&m_sde_mutex);
     QString ret;
     if (!m_eve_sde_db.isOpen()) {
         return ret;
@@ -470,6 +495,7 @@ QString DbSqlite::typeName(quint64 type_id)
 
 QJsonObject DbSqlite::typeInfo(quint64 type_id)
 {
+    QMutexLocker lock(&m_sde_mutex);
     QJsonObject ret;
     if (!m_eve_sde_db.isOpen()) {
         return ret;
@@ -495,6 +521,7 @@ QJsonObject DbSqlite::typeInfo(quint64 type_id)
 
 QJsonArray DbSqlite::typeAttributes(quint64 type_id)
 {
+    QMutexLocker lock(&m_sde_mutex);
     QJsonArray ret;
     if (!m_eve_sde_db.isOpen()) {
         return ret;
@@ -520,6 +547,7 @@ QJsonArray DbSqlite::typeAttributes(quint64 type_id)
 
 QJsonArray DbSqlite::loadSkillGroups()
 {
+    QMutexLocker lock(&m_sde_mutex);
     QJsonArray ret;
     if (!m_eve_sde_db.isOpen()) {
         return ret;
@@ -561,6 +589,7 @@ QJsonArray DbSqlite::loadSkillGroups()
 
 QJsonArray DbSqlite::loadSkillsInGroup(quint64 group_id)
 {
+    QMutexLocker lock(&m_sde_mutex);
     QJsonArray ret;
     if (!m_eve_sde_db.isOpen()) {
         return ret;
@@ -627,6 +656,7 @@ QJsonArray DbSqlite::loadSkillsInGroup(quint64 group_id)
 
 QJsonObject DbSqlite::loadCachedLocation(quint64 location_id)
 {
+    QMutexLocker lock(&m_cache_mutex);
     QJsonObject ret;
     if (!m_cache_db.isOpen()) {
         return ret;
@@ -646,6 +676,7 @@ QJsonObject DbSqlite::loadCachedLocation(quint64 location_id)
 
 bool DbSqlite::saveCachedLocation(quint64 location_id, const QJsonObject &location)
 {
+    QMutexLocker lock(&m_cache_mutex);
     QJsonObject ret;
     if (!m_cache_db.isOpen()) {
         return false;
@@ -661,6 +692,7 @@ bool DbSqlite::saveCachedLocation(quint64 location_id, const QJsonObject &locati
 
 bool DbSqlite::loadTypeIcon(quint64 type_id, QImage &img)
 {
+    QMutexLocker lock(&m_cache_mutex);
     if (!m_cache_db.isOpen()) {
         return false;
     }
@@ -672,7 +704,7 @@ bool DbSqlite::loadTypeIcon(quint64 type_id, QImage &img)
             QByteArray data = q.value(1).toByteArray();
             QBuffer buf(&data);
             buf.open(QIODevice::ReadOnly);
-            bool ret = img.load(&buf, "JPG");
+            bool ret = img.load(&buf, "PNG");
             return ret;
         }
     }
@@ -681,6 +713,7 @@ bool DbSqlite::loadTypeIcon(quint64 type_id, QImage &img)
 
 bool DbSqlite::saveTypeIcon(quint64 type_id, const QImage &img)
 {
+    QMutexLocker lock(&m_cache_mutex);
     if (!m_cache_db.isOpen() || img.isNull()) {
         return false;
     }

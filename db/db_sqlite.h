@@ -2,6 +2,7 @@
 #define H_EM_DB_SQLITE
 
 #include <QSqlDatabase>
+#include <QMutex>
 #include "db.h"
 
 
@@ -42,7 +43,7 @@ public:
     virtual bool saveTypeIcon(quint64 type_id, const QImage& img) override;
 
 protected:
-    bool open(const QString& db_filename);
+    bool open_chars(const QString& db_filename);
     bool open_sde(const QString& db_filename);
     bool open_cache(const QString& db_filename);
     void close();
@@ -50,8 +51,13 @@ protected:
 
 protected:
     QSqlDatabase m_chars_db;
+    QMutex m_chars_mutex;
+
     QSqlDatabase m_eve_sde_db;
+    QMutex m_sde_mutex;
+
     QSqlDatabase m_cache_db;
+    QMutex m_cache_mutex;
 };
 
 
