@@ -26,6 +26,7 @@ Rectangle {
             anchors.leftMargin: AppStyle.marginNormal
             text: qsTr("Active clone:")
             font.bold: true
+            font.pointSize: AppStyle.textSizeH2
         }
 
         TextKeyValue {
@@ -45,11 +46,10 @@ Rectangle {
 
         Item {
             width: 1
-            height: AppStyle.marginNormal
+            height: AppStyle.marginSmall
         }
 
         Repeater {
-            visible: false
             width: col1.width
             model: curChar.currentClone.implantsModel
             delegate: Item {
@@ -59,7 +59,7 @@ Rectangle {
                 Image {
                     id: implantIcon
                     anchors.left: parent.left
-                    anchors.leftMargin: AppStyle.marginBig
+                    anchors.leftMargin: AppStyle.marginBig + AppStyle.marginNormal
                     sourceSize.width: 32
                     sourceSize.height: 32
                     width: 16
@@ -86,23 +86,27 @@ Rectangle {
             anchors.leftMargin: AppStyle.marginNormal
             text: qsTr("Other clones:")
             font.bold: true
+            font.pointSize: AppStyle.textSizeH2
         }
-    }
 
-    ListView {
-        anchors.top: col1.bottom
-        anchors.bottom: container.bottom
-        anchors.left: container.left
-        anchors.leftMargin: AppStyle.marginNormal
-        anchors.topMargin: AppStyle.marginNormal
-        width: parent.width
-        model: curChar.clonesModel
+        Item {
+            width: 1
+            height: AppStyle.marginNormal
+        }
 
-        delegate: Item {
-            implicitHeight: lblCloneName.height
-            Label {
-                id: lblCloneName
-                text: model.cloneName !== "" ? model.cloneName : "<no name>"
+        Repeater {
+            width: col1.width
+            model: curChar.clonesModel
+            delegate: Item {
+                implicitHeight: lblCloneName.height
+                implicitWidth: col1.width
+
+                Label {
+                    id: lblCloneName
+                    anchors.left: parent.left
+                    anchors.leftMargin: AppStyle.marginBig // + AppStyle.marginNormal
+                    text: model.cloneName !== "" ? model.cloneName : "<no name>"
+                }
             }
         }
     }
