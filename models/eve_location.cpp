@@ -231,7 +231,7 @@ QDataStream &operator>>(QDataStream &stream, EM::EveLocation &loc)
 QDebug operator<<(QDebug &stream, const EM::EveLocation &loc)
 {
     stream.nospace() << "[Location " << loc.m_name << "/"
-                     << loc.m_locationId << ", "
+                     << loc.m_locationId << ", type: "
                      << loc.m_type << "]";
     return stream;
 }
