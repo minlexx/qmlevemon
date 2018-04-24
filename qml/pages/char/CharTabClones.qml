@@ -12,7 +12,21 @@ Rectangle {
     clip: true
 
     Column {
+        id: col1
+        anchors.top: container.top
         width: parent.width
+
+        Item {
+            width: 1
+            height: AppStyle.marginNormal
+        }
+
+        Text {
+            anchors.left: parent.left
+            anchors.leftMargin: AppStyle.marginNormal
+            text: qsTr("Active clone:")
+            font.bold: true
+        }
 
         TextKeyValue {
             keyText: qsTr("Home location:")
@@ -24,14 +38,71 @@ Rectangle {
             valueText: Qt.formatDateTime(curChar.lastCloneJumpDate)
         }
 
-        ListView {
-            width: parent.width
-            model: curChar.clonesModel
+        TextKeyValue {
+            keyText: qsTr("Implants:")
+            valueText: ""
+        }
 
+        Item {
+            width: 1
+            height: AppStyle.marginNormal
+        }
+
+        Repeater {
+            visible: false
+            width: col1.width
+            model: curChar.currentClone.implantsModel
             delegate: Item {
-                Label {
-                    text: model.cloneName
+                implicitHeight: lblCurImpName.height + AppStyle.marginSmall
+                implicitWidth: col1.width
+
+                Image {
+                    id: implantIcon
+                    anchors.left: parent.left
+                    anchors.leftMargin: AppStyle.marginBig
+                    sourceSize.width: 32
+                    sourceSize.height: 32
+                    width: 16
+                    height: 16
+                    source: "image://typeid/" + model.typeId
                 }
+                Label {
+                    anchors.verticalCenter: implantIcon.verticalCenter
+                    anchors.left: implantIcon.right
+                    anchors.leftMargin: AppStyle.marginNormal
+                    id: lblCurImpName
+                    text: model.displayName
+                }
+            }
+        }
+
+        Item {
+            width: 1
+            height: AppStyle.marginNormal
+        }
+
+        Text {
+            anchors.left: parent.left
+            anchors.leftMargin: AppStyle.marginNormal
+            text: qsTr("Other clones:")
+            font.bold: true
+        }
+    }
+
+    ListView {
+        anchors.top: col1.bottom
+        anchors.bottom: container.bottom
+        anchors.left: container.left
+        anchors.leftMargin: AppStyle.marginNormal
+        anchors.topMargin: AppStyle.marginNormal
+        width: parent.width
+        model: curChar.clonesModel
+
+        delegate: Item {
+            implicitHeight: lblCloneName.height
+            Label {
+                id: lblCloneName
+                text: model.cloneName !== "" ? model.cloneName : "<no name>"
             }
         }
     }
