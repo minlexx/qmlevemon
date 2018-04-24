@@ -33,7 +33,7 @@ CharacterImplantsGroup::CharacterImplantsGroup(CharacterImplantsGroup &&other)
 CharacterImplantsGroup &CharacterImplantsGroup::operator=(const CharacterImplantsGroup &other)
 {
     if (this == &other) return (*this);
-    m_roles = other.m_roles;
+    m_roles    = other.m_roles;
     m_implants = other.m_implants;
     return (*this);
 }
@@ -41,7 +41,7 @@ CharacterImplantsGroup &CharacterImplantsGroup::operator=(const CharacterImplant
 CharacterImplantsGroup &CharacterImplantsGroup::operator=(CharacterImplantsGroup &&other)
 {
     if (this == &other) return (*this);
-    m_roles = std::move(other.m_roles);
+    m_roles    = std::move(other.m_roles);
     m_implants = std::move(other.m_implants);
     return (*this);
 }
@@ -150,12 +150,14 @@ const InvType &CharacterImplantsGroup::at(int i) const
 
 QDataStream &operator<<(QDataStream &stream, const EM::CharacterImplantsGroup &impGroup)
 {
+    stream << impGroup.m_roles;
     stream << impGroup.m_implants;
     return stream;
 }
 
 QDataStream &operator>>(QDataStream &stream, EM::CharacterImplantsGroup &impGroup)
 {
+    stream >> impGroup.m_roles;
     stream >> impGroup.m_implants;
     return stream;
 }
