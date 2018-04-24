@@ -33,16 +33,20 @@ CharacterImplantsGroup::CharacterImplantsGroup(CharacterImplantsGroup &&other)
 CharacterImplantsGroup &CharacterImplantsGroup::operator=(const CharacterImplantsGroup &other)
 {
     if (this == &other) return (*this);
+    beginResetModel();
     m_roles    = other.m_roles;
     m_implants = other.m_implants;
+    endResetModel();
     return (*this);
 }
 
 CharacterImplantsGroup &CharacterImplantsGroup::operator=(CharacterImplantsGroup &&other)
 {
     if (this == &other) return (*this);
+    beginResetModel();
     m_roles    = std::move(other.m_roles);
     m_implants = std::move(other.m_implants);
+    endResetModel();
     return (*this);
 }
 
