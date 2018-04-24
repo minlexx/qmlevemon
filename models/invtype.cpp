@@ -95,6 +95,11 @@ bool InvType::operator==(const InvType &other) const
     return (m_typeId == other.m_typeId);
 }
 
+bool InvType::operator!=(const InvType &other) const
+{
+    return !(this->operator==(other));
+}
+
 
 bool InvType::isValid() const { return (m_typeId > 0); }
 quint64 InvType::typeId() const { return m_typeId; }

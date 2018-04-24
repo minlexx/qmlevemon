@@ -57,6 +57,7 @@ public:
     const InvType &operator=(const InvType &other);
     const InvType &operator=(InvType &&other);
     bool operator==(const InvType &other) const;
+    bool operator!=(const InvType &other) const;
 
     bool isValid() const;
 
