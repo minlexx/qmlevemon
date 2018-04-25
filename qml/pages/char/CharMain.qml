@@ -306,10 +306,50 @@ Rectangle {
         color: AppStyle.mainColor
         clip: true
 
+        property bool isExpanded: false
+
+        function doExpand() {
+            anchors.top = container.top;
+            isExpanded = true;
+        }
+
+        function doCollapse() {
+            anchors.top = charBasicInfoFlow.bottom;
+            isExpanded = false;
+        }
+
+        MouseArea {
+            id: btnSubInfoExpand
+            anchors {
+                top: parent.top
+                left: parent.left
+                right: parent.right
+            }
+            height: 32
+            // hoverEnabled: true
+            cursorShape: Qt.PointingHandCursor
+
+            onClicked: {
+                if (subInfoTabRect.isExpanded) {
+                    subInfoTabRect.doCollapse();
+                } else {
+                    subInfoTabRect.doExpand();
+                }
+            }
+
+            Image {
+                anchors.centerIn: parent
+                sourceSize.width: 32
+                sourceSize.height: 32
+                source: subInfoTabRect.isExpanded ? "qrc:///img/sort_down_32.png"
+                                                  : "qrc:///img/sort_up_32.png"
+            }
+        }
+
         TabBar {
             id: subInfoTabBar
             anchors {
-                top: parent.top
+                top: btnSubInfoExpand.bottom // parent.top
                 left: parent.left
                 right: parent.right
                 margins: 2
@@ -367,6 +407,7 @@ Rectangle {
         anchors.margins: 2
         sourceSize.width: 48
         sourceSize.height: 48
+        visible: !subInfoTabRect.isExpanded
         source: "qrc:///img/refresh_48.png"
 
         MouseArea {
