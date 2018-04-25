@@ -189,6 +189,7 @@ int PeriodicalRefresherWorker::resresh_clones(Character *ch)
             CharacterClone newClone;
             newClone.setCloneId(jumpCloneId);
             newClone.setCloneName(cloneName);
+            newClone.setLocation(loc);
             newClone.setImplantsGroup(newCloneImplants);
 
             newClones.append(std::move(newClone));
