@@ -48,12 +48,15 @@ QVariant CharacterClonesModel::data(const QModelIndex &index, int role) const
     case Roles::CloneName:
         ret = clone.cloneName();
         break;
-    case Roles::CloneLocation:
-        ret = clone.locationObj();
-        break;
-    case Roles::CloneImplantsModel:
-        ret = clone.implantsModel();
-        break;
+    case Roles::CloneLocation: {
+            QObject *loc = const_cast<QObject *>(clone.locationObj());
+            ret = QVariant::fromValue(loc);
+            //qDebug() << Q_FUNC_INFO << "Returning location:" << (*loc);
+        } break;
+    case Roles::CloneImplantsModel: {
+            QObject *impsModel = const_cast<QObject *>(clone.implantsModel());
+            ret = QVariant::fromValue(impsModel);
+        } break;
     }
     return ret;
 }
