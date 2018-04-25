@@ -21,10 +21,7 @@ Rectangle {
             anchors.top: parent.top
             width: container.width
 
-            Item {
-                width: 1
-                height: AppStyle.marginNormal
-            }
+            Item { width: 1; height: AppStyle.marginNormal }
 
             TextKeyValue {
                 keyText: qsTr("Home location:")
@@ -36,10 +33,7 @@ Rectangle {
                 valueText: Qt.formatDateTime(curChar.lastCloneJumpDate)
             }
 
-            Item {
-                width: 1
-                height: AppStyle.marginSmall
-            }
+            Item { width: 1; height: AppStyle.marginSmall }
 
             Text {
                 anchors.left: parent.left
@@ -48,6 +42,8 @@ Rectangle {
                 font.bold: true
                 font.pointSize: AppStyle.textSizeH2
             }
+
+            Item { width: 1; height: AppStyle.marginSmall }
 
             Repeater {
                 width: col1.width
@@ -77,10 +73,7 @@ Rectangle {
                 }
             }
 
-            Item {
-                width: 1
-                height: AppStyle.marginNormal
-            }
+            Item { width: 1; height: AppStyle.marginNormal }
 
             Text {
                 anchors.left: parent.left
@@ -90,10 +83,7 @@ Rectangle {
                 font.pointSize: AppStyle.textSizeH2
             }
 
-            Item {
-                width: 1
-                height: AppStyle.marginNormal
-            }
+            Item { width: 1; height: AppStyle.marginNormal }
 
             Repeater {
                 width: col1.width
@@ -108,17 +98,32 @@ Rectangle {
                         width: parent.width
                         anchors.left: parent.left
                         anchors.leftMargin: AppStyle.marginBig + AppStyle.marginNormal
+
                         property var implantsModel: model.cloneImplantsModel
 
-                        Label {
-                            id: lblCloneName
-                            anchors.left: parent.left
-                            text: ((model.cloneName !== "") ? model.cloneName : qsTr("<no name>"))
-                                + " @ " + model.cloneLocation.name
-
-                            font.pointSize: AppStyle.textSizeH3
-                            font.bold: true
+                        Item {
+                            implicitHeight: lblCloneName.height
+                            implicitWidth: lblCloneName.width + lblCloneLocation.width
+                            Label {
+                                id: lblCloneName
+                                anchors.left: parent.left
+                                font.pointSize: AppStyle.textSizeH3
+                                font.bold: true
+                                color: AppStyle.textDefaultColor
+                                text: ((model.cloneName !== "") ? model.cloneName : qsTr("<no name>"))
+                            }
+                            Label {
+                                id: lblCloneLocation
+                                anchors.left: lblCloneName.right
+                                anchors.leftMargin: AppStyle.marginBig
+                                font.pointSize: AppStyle.textSizeH3
+                                font.bold: true
+                                color: AppStyle.textQueuedSkillColor // AppStyle.textLightColor
+                                text: model.cloneLocation.name
+                            }
                         }
+
+                        Item { width: 1; height: AppStyle.marginSmall }
 
                         Repeater {
                             width: col2.width
@@ -147,14 +152,12 @@ Rectangle {
                             }
                         }
 
-//                        Component.onCompleted: {
-//                            console.log(col2.implantsModel);
-//                            console.log(model);
-//                            console.log(model.cloneImplantsModel);
-//                        }
+                        Item { width: 1; height: AppStyle.marginNormal }
                     }
                 }
             }
+
+            Item { width: 1; height: AppStyle.marginNormal }
         } // Column
     } // Flickable
 }
