@@ -55,6 +55,7 @@ QDateTime& UpdateTimestamps::p_get_ts(UTST kind)
     case UTST::WALLET:   return dt_wallet;
     case UTST::LOCATION: return dt_location;
     case UTST::CLONES:   return dt_clones;
+    case UTST::FATIGUE:  return dt_fatigue;
     case UTST::ASSETS:   return dt_assets;
     }
     return *new QDateTime(); // should never happen
@@ -69,6 +70,7 @@ qint64 UpdateTimestamps::p_get_cache_seconds(UTST kind)
     case UTST::WALLET:   return 120;
     case UTST::LOCATION: return 60;
     case UTST::CLONES:   return 3600;
+    case UTST::FATIGUE:  return 300;
     case UTST::ASSETS:   return 3600;
     }
     return 0; // should never happen
@@ -83,6 +85,7 @@ UpdateTimestamps& UpdateTimestamps::operator=(const UpdateTimestamps& other)
     dt_wallet   = other.dt_wallet;
     dt_location = other.dt_location;
     dt_clones   = other.dt_clones;
+    dt_fatigue  = other.dt_fatigue;
     dt_assets   = other.dt_assets;
     return (*this);
 }
@@ -94,6 +97,7 @@ UpdateTimestamps& UpdateTimestamps::operator=(UpdateTimestamps&& other)
     dt_wallet   = std::move(other.dt_wallet);
     dt_location = std::move(other.dt_location);
     dt_clones   = std::move(other.dt_clones);
+    dt_fatigue  = std::move(other.dt_fatigue);
     dt_assets   = std::move(other.dt_assets);
     return (*this);
 }
@@ -110,6 +114,7 @@ QDataStream& operator<<(QDataStream& stream, const EM::UpdateTimestamps& ts)
     stream << ts.dt_wallet;
     stream << ts.dt_location;
     stream << ts.dt_clones;
+    stream << ts.dt_fatigue;
     stream << ts.dt_assets;
     return stream;
 }
@@ -122,6 +127,7 @@ QDataStream& operator>>(QDataStream& stream, EM::UpdateTimestamps& ts)
     stream >> ts.dt_wallet;
     stream >> ts.dt_location;
     stream >> ts.dt_clones;
+    stream >> ts.dt_fatigue;
     stream >> ts.dt_assets;
     return stream;
 }

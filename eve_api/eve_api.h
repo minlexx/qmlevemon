@@ -47,6 +47,7 @@ public:
     // character
     bool get_character_attributes(QJsonObject& reply, quint64 char_id, const QByteArray& access_token);
     bool get_character_clones(QJsonObject& reply, quint64 char_id, const QByteArray& access_token);
+    bool get_character_fatigue(QJsonObject& reply, quint64 char_id, const QByteArray& access_token);
     bool get_character_implants(QJsonArray& reply, quint64 char_id, const QByteArray& access_token);
     bool get_character_location(QJsonObject& reply, quint64 char_id, const QByteArray& access_token);
     bool get_character_public_info(QJsonObject& reply, quint64 char_id);

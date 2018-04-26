@@ -95,6 +95,9 @@ class Character: public QObject
     Q_PROPERTY(QObject*   clonesModel              READ clonesModelObj           CONSTANT)
     Q_PROPERTY(QDateTime  lastCloneJumpDate        READ lastCloneJumpDate        NOTIFY lastCloneJumpDateChanged)
     Q_PROPERTY(QObject*   homeLocation             READ homeLocationObj          NOTIFY homeLocationChanged)
+    // fatigue
+    Q_PROPERTY(QDateTime  jumpFatigueExpireDate    READ jumpFatigueExpireDate    NOTIFY jumpFatigueExpireDateChanged)
+    Q_PROPERTY(QDateTime  lastJumpDate             READ lastJumpDate             NOTIFY lastJumpDateChanged)
 
 public:
     Character(QObject *parent = nullptr);
@@ -268,6 +271,12 @@ public:
     EveLocation *homeLocation();
     void setHomeLocation(const EveLocation &loc);
 
+    // fatigue
+    QDateTime jumpFatigueExpireDate() const;
+    void setJumpFatigueExpireDate(const QDateTime &dt);
+    QDateTime lastJumpDate() const;
+    void setLastJumpDate(const QDateTime &dt);
+
     // auth info
     EveOAuthTokens getAuthTokens() const;
     void setAuthTokens(const EveOAuthTokens& tokens);
@@ -340,6 +349,9 @@ Q_SIGNALS:
     void currentCloneChanged();
     void lastCloneJumpDateChanged();
     void homeLocationChanged();
+    // fatigue
+    void jumpFatigueExpireDateChanged();
+    void lastJumpDateChanged();
 
 protected:
     // general info
@@ -408,6 +420,9 @@ protected:
     CharacterClonesModel m_clonesModel;
     QDateTime m_lastCloneJumpDate;
     EveLocation m_homeLocation;
+    // fatigue
+    QDateTime m_jumpFatigueExpireDate;
+    QDateTime m_lastJumpDate;
 
     // auth info
     EveOAuthTokens m_tokens;

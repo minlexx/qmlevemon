@@ -14,7 +14,7 @@ class UpdateTimestamps
 {
 public:
     enum class UTST {
-        PUBLIC, SKILLS, WALLET, LOCATION, CLONES, ASSETS
+        PUBLIC, SKILLS, WALLET, LOCATION, CLONES, FATIGUE, ASSETS
     };
 
 public:
@@ -38,6 +38,7 @@ public:
     QDateTime dt_wallet;
     QDateTime dt_location;
     QDateTime dt_clones;
+    QDateTime dt_fatigue;
     QDateTime dt_assets;
 };
 

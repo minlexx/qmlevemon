@@ -237,4 +237,44 @@ int PeriodicalRefresherWorker::resresh_clones(Character *ch)
 }
 
 
+int PeriodicalRefresherWorker::refresh_jump_fatigue(Character *ch)
+{
+    int nChanges = 0;
+    if (!ch->updateTimestamps().isUpdateNeeded(UpdateTimestamps::UTST::FATIGUE)) {
+        qCDebug(logRefresher) << " no need to refresh jump fatigue for" << ch->toString();
+        return nChanges;  // no update needed, too early
+    }
+    // check if tokens needs refresing
+    if (!this->check_refresh_token(ch)) {
+        return nChanges;
+    }
+
+    qCDebug(logRefresher) << " refreshing jump fatigue for" << ch->toString();
+    QJsonObject reply;
+
+    if (m_api->get_character_fatigue(reply, ch->characterId(), ch->getAuthTokens().access_token)) {
+        // {
+        //   "jump_fatigue_expire_date": "2017-01-07T19:17:51Z",
+        //   "last_jump_date": "2017-01-07T18:21:31Z",
+        //   "last_update_date": "2017-01-07T18:27:09Z"
+        // }
+        QDateTime jump_fatigue_expire_date = reply.value(QLatin1String("jump_fatigue_expire_date")).toVariant().toDateTime();
+        QDateTime last_jump_date = reply.value(QLatin1String("last_jump_date")).toVariant().toDateTime();
+        if (jump_fatigue_expire_date.isValid()) {
+            ch->setJumpFatigueExpireDate(jump_fatigue_expire_date);
+            nChanges++;
+        }
+        if (last_jump_date.isValid()) {
+            ch->setLastJumpDate(last_jump_date);
+            nChanges++;
+        }
+    }
+
+    if (nChanges > 0) {
+        ch->setUpdateTimestamp(UpdateTimestamps::UTST::FATIGUE);
+    }
+    return nChanges; // >0 : there was an update
+}
+
+
 } // namespace EM

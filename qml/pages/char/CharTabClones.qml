@@ -33,6 +33,16 @@ Rectangle {
                 valueText: Qt.formatDateTime(curChar.lastCloneJumpDate)
             }
 
+            TextKeyValue {
+                keyText: qsTr("Jump fatigue expire date:")
+                valueText: Qt.formatDateTime(curChar.jumpFatigueExpireDate)
+            }
+
+            TextKeyValue {
+                keyText: qsTr("Last jump date:")
+                valueText: Qt.formatDateTime(curChar.lastJumpDate)
+            }
+
             Item { width: 1; height: AppStyle.marginSmall }
 
             Text {

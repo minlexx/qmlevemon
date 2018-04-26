@@ -94,6 +94,9 @@ Character& Character::operator=(const Character& other)
     setClones(other.clonesModel()->clones());
     setLastCloneJumpDate(other.m_lastCloneJumpDate);
     setHomeLocation(other.m_homeLocation);
+    // fatigue
+    setJumpFatigueExpireDate(other.m_jumpFatigueExpireDate);
+    setLastJumpDate(other.m_lastJumpDate);
     // auth info
     m_tokens = other.m_tokens;
     // last update date-times
@@ -159,6 +162,9 @@ Character& Character::operator=(Character&& other)
     setClones(std::move(other.clonesModel()->clones()));
     setLastCloneJumpDate(std::move(other.m_lastCloneJumpDate));
     setHomeLocation(std::move(other.m_homeLocation));
+    // fatigue
+    setJumpFatigueExpireDate(std::move(other.m_jumpFatigueExpireDate));
+    setLastJumpDate(std::move(other.m_lastJumpDate));
     // auth info
     m_tokens = std::move(other.m_tokens);
     // last update date-times
@@ -692,6 +698,26 @@ void Character::setHomeLocation(const EveLocation &loc)
     }
 }
 
+QDateTime Character::jumpFatigueExpireDate() const { return m_jumpFatigueExpireDate; }
+
+void Character::setJumpFatigueExpireDate(const QDateTime &dt)
+{
+    if (m_jumpFatigueExpireDate != dt) {
+        m_jumpFatigueExpireDate = dt;
+        Q_EMIT jumpFatigueExpireDateChanged();
+    }
+}
+
+QDateTime Character::lastJumpDate() const { return m_lastJumpDate; }
+
+void Character::setLastJumpDate(const QDateTime &dt)
+{
+    if (m_lastJumpDate != dt) {
+        m_lastJumpDate = dt;
+        Q_EMIT lastJumpDateChanged();
+    }
+}
+
 // auth info
 EveOAuthTokens Character::getAuthTokens() const { return m_tokens; }
 void Character::setAuthTokens(const EveOAuthTokens& tokens) { m_tokens = tokens; }
@@ -856,7 +882,7 @@ void Character::calcSkillQueue()
 
 
 // increase version number when savedata format changes
-static const int SAVEDATA_VERSION = 19;
+static const int SAVEDATA_VERSION = 20;
 
 
 QDataStream& operator<<(QDataStream &stream, const EM::Character &character)
@@ -917,6 +943,9 @@ QDataStream& operator<<(QDataStream &stream, const EM::Character &character)
     stream << character.m_clonesModel.clones();
     stream << character.m_lastCloneJumpDate;
     stream << character.m_homeLocation;
+    // fatigue
+    stream << character.m_jumpFatigueExpireDate;
+    stream << character.m_lastJumpDate;
     // auth tokens
     stream << character.m_tokens;
     // update timestamps
@@ -992,6 +1021,9 @@ QDataStream& operator>>(QDataStream &stream, EM::Character &character)
     stream >> character.m_clonesModel.clones();
     stream >> character.m_lastCloneJumpDate;
     stream >> character.m_homeLocation;
+    // fatigue
+    stream >> character.m_jumpFatigueExpireDate;
+    stream >> character.m_lastJumpDate;
     // auth tokens
     stream >> character.m_tokens;
     // update timestamps

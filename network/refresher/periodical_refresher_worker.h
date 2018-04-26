@@ -43,6 +43,7 @@ protected:
     int refresh_location(Character *ch);
     int refresh_skills(Character *ch);
     int resresh_clones(Character *ch);
+    int refresh_jump_fatigue(Character *ch);
     int refresh_wallet(Character *ch);
 
     // utility

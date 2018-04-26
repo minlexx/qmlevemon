@@ -444,6 +444,20 @@ bool EveApi::get_character_clones(QJsonObject &reply, quint64 char_id, const QBy
     return true;
 }
 
+bool EveApi::get_character_fatigue(QJsonObject &reply, quint64 char_id, const QByteArray &access_token)
+{
+    QJsonDocument replyJson;
+    int reply_http_status = 0;
+    QString url = QString(QLatin1String("/characters/%1/fatigue/")).arg(char_id);
+    bool req_ok = this->send_general_esi_request_json(
+                EsiReqType::GET, url, QByteArray(), 15, access_token,
+                reply_http_status, replyJson);
+    if (!req_ok || (reply_http_status != 200)) return false;
+    if (!replyJson.isObject()) return false;
+    reply = replyJson.object();
+    return true;
+}
+
 bool EveApi::get_character_implants(QJsonArray &reply, quint64 char_id, const QByteArray &access_token)
 {
     QJsonDocument replyJson;
