@@ -86,7 +86,7 @@ set(qtwebserver_srcs
     "qtwebserver/css/cssruleset.cpp"
     "qtwebserver/weblayout.cpp")
 
-add_executable(${PROJECT_NAME}
+add_executable(${PROJECT_NAME} WIN32
     ${qmlevemon_srcs}
     ${qtwebserver_srcs}
 )
