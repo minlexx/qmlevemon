@@ -8,15 +8,17 @@ pipeline {
             steps {
                 echo 'Building...'
                 checkout scm
-                bat 'call "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat"'
-                bat 'echo PATH: %PATH%'
-                bat 'echo LIB: %LIB%'
-                bat 'echo INCLUDE: %INCLUDE%'
-                bat 'echo QT_PREFIX: %QT_PREFIX%'
-                bat 'if exist build rmdir /s /q build'
-                bat 'mkdir build'
-                bat 'cd build'
-                bat 'cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=%QT_PREFIX% -DBUILD_TESTING=OFF ../'
+                bat '''
+                    call "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat"
+                    echo PATH: %PATH%
+                    echo LIB: %LIB%
+                    echo INCLUDE: %INCLUDE%'
+                    echo QT_PREFIX: %QT_PREFIX%
+                    if exist build rmdir /s /q build
+                    mkdir build
+                    cd build
+                    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=%QT_PREFIX% -DBUILD_TESTING=OFF ../
+                '''
             }
         }
     }
