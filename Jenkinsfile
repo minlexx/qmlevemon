@@ -9,11 +9,10 @@ pipeline {
                 echo 'Building...'
                 checkout scm
                 bat '''
-                    rem call "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat"
-                    echo PATH: %PATH%
-                    echo LIB: %LIB%
-                    echo INCLUDE: %INCLUDE%
-                    echo QT_PREFIX: %QT_PREFIX%
+                    rem echo PATH: %PATH%
+                    rem echo LIB: %LIB%
+                    rem echo INCLUDE: %INCLUDE%
+                    rem echo QT_PREFIX: %QT_PREFIX%
                     where cl
                     if exist build rmdir /s /q build
                     mkdir build
@@ -26,4 +25,3 @@ pipeline {
         }
     }
 }
-p
