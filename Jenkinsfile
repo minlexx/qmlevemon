@@ -8,8 +8,7 @@ pipeline {
             steps {
                 echo 'Building...'
                 checkout scm
-                bat 'git status'
-                bat ''' echo Lol '''
+                cmakeBuild buildDir: 'build', buildType: 'Release', cleanBuild: true, generator: 'NMake Makefiles', installation: 'InSearchPath', sourceDir: '.', steps: [[args: 'all', withCmake: true]]
             }
         }
     }
