@@ -28,7 +28,7 @@ pipeline {
                 bat '''
                     if exist out rmdir /s /q out
                     cd out
-                    copy /y ..\build\QMLEVEMon.exe .
+                    copy /y ..\\build\\QMLEVEMon.exe .
                     %QT_PREFIX%\bin\windeployqt.exe --release --qmldir ..\qml --compiler-runtime QMLEVEMon.exe
                 '''
             }
