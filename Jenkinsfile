@@ -12,7 +12,10 @@ pipeline {
                 bat 'echo PATH: %PATH%'
                 bat 'echo LIB: %LIB%'
                 bat 'echo INCLUDE: %INCLUDE%'
-                cmakeBuild buildDir: 'build', buildType: 'Release', cleanBuild: true, generator: 'NMake Makefiles', installation: 'InSearchPath', sourceDir: '.', steps: [[args: 'all', withCmake: true]]
+                bat 'echo QT_PREFIX: %QT_PREFIX%'
+                bat 'mkdir build'
+                bat 'cd build'
+                bat 'cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=%QT_PREFIX% -DBUILD_TESTING=OFF ../'
             }
         }
     }
