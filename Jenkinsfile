@@ -8,6 +8,7 @@ pipeline {
             steps {
                 echo 'Building...'
                 checkout scm
+                bat 'git status'
                 bat ''' echo Lol '''
             }
         }
