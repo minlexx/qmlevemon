@@ -46,9 +46,19 @@ pipeline {
                     if exist build_android rmdir /s /q build_android
                     mkdir build_android
                     cd build_android
-                    %QT_ANDROID_PREFIX%\\bin\\qmake.exe ..\\qmlevemon.pro -spec android-g++ "CONFIG+=release"
-                    %ANDROID_NDK_ROOT%\\prebuilt\\windows-x86_64\\bin\\make.exe qmake_all
-                    %ANDROID_NDK_ROOT%\\prebuilt\\windows-x86_64\\bin\\make.exe
+                    "%QT_ANDROID_PREFIX%\\bin\\qmake.exe" ..\\qmlevemon.pro -spec android-g++ "CONFIG+=release"
+                    "%ANDROID_NDK_ROOT%\\prebuilt\\windows-x86_64\\bin\\make.exe" qmake_all
+                    "%ANDROID_NDK_ROOT%\\prebuilt\\windows-x86_64\\bin\\make.exe"
+                '''
+            }
+        }
+        stage('androiddeployqt') {
+            agent { label: 'android' }
+            steps {
+                bat '''
+                    cd build_android
+                    "%QT_ANDROID_PREFIX%\\bin\\qmake.exe" -install qinstall -exe libqmlevemon.so .\\android-build\\libs\\armeabi-v7a\\libqmlevemon.so
+                    "%QT_ANDROID_PREFIX%\\bin\\androiddeployqt.exe" --input ./android-libqmlevemon.so-deployment-settings.json --output ./android-build --android-platform android-27 --jdk "%JDK_ROOT%" --gradle
                 '''
             }
         }
