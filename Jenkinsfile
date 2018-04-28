@@ -47,15 +47,17 @@ pipeline {
             }
             steps {
                 bat '''
+                    set NDK_TOOLCHAIN_PATH=%ANDROID_NDK_ROOT%/toolchains/%ANDROID_NDK_TOOLCHAIN_PREFIX%-%ANDROID_NDK_TOOLCHAIN_VERSION%/prebuilt/%ANDROID_NDK_HOST%
                     echo ANDROID_NDK_ROOT: %ANDROID_NDK_ROOT%
-                    echo ANDROID_NDK_PREBUILT_TARGET: %ANDROID_NDK_PREBUILT_TARGET%
+                    echo ANDROID_NDK_HOST: %ANDROID_NDK_HOST%
+                    echo NDK_TOOLCHAIN_PATH: %NDK_TOOLCHAIN_PATH%
                     echo QT_ANDROID_PREFIX: %QT_ANDROID_PREFIX%
                     if exist build_android rmdir /s /q build_android
                     mkdir build_android
                     cd build_android
                     "%QT_ANDROID_PREFIX%\\bin\\qmake.exe" ..\\qmlevemon.pro -spec android-g++ "CONFIG+=release"
-                    "%ANDROID_NDK_ROOT%\\prebuilt\\%ANDROID_NDK_PREBUILT_TARGET%\\bin\\make.exe" qmake_all
-                    "%ANDROID_NDK_ROOT%\\prebuilt\\%ANDROID_NDK_PREBUILT_TARGET%\\bin\\make.exe"
+                    "%ANDROID_NDK_ROOT%\\prebuilt\\%ANDROID_NDK_HOST%\\bin\\make.exe" qmake_all
+                    "%ANDROID_NDK_ROOT%\\prebuilt\\%ANDROID_NDK_HOST%\\bin\\make.exe"
                 '''
             }
         }
