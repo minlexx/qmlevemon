@@ -1,10 +1,11 @@
 pipeline {
     agent {
-        label 'windows && qt5'
+        label 'qt5'
     }
 
     stages {
         stage('Build') {
+            agent { label 'windows' }
             steps {
                 echo 'Building...'
                 checkout scm
@@ -24,6 +25,7 @@ pipeline {
             }
         }
         stage('windeployqt') {
+            agent { label 'windows' }
             steps {
                 bat '''
                     if exist build\\out rmdir /s /q build\\out
@@ -35,6 +37,19 @@ pipeline {
                     copy /y %windir%\\system32\\ssleay32.dll .
                 '''
                 archiveArtifacts 'build/out/'
+            }
+        }
+        stage('Build (android)') {
+            agent { label: 'android' }
+            steps {
+                bat '''
+                    if exist build_android rmdir /s /q build_android
+                    mkdir build_android
+                    cd build_android
+                    %QT_ANDROID_PREFIX%\\bin\\qmake.exe ..\\qmlevemon.pro -spec android-g++ "CONFIG+=release"
+                    %ANDROID_NDK_ROOT%\\prebuilt\\windows-x86_64\\bin\\make.exe qmake_all
+                    %ANDROID_NDK_ROOT%\\prebuilt\\windows-x86_64\\bin\\make.exe
+                '''
             }
         }
     }
