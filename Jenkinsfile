@@ -26,11 +26,13 @@ pipeline {
         stage('windeployqt') {
             steps {
                 bat '''
-                    if exist out rmdir /s /q out
-                    mkdir out
-                    cd out
-                    copy /y ..\\build\\QMLEVEMon.exe .
+                    if exist build\\out rmdir /s /q build\\out
+                    mkdir build\\out
+                    cd build\\out
+                    copy /y ..\\QMLEVEMon.exe .
                     %QT_PREFIX%\\bin\\windeployqt.exe --release --qmldir ..\\qml --compiler-runtime QMLEVEMon.exe
+                    copy /y %windir%\\system32\\libeay32.dll .
+                    copy /y %windir%\\system32\\ssleay32.dll .
                 '''
             }
         }
