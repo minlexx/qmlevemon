@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'qt5 && windows && android'
+        label '(qt5 && windows) || (qt5 && android)'
     }
 
     stages {
@@ -47,6 +47,8 @@ pipeline {
             }
             steps {
                 bat '''
+                    echo ANDROID_NDK_ROOT: %ANDROID_NDK_ROOT%
+                    echo QT_ANDROID_PREFIX: %QT_ANDROID_PREFIX%
                     if exist build_android rmdir /s /q build_android
                     mkdir build_android
                     cd build_android
