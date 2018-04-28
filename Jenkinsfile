@@ -1,11 +1,10 @@
 pipeline {
     agent {
-        label '(qt5 && windows) || (qt5 && android)'
+        label 'qt5 && windows && android'
     }
 
     stages {
         stage('Build') {
-            agent { label 'windows' }
             steps {
                 echo 'Building...'
                 checkout scm
@@ -25,9 +24,6 @@ pipeline {
             }
         }
         stage('windeployqt') {
-            agent {
-                label 'windows && qt5'
-            }
             steps {
                 bat '''
                     if exist build\\out rmdir /s /q build\\out
@@ -42,9 +38,6 @@ pipeline {
             }
         }
         stage('Build (android)') {
-            agent {
-                label 'android && qt5'
-            }
             steps {
                 bat '''
                     set NDK_TOOLCHAIN_PATH=%ANDROID_NDK_ROOT%/toolchains/%ANDROID_NDK_TOOLCHAIN_PREFIX%-%ANDROID_NDK_TOOLCHAIN_VERSION%/prebuilt/%ANDROID_NDK_HOST%
@@ -64,15 +57,15 @@ pipeline {
             }
         }
         stage('androiddeployqt') {
-            agent {
-                label 'android && qt5'
-            }
             steps {
                 bat '''
                     cd build_android
                     "%QT_ANDROID_PREFIX%\\bin\\qmake.exe" -install qinstall -exe libqmlevemon.so .\\android-build\\libs\\armeabi-v7a\\libqmlevemon.so
                     "%QT_ANDROID_PREFIX%\\bin\\androiddeployqt.exe" --input ./android-libqmlevemon.so-deployment-settings.json --output ./android-build --android-platform %ANDROID_NDK_PLATFORM% --jdk "%JDK_ROOT%" --gradle
+                    copy /y android-build\build\outputs\apk\android-build-debug.apk .\
+                    ren android-build-debug.apk qmlevemon-debug.apk
                 '''
+                archiveArtifacts 'build_android/qmlevemon-debug.apk'
             }
         }
     }
