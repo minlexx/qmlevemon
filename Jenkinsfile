@@ -40,7 +40,7 @@ pipeline {
             }
         }
         stage('Build (android)') {
-            agent { label: 'android' }
+            agent { label 'android' }
             steps {
                 bat '''
                     if exist build_android rmdir /s /q build_android
@@ -53,7 +53,7 @@ pipeline {
             }
         }
         stage('androiddeployqt') {
-            agent { label: 'android' }
+            agent { label 'android' }
             steps {
                 bat '''
                     cd build_android
