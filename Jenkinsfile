@@ -34,6 +34,7 @@ pipeline {
                     copy /y %windir%\\system32\\libeay32.dll .
                     copy /y %windir%\\system32\\ssleay32.dll .
                 '''
+                archiveArtifacts 'build/out'
             }
         }
     }
