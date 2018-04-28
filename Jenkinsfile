@@ -48,13 +48,14 @@ pipeline {
             steps {
                 bat '''
                     echo ANDROID_NDK_ROOT: %ANDROID_NDK_ROOT%
+                    echo ANDROID_NDK_PREBUILT_TARGET: %ANDROID_NDK_PREBUILT_TARGET%
                     echo QT_ANDROID_PREFIX: %QT_ANDROID_PREFIX%
                     if exist build_android rmdir /s /q build_android
                     mkdir build_android
                     cd build_android
                     "%QT_ANDROID_PREFIX%\\bin\\qmake.exe" ..\\qmlevemon.pro -spec android-g++ "CONFIG+=release"
-                    "%ANDROID_NDK_ROOT%\\prebuilt\\windows-x86_64\\bin\\make.exe" qmake_all
-                    "%ANDROID_NDK_ROOT%\\prebuilt\\windows-x86_64\\bin\\make.exe"
+                    "%ANDROID_NDK_ROOT%\\prebuilt\\%ANDROID_NDK_PREBUILT_TARGET%\\bin\\make.exe" qmake_all
+                    "%ANDROID_NDK_ROOT%\\prebuilt\\%ANDROID_NDK_PREBUILT_TARGET%\\bin\\make.exe"
                 '''
             }
         }
