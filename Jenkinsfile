@@ -62,7 +62,7 @@ pipeline {
                     cd build_android
                     "%QT_ANDROID_PREFIX%\\bin\\qmake.exe" -install qinstall -exe libqmlevemon.so .\\android-build\\libs\\armeabi-v7a\\libqmlevemon.so
                     "%QT_ANDROID_PREFIX%\\bin\\androiddeployqt.exe" --input ./android-libqmlevemon.so-deployment-settings.json --output ./android-build --android-platform %ANDROID_NDK_PLATFORM% --jdk "%JDK_ROOT%" --gradle
-                    copy /y android-build\build\outputs\apk\android-build-debug.apk .\
+                    copy /y android-build\\build\\outputs\\apk\\android-build-debug.apk .\\
                     ren android-build-debug.apk qmlevemon-debug.apk
                 '''
                 archiveArtifacts 'build_android/qmlevemon-debug.apk'
