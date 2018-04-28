@@ -25,7 +25,9 @@ pipeline {
             }
         }
         stage('windeployqt') {
-            agent { label 'windows' }
+            agent {
+                label 'windows && qt5'
+            }
             steps {
                 bat '''
                     if exist build\\out rmdir /s /q build\\out
@@ -40,7 +42,9 @@ pipeline {
             }
         }
         stage('Build (android)') {
-            agent { label 'android' }
+            agent {
+                label 'android && qt5'
+            }
             steps {
                 bat '''
                     if exist build_android rmdir /s /q build_android
@@ -53,7 +57,9 @@ pipeline {
             }
         }
         stage('androiddeployqt') {
-            agent { label 'android' }
+            agent {
+                label 'android && qt5'
+            }
             steps {
                 bat '''
                     cd build_android
