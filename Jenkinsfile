@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'qt5'
+        label 'qt5 && windows && android'
     }
 
     stages {
