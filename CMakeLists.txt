@@ -46,6 +46,7 @@ set(qmlevemon_srcs
     "models/eve_location.cpp"
     "models/formulas.cpp"
     "models/invtype.cpp"
+    "models/mail_models.cpp"
     "models/model_manager.cpp"
     "models/skill_group.cpp"
     "models/skill_template.cpp"

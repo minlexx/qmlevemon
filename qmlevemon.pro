@@ -32,6 +32,7 @@ SOURCES += \
     ./models/eve_location.cpp \
     ./models/formulas.cpp \
     ./models/invtype.cpp \
+    ./models/mail_models.cpp \
     ./models/model_manager.cpp \
     ./models/skill_group.cpp \
     ./models/skill_template.cpp \
@@ -88,6 +89,7 @@ HEADERS += \
     ./models/eve_location.h \
     ./models/formulas.h \
     ./models/invtype.h \
+    ./models/mail_models.h \
     ./models/model_manager.h \
     ./models/skill_group.h \
     ./models/skill_template.h \
