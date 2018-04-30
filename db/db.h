@@ -38,6 +38,7 @@ public:
     virtual QString bloodlineName(quint64 bloodline_id) = 0;
     virtual QString ancestryName(quint64 ancestry_id) = 0;
     virtual QString factionName(quint64 faction_id) = 0;
+
     virtual QString     typeName(quint64 type_id) = 0;
     virtual QJsonObject typeInfo(quint64 type_id) = 0;
     virtual QJsonArray  typeAttributes(quint64 type_id) = 0;
@@ -46,7 +47,7 @@ public:
     virtual QJsonArray loadSkillsInGroup(quint64 group_id) = 0;
 
     virtual QJsonObject loadCachedLocation(quint64 location_id) = 0;
-    virtual bool saveCachedLocation(quint64 location_id, const QJsonObject &location) = 0;
+    virtual bool        saveCachedLocation(quint64 location_id, const QJsonObject &location) = 0;
 
     virtual bool loadTypeIcon(quint64 type_id, QImage& img) = 0;
     virtual bool saveTypeIcon(quint64 type_id, const QImage& img) = 0;
