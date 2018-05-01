@@ -547,7 +547,7 @@ bool EveApi::get_character_mail_id(QJsonObject &reply, quint64 char_id, const QB
     return true;
 }
 
-bool EveApi::get_character_mail_labels(QJsonArray &replyArr, quint64 char_id, const QByteArray &access_token)
+bool EveApi::get_character_mail_labels(QJsonObject &reply, quint64 char_id, const QByteArray &access_token)
 {
     QJsonDocument replyJson;
     int reply_http_status = 0;
@@ -557,7 +557,7 @@ bool EveApi::get_character_mail_labels(QJsonArray &replyArr, quint64 char_id, co
                 reply_http_status, replyJson);
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!replyJson.isArray()) return false;
-    replyArr = replyJson.array();
+    reply = replyJson.object();
     return true;
 }
 

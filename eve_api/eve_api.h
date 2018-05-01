@@ -54,7 +54,7 @@ public:
     bool get_character_location(QJsonObject& reply, quint64 char_id, const QByteArray& access_token);
     bool get_character_mail_headers(QJsonArray& replyArr, quint64 char_id, const QByteArray& access_token, quint64 last_mail_id = 0);
     bool get_character_mail_id(QJsonObject& reply, quint64 char_id, const QByteArray& access_token, quint64 mail_id);
-    bool get_character_mail_labels(QJsonArray& replyArr, quint64 char_id, const QByteArray& access_token);
+    bool get_character_mail_labels(QJsonObject& reply, quint64 char_id, const QByteArray& access_token);
     bool get_character_mailing_lists(QJsonArray& replyArr, quint64 char_id, const QByteArray& access_token);
     bool get_character_public_info(QJsonObject& reply, quint64 char_id);
     bool get_character_ship(QJsonObject& reply, quint64 char_id, const QByteArray& access_token);
