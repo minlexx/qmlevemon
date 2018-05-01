@@ -57,6 +57,7 @@ QDateTime& UpdateTimestamps::p_get_ts(UTST kind)
     case UTST::CLONES:   return dt_clones;
     case UTST::FATIGUE:  return dt_fatigue;
     case UTST::ASSETS:   return dt_assets;
+    case UTST::MAIL:     return dt_mail;
     }
     return *new QDateTime(); // should never happen
 }
@@ -72,6 +73,7 @@ qint64 UpdateTimestamps::p_get_cache_seconds(UTST kind)
     case UTST::CLONES:   return 3600;
     case UTST::FATIGUE:  return 300;
     case UTST::ASSETS:   return 3600;
+    case UTST::MAIL:     return 120; // in ESI mails are cached for 30 seconds, mailing lists for 120 seconds
     }
     return 0; // should never happen
 }
@@ -87,6 +89,7 @@ UpdateTimestamps& UpdateTimestamps::operator=(const UpdateTimestamps& other)
     dt_clones   = other.dt_clones;
     dt_fatigue  = other.dt_fatigue;
     dt_assets   = other.dt_assets;
+    dt_mail     = other.dt_mail;
     return (*this);
 }
 
@@ -99,6 +102,7 @@ UpdateTimestamps& UpdateTimestamps::operator=(UpdateTimestamps&& other)
     dt_clones   = std::move(other.dt_clones);
     dt_fatigue  = std::move(other.dt_fatigue);
     dt_assets   = std::move(other.dt_assets);
+    dt_mail     = std::move(other.dt_mail);
     return (*this);
 }
 
@@ -116,6 +120,7 @@ QDataStream& operator<<(QDataStream& stream, const EM::UpdateTimestamps& ts)
     stream << ts.dt_clones;
     stream << ts.dt_fatigue;
     stream << ts.dt_assets;
+    stream << ts.dt_mail;
     return stream;
 }
 
@@ -129,5 +134,6 @@ QDataStream& operator>>(QDataStream& stream, EM::UpdateTimestamps& ts)
     stream >> ts.dt_clones;
     stream >> ts.dt_fatigue;
     stream >> ts.dt_assets;
+    stream >> ts.dt_mail;
     return stream;
 }
