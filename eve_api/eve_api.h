@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QString>
 #include <QByteArray>
+#include <QUrl>
+#include <QUrlQuery>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
@@ -48,11 +50,15 @@ public:
     bool get_character_attributes(QJsonObject& reply, quint64 char_id, const QByteArray& access_token);
     bool get_character_clones(QJsonObject& reply, quint64 char_id, const QByteArray& access_token);
     bool get_character_fatigue(QJsonObject& reply, quint64 char_id, const QByteArray& access_token);
-    bool get_character_implants(QJsonArray& reply, quint64 char_id, const QByteArray& access_token);
+    bool get_character_implants(QJsonArray& replyArr, quint64 char_id, const QByteArray& access_token);
     bool get_character_location(QJsonObject& reply, quint64 char_id, const QByteArray& access_token);
+    bool get_character_mail_headers(QJsonArray& replyArr, quint64 char_id, const QByteArray& access_token, quint64 last_mail_id = 0);
+    bool get_character_mail_id(QJsonObject& reply, quint64 char_id, const QByteArray& access_token, quint64 mail_id);
+    bool get_character_mail_labels(QJsonArray& replyArr, quint64 char_id, const QByteArray& access_token);
+    bool get_character_mailing_lists(QJsonArray& replyArr, quint64 char_id, const QByteArray& access_token);
     bool get_character_public_info(QJsonObject& reply, quint64 char_id);
     bool get_character_ship(QJsonObject& reply, quint64 char_id, const QByteArray& access_token);
-    bool get_character_skillqueue(QJsonArray& reply, quint64 char_id, const QByteArray& access_token);
+    bool get_character_skillqueue(QJsonArray& replyArr, quint64 char_id, const QByteArray& access_token);
     bool get_character_skills(QJsonObject& reply, quint64 char_id, const QByteArray& access_token);
     bool get_character_wallet(float& reply, quint64 char_id, const QByteArray& access_token);
     // corporation, alliance
@@ -61,9 +67,9 @@ public:
     // common
     bool get_server_status(QJsonObject& reply);
     // universe
-    bool get_universe_bloodlines(QJsonArray& reply);
+    bool get_universe_bloodlines(QJsonArray& replyArr);
     bool get_universe_constellation(QJsonObject& reply, quint64 constellation_id);
-    bool get_universe_races(QJsonArray& reply);
+    bool get_universe_races(QJsonArray& replyArr);
     bool get_universe_region(QJsonObject& reply, quint64 region_id);
     bool get_universe_station(QJsonObject& reply, quint64 station_id);
     bool get_universe_structure(QJsonObject& reply, quint64 structure_id, const QByteArray& access_token);
@@ -76,6 +82,7 @@ protected:
             // input arguments
             EsiReqType rtype,
             const QString& api_url,
+            const QUrlQuery& get_params,
             const QByteArray& post_data,
             const QMap<QByteArray, QByteArray>& req_headers, // any extra headers
             int timeout_seconds,
@@ -90,6 +97,7 @@ protected:
             // input arguments
             EsiReqType rtype,
             const QString& api_url,
+            const QUrlQuery& get_params,
             const QByteArray& post_data,
             int timeout_seconds,
             const QByteArray &access_token,
@@ -102,6 +110,7 @@ protected:
             // input arguments
             EsiReqType rtype,
             const QString& api_url,
+            const QUrlQuery& get_params,
             const QByteArray& post_data,
             int timeout_seconds,
             const QByteArray &access_token,
