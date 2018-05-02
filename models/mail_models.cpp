@@ -5,6 +5,32 @@
 namespace EM {
 
 
+bool MailLabel::operator==(const MailLabel &other)
+{
+    return (id           == other.id)
+        && (name         == other.name)
+        && (color        == other.color)
+        && (unread_count == other.unread_count);
+}
+
+bool MailLabel::operator!=(const MailLabel &other)
+{
+    return !(operator==(other));
+}
+
+
+bool MailRecipient::operator==(const MailRecipient &other)
+{
+    return (id   == other.id)
+        && (type == other.type)
+        && (name == other.name);
+}
+
+bool MailRecipient::operator!=(const MailRecipient &other)
+{
+    return !(operator==(other));
+}
+
 MailRecipient::Type MailRecipient::typeFromString(const QString &typeName)
 {
     Type ret = Type::None;
@@ -18,6 +44,101 @@ MailRecipient::Type MailRecipient::typeFromString(const QString &typeName)
         ret = MailingList;
     }
     return ret;
+}
+
+
+CharacterMails::CharacterMails(QObject *parent)
+    : QAbstractListModel(parent)
+{
+}
+
+CharacterMails::CharacterMails(const CharacterMails &other)
+    : QAbstractListModel(other.parent())
+{
+    (*this) = other;
+}
+
+CharacterMails::CharacterMails(CharacterMails &&other)
+    : QAbstractListModel(other.parent())
+{
+    (*this) = std::move(other);
+}
+
+CharacterMails &CharacterMails::operator=(const CharacterMails &other)
+{
+    if (this == &other) return (*this);
+    beginResetModel();
+    m_data = other.m_data;
+    endResetModel();
+    return (*this);
+}
+
+CharacterMails &CharacterMails::operator=(CharacterMails &&other)
+{
+    if (this == &other) return (*this);
+    beginResetModel();
+    m_data = std::move(other.m_data);
+    endResetModel();
+    return (*this);
+}
+
+bool CharacterMails::operator==(const CharacterMails &other) const
+{
+    return m_data == other.m_data;
+}
+
+bool CharacterMails::operator!=(const CharacterMails &other) const
+{
+    return !(operator==(other));
+}
+
+int CharacterMails::rowCount(const QModelIndex &parent) const
+{
+    Q_UNUSED(parent);
+    return m_data.size();
+}
+
+QHash<int,QByteArray> CharacterMails::roleNames() const
+{
+    QHash<int,QByteArray> roles = {
+        {Qt::DisplayRole, QByteArrayLiteral("display")}
+    };
+    return roles;
+}
+
+QVariant CharacterMails::data(const QModelIndex &index, int role) const
+{
+    QVariant ret;
+    if (!index.isValid()) {
+        return ret;
+    }
+    int row = index.row();
+    if ((row < 0) || (row >= m_data.size())) {
+        return ret;
+    }
+    switch (role) {
+    case Qt::DisplayRole:
+        ret = QLatin1String("TBD");
+        break;
+    }
+    return ret;
+}
+
+bool Mail::operator==(const Mail &other)
+{
+    return (id         == other.id)
+        && (body       == other.body)
+        && (subject    == other.subject)
+        && (id_from    == other.id_from)
+        && (is_read    == other.is_read)
+        && (timestamp  == other.timestamp)
+        && (labels     == other.labels)
+        && (recipients == other.recipients);
+}
+
+bool Mail::operator!=(const Mail &other)
+{
+    return !(operator==(other));
 }
 
 
