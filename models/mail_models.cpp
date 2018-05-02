@@ -5,7 +5,7 @@
 namespace EM {
 
 
-bool MailLabel::operator==(const MailLabel &other)
+bool MailLabel::operator==(const MailLabel &other) const
 {
     return (id           == other.id)
         && (name         == other.name)
@@ -13,20 +13,20 @@ bool MailLabel::operator==(const MailLabel &other)
         && (unread_count == other.unread_count);
 }
 
-bool MailLabel::operator!=(const MailLabel &other)
+bool MailLabel::operator!=(const MailLabel &other) const
 {
     return !(operator==(other));
 }
 
 
-bool MailRecipient::operator==(const MailRecipient &other)
+bool MailRecipient::operator==(const MailRecipient &other) const
 {
     return (id   == other.id)
         && (type == other.type)
         && (name == other.name);
 }
 
-bool MailRecipient::operator!=(const MailRecipient &other)
+bool MailRecipient::operator!=(const MailRecipient &other) const
 {
     return !(operator==(other));
 }
@@ -124,7 +124,7 @@ QVariant CharacterMails::data(const QModelIndex &index, int role) const
     return ret;
 }
 
-bool Mail::operator==(const Mail &other)
+bool Mail::operator==(const Mail &other) const
 {
     return (id         == other.id)
         && (body       == other.body)
@@ -136,7 +136,7 @@ bool Mail::operator==(const Mail &other)
         && (recipients == other.recipients);
 }
 
-bool Mail::operator!=(const Mail &other)
+bool Mail::operator!=(const Mail &other) const
 {
     return !(operator==(other));
 }

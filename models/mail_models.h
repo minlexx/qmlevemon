@@ -23,8 +23,8 @@ public:
     MailLabel(MailLabel &&) = default;
     MailLabel &operator=(const MailLabel &) = default;
     MailLabel &operator=(MailLabel &&) = default;
-    bool operator==(const MailLabel &other);
-    bool operator!=(const MailLabel &other);
+    bool operator==(const MailLabel &other) const;
+    bool operator!=(const MailLabel &other) const;
 
     quint64 id = 0;
     QString name;
@@ -48,8 +48,8 @@ public:
     MailRecipient(MailRecipient &&) = default;
     MailRecipient& operator=(const MailRecipient &) = default;
     MailRecipient& operator=(MailRecipient &&) = default;
-    bool operator==(const MailRecipient &other);
-    bool operator!=(const MailRecipient &other);
+    bool operator==(const MailRecipient &other) const;
+    bool operator!=(const MailRecipient &other) const;
 
     static Type typeFromString(const QString &typeName);
 
@@ -66,8 +66,8 @@ public:
     Mail(Mail &&) = default;
     Mail &operator=(const Mail &) = default;
     Mail &operator=(Mail &&) = default;
-    bool operator==(const Mail &other);
-    bool operator!=(const Mail &other);
+    bool operator==(const Mail &other) const;
+    bool operator!=(const Mail &other) const;
 
 public:
     quint64 id = 0;
