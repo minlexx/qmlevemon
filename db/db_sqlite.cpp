@@ -192,6 +192,15 @@ bool DbSqlite::open_cache(const QString &db_filename)
         q.clear();
     }
 
+    if (!existing_tables.contains(QLatin1String("names_cache"))) {
+        qCDebug(logDb) << "Creating table names_cache...";
+        q.exec(QLatin1String("CREATE TABLE names_cache("
+               "    object_id   INTEGER PRIMARY KEY NOT NULL,"
+               "    object_type TEXT NOT NULL,"
+               "    object_name TEXT NOT NULL)"));
+        q.clear();
+    }
+
     return true;
 }
 
@@ -721,12 +730,119 @@ bool DbSqlite::saveTypeIcon(quint64 type_id, const QImage &img)
     QBuffer buf;
     buf.open(QIODevice::WriteOnly);
     if (img.save(&buf, "PNG")) {
-        q.prepare(QLatin1String("INSERT OR REPLACE INTO type_icons(type_id, picture) VALUES (?, ?)"));
+        q.prepare(QLatin1String("INSERT OR REPLACE INTO type_icons "
+                                "(type_id, picture) VALUES (?, ?)"));
         q.addBindValue(type_id, QSql::In);
         q.addBindValue(buf.buffer(), QSql::In | QSql::Binary);
         return q.exec();
     }
     return false;
 }
+
+QString DbSqlite::findCachedCharacterName(quint64 char_id)
+{
+    QString ret;
+    QMutexLocker lock(&m_cache_mutex);
+    if (!m_cache_db.isOpen()) {
+        return ret;
+    }
+    QSqlQuery q(m_cache_db);
+    q.prepare(QLatin1String("SELECT object_name FROM names_cache WHERE object_id=? AND object_type=?"));
+    q.addBindValue(char_id);
+    q.addBindValue(QLatin1String("char"));
+    if (q.exec()) {
+        if (q.next()) {
+            ret = q.value(0).toString();
+        }
+    }
+    return ret;
+}
+
+QString DbSqlite::findCachedCorporationName(quint64 corp_id)
+{
+    QString ret;
+    QMutexLocker lock(&m_cache_mutex);
+    if (!m_cache_db.isOpen()) {
+        return ret;
+    }
+    QSqlQuery q(m_cache_db);
+    q.prepare(QLatin1String("SELECT object_name FROM names_cache WHERE object_id=? AND object_type=?"));
+    q.addBindValue(corp_id);
+    q.addBindValue(QLatin1String("corp"));
+    if (q.exec()) {
+        if (q.next()) {
+            ret = q.value(0).toString();
+        }
+    }
+    return ret;
+}
+
+QString DbSqlite::findCachedAllianceName(quint64 ally_id)
+{
+    QString ret;
+    QMutexLocker lock(&m_cache_mutex);
+    if (!m_cache_db.isOpen()) {
+        return ret;
+    }
+    QSqlQuery q(m_cache_db);
+    q.prepare(QLatin1String("SELECT object_name FROM names_cache WHERE object_id=? AND object_type=?"));
+    q.addBindValue(ally_id);
+    q.addBindValue(QLatin1String("ally"));
+    if (q.exec()) {
+        if (q.next()) {
+            ret = q.value(0).toString();
+        }
+    }
+    return ret;
+}
+
+bool DbSqlite::saveCachedCharacterName(quint64 char_id, const QString &name)
+{
+    QMutexLocker lock(&m_cache_mutex);
+    if (!m_cache_db.isOpen()) {
+        return false;
+    }
+    QSqlQuery q(m_cache_db);
+    q.prepare(QLatin1String("INSERT OR REPLACE INTO names_cache "
+                            " (object_id, object_type, object_name) "
+                            " VALUES (?, ?, ?)"));
+    q.addBindValue(char_id);
+    q.addBindValue(QLatin1String("char"));
+    q.addBindValue(name);
+    return q.exec();
+}
+
+bool DbSqlite::saveCachedCorporationName(quint64 corp_id, const QString &name)
+{
+    QMutexLocker lock(&m_cache_mutex);
+    if (!m_cache_db.isOpen()) {
+        return false;
+    }
+    QSqlQuery q(m_cache_db);
+    q.prepare(QLatin1String("INSERT OR REPLACE INTO names_cache "
+                            " (object_id, object_type, object_name) "
+                            " VALUES (?, ?, ?)"));
+    q.addBindValue(corp_id);
+    q.addBindValue(QLatin1String("corp"));
+    q.addBindValue(name);
+    return q.exec();
+}
+
+bool DbSqlite::saveCachedAllianceName(quint64 ally_id, const QString &name)
+{
+    QMutexLocker lock(&m_cache_mutex);
+    if (!m_cache_db.isOpen()) {
+        return false;
+    }
+    QSqlQuery q(m_cache_db);
+    q.prepare(QLatin1String("INSERT OR REPLACE INTO names_cache "
+                            " (object_id, object_type, object_name) "
+                            " VALUES (?, ?, ?)"));
+    q.addBindValue(ally_id);
+    q.addBindValue(QLatin1String("ally"));
+    q.addBindValue(name);
+    return q.exec();
+}
+
 
 } // namespace

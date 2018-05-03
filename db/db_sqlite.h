@@ -13,7 +13,7 @@ class DbSqlite: public Db
 {
 public:
     DbSqlite();
-    virtual ~DbSqlite();
+    virtual ~DbSqlite() override;
     static Db* instance();
 
 public:
@@ -41,6 +41,13 @@ public:
 
     virtual bool loadTypeIcon(quint64 type_id, QImage& img) override;
     virtual bool saveTypeIcon(quint64 type_id, const QImage& img) override;
+
+    virtual QString findCachedCharacterName(quint64 char_id) override;
+    virtual QString findCachedCorporationName(quint64 corp_id) override;
+    virtual QString findCachedAllianceName(quint64 ally_id) override;
+    virtual bool saveCachedCharacterName(quint64 char_id, const QString &name) override;
+    virtual bool saveCachedCorporationName(quint64 corp_id, const QString &name) override;
+    virtual bool saveCachedAllianceName(quint64 ally_id, const QString &name) override;
 
 protected:
     bool open_chars(const QString& db_filename);

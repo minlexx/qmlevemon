@@ -52,6 +52,13 @@ public:
     virtual bool loadTypeIcon(quint64 type_id, QImage& img) = 0;
     virtual bool saveTypeIcon(quint64 type_id, const QImage& img) = 0;
 
+    virtual QString findCachedCharacterName(quint64 char_id) = 0;
+    virtual QString findCachedCorporationName(quint64 corp_id) = 0;
+    virtual QString findCachedAllianceName(quint64 ally_id) = 0;
+    virtual bool saveCachedCharacterName(quint64 char_id, const QString &name) = 0;
+    virtual bool saveCachedCorporationName(quint64 corp_id, const QString &name) = 0;
+    virtual bool saveCachedAllianceName(quint64 ally_id, const QString &name) = 0;
+
 protected:
     Q_DISABLE_COPY(Db)
 };
