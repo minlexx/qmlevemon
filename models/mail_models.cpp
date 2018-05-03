@@ -47,6 +47,134 @@ MailRecipient::Type MailRecipient::typeFromString(const QString &typeName)
 }
 
 
+bool Mail::operator==(const Mail &other) const
+{
+    return (id         == other.id)
+        && (body       == other.body)
+        && (subject    == other.subject)
+        && (id_from    == other.id_from)
+        && (is_read    == other.is_read)
+        && (timestamp  == other.timestamp)
+        && (labels     == other.labels)
+        && (labels_str == other.labels_str)
+        && (recipients == other.recipients);
+}
+
+bool Mail::operator!=(const Mail &other) const
+{
+    return !(operator==(other));
+}
+
+void Mail::resolveLabels(const QVector<MailLabel> &charLabels)
+{
+    labels_str.clear();
+    // for each label_id find its name in passed in vector
+    for (quint64 lbl_id: labels) {
+        QString lbl_str = QString::number(lbl_id);
+        for (const MailLabel &charLabel: charLabels) {
+            if (charLabel.id == lbl_id) {
+                lbl_str = charLabel.name;
+                break;
+            }
+        }
+        labels_str.push_back(lbl_str);
+    }
+}
+
+
+CharacterMailLabels::CharacterMailLabels(QObject *parent)
+    : QAbstractListModel(parent)
+{
+}
+
+CharacterMailLabels::CharacterMailLabels(const CharacterMailLabels &other)
+    : QAbstractListModel(other.parent())
+{
+    (*this) = other;
+}
+
+CharacterMailLabels::CharacterMailLabels(CharacterMailLabels &&other)
+    : QAbstractListModel(other.parent())
+{
+    (*this) = std::move(other);
+}
+
+CharacterMailLabels &CharacterMailLabels::operator=(const CharacterMailLabels &other)
+{
+    if (this == &other) return (*this);
+    beginResetModel();
+    m_data = other.m_data;
+    endResetModel();
+    return (*this);
+}
+
+CharacterMailLabels &CharacterMailLabels::operator=(CharacterMailLabels &&other)
+{
+    if (this == &other) return (*this);
+    beginResetModel();
+    m_data = std::move(other.m_data);
+    endResetModel();
+    return (*this);
+}
+
+bool CharacterMailLabels::operator==(const CharacterMailLabels &other) const
+{
+    return m_data == other.m_data;
+}
+
+bool CharacterMailLabels::operator!=(const CharacterMailLabels &other) const
+{
+    return !(operator==(other));
+}
+
+int CharacterMailLabels::rowCount(const QModelIndex &parent) const
+{
+    Q_UNUSED(parent)
+    return m_data.size();
+}
+
+QHash<int,QByteArray> CharacterMailLabels::roleNames() const
+{
+    QHash<int,QByteArray> roles = {
+        {Qt::DisplayRole,    QByteArrayLiteral("display")},
+        {Roles::Id,          QByteArrayLiteral("id")},
+        {Roles::Name,        QByteArrayLiteral("name")},
+        {Roles::Color,       QByteArrayLiteral("color")},
+        {Roles::UnreadCount, QByteArrayLiteral("UnreadCount")},
+    };
+    return roles;
+}
+
+QVariant CharacterMailLabels::data(const QModelIndex &index, int role) const
+{
+    QVariant ret;
+    if (!index.isValid()) {
+        return ret;
+    }
+    int row = index.row();
+    if ((row < 0) || (row >= m_data.size())) {
+        return ret;
+    }
+    const MailLabel &mailLabel = m_data.at(row);
+    switch (role) {
+    case Qt::DisplayRole:
+    case Roles::Name:
+        ret = mailLabel.name;
+        break;
+    case Roles::Id:
+        ret = mailLabel.id;
+        break;
+    case Roles::Color:
+        ret = mailLabel.color;
+        break;
+    case Roles::UnreadCount:
+        ret = mailLabel.unread_count;
+        break;
+    }
+    return ret;
+}
+
+
 CharacterMails::CharacterMails(QObject *parent)
     : QAbstractListModel(parent)
 {
@@ -101,7 +229,15 @@ int CharacterMails::rowCount(const QModelIndex &parent) const
 QHash<int,QByteArray> CharacterMails::roleNames() const
 {
     QHash<int,QByteArray> roles = {
-        {Qt::DisplayRole, QByteArrayLiteral("display")}
+        {Qt::DisplayRole,   QByteArrayLiteral("display")},
+        {Roles::Id,         QByteArrayLiteral("id")},
+        {Roles::Body,       QByteArrayLiteral("body")},
+        {Roles::Subject,    QByteArrayLiteral("subject")},
+        {Roles::From,       QByteArrayLiteral("from")},
+        {Roles::IsRead,     QByteArrayLiteral("isRead")},
+        {Roles::Timestamp,  QByteArrayLiteral("timestamp")},
+        {Roles::Labels,     QByteArrayLiteral("labels")},
+        {Roles::Recipients, QByteArrayLiteral("recipients")},
     };
     return roles;
 }
@@ -116,29 +252,36 @@ QVariant CharacterMails::data(const QModelIndex &index, int role) const
     if ((row < 0) || (row >= m_data.size())) {
         return ret;
     }
+    const Mail &mail = m_data.at(row);
     switch (role) {
     case Qt::DisplayRole:
-        ret = QLatin1String("TBD");
+    case Roles::Subject:
+        ret = mail.subject;
         break;
+    case Roles::Id:
+        ret = mail.id;
+        break;
+    case Roles::Body:
+        ret = mail.body;
+        break;
+    case Roles::From:
+        ret = mail.id_from; // TODO: change from character_id to character name
+        break;
+    case Roles::IsRead:
+        ret = mail.is_read;
+        break;
+    case Roles::Timestamp:
+        ret = mail.timestamp;
+        break;
+    case Roles::Labels: {
+            QStringList lblList;
+            for (const QString &lblName: mail.labels_str) {
+                lblList.append(lblName);
+            }
+            ret = lblList;
+        } break;
     }
     return ret;
-}
-
-bool Mail::operator==(const Mail &other) const
-{
-    return (id         == other.id)
-        && (body       == other.body)
-        && (subject    == other.subject)
-        && (id_from    == other.id_from)
-        && (is_read    == other.is_read)
-        && (timestamp  == other.timestamp)
-        && (labels     == other.labels)
-        && (recipients == other.recipients);
-}
-
-bool Mail::operator!=(const Mail &other) const
-{
-    return !(operator==(other));
 }
 
 

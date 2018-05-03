@@ -69,6 +69,8 @@ public:
     bool operator==(const Mail &other) const;
     bool operator!=(const Mail &other) const;
 
+    void resolveLabels(const QVector<MailLabel> &charLabels);
+
 public:
     quint64 id = 0;
     QString body;
@@ -77,13 +79,45 @@ public:
     bool is_read = false;
     QDateTime timestamp;
     QVector<quint64> labels;
+    QVector<QString> labels_str;
     QVector<MailRecipient> recipients;
+};
+
+
+class CharacterMailLabels: public QAbstractListModel
+{
+private:
+    enum Roles {
+        Id = Qt::UserRole + 1, Name, Color, UnreadCount
+    };
+
+public:
+    CharacterMailLabels(QObject *parent = nullptr);
+    CharacterMailLabels(const CharacterMailLabels &other);
+    CharacterMailLabels(CharacterMailLabels &&other);
+    CharacterMailLabels &operator=(const CharacterMailLabels &other);
+    CharacterMailLabels &operator=(CharacterMailLabels &&other);
+    bool operator==(const CharacterMailLabels &other) const;
+    bool operator!=(const CharacterMailLabels &other) const;
+
+public:
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    QHash<int,QByteArray> roleNames() const override;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+
+protected:
+    QVector<MailLabel> m_data;
 };
 
 
 class CharacterMails: public QAbstractListModel
 {
-public:
+private:
+    enum Roles {
+        Id = Qt::UserRole + 1, Body, Subject, From, IsRead, Timestamp, Labels, Recipients
+    };
+
+public:    
     CharacterMails(QObject *parent = nullptr);
     CharacterMails(const CharacterMails &other);
     CharacterMails(CharacterMails &&other);
