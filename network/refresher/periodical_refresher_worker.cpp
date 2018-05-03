@@ -72,6 +72,10 @@ void PeriodicalRefresherWorker::refresh()
         num_updates += this->refresh_wallet(ch);
         if (QThread::currentThread()->isInterruptionRequested()) break; // break early
 
+        // mails
+        num_updates += this->refresh_mail(ch);
+        if (QThread::currentThread()->isInterruptionRequested()) break; // break early
+
         // in the case of any updates were made to this character,
         // after all data was updated, return modified copy to model
         if (num_updates > 0) {

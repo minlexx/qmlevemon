@@ -45,6 +45,7 @@ protected:
     int resresh_clones(Character *ch);
     int refresh_jump_fatigue(Character *ch);
     int refresh_wallet(Character *ch);
+    int refresh_mail(Character *ch);
 
     // utility
     EveLocation send_location_request(quint64 locationId, const QString &locationType, const QByteArray &accessToken);

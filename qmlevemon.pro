@@ -42,6 +42,7 @@ SOURCES += \
     ./network/refresher/periodical_refresher_worker.cpp \
     ./network/refresher/clones.cpp \
     ./network/refresher/location.cpp \
+    ./network/refresher/mail.cpp \
     ./network/refresher/public_data.cpp \
     ./network/refresher/server_status.cpp \
     ./network/refresher/skills.cpp \
