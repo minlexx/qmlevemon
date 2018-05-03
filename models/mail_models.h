@@ -14,6 +14,18 @@ QT_FORWARD_DECLARE_CLASS(QDataStream)
 
 
 namespace EM {
+class CharacterMailLabels;
+class CharacterMails;
+}
+
+
+QDataStream &operator<<(QDataStream &stream, const EM::CharacterMailLabels &charMailLabels);
+QDataStream &operator>>(QDataStream &stream, EM::CharacterMailLabels &charMailLabels);
+QDataStream &operator<<(QDataStream &stream, const EM::CharacterMails &charMails);
+QDataStream &operator>>(QDataStream &stream, EM::CharacterMails &charMails);
+
+
+namespace EM {
 
 
 class MailLabel {
@@ -105,8 +117,15 @@ public:
     QHash<int,QByteArray> roleNames() const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
+public: // for internal use, m_data getter
+    QVector<MailLabel> &internalData();
+    const QVector<MailLabel> &internalData() const;
+
 protected:
     QVector<MailLabel> m_data;
+
+    friend QDataStream& (::operator<<)(QDataStream &stream, const EM::CharacterMailLabels &charMailLabels);
+    friend QDataStream& (::operator>>)(QDataStream &stream, EM::CharacterMailLabels &charMailLabels);
 };
 
 
@@ -133,6 +152,9 @@ public:
 
 protected:
     QVector<Mail> m_data;
+
+    friend QDataStream& (::operator<<)(QDataStream &stream, const EM::CharacterMails &charMails);
+    friend QDataStream& (::operator>>)(QDataStream &stream, EM::CharacterMails &charMails);
 };
 
 

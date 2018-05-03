@@ -174,6 +174,16 @@ QVariant CharacterMailLabels::data(const QModelIndex &index, int role) const
     return ret;
 }
 
+QVector<MailLabel> &CharacterMailLabels::internalData()
+{
+    return m_data;
+}
+
+const QVector<MailLabel> &CharacterMailLabels::internalData() const
+{
+    return m_data;
+}
+
 
 CharacterMails::CharacterMails(QObject *parent)
     : QAbstractListModel(parent)
@@ -348,5 +358,29 @@ QDataStream &operator>>(QDataStream &stream, EM::Mail &mail)
     stream >> mail.timestamp;
     stream >> mail.labels;
     stream >> mail.recipients;
+    return stream;
+}
+
+QDataStream &operator<<(QDataStream &stream, const EM::CharacterMailLabels &charMailLabels)
+{
+    stream << charMailLabels.m_data;
+    return stream;
+}
+
+QDataStream &operator>>(QDataStream &stream, EM::CharacterMailLabels &charMailLabels)
+{
+    stream >> charMailLabels.m_data;
+    return stream;
+}
+
+QDataStream &operator<<(QDataStream &stream, const EM::CharacterMails &charMails)
+{
+    stream << charMails.m_data;
+    return stream;
+}
+
+QDataStream &operator>>(QDataStream &stream, EM::CharacterMails &charMails)
+{
+    stream >> charMails.m_data;
     return stream;
 }
