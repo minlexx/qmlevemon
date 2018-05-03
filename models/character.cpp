@@ -97,6 +97,9 @@ Character& Character::operator=(const Character& other)
     // fatigue
     setJumpFatigueExpireDate(other.m_jumpFatigueExpireDate);
     setLastJumpDate(other.m_lastJumpDate);
+    // mails
+    setMailLabels(other.m_mailLabels);
+    setMails(other.m_mails);
     // auth info
     m_tokens = other.m_tokens;
     // last update date-times
@@ -165,6 +168,9 @@ Character& Character::operator=(Character&& other)
     // fatigue
     setJumpFatigueExpireDate(std::move(other.m_jumpFatigueExpireDate));
     setLastJumpDate(std::move(other.m_lastJumpDate));
+    // mails
+    setMailLabels(std::move(other.m_mailLabels));
+    setMails(std::move(other.m_mails));
     // auth info
     m_tokens = std::move(other.m_tokens);
     // last update date-times
@@ -718,6 +724,30 @@ void Character::setLastJumpDate(const QDateTime &dt)
     }
 }
 
+QObject *Character::mailLabelsObj() { return static_cast<QObject *>(&m_mailLabels); }
+CharacterMailLabels *Character::mailLabels() { return &m_mailLabels; }
+const CharacterMailLabels *Character::mailLabels() const { return &m_mailLabels; }
+
+void Character::setMailLabels(const CharacterMailLabels &newLabels)
+{
+    if (m_mailLabels != newLabels) {
+        m_mailLabels = newLabels;
+        Q_EMIT mailLabelsChanged();
+    }
+}
+
+QObject *Character::mailsObj() { return static_cast<QObject *>(&m_mails); }
+CharacterMails *Character::mails() { return &m_mails; }
+const CharacterMails *Character::mails() const { return &m_mails; }
+
+void Character::setMails(const CharacterMails &newMails)
+{
+    if (m_mails != newMails) {
+        m_mails = newMails;
+        Q_EMIT mailsChanged();
+    }
+}
+
 // auth info
 EveOAuthTokens Character::getAuthTokens() const { return m_tokens; }
 void Character::setAuthTokens(const EveOAuthTokens& tokens) { m_tokens = tokens; }
@@ -882,7 +912,7 @@ void Character::calcSkillQueue()
 
 
 // increase version number when savedata format changes
-static const int SAVEDATA_VERSION = 21;
+static const int SAVEDATA_VERSION = 22;
 
 
 QDataStream& operator<<(QDataStream &stream, const EM::Character &character)
@@ -946,6 +976,9 @@ QDataStream& operator<<(QDataStream &stream, const EM::Character &character)
     // fatigue
     stream << character.m_jumpFatigueExpireDate;
     stream << character.m_lastJumpDate;
+    // mails
+    stream << character.m_mailLabels;
+    stream << character.m_mails;
     // auth tokens
     stream << character.m_tokens;
     // update timestamps
@@ -1024,6 +1057,9 @@ QDataStream& operator>>(QDataStream &stream, EM::Character &character)
     // fatigue
     stream >> character.m_jumpFatigueExpireDate;
     stream >> character.m_lastJumpDate;
+    // mails
+    stream >> character.m_mailLabels;
+    stream >> character.m_mails;
     // auth tokens
     stream >> character.m_tokens;
     // update timestamps

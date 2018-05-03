@@ -99,6 +99,9 @@ class Character: public QObject
     // fatigue
     Q_PROPERTY(QDateTime  jumpFatigueExpireDate    READ jumpFatigueExpireDate    NOTIFY jumpFatigueExpireDateChanged)
     Q_PROPERTY(QDateTime  lastJumpDate             READ lastJumpDate             NOTIFY lastJumpDateChanged)
+    // mail
+    Q_PROPERTY(QObject*   mailLabels               READ mailLabelsObj            NOTIFY mailLabelsChanged)
+    Q_PROPERTY(QObject*   mails                    READ mailsObj                 NOTIFY mailsChanged)
 
 public:
     Character(QObject *parent = nullptr);
@@ -278,6 +281,17 @@ public:
     QDateTime lastJumpDate() const;
     void setLastJumpDate(const QDateTime &dt);
 
+    // mails
+    QObject *mailLabelsObj();
+    CharacterMailLabels *mailLabels();
+    const CharacterMailLabels *mailLabels() const;
+    void setMailLabels(const CharacterMailLabels &newLabels);
+
+    QObject *mailsObj();
+    CharacterMails *mails();
+    const CharacterMails *mails() const;
+    void setMails(const CharacterMails &newMails);
+
     // auth info
     EveOAuthTokens getAuthTokens() const;
     void setAuthTokens(const EveOAuthTokens& tokens);
@@ -353,6 +367,9 @@ Q_SIGNALS:
     // fatigue
     void jumpFatigueExpireDateChanged();
     void lastJumpDateChanged();
+    // mails
+    void mailLabelsChanged();
+    void mailsChanged();
 
 protected:
     // general info
@@ -424,6 +441,10 @@ protected:
     // fatigue
     QDateTime m_jumpFatigueExpireDate;
     QDateTime m_lastJumpDate;
+
+    // mails
+    CharacterMailLabels m_mailLabels;
+    CharacterMails m_mails;
 
     // auth info
     EveOAuthTokens m_tokens;
