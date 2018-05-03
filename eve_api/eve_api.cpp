@@ -452,7 +452,7 @@ bool EveApi::get_characters_names(QJsonArray &replyArr, const QVector<quint64> &
                 urlQuery, QByteArray(), 15, QByteArray(),
                 reply_http_status, reply_doc);
     if (!req_ok || (reply_http_status != 200)) return false;
-    if (!reply_doc.isObject()) return false;
+    if (!reply_doc.isArray()) return false;
     replyArr = reply_doc.array();
     //   [{
     //      "character_id": 91205062,
@@ -472,7 +472,7 @@ bool EveApi::get_corporations_names(QJsonArray &replyArr, const QVector<quint64>
                 urlQuery, QByteArray(), 15, QByteArray(),
                 reply_http_status, reply_doc);
     if (!req_ok || (reply_http_status != 200)) return false;
-    if (!reply_doc.isObject()) return false;
+    if (!reply_doc.isArray()) return false;
     replyArr = reply_doc.array();
     //   [{
     //      "corporation_id": 98441646,
@@ -492,7 +492,7 @@ bool EveApi::get_alliances_names(QJsonArray &replyArr, const QVector<quint64> &i
                 urlQuery, QByteArray(), 15, QByteArray(),
                 reply_http_status, reply_doc);
     if (!req_ok || (reply_http_status != 200)) return false;
-    if (!reply_doc.isObject()) return false;
+    if (!reply_doc.isArray()) return false;
     replyArr = reply_doc.array();
     //   [{
     //      "alliance_id": 1683694957,
@@ -629,7 +629,7 @@ bool EveApi::get_character_mail_labels(QJsonObject &reply, quint64 char_id, cons
                 EsiReqType::GET, url, QUrlQuery(), QByteArray(), 15, access_token,
                 reply_http_status, replyJson);
     if (!req_ok || (reply_http_status != 200)) return false;
-    if (!replyJson.isArray()) return false;
+    if (!replyJson.isObject()) return false;
     reply = replyJson.object();
     return true;
 }
