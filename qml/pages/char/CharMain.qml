@@ -443,12 +443,16 @@ Rectangle {
                 onTriggered: { curChar.forceRefreshLocation(); evemonapp.forceRefresh(); }
             }
             EMPopupMenuItem {
+                text: qsTr("Refresh skills");
+                onTriggered: { curChar.forceRefreshSkills(); evemonapp.forceRefresh(); }
+            }
+            EMPopupMenuItem {
                 text: qsTr("Refresh clones");
                 onTriggered: { curChar.forceRefreshClones(); evemonapp.forceRefresh(); }
             }
             EMPopupMenuItem {
-                text: qsTr("Refresh skills");
-                onTriggered: { curChar.forceRefreshSkills(); evemonapp.forceRefresh(); }
+                text: qsTr("Refresh jump fatigue");
+                onTriggered: { curChar.forceRefreshFatigue(); evemonapp.forceRefresh(); }
             }
             EMPopupMenuItem {
                 text: qsTr("Refresh wallet");
@@ -457,6 +461,10 @@ Rectangle {
             EMPopupMenuItem {
                 text: qsTr("Refresh assets");
                 onTriggered: { curChar.forceRefreshAssets(); evemonapp.forceRefresh(); }
+            }
+            EMPopupMenuItem {
+                text: qsTr("Refresh mail");
+                onTriggered: { curChar.forceRefreshMail(); evemonapp.forceRefresh(); }
             }
 
             function popup(x, y) {

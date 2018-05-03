@@ -765,11 +765,13 @@ void Character::resetUpdateTimestamp(UpdateTimestamps::UTST kind) {
 }
 
 void Character::forceRefreshPublicInfo() { resetUpdateTimestamp(UpdateTimestamps::UTST::PUBLIC); }
-void Character::forceRefreshSkills() { resetUpdateTimestamp(UpdateTimestamps::UTST::SKILLS); }
-void Character::forceRefreshWallet() { resetUpdateTimestamp(UpdateTimestamps::UTST::WALLET); }
+void Character::forceRefreshSkills()  { resetUpdateTimestamp(UpdateTimestamps::UTST::SKILLS); }
+void Character::forceRefreshWallet()  { resetUpdateTimestamp(UpdateTimestamps::UTST::WALLET); }
 void Character::forceRefreshLocation() { resetUpdateTimestamp(UpdateTimestamps::UTST::LOCATION); }
-void Character::forceRefreshClones() { resetUpdateTimestamp(UpdateTimestamps::UTST::CLONES); }
-void Character::forceRefreshAssets() { resetUpdateTimestamp(UpdateTimestamps::UTST::ASSETS); }
+void Character::forceRefreshClones()  { resetUpdateTimestamp(UpdateTimestamps::UTST::CLONES); }
+void Character::forceRefreshAssets()  { resetUpdateTimestamp(UpdateTimestamps::UTST::ASSETS); }
+void Character::forceRefreshFatigue() { resetUpdateTimestamp(UpdateTimestamps::UTST::FATIGUE); }
+void Character::forceRefreshMail()    { resetUpdateTimestamp(UpdateTimestamps::UTST::MAIL); }
 
 QList<QObject *> Character::getSkillsForGroupId(quint64 groupId) const
 {

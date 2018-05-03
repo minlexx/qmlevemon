@@ -308,6 +308,8 @@ public Q_SLOTS:
     void forceRefreshLocation();
     void forceRefreshClones();
     void forceRefreshAssets();
+    void forceRefreshFatigue();
+    void forceRefreshMail();
     // ^^ add more, if needed
 
     QList<QObject *> getSkillsForGroupId(quint64 groupId) const;
