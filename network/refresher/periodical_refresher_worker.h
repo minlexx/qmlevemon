@@ -1,11 +1,11 @@
 #include <QObject>
 #include <QAtomicInteger>
+#include "models/character.h"
 #include "models/eve_location.h"
 
 namespace EM {
 
 class PeriodicalRefresher;
-class Character;
 class EveApi;
 
 class PeriodicalRefresherWorker: public QObject
@@ -50,6 +50,7 @@ protected:
     // utility
     EveLocation send_location_request(quint64 locationId, const QString &locationType, const QByteArray &accessToken);
     EveLocation resolve_location(quint64 locationId, const QString &locationType, const QByteArray &accessToken);
+    void resolve_mail_recipients(QVector<MailRecipient> &recipients, const QVector<MailRecipient> &mailingLists);
 
 protected:
     PeriodicalRefresher *m_owner = nullptr;
