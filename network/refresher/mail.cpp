@@ -38,9 +38,9 @@ void PeriodicalRefresherWorker::resolve_mail_recipients(
             QString nameFromCache;
             if (db) {
                 switch (rcpt.type) {
-                case MailRecipient::Character:   nameFromCache = db->findCachedCharacterName(rcpt.id); break;
+                case MailRecipient::Character:   nameFromCache = db->findCachedCharacterName(rcpt.id);   break;
                 case MailRecipient::Corporation: nameFromCache = db->findCachedCorporationName(rcpt.id); break;
-                case MailRecipient::Alliance:    nameFromCache = db->findCachedAllianceName(rcpt.id); break;
+                case MailRecipient::Alliance:    nameFromCache = db->findCachedAllianceName(rcpt.id);    break;
                 default: break;
                 }
             }
@@ -51,9 +51,9 @@ void PeriodicalRefresherWorker::resolve_mail_recipients(
                 bool api_ok = false;
 
                 switch (rcpt.type) {
-                case MailRecipient::Character:   api_ok = m_api->get_characters_names(replyArr, ids); break;
+                case MailRecipient::Character:   api_ok = m_api->get_characters_names(replyArr, ids);   break;
                 case MailRecipient::Corporation: api_ok = m_api->get_corporations_names(replyArr, ids); break;
-                case MailRecipient::Alliance:    api_ok = m_api->get_alliances_names(replyArr, ids); break;
+                case MailRecipient::Alliance:    api_ok = m_api->get_alliances_names(replyArr, ids);    break;
                 default: break;
                 }
 
@@ -85,9 +85,9 @@ void PeriodicalRefresherWorker::resolve_mail_recipients(
                             // save it in cache
                             if (db) {
                                 switch (rcpt.type) {
-                                case MailRecipient::Character:   db->saveCachedCharacterName(rcpt.id, value_name); break;
+                                case MailRecipient::Character:   db->saveCachedCharacterName(rcpt.id, value_name);   break;
                                 case MailRecipient::Corporation: db->saveCachedCorporationName(rcpt.id, value_name); break;
-                                case MailRecipient::Alliance:    db->saveCachedAllianceName(rcpt.id, value_name); break;
+                                case MailRecipient::Alliance:    db->saveCachedAllianceName(rcpt.id, value_name);    break;
                                 default: break;
                                 }
                             }
@@ -96,7 +96,7 @@ void PeriodicalRefresherWorker::resolve_mail_recipients(
                 }
             }
 
-            // finally remember lokked up name
+            // finally remember looked up name
             if (!nameFromCache.isEmpty()) {
                 rcpt.name = nameFromCache;
             }
@@ -201,7 +201,7 @@ int PeriodicalRefresherWorker::refresh_mail(Character *ch)
 
             // fill recipients
             QVector<MailRecipient> mailRecipients;
-            for (const QJsonValue &jval_r: jlabels) {
+            for (const QJsonValue &jval_r: jrecipients) {
                 const QJsonObject &jobj_r = jval_r.toObject();
                 //
                 const quint64 recipient_id = jobj_r.value(QLatin1String("recipient_id")).toVariant().toULongLong();
