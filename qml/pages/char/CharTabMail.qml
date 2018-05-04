@@ -24,11 +24,36 @@ Rectangle {
                 color: AppStyle.bgLightColor
             }
 
-            Rectangle {
+            Item {
                 width: 200  // inside SplitView sets only initial width
                 Layout.minimumWidth: 200
                 Layout.maximumWidth: 600
-                color: "green"
+
+                Column {
+                    id: labelsCol
+                    width: parent.width
+
+                    MailLabelRect {
+                        width: parent.width
+                        labelId: 0
+                        labelName: qsTr("All mails")
+                        fontBold: true
+                        fontPointSize: AppStyle.textSizeH2
+                    }
+
+                    Repeater {
+                        width: parent.width
+                        model: curChar.mailLabels
+                        delegate: MailLabelRect {
+                            width: labelsCol.width
+                            labelId: model.id
+                            labelName: model.name
+                            labelColor: model.color
+                            unreadCount: model.unreadCount
+                            fontPointSize: AppStyle.textSizeH2
+                        }
+                    }
+                }
             }
 
             Rectangle {
