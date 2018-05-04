@@ -87,7 +87,7 @@ public:
     quint64 id = 0;
     QString body;
     QString subject;
-    quint64 id_from = 0;
+    MailRecipient from;
     bool is_read = false;
     QDateTime timestamp;
     QVector<quint64> labels;
@@ -133,7 +133,7 @@ class CharacterMails: public QAbstractListModel
 {
 private:
     enum Roles {
-        Id = Qt::UserRole + 1, Body, Subject, From, IsRead, Timestamp, Labels, Recipients
+        Id = Qt::UserRole + 1, Body, Subject, FromId, FromName, IsRead, Timestamp, Labels, Recipients
     };
 
 public:    

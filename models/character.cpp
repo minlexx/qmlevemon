@@ -914,7 +914,7 @@ void Character::calcSkillQueue()
 
 
 // increase version number when savedata format changes
-static const int SAVEDATA_VERSION = 22;
+static const int SAVEDATA_VERSION = 23;
 
 
 QDataStream& operator<<(QDataStream &stream, const EM::Character &character)

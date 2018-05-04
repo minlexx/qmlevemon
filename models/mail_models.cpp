@@ -52,7 +52,7 @@ bool Mail::operator==(const Mail &other) const
     return (id         == other.id)
         && (body       == other.body)
         && (subject    == other.subject)
-        && (id_from    == other.id_from)
+        && (from       == other.from)
         && (is_read    == other.is_read)
         && (timestamp  == other.timestamp)
         && (labels     == other.labels)
@@ -243,7 +243,8 @@ QHash<int,QByteArray> CharacterMails::roleNames() const
         {Roles::Id,         QByteArrayLiteral("id")},
         {Roles::Body,       QByteArrayLiteral("body")},
         {Roles::Subject,    QByteArrayLiteral("subject")},
-        {Roles::From,       QByteArrayLiteral("from")},
+        {Roles::FromId,     QByteArrayLiteral("fromId")},
+        {Roles::FromName,   QByteArrayLiteral("fromName")},
         {Roles::IsRead,     QByteArrayLiteral("isRead")},
         {Roles::Timestamp,  QByteArrayLiteral("timestamp")},
         {Roles::Labels,     QByteArrayLiteral("labels")},
@@ -274,8 +275,11 @@ QVariant CharacterMails::data(const QModelIndex &index, int role) const
     case Roles::Body:
         ret = mail.body;
         break;
-    case Roles::From:
-        ret = mail.id_from; // TODO: change from character_id to character name
+    case Roles::FromId:
+        ret = mail.from.id;
+        break;
+    case Roles::FromName:
+        ret = mail.from.name;
         break;
     case Roles::IsRead:
         ret = mail.is_read;
@@ -350,7 +354,7 @@ QDataStream &operator<<(QDataStream &stream, const EM::Mail &mail)
     stream << mail.id;
     stream << mail.body;
     stream << mail.subject;
-    stream << mail.id_from;
+    stream << mail.from;
     stream << mail.is_read;
     stream << mail.timestamp;
     stream << mail.labels;
@@ -363,7 +367,7 @@ QDataStream &operator>>(QDataStream &stream, EM::Mail &mail)
     stream >> mail.id;
     stream >> mail.body;
     stream >> mail.subject;
-    stream >> mail.id_from;
+    stream >> mail.from;
     stream >> mail.is_read;
     stream >> mail.timestamp;
     stream >> mail.labels;

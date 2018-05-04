@@ -50,6 +50,7 @@ protected:
     // utility
     EveLocation send_location_request(quint64 locationId, const QString &locationType, const QByteArray &accessToken);
     EveLocation resolve_location(quint64 locationId, const QString &locationType, const QByteArray &accessToken);
+    void resolve_single_mail_recipient(MailRecipient &rcpt, const QVector<MailRecipient> &mailingLists);
     void resolve_mail_recipients(QVector<MailRecipient> &recipients, const QVector<MailRecipient> &mailingLists);
 
 protected:
