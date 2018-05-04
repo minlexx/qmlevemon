@@ -28,6 +28,11 @@ void PeriodicalRefresherWorker::resolve_single_mail_recipient(
                 break;
             }
         }
+        if (rcpt.name.isEmpty()) {
+            // unknown mailing list, this can happen if character WAS in this ML
+            // in the past, but now he's not in this list, so we can't know its name.
+            rcpt.name = this->tr("Uknown mailing list", "API parser");
+        }
     } else {
         // Try to resolve recipient name from DB cache
         QString nameFromCache;
@@ -237,6 +242,7 @@ int PeriodicalRefresherWorker::refresh_mail(Character *ch)
         }
 
         // save mails in character
+        // qCDebug(logRefresher) << "   Parsed mails: " << mails.internalData();
         ch->setMails(mails);
     }
 
