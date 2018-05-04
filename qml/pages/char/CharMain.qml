@@ -371,7 +371,7 @@ Rectangle {
                 right: parent.right
                 margins: 0
             }
-            interactive: false // This QML property was introduced in QtQuick.Controls 2.1 (Qt 5.8).
+            interactive: true // This QML property was introduced in QtQuick.Controls 2.1 (Qt 5.8).
             currentIndex: subInfoTabBar.currentIndex
 
             CharTabSkills {
