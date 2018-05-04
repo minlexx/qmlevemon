@@ -151,10 +151,7 @@ int PeriodicalRefresherWorker::refresh_mail(Character *ch)
             const quint64 label_id = jobj.value(QLatin1String("label_id")).toVariant().toULongLong();
             const QString label_name = jobj.value(QLatin1String("name")).toString();
             const QColor color(jobj.value(QLatin1String("color")).toVariant().toString());
-            int unread_count = 0;
-            if (jobj.contains(QLatin1String("unread_count"))) {
-                unread_count = jobj.value(QLatin1String("name")).toVariant().toInt();
-            }
+            const int unread_count = jobj.value(QLatin1String("unread_count")).toInt(0);
             MailLabel lbl;
             lbl.id = label_id;
             lbl.name = label_name;
