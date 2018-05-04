@@ -103,12 +103,6 @@ void PeriodicalRefresherWorker::resolve_mail_recipients(
         QVector<MailRecipient> &recipients,
         const QVector<MailRecipient> &mailingLists)
 {
-    QmlEvemonApp *gApp = globalAppInstance();
-    Db *db = nullptr;
-    if (gApp) {
-        db = gApp->database();
-    }
-
     for (MailRecipient &rcpt: recipients) {
         if (!rcpt.name.isEmpty()) {
             continue;
