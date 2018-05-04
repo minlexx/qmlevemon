@@ -6,7 +6,6 @@
 #include "periodical_refresher_worker.h"
 #include "../periodical_refresher.h"
 #include "eve_api/eve_api.h"
-#include "models/character.h"
 #include "db/db.h"
 #include "qmlevemon_app.h"
 

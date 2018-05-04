@@ -6,7 +6,6 @@
 #include "periodical_refresher_worker.h"
 #include "../periodical_refresher.h"
 #include "eve_api/eve_api.h"
-#include "models/character.h"
 #include "models/character_skillqueue.h"
 #include "models/skill_tree_model.h"
 #include "models/model_manager.h"

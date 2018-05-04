@@ -1,5 +1,4 @@
 #include <QColor>
-#include "models/character.h"
 #include "periodical_refresher_worker.h"
 #include "../periodical_refresher.h"   // for logRefresher
 #include "eve_api/eve_api.h"  // to be able to use Eve API
