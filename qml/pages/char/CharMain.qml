@@ -359,6 +359,7 @@ Rectangle {
             TabButton { text: qsTr("Clones"); }
             TabButton { text: qsTr("Wallet"); }
             TabButton { text: qsTr("Assets"); }
+            TabButton { text: qsTr("Mail"); }
         }
 
         SwipeView {
@@ -394,6 +395,11 @@ Rectangle {
             }
 
             CharTabAssets {
+                width: subInfoSwipeView.width
+                height: subInfoSwipeView.height
+            }
+
+            CharTabMail {
                 width: subInfoSwipeView.width
                 height: subInfoSwipeView.height
             }
