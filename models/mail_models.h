@@ -150,6 +150,10 @@ public:
     QHash<int,QByteArray> roleNames() const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
+public: // for internal use, m_data getter
+    QVector<Mail> &internalData();
+    const QVector<Mail> &internalData() const;
+
 protected:
     QVector<Mail> m_data;
 

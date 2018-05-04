@@ -294,6 +294,16 @@ QVariant CharacterMails::data(const QModelIndex &index, int role) const
     return ret;
 }
 
+QVector<Mail> &CharacterMails::internalData()
+{
+    return m_data;
+}
+
+const QVector<Mail> &CharacterMails::internalData() const
+{
+    return m_data;
+}
+
 
 }  // namespace EM
 
