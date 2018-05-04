@@ -140,7 +140,7 @@ QHash<int,QByteArray> CharacterMailLabels::roleNames() const
         {Roles::Id,          QByteArrayLiteral("id")},
         {Roles::Name,        QByteArrayLiteral("name")},
         {Roles::Color,       QByteArrayLiteral("color")},
-        {Roles::UnreadCount, QByteArrayLiteral("UnreadCount")},
+        {Roles::UnreadCount, QByteArrayLiteral("unreadCount")},
     };
     return roles;
 }
