@@ -8,6 +8,7 @@
 #include <QByteArray>
 #include <QHash>
 #include <QAbstractListModel>
+#include <QDebug>
 
 
 QT_FORWARD_DECLARE_CLASS(QDataStream)
@@ -64,6 +65,7 @@ public:
     bool operator!=(const MailRecipient &other) const;
 
     static Type typeFromString(const QString &typeName);
+    static QString typeToString(Type typ);
 
     quint64 id = 0;
     Type type = Type::None;
@@ -173,6 +175,10 @@ QDataStream &operator>>(QDataStream &stream, EM::MailRecipient &recipient);
 
 QDataStream &operator<<(QDataStream &stream, const EM::Mail &mail);
 QDataStream &operator>>(QDataStream &stream, EM::Mail &mail);
+
+QDebug operator<<(QDebug &stream, const EM::MailLabel &label);
+QDebug operator<<(QDebug &stream, const EM::MailRecipient &rcpt);
+QDebug operator<<(QDebug &stream, const EM::Mail &mail);
 
 
 #endif // MAIL_MODELS_H

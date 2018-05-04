@@ -46,6 +46,21 @@ MailRecipient::Type MailRecipient::typeFromString(const QString &typeName)
     return ret;
 }
 
+QString MailRecipient::typeToString(MailRecipient::Type typ)
+{
+    QString ret;
+    if (typ == Character) {
+        ret = QLatin1String("character");
+    } else if (typ == Corporation) {
+        ret = QLatin1String("corporation");
+    } else if (typ == Alliance) {
+        ret = QLatin1String("alliance");
+    } else if (typ == MailingList) {
+        ret = QLatin1String("mailing_list");
+    }
+    return ret;
+}
+
 
 bool Mail::operator==(const Mail &other) const
 {
@@ -396,5 +411,26 @@ QDataStream &operator<<(QDataStream &stream, const EM::CharacterMails &charMails
 QDataStream &operator>>(QDataStream &stream, EM::CharacterMails &charMails)
 {
     stream >> charMails.m_data;
+    return stream;
+}
+
+QDebug operator<<(QDebug &stream, const EM::MailLabel &label)
+{
+    stream.nospace() << "[Label " << label.id << "/" << label.name << "]";
+    return stream;
+}
+
+QDebug operator<<(QDebug &stream, const EM::MailRecipient &rcpt)
+{
+    stream.nospace() << "[Recepient " << rcpt.id << "/" << rcpt.name
+                     << "/" << EM::MailRecipient::typeToString(rcpt.type) << "]";
+    return stream;
+}
+
+QDebug operator<<(QDebug &stream, const EM::Mail &mail)
+{
+    stream.nospace() << "[Mail " << mail.id << "; Subject: " << mail.subject
+                     << "; From: " << mail.from << "; Date: " << mail.timestamp
+                     << "; Labels:" << mail.labels << "; Recipients: " << mail.recipients << "]";
     return stream;
 }
