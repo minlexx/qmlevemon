@@ -306,15 +306,46 @@ Rectangle {
         color: AppStyle.mainColor
         clip: true
 
+        state: "collapsed"
+        states: [
+            State {
+                name: "expanded"
+                changes: [
+                    AnchorChanges {
+                        target: subInfoTabRect
+                        anchors.top: container.top
+                    }
+                ]
+            },
+            State {
+                name: "collapsed"
+                changes: [
+                    AnchorChanges {
+                        target: subInfoTabRect
+                        anchors.top: charBasicInfoFlow.bottom
+                    }
+                ]
+            }
+        ]
+
+        transitions: [
+            Transition {
+                AnchorAnimation {
+                    duration: 200
+                }
+            }
+
+        ]
+
         property bool isExpanded: false
 
         function doExpand() {
-            anchors.top = container.top;
+            state = "expanded";
             isExpanded = true;
         }
 
         function doCollapse() {
-            anchors.top = charBasicInfoFlow.bottom;
+            state = "collapsed";
             isExpanded = false;
         }
 
@@ -326,7 +357,6 @@ Rectangle {
                 right: parent.right
             }
             height: 32
-            // hoverEnabled: true
             cursorShape: Qt.PointingHandCursor
 
             onClicked: {
