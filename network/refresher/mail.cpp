@@ -3,6 +3,8 @@
 #include "periodical_refresher_worker.h"
 #include "../periodical_refresher.h"   // for logRefresher
 #include "eve_api/eve_api.h"  // to be able to use Eve API
+#include "qmlevemon_app.h"
+#include "db/db_sqlite.h"
 
 
 namespace EM {
@@ -63,13 +65,81 @@ int PeriodicalRefresherWorker::refresh_mail(Character *ch)
             lbl.name = label_name;
             lbl.color = color;
             lbl.unread_count = unread_count;
+
+            // save mail label in model
             mailLabels.internalData().push_back(std::move(lbl));
         }
+
+        // save mail labels in character
+        ch->setMailLabels(mailLabels);
+    }
+
+    QmlEvemonApp *gApp = globalAppInstance();
+    Db *db = nullptr;
+    if (gApp) {
+        db = gApp->database();
     }
 
     // load mail headers list
+    CharacterMails mails;
     if (m_api->get_character_mail_headers(replyArr, ch->characterId(), ch->getAuthTokens().access_token)) {
         num_updates++;
+        for (const QJsonValue &jval: replyArr) {
+            const QJsonObject &jobj = jval.toObject();
+            //
+            const quint64 mail_id = jobj.value(QLatin1String("mail_id")).toVariant().toULongLong();
+            const quint64 from_id = jobj.value(QLatin1String("from")).toVariant().toULongLong();
+            const QString subject = jobj.value(QLatin1String("subject")).toString();
+            const QDateTime timestamp = jobj.value(QLatin1String("timestamp")).toVariant().toDateTime();
+            const bool is_read = jobj.value(QLatin1String("is_read")).toBool(false); // may be absent, default false
+            const QJsonArray jlabels = jobj.value(QLatin1String("labels")).toArray();
+            const QJsonArray jrecipients = jobj.value(QLatin1String("recipients")).toArray();
+
+            Mail mail;
+            mail.id = mail_id;
+            mail.id_from = from_id;
+            mail.is_read = is_read;
+            mail.subject = subject;
+            mail.timestamp = timestamp;
+
+            // fill labels
+            QVector<quint64> vlabels;
+            for (const QJsonValue &jval: jlabels) {
+                const quint64 label_id = jval.toVariant().toULongLong();
+                vlabels.push_back(label_id);
+            }
+
+            mail.labels = vlabels;
+            // autofill labels strings
+            mail.resolveLabels(mailLabels.internalData());
+
+            // fill recipients
+            QVector<MailRecipient> mailRecipients;
+            for (const QJsonValue &jval_r: jlabels) {
+                const QJsonObject &jobj_r = jval_r.toObject();
+                //
+                const quint64 recipient_id = jobj_r.value(QLatin1String("recipient_id")).toVariant().toULongLong();
+                const QString recipient_type_s = jobj_r.value(QLatin1String("recipient_type")).toString();
+                const MailRecipient::Type recipient_type = MailRecipient::typeFromString(recipient_type_s);
+                //
+                MailRecipient rcpt;
+                rcpt.id = recipient_id;
+                rcpt.type = recipient_type;
+                //rcpt.name - ? // to be resolved later
+
+                mailRecipients.push_back(std::move(rcpt));
+            }
+
+            mail.recipients = mailRecipients;
+
+            // TODO: resolve mail recipient names
+
+            // save mail in model
+            mails.internalData().push_back(std::move(mail));
+        }
+
+        // save mails in character
+        ch->setMails(mails);
     }
 
     if (num_updates > 0) {
