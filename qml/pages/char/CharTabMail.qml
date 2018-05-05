@@ -25,9 +25,12 @@ Rectangle {
             }
 
             Item {
+                id: mailLabelsContainer
                 width: 200  // inside SplitView sets only initial width
                 Layout.minimumWidth: 200
                 Layout.maximumWidth: 600
+
+                property int currentSelectedIndex: 999
 
                 Column {
                     id: labelsCol
@@ -39,6 +42,12 @@ Rectangle {
                         labelName: qsTr("All mails")
                         fontBold: true
                         fontPointSize: AppStyle.textSizeH2
+                        itemIndex: 999
+                        isCurrent: mailLabelsContainer.currentSelectedIndex == itemIndex
+
+                        onClicked: {
+                            mailLabelsContainer.currentSelectedIndex = itemIndex;
+                        }
                     }
 
                     Repeater {
@@ -51,14 +60,37 @@ Rectangle {
                             labelColor: model.color
                             unreadCount: model.unreadCount
                             fontPointSize: AppStyle.textSizeH2
+                            itemIndex: index
+                            isCurrent: mailLabelsContainer.currentSelectedIndex == itemIndex
+                            textColor: labelId > 8 ? AppStyle.textLightColor : AppStyle.textDefaultColor
+
+                            onClicked: {
+                                mailLabelsContainer.currentSelectedIndex = itemIndex;
+                            }
                         }
                     }
                 }
             }
 
             Rectangle {
+                id: mailHeadersRect
                 Layout.fillWidth: true
                 color: "red"
+
+                ListView {
+                    id: mailHeadersLV
+                    anchors.fill: parent
+                    model: curChar.mails
+                    delegate: Item {
+                        implicitWidth: mailHeadersRect.width
+                        implicitHeight: lblSubject.height + AppStyle.marginSmall*2
+
+                        Label {
+                            id: lblSubject
+                            text: model.subject
+                        }
+                    }
+                }
             }
         }
     }
