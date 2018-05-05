@@ -174,6 +174,17 @@ int PeriodicalRefresherWorker::refresh_mail(Character *ch)
             mailLabels.internalData().push_back(std::move(lbl));
         }
 
+        // add mailing lists to mail labels (?)
+        for (const MailRecipient &ml: mailingLists) {
+            MailLabel ml_lbl;
+            ml_lbl.id = ml.id;
+            ml_lbl.color = QColor(255, 255, 255);
+            ml_lbl.name = ml.name;
+            ml_lbl.unread_count = 0;
+            // save mailing list label in model
+            mailLabels.internalData().push_back(std::move(ml_lbl));
+        }
+
         // save mail labels in character
         ch->setMailLabels(mailLabels);
     }
