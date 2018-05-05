@@ -37,7 +37,7 @@ Rectangle {
                     width: parent.width
 
                     MailLabelRect {
-                        width: parent.width
+                        width: parent.width - AppStyle.marginNormal
                         labelId: 0
                         labelName: qsTr("All mails")
                         fontBold: true
@@ -54,7 +54,7 @@ Rectangle {
                         width: parent.width
                         model: curChar.mailLabels
                         delegate: MailLabelRect {
-                            width: labelsCol.width
+                            width: labelsCol.width - AppStyle.marginNormal
                             labelId: model.id
                             labelName: model.name
                             labelColor: model.color
@@ -75,7 +75,7 @@ Rectangle {
             Rectangle {
                 id: mailHeadersRect
                 Layout.fillWidth: true
-                color: "red"
+                //color: "red"
 
                 ListView {
                     id: mailHeadersLV
@@ -83,11 +83,33 @@ Rectangle {
                     model: curChar.mails
                     delegate: Item {
                         implicitWidth: mailHeadersRect.width
-                        implicitHeight: lblSubject.height + AppStyle.marginSmall*2
+                        implicitHeight: col1.height + AppStyle.marginSmall*2
 
-                        Label {
-                            id: lblSubject
-                            text: model.subject
+                        Column {
+                            anchors.left: parent.left
+                            anchors.leftMargin: AppStyle.marginNormal
+                            id: col1
+                            Row {
+                                Label {
+                                    id: lblFrom
+                                    text: qsTr("From:") + " " + model.fromName
+                                    font.pointSize: AppStyle.textSizeH3
+                                    //font.bold: !model.isRead
+                                }
+                                Item { height: 1;  width: AppStyle.marginBig }
+                                Label {
+                                    id: lblTimestamp
+                                    text: qsTr("Date:") + " " + Qt.formatDateTime(model.timestamp)
+                                    font.pointSize: AppStyle.textSizeH3
+                                    //font.bold: !model.isRead
+                                }
+                            }
+                            Label {
+                                id: lblSubject
+                                text: model.subject
+                                font.pointSize: AppStyle.textSizeH3
+                                font.bold: !model.isRead
+                            }
                         }
                     }
                 }
