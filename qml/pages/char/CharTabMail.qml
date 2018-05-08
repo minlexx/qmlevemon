@@ -14,7 +14,7 @@ Rectangle {
 
     Item {
         anchors.fill: parent
-        anchors.margins: AppStyle.marginNormal
+        anchors.margins: AppStyle.marginSmall
 
         QQC1.SplitView {
             id: sv1
@@ -45,7 +45,7 @@ Rectangle {
                     MailLabelRect {
                         width: parent.width - AppStyle.marginNormal
                         labelId: 0
-                        labelName: qsTr("All mails")
+                        labelName: " " + qsTr("All mails")
                         fontBold: true
                         fontPointSize: AppStyle.textSizeH2
                         itemIndex: 999
@@ -62,7 +62,7 @@ Rectangle {
                         delegate: MailLabelRect {
                             width: labelsCol.width - AppStyle.marginNormal
                             labelId: model.id
-                            labelName: model.name
+                            labelName: " " + model.name
                             labelColor: model.color
                             unreadCount: model.unreadCount
                             fontPointSize: AppStyle.textSizeH2
@@ -86,9 +86,13 @@ Rectangle {
                     id: mailHeadersLV
                     anchors.fill: parent
                     model: curChar.mails
-                    delegate: Item {
+                    currentIndex: -1
+                    delegate: Rectangle {
+                        id: mailDelegateItem
                         implicitWidth: mailHeadersRect.width
                         implicitHeight: col1.height + AppStyle.marginSmall*2
+                        property bool isCurrentItem: ListView.isCurrentItem
+                        color: isCurrentItem ? AppStyle.rectBgHighlightColor : AppStyle.bgColor
 
                         Column {
                             anchors.left: parent.left
