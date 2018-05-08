@@ -17,6 +17,7 @@ Rectangle {
         anchors.margins: AppStyle.marginNormal
 
         QQC1.SplitView {
+            id: sv1
             anchors.fill: parent
             orientation: Qt.Horizontal
             handleDelegate: Rectangle {
@@ -24,11 +25,16 @@ Rectangle {
                 color: AppStyle.bgLightColor
             }
 
+            function mailLabelClicked(itemIndex, labelId) {
+                mailLabelsContainer.currentSelectedIndex = itemIndex;
+                mailHeadersLV.model = curChar.filterMailsForLabel(labelId);
+            }
+
             Item {
                 id: mailLabelsContainer
                 width: 200  // inside SplitView sets only initial width
-                Layout.minimumWidth: 200
-                Layout.maximumWidth: 600
+                Layout.minimumWidth: 100
+                Layout.maximumWidth: 500
 
                 property int currentSelectedIndex: 999
 
@@ -46,7 +52,7 @@ Rectangle {
                         isCurrent: mailLabelsContainer.currentSelectedIndex == itemIndex
 
                         onClicked: {
-                            mailLabelsContainer.currentSelectedIndex = itemIndex;
+                            sv1.mailLabelClicked(itemIndex, labelId);
                         }
                     }
 
@@ -65,7 +71,7 @@ Rectangle {
                             textColor: labelId > 8 ? AppStyle.textLightColor : AppStyle.textDefaultColor
 
                             onClicked: {
-                                mailLabelsContainer.currentSelectedIndex = itemIndex;
+                                sv1.mailLabelClicked(itemIndex, labelId);
                             }
                         }
                     }
@@ -75,7 +81,6 @@ Rectangle {
             Rectangle {
                 id: mailHeadersRect
                 Layout.fillWidth: true
-                //color: "red"
 
                 ListView {
                     id: mailHeadersLV
@@ -90,18 +95,22 @@ Rectangle {
                             anchors.leftMargin: AppStyle.marginNormal
                             id: col1
                             Row {
+                                id: rowFromDate
                                 Label {
                                     id: lblFrom
                                     text: qsTr("From:") + " " + model.fromName
                                     font.pointSize: AppStyle.textSizeH3
-                                    //font.bold: !model.isRead
+                                    // font.bold: !model.isRead
                                 }
-                                Item { height: 1;  width: AppStyle.marginBig }
+                                Item {
+                                    height: 1
+                                    width: (lblFrom.width < 200 ? 200 - lblFrom.width : AppStyle.marginBig)
+                                }
                                 Label {
                                     id: lblTimestamp
                                     text: qsTr("Date:") + " " + Qt.formatDateTime(model.timestamp)
                                     font.pointSize: AppStyle.textSizeH3
-                                    //font.bold: !model.isRead
+                                    // font.bold: !model.isRead
                                 }
                             }
                             Label {
