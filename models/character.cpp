@@ -748,6 +748,17 @@ void Character::setMails(const CharacterMails &newMails)
     }
 }
 
+QObject *Character::filterMailsForLabel(quint64 mailLabelId)
+{
+    qCDebug(logCharacter) << Q_FUNC_INFO << mailLabelId;
+    if (!m_mailsModel) {
+        m_mailsModel = new MailLabelFilteredMailsModel(this);
+        m_mailsModel->setSourceModel(&m_mails);
+    }
+    m_mailsModel->setFilterMailLabelId(mailLabelId);
+    return m_mailsModel;
+}
+
 // auth info
 EveOAuthTokens Character::getAuthTokens() const { return m_tokens; }
 void Character::setAuthTokens(const EveOAuthTokens& tokens) { m_tokens = tokens; }
