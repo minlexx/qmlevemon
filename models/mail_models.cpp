@@ -324,6 +324,43 @@ const QVector<Mail> &CharacterMails::internalData() const
 }
 
 
+MailLabelFilteredMailsModel::MailLabelFilteredMailsModel(QObject *parent)
+    : QSortFilterProxyModel(parent)
+{
+}
+
+void MailLabelFilteredMailsModel::setFilterMailLabelId(quint64 labelId)
+{
+    m_filterMailLabelId = labelId;
+    invalidateFilter();
+}
+
+quint64 MailLabelFilteredMailsModel::filterMailLabelId() const
+{
+    return m_filterMailLabelId;
+}
+
+bool MailLabelFilteredMailsModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+{
+    if (m_filterMailLabelId == 0) {
+        // no filter - return all
+        return true;
+    }
+    const CharacterMails *parentModel = qobject_cast<const CharacterMails *>(sourceModel());
+    if (Q_UNLIKELY(!parentModel)) {
+        // somehow our source model is not CharacterMails instance
+        return true; // blindly accept, should never happen
+    }
+    const QModelIndex sourceIndex = parentModel->index(sourceRow, 0, sourceParent);
+    const QVector<Mail> &allMails = parentModel->internalData();
+    const Mail &sourceMail = allMails.at(sourceIndex.row());
+    if (sourceMail.labels.contains(m_filterMailLabelId)) {
+        return true;
+    }
+    return false;
+}
+
+
 }  // namespace EM
 
 

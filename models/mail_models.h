@@ -8,6 +8,7 @@
 #include <QByteArray>
 #include <QHash>
 #include <QAbstractListModel>
+#include <QSortFilterProxyModel>
 #include <QDebug>
 
 
@@ -100,6 +101,7 @@ public:
 
 class CharacterMailLabels: public QAbstractListModel
 {
+    Q_OBJECT
 private:
     enum Roles {
         Id = Qt::UserRole + 1, Name, Color, UnreadCount
@@ -133,6 +135,7 @@ protected:
 
 class CharacterMails: public QAbstractListModel
 {
+    Q_OBJECT
 private:
     enum Roles {
         Id = Qt::UserRole + 1, Body, Subject, FromId, FromName, IsRead, Timestamp, Labels, Recipients
@@ -161,6 +164,23 @@ protected:
 
     friend QDataStream& (::operator<<)(QDataStream &stream, const EM::CharacterMails &charMails);
     friend QDataStream& (::operator>>)(QDataStream &stream, EM::CharacterMails &charMails);
+};
+
+
+class MailLabelFilteredMailsModel: public QSortFilterProxyModel
+{
+    Q_OBJECT
+public:
+    explicit MailLabelFilteredMailsModel(QObject *parent = nullptr);
+
+    void setFilterMailLabelId(quint64 labelId);
+    quint64 filterMailLabelId() const;
+
+protected:
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+
+private:
+    quint64 m_filterMailLabelId = 0;
 };
 
 
