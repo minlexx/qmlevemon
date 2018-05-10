@@ -117,7 +117,8 @@ Rectangle {
 
                     onClicked: {
                         var curIdx = listViewSkills.currentIndex
-                        var clickedIndex = listViewSkills.indexAt(mouse.x, skillListItem.y + mouse.y);
+                        // var clickedIndex = listViewSkills.indexAt(mouse.x, skillListItem.y + mouse.y);
+                        var clickedIndex = index;
                         if (clickedIndex === curIdx) {
                             // the same item is clicked twice, collapse all
                             listViewSkills.currentIndex = -1;
