@@ -44,7 +44,7 @@ Rectangle {
                     width: parent.width
 
                     MailLabelRect {
-                        width: parent.width - AppStyle.marginNormal
+                        width: parent.width - AppStyle.marginSmall
                         labelId: 0
                         labelName: " " + qsTr("All mails")
                         fontBold: isCurrent
@@ -61,7 +61,7 @@ Rectangle {
                         width: parent.width
                         model: curChar.mailLabels
                         delegate: MailLabelRect {
-                            width: labelsCol.width - AppStyle.marginNormal
+                            width: labelsCol.width - AppStyle.marginSmall
                             labelId: model.id
                             labelName: " " + model.name
                             labelColor: model.color
@@ -89,53 +89,74 @@ Rectangle {
                     anchors.fill: parent
                     model: curChar.mails
                     currentIndex: -1
-                    delegate: Rectangle {
+                    delegate: Item {
                         id: mailDelegateItem
-                        implicitWidth: mailHeadersRect.width
-                        implicitHeight: col1.height + AppStyle.marginSmall*2
+                        width: mailHeadersRect.width
+                        height: col1.height //+ AppStyle.marginSmall*2
                         readonly property bool isCurrentItem: ListView.isCurrentItem
-                        color: isCurrentItem ? AppStyle.rectBgHighlightColor : AppStyle.bgColor
 
-                        Column {
-                            anchors.left: parent.left
-                            anchors.leftMargin: AppStyle.marginNormal
-                            id: col1
-                            Row {
-                                id: rowFromDate
-                                Label {
-                                    id: lblFrom
-                                    text: qsTr("From:") + " " + model.fromName
-                                    font.pointSize: AppStyle.textSizeH3
-                                    // font.bold: !model.isRead
-                                }
-                                Item {
-                                    height: 1
-                                    width: (lblFrom.width < 200 ? 200 - lblFrom.width : AppStyle.marginBig)
-                                }
-                                Label {
-                                    id: lblTimestamp
-                                    text: qsTr("Date:") + " " + Qt.formatDateTime(model.timestamp)
-                                    font.pointSize: AppStyle.textSizeH3
-                                    // font.bold: !model.isRead
-                                }
-                            }
-                            Label {
-                                id: lblSubject
-                                text: model.subject
-                                font.pointSize: AppStyle.textSizeH3
-                                font.bold: !model.isRead
-                            }
-                        }
-
-                        MouseArea {
-                            id: mailDelegateRectMa
+                        Rectangle {
+                            id: mailDelegateRect
                             anchors.fill: parent
-                            cursorShape: Qt.PointingHandCursor
-                            onClicked: {
-                                mailHeadersLV.currentIndex = index;
+                            anchors.leftMargin: AppStyle.marginSmall
+                            color: isCurrentItem ? AppStyle.rectBgHighlightColor : AppStyle.bgColor
+
+                            Column {
+                                id: col1
+                                anchors.left: parent.left
+                                anchors.top: parent.top
+                                anchors.leftMargin: AppStyle.marginSmall
+
+                                // small spacer
+                                Item {
+                                    width: 1;
+                                    height: AppStyle.marginSmall
+                                }
+
+                                Row {
+                                    id: rowFromDate
+                                    Label {
+                                        id: lblFrom
+                                        text: qsTr("From:") + " " + model.fromName
+                                        font.pointSize: AppStyle.textSizeH3
+                                        // font.bold: !model.isRead
+                                    }
+                                    Item {
+                                        height: 1
+                                        width: (lblFrom.width < 200 ? 200 - lblFrom.width : AppStyle.marginBig)
+                                    }
+                                    Label {
+                                        id: lblTimestamp
+                                        text: qsTr("Date:") + " " + Qt.formatDateTime(model.timestamp)
+                                        font.pointSize: AppStyle.textSizeH3
+                                        // font.bold: !model.isRead
+                                    }
+                                }
+
+                                Label {
+                                    id: lblSubject
+                                    text: model.subject
+                                    font.pointSize: AppStyle.textSizeH3
+                                    font.bold: !model.isRead
+                                }
+
+                                // small spacer
+                                Item {
+                                    width: 1;
+                                    height: AppStyle.marginSmall
+                                }
                             }
-                        }
-                    } // delegate rectangle
+
+                            MouseArea {
+                                id: mailDelegateRectMa
+                                anchors.fill: parent
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: {
+                                    mailHeadersLV.currentIndex = index;
+                                }
+                            }
+                        } // delegate rectangle
+                    } // delegate item
                 }
             }
         }
