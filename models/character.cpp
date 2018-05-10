@@ -750,7 +750,6 @@ void Character::setMails(const CharacterMails &newMails)
 
 QObject *Character::filterMailsForLabel(quint64 mailLabelId)
 {
-    qCDebug(logCharacter) << Q_FUNC_INFO << mailLabelId;
     if (!m_mailsModel) {
         m_mailsModel = new MailLabelFilteredMailsModel(this);
         m_mailsModel->setSourceModel(&m_mails);
