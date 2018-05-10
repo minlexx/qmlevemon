@@ -28,6 +28,7 @@ Rectangle {
             function mailLabelClicked(itemIndex, labelId) {
                 mailLabelsContainer.currentSelectedIndex = itemIndex;
                 mailHeadersLV.model = curChar.filterMailsForLabel(labelId);
+                mailHeadersLV.currentIndex = -1;
             }
 
             Item {
@@ -46,7 +47,7 @@ Rectangle {
                         width: parent.width - AppStyle.marginNormal
                         labelId: 0
                         labelName: " " + qsTr("All mails")
-                        fontBold: true
+                        fontBold: isCurrent
                         fontPointSize: AppStyle.textSizeH2
                         itemIndex: 999
                         isCurrent: mailLabelsContainer.currentSelectedIndex == itemIndex
@@ -66,6 +67,7 @@ Rectangle {
                             labelColor: model.color
                             unreadCount: model.unreadCount
                             fontPointSize: AppStyle.textSizeH2
+                            fontBold: isCurrent
                             itemIndex: index
                             isCurrent: mailLabelsContainer.currentSelectedIndex == itemIndex
                             textColor: labelId > 8 ? AppStyle.textLightColor : AppStyle.textDefaultColor
@@ -91,7 +93,7 @@ Rectangle {
                         id: mailDelegateItem
                         implicitWidth: mailHeadersRect.width
                         implicitHeight: col1.height + AppStyle.marginSmall*2
-                        property bool isCurrentItem: ListView.isCurrentItem
+                        readonly property bool isCurrentItem: ListView.isCurrentItem
                         color: isCurrentItem ? AppStyle.rectBgHighlightColor : AppStyle.bgColor
 
                         Column {
@@ -124,7 +126,16 @@ Rectangle {
                                 font.bold: !model.isRead
                             }
                         }
-                    }
+
+                        MouseArea {
+                            id: mailDelegateRectMa
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                mailHeadersLV.currentIndex = index;
+                            }
+                        }
+                    } // delegate rectangle
                 }
             }
         }
