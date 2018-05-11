@@ -21,7 +21,7 @@ Rectangle {
             anchors.fill: parent
             orientation: Qt.Horizontal
             handleDelegate: Rectangle {
-                width: AppStyle.marginNormal
+                width: evemonapp.isDesktopPlatform ? AppStyle.marginNormal : AppStyle.marginBig
                 color: AppStyle.bgLightColor
             }
 
@@ -33,7 +33,7 @@ Rectangle {
 
             Item {
                 id: mailLabelsContainer
-                width: 200  // inside SplitView sets only initial width
+                width: evemonapp.isDesktopPlatform ? 200 : 100  // inside SplitView sets only initial width
                 Layout.minimumWidth: 100
                 Layout.maximumWidth: 500
 
