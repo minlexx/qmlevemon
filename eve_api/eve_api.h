@@ -40,7 +40,7 @@ public:
     };
 
     explicit EveApi(QObject *parent = Q_NULLPTR);
-    virtual ~EveApi();
+    ~EveApi() override;
 
 protected Q_SLOTS:
     void onProxySettingsChanged();

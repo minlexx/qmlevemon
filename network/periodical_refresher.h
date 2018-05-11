@@ -22,7 +22,7 @@ class PeriodicalRefresher: public QObject
 
 public:
     explicit PeriodicalRefresher(QObject *parent = Q_NULLPTR);
-    virtual ~PeriodicalRefresher();
+    ~PeriodicalRefresher() override;
 
 public Q_SLOTS:
     void stopGracefully();

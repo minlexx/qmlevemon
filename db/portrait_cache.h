@@ -13,9 +13,8 @@ class PortraitCache: public QQuickAsyncImageProvider
 {
 public:
     PortraitCache();
-    virtual ~PortraitCache() override;
-    virtual QQuickImageResponse *requestImageResponse(const QString &id,
-                                                      const QSize &requestedSize) override;
+    ~PortraitCache() override;
+    QQuickImageResponse *requestImageResponse(const QString &id, const QSize &requestedSize) override;
 
     // specific hack to clear cached image for character
     void removeCachedImageForCharacter(quint64 char_id);

@@ -19,7 +19,7 @@ class EveSsoLoginManager: public QObject
 
 public:
     explicit EveSsoLoginManager(QObject *parent = Q_NULLPTR);
-    virtual ~EveSsoLoginManager();
+    ~EveSsoLoginManager() override;
     static EveSsoLoginManager *instance();
 
 

@@ -14,7 +14,7 @@ class PeriodicalRefresherWorker: public QObject
 
 public:
     PeriodicalRefresherWorker(PeriodicalRefresher *parent);
-    virtual ~PeriodicalRefresherWorker();
+    ~PeriodicalRefresherWorker() override;
 
 public Q_SLOTS:
     // this is run in a background thread in an async Qt signal-slot connection

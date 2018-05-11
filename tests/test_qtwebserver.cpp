@@ -19,7 +19,7 @@ public:
     }
 
     /** Defines the resource's response behaviour. */
-    virtual void deliver(const Http::Request& request, Http::Response& response) {
+    void deliver(const Http::Request& request, Http::Response& response) override {
         if (request.method() == "get") {
             response.setBody(QByteArray("quit requested, exiting"));
             response.setStatusCode(Http::Ok);

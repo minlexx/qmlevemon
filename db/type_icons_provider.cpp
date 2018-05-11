@@ -37,17 +37,17 @@ public:
         setAutoDelete(false);
     }
 
-    virtual ~TypeIconsAsyncImageResponse() override
+    ~TypeIconsAsyncImageResponse() override
     {
         //qCDebug(logPcache) << Q_FUNC_INFO;
     }
 
-    virtual QQuickTextureFactory *textureFactory() const override
+    QQuickTextureFactory *textureFactory() const override
     {
         return QQuickTextureFactory::textureFactoryForImage(m_image);
     }
 
-    virtual void run() override
+    void run() override
     {
         qCDebug(logTypeIcons) << "Requested typeIcon:" << m_id <<
                               "of size:" << m_requestedSize;

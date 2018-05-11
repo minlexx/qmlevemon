@@ -14,9 +14,8 @@ class TypeIconsProvider: public QQuickAsyncImageProvider
 {
 public:
     TypeIconsProvider();
-    virtual ~TypeIconsProvider() override;
-    virtual QQuickImageResponse *requestImageResponse(const QString &id,
-                                                      const QSize &requestedSize) override;
+    ~TypeIconsProvider() override;
+    QQuickImageResponse *requestImageResponse(const QString &id, const QSize &requestedSize) override;
 
 protected:
     QThreadPool m_threadPool;

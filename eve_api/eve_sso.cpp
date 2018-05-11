@@ -39,8 +39,8 @@ public:
     }
 
     /** Defines the resource's response behaviour. */
-    virtual void deliver(const QtWebServer::Http::Request& request,
-                         QtWebServer::Http::Response& response)
+    void deliver(const QtWebServer::Http::Request& request,
+                         QtWebServer::Http::Response& response) override
     {
         if (request.method() == QStringLiteral("get")) {
             // after successful auth you get request like:
@@ -87,7 +87,7 @@ public:
                          Qt::QueuedConnection);
     }
 
-    virtual ~EveSsoLoginManagerPrivate() override {
+    ~EveSsoLoginManagerPrivate() override {
         if (m_server.isListening()) {
             stopSsoHandlerHttpServer();
         }

@@ -30,7 +30,7 @@ class QmlEvemonApp: public QGuiApplication
 
 public:
     QmlEvemonApp(int& argc, char **argv);
-    virtual ~QmlEvemonApp();
+    ~QmlEvemonApp() override;
 
 public:
     // returns false for Android platform
