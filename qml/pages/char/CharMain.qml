@@ -402,7 +402,6 @@ Rectangle {
                 margins: 0
             }
             interactive: true // This QML property was introduced in QtQuick.Controls 2.1 (Qt 5.8).
-            currentIndex: subInfoTabBar.currentIndex
 
             CharTabSkills {
                 width: subInfoSwipeView.width
@@ -432,6 +431,24 @@ Rectangle {
             CharTabMail {
                 width: subInfoSwipeView.width
                 height: subInfoSwipeView.height
+            }
+        }
+
+        Connections {
+            target: subInfoTabBar
+            onCurrentIndexChanged: {
+                if (subInfoSwipeView.currentIndex != subInfoTabBar.currentIndex) {
+                    subInfoSwipeView.currentIndex = subInfoTabBar.currentIndex;
+                }
+            }
+        }
+
+        Connections {
+            target: subInfoSwipeView
+            onCurrentIndexChanged: {
+                if (subInfoTabBar.currentIndex != subInfoSwipeView.currentIndex) {
+                    subInfoTabBar.currentIndex = subInfoSwipeView.currentIndex;
+                }
             }
         }
     }
