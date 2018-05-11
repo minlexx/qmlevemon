@@ -13,41 +13,41 @@ class DbSqlite: public Db
 {
 public:
     DbSqlite();
-    virtual ~DbSqlite() override;
+    ~DbSqlite() override;
     static Db* instance();
 
 public:
-    virtual bool loadCharacters(QVector<Character *>& charList) override;
-    virtual bool saveCharacters(const QVector<Character *>& charList) override;
-    virtual bool saveCharacter(const Character *character) override;
+    bool loadCharacters(QVector<Character *>& charList) override;
+    bool saveCharacters(const QVector<Character *>& charList) override;
+    bool saveCharacter(const Character *character) override;
 
-    virtual bool loadPortrait(quint64 char_id, QImage& img) override;
-    virtual bool savePortrait(quint64 char_id, const QImage& img) override;
-    virtual bool deletePortrait(quint64 char_id) override;
+    bool loadPortrait(quint64 char_id, QImage& img) override;
+    bool savePortrait(quint64 char_id, const QImage& img) override;
+    bool deletePortrait(quint64 char_id) override;
 
-    virtual QString raceName(quint64 race_id) override;
-    virtual QString bloodlineName(quint64 bloodline_id) override;
-    virtual QString ancestryName(quint64 ancestry_id) override;
-    virtual QString factionName(quint64 faction_id) override;
-    virtual QString typeName(quint64 type_id) override;
-    virtual QJsonObject typeInfo(quint64 type_id) override;
-    virtual QJsonArray  typeAttributes(quint64 type_id) override;
+    QString raceName(quint64 race_id) override;
+    QString bloodlineName(quint64 bloodline_id) override;
+    QString ancestryName(quint64 ancestry_id) override;
+    QString factionName(quint64 faction_id) override;
+    QString typeName(quint64 type_id) override;
+    QJsonObject typeInfo(quint64 type_id) override;
+    QJsonArray  typeAttributes(quint64 type_id) override;
 
-    virtual QJsonArray loadSkillGroups() override;
-    virtual QJsonArray loadSkillsInGroup(quint64 group_id) override;
+    QJsonArray loadSkillGroups() override;
+    QJsonArray loadSkillsInGroup(quint64 group_id) override;
 
-    virtual QJsonObject loadCachedLocation(quint64 location_id) override;
-    virtual bool saveCachedLocation(quint64 location_id, const QJsonObject &location) override;
+    QJsonObject loadCachedLocation(quint64 location_id) override;
+    bool saveCachedLocation(quint64 location_id, const QJsonObject &location) override;
 
-    virtual bool loadTypeIcon(quint64 type_id, QImage& img) override;
-    virtual bool saveTypeIcon(quint64 type_id, const QImage& img) override;
+    bool loadTypeIcon(quint64 type_id, QImage& img) override;
+    bool saveTypeIcon(quint64 type_id, const QImage& img) override;
 
-    virtual QString findCachedCharacterName(quint64 char_id) override;
-    virtual QString findCachedCorporationName(quint64 corp_id) override;
-    virtual QString findCachedAllianceName(quint64 ally_id) override;
-    virtual bool saveCachedCharacterName(quint64 char_id, const QString &name) override;
-    virtual bool saveCachedCorporationName(quint64 corp_id, const QString &name) override;
-    virtual bool saveCachedAllianceName(quint64 ally_id, const QString &name) override;
+    QString findCachedCharacterName(quint64 char_id) override;
+    QString findCachedCorporationName(quint64 corp_id) override;
+    QString findCachedAllianceName(quint64 ally_id) override;
+    bool saveCachedCharacterName(quint64 char_id, const QString &name) override;
+    bool saveCachedCorporationName(quint64 corp_id, const QString &name) override;
+    bool saveCachedAllianceName(quint64 ally_id, const QString &name) override;
 
 protected:
     bool open_chars(const QString& db_filename);
