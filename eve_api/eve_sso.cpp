@@ -32,7 +32,7 @@ class HttpSsoCallbackResource: public QtWebServer::Http::Resource
 {
     Q_OBJECT
 public:
-    HttpSsoCallbackResource(QObject *parent = 0):
+    HttpSsoCallbackResource(QObject *parent = nullptr):
         QtWebServer::Http::Resource(QLatin1String("/evesso"), parent)
     {
         setContentType(QLatin1String("text/plain"));
@@ -87,7 +87,7 @@ public:
                          Qt::QueuedConnection);
     }
 
-    virtual ~EveSsoLoginManagerPrivate() {
+    virtual ~EveSsoLoginManagerPrivate() override {
         if (m_server.isListening()) {
             stopSsoHandlerHttpServer();
         }
@@ -156,11 +156,11 @@ Q_SIGNALS:
     void ssoAuthError(const QString& message);
 
 protected:
-    int m_listenPort;
     QtWebServer::Tcp::MultithreadedServer m_server;
     QtWebServer::Http::WebEngine m_webengine;
     HttpSsoCallbackResource m_callback;
     QString m_sso_state;
+    int m_listenPort;
 };
 
 
