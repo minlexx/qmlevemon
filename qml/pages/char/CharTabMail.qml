@@ -12,6 +12,8 @@ Rectangle {
     color: AppStyle.bgColor
     clip: true
 
+    signal requestOpenMail(int id)
+
     Item {
         anchors.fill: parent
         anchors.margins: AppStyle.marginSmall
@@ -153,6 +155,7 @@ Rectangle {
                                 cursorShape: Qt.PointingHandCursor
                                 onClicked: {
                                     mailHeadersLV.currentIndex = index;
+                                    container.requestOpenMail(model.id);
                                 }
                             }
                         } // delegate rectangle

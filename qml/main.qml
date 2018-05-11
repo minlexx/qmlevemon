@@ -180,6 +180,10 @@ ApplicationWindow {
                 evemonapp.requestDeleteCharacter(characterId);
                 nav_back();
             }
+
+            onRequestOpenMail: {
+                console.log("request to open mail: ", mailId);
+            }
         }
     }
 

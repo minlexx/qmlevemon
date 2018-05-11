@@ -15,6 +15,7 @@ Rectangle {
 
     signal selectCharacterRequest(int characterId)
     signal removeCharacterRequest(int characterId)
+    signal requestOpenMail(int mailId)
 
     CharacterPickerSidebar {
         id: charPickSidebar
@@ -431,6 +432,10 @@ Rectangle {
             CharTabMail {
                 width: subInfoSwipeView.width
                 height: subInfoSwipeView.height
+
+                onRequestOpenMail: {
+                    container.requestOpenMail(id);
+                }
             }
         }
 
