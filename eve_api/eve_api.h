@@ -61,6 +61,8 @@ public:
     bool get_character_skillqueue(QJsonArray& replyArr, quint64 char_id, const QByteArray& access_token);
     bool get_character_skills(QJsonObject& reply, quint64 char_id, const QByteArray& access_token);
     bool get_character_wallet(float& reply, quint64 char_id, const QByteArray& access_token);
+    bool get_character_wallet_journal(QJsonArray& replyArr, quint64 char_id, const QByteArray& access_token, int page = 0);
+    bool get_character_wallet_transactions(QJsonArray& replyArr, quint64 char_id, const QByteArray& access_token, quint64 from_id = 0);
     // corporation, alliance
     bool get_corporation_public_data(QJsonObject& reply, quint64 corp_id);
     bool get_alliance_public_data(QJsonObject& reply, quint64 ally_id);

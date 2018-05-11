@@ -709,6 +709,42 @@ bool EveApi::get_character_wallet(float& reply, quint64 char_id, const QByteArra
     return ok;
 }
 
+bool EveApi::get_character_wallet_journal(QJsonArray &replyArr, quint64 char_id, const QByteArray &access_token, int page)
+{
+    QJsonDocument replyJson;
+    int reply_http_status = 0;
+    QString url = QString(QLatin1String("/characters/%1/wallet/journal/")).arg(char_id);
+    QUrlQuery query;
+    if (page > 0) {
+        query.addQueryItem(QLatin1String("page"), QString::number(page));
+    }
+    bool req_ok = this->send_general_esi_request_json(
+                EsiReqType::GET, url, query, QByteArray(), 15, access_token,
+                reply_http_status, replyJson);
+    if (!req_ok || (reply_http_status != 200)) return false;
+    bool ok = false;
+    replyArr = replyJson.array();
+    return ok;
+}
+
+bool EveApi::get_character_wallet_transactions(QJsonArray &replyArr, quint64 char_id, const QByteArray &access_token, quint64 from_id)
+{
+    QJsonDocument replyJson;
+    int reply_http_status = 0;
+    QString url = QString(QLatin1String("/characters/%1/wallet/transactions/")).arg(char_id);
+    QUrlQuery query;
+    if (from_id > 0) {
+        query.addQueryItem(QLatin1String("from_id"), QString::number(from_id));
+    }
+    bool req_ok = this->send_general_esi_request_json(
+                EsiReqType::GET, url, query, QByteArray(), 15, access_token,
+                reply_http_status, replyJson);
+    if (!req_ok || (reply_http_status != 200)) return false;
+    bool ok = false;
+    replyArr = replyJson.array();
+    return ok;
+}
+
 
 bool EveApi::get_corporation_public_data(QJsonObject& reply, quint64 corp_id)
 {
