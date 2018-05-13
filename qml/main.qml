@@ -183,8 +183,14 @@ ApplicationWindow {
 
             onRequestOpenMail: {
                 console.log("request to open mail: ", mailId);
+                nav_to("mail_view", mailId);
             }
         }
+    }
+
+    Component {
+        id: pageMailView
+        MailView { }
     }
 
     // Main content
@@ -196,6 +202,7 @@ ApplicationWindow {
       - "home" - home screen
       - "add_character" - add character screen
       - "select_character" - view character screen
+      - "mail_view" - view character mail body
       - "about" - About... window
     */
     property var navStack: ["home"]
@@ -262,6 +269,12 @@ ApplicationWindow {
             evemonapp.setCurrentCharacter(characterId);
             mainStack.push(pageCharacterMain);
             nav_title = qsTr("Char: ") + curChar.characterName
+            handled = true;
+        } else if (page === "mail_view") {
+            var mailId = p1;
+            // TODO: evemonapp.loadMail(mailId);
+            nav_title = qsTr("Mail")
+            mainStack.push(pageMailView);
             handled = true;
         } else if (page === "settings") {
             nav_title = qsTr("Settings")

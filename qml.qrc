@@ -24,6 +24,7 @@
         <file>qml/pages/char/CharTabWallet.qml</file>
         <file>qml/pages/char/CharTabMail.qml</file>
         <file>qml/pages/Home.qml</file>
+        <file>qml/pages/MailView.qml</file>
         <file>qml/pages/Settings.qml</file>
         <file>qml/pages/TestPage.qml</file>
         <file>qml/utils.js</file>
