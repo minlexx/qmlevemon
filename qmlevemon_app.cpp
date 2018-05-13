@@ -250,6 +250,11 @@ void QmlEvemonApp::requestDeleteCharacter(quint64 characterId)
     ModelManager::instance()->characterModel()->removeCharacter(characterId);
 }
 
+void QmlEvemonApp::requestOpenMail(quint64 mailId)
+{
+    qCDebug(logApp) << "Request to open mail: " << mailId;
+}
+
 
 
 QmlEvemonApp *globalAppInstance()

@@ -66,6 +66,8 @@ public Q_SLOTS:
     void forceRefresh();
     // called from QML to request deletion of character from application
     void requestDeleteCharacter(quint64 characterId);
+    // called from QML to request open specific mail
+    void requestOpenMail(quint64 mailId);
 
 Q_SIGNALS:
     void settingsChanged();

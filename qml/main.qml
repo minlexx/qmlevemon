@@ -182,7 +182,6 @@ ApplicationWindow {
             }
 
             onRequestOpenMail: {
-                console.log("request to open mail: ", mailId);
                 nav_to("mail_view", mailId);
             }
         }
@@ -272,8 +271,8 @@ ApplicationWindow {
             handled = true;
         } else if (page === "mail_view") {
             var mailId = p1;
-            // TODO: evemonapp.loadMail(mailId);
-            nav_title = qsTr("Mail")
+            evemonapp.requestOpenMail(mailId);
+            nav_title = qsTr("Mail");
             mainStack.push(pageMailView);
             handled = true;
         } else if (page === "settings") {
