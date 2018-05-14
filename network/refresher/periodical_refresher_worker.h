@@ -1,5 +1,5 @@
 #include <QObject>
-#include <QAtomicInteger>
+#include <QAtomicInt>
 #include "models/character.h"
 #include "models/eve_location.h"
 
@@ -20,16 +20,20 @@ public Q_SLOTS:
     // this is run in a background thread in an async Qt signal-slot connection
     void refresh();
     void initialDelayedRefresh();
+    void requestCharacterMailBody(Character *ch, quint64 mailId);
 
     bool isNetworkActive() const;
-    int serverPlayersOnline() const;
+    int  serverPlayersOnline() const;
+    bool isMailDownloadInProgress() const;
 
 Q_SIGNALS:
     void characterUpdated(Character *character);
+    void mailBodyDownloaded(quint64 charId, quint64 mailId, const QString &body);
 
 
 protected:
     void setNetworkActive(bool active);
+    void setMailDownloadInProgress(bool active);
 
     /**
      * @brief check_refresh_token - check if EVE OAuth tokens need refresh, refresh if needed
@@ -57,8 +61,9 @@ protected:
 
 protected:
     PeriodicalRefresher *m_owner = nullptr;
-    QAtomicInteger<int> m_active;
-    QAtomicInteger<int> m_server_players;
+    QAtomicInt m_active = 0;
+    QAtomicInt m_server_players = 0;
+    QAtomicInt m_mailDownloadInProgress = 0;
     //
     EveApi *m_api = nullptr;
 };

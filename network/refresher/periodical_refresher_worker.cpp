@@ -112,6 +112,19 @@ void PeriodicalRefresherWorker::initialDelayedRefresh()
     QTimer::singleShot(3000, this, &PeriodicalRefresherWorker::refresh);
 }
 
+void PeriodicalRefresherWorker::requestCharacterMailBody(Character *ch, quint64 mailId)
+{
+    setMailDownloadInProgress(true);
+    quint64 charId = ch->characterId();
+    Mail mail = this->requestMailBody(ch, mailId);
+    if (mail.id > 0) {
+        // no error
+        ch->setMailBody(mailId, mail.body);
+    }
+    setMailDownloadInProgress(false);
+    Q_EMIT mailBodyDownloaded(charId, mailId, mail.body);
+}
+
 
 bool PeriodicalRefresherWorker::isNetworkActive() const {
     int ret = m_active;
@@ -123,12 +136,25 @@ int PeriodicalRefresherWorker::serverPlayersOnline() const {
     return m_server_players;
 }
 
+bool PeriodicalRefresherWorker::isMailDownloadInProgress() const
+{
+    int ret = m_mailDownloadInProgress;
+    return (ret != 0);
+}
+
 
 void PeriodicalRefresherWorker::setNetworkActive(bool active)
 {
     if (active) m_active = 1;
     else m_active = 0;
     Q_EMIT m_owner->networkActivityChanged();
+}
+
+void PeriodicalRefresherWorker::setMailDownloadInProgress(bool active)
+{
+    if (active) m_mailDownloadInProgress = 1;
+    else m_mailDownloadInProgress = 0;
+    Q_EMIT m_owner->isMailDownloadInProgressChanged();
 }
 
 /**

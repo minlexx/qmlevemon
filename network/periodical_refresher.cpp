@@ -44,10 +44,16 @@ PeriodicalRefresher::PeriodicalRefresher(QObject *parent):
     QObject::connect(this, &PeriodicalRefresher::refresh,
                      m_worker, &PeriodicalRefresherWorker::refresh,
                      Qt::QueuedConnection);
+    QObject::connect(this, &PeriodicalRefresher::doRequestMailBody,
+                     m_worker, &PeriodicalRefresherWorker::requestCharacterMailBody,
+                     Qt::QueuedConnection);
 
     CharacterModel *characterModel = ModelManager::instance()->characterModel();
     QObject::connect(m_worker, &PeriodicalRefresherWorker::characterUpdated,
                      characterModel, &CharacterModel::updateCharacter,
+                     Qt::QueuedConnection);
+    QObject::connect(m_worker, &PeriodicalRefresherWorker::mailBodyDownloaded,
+                     this, &PeriodicalRefresher::mailBodyDownloaded,
                      Qt::QueuedConnection);
 
     m_thread.start(QThread::LowPriority);
@@ -94,6 +100,16 @@ int PeriodicalRefresher::serverPlayersOnline() const
 void PeriodicalRefresher::forceRefreshNow()
 {
     Q_EMIT refresh();
+}
+
+void PeriodicalRefresher::requestMailBody(Character *ch, quint64 mailId)
+{
+    Q_EMIT doRequestMailBody(ch, mailId);
+}
+
+bool PeriodicalRefresher::isMailDownloadInProgress() const
+{
+    return m_worker->isMailDownloadInProgress();
 }
 
 
