@@ -253,6 +253,13 @@ void QmlEvemonApp::requestDeleteCharacter(quint64 characterId)
 void QmlEvemonApp::requestOpenMail(quint64 mailId)
 {
     qCDebug(logApp) << "Request to open mail: " << mailId;
+    Character *ch = ModelManager::instance()->characterModel()->findCharacterById(m_curCharId);
+    if (ch == nullptr) {
+        // something goes completely wrong
+        qCWarning(logApp) << "requestOpenMail(): cannot find current char: " << m_curCharId << "!";
+        return;
+    }
+    m_refresher->requestMailBody(ch, mailId);
 }
 
 
