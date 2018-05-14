@@ -350,6 +350,19 @@ const QVector<Mail> &CharacterMails::internalData() const
     return m_data;
 }
 
+void CharacterMails::setMailBody(quint64 mailId, const QString &body)
+{
+    int iRow = 0;
+    for (Mail &m: m_data) {
+        if (m.id == mailId) {
+            m.body = body;
+            QModelIndex idx = index(iRow);
+            Q_EMIT dataChanged(idx, idx);
+        }
+        iRow++;
+    }
+}
+
 
 MailLabelFilteredMailsModel::MailLabelFilteredMailsModel(QObject *parent)
     : QSortFilterProxyModel(parent)
