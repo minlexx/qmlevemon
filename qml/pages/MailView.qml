@@ -15,4 +15,29 @@ Rectangle {
     Text {
         text: "MailView: mailId: " + mailId
     }
+
+    BusyIndicator {
+        anchors.centerIn: parent
+        running: refresher.isMailDownloadInProgress
+        visible: refresher.isMailDownloadInProgress
+    }
+
+    Connections {
+        target: refresher
+        onIsMailDownloadInProgressChanged: {
+            console.log("signal: isMailDownloadInProgress changed: ", refresher.isMailDownloadInProgress);
+            if (!refresher.isMailDownloadInProgress) {
+                container.mailId = curMail.id;
+                console.log("body: " + curMail.body);
+            }
+        }
+    }
+
+    property bool hasMailId: typeof(curMail) != "undefined"
+    onHasMailIdChanged: {
+        if (hasMailId) {
+            container.mailId = curMail.id;
+            console.log("here!")
+        }
+    }
 }
