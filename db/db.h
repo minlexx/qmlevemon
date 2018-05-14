@@ -59,6 +59,9 @@ public:
     virtual bool saveCachedCorporationName(quint64 corp_id, const QString &name) = 0;
     virtual bool saveCachedAllianceName(quint64 ally_id, const QString &name) = 0;
 
+    virtual QJsonObject loadMailBody(quint64 char_id, quint64 mail_id) = 0;
+    virtual bool saveMailBody(quint64 char_id, quint64 mail_id, const QJsonObject &mailBody) = 0;
+
 protected:
     Q_DISABLE_COPY(Db)
 };

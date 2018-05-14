@@ -49,6 +49,9 @@ public:
     bool saveCachedCorporationName(quint64 corp_id, const QString &name) override;
     bool saveCachedAllianceName(quint64 ally_id, const QString &name) override;
 
+    QJsonObject loadMailBody(quint64 char_id, quint64 mail_id) override;
+    bool saveMailBody(quint64 char_id, quint64 mail_id, const QJsonObject &mailBody) override;
+
 protected:
     bool open_chars(const QString& db_filename);
     bool open_sde(const QString& db_filename);

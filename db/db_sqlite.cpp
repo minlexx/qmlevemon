@@ -201,6 +201,15 @@ bool DbSqlite::open_cache(const QString &db_filename)
         q.clear();
     }
 
+    if (!existing_tables.contains(QLatin1String("mails_cache"))) {
+        qCDebug(logDb) << "Creating table mails_cache...";
+        q.exec(QLatin1String("CREATE TABLE mails_cache("
+               "    mail_id   INTEGER PRIMARY KEY NOT NULL,"
+               "    char_id   INTEGER NOT NULL,"
+               "    mail_json TEXT NOT NULL)"));
+        q.clear();
+    }
+
     return true;
 }
 
@@ -841,6 +850,45 @@ bool DbSqlite::saveCachedAllianceName(quint64 ally_id, const QString &name)
     q.addBindValue(ally_id);
     q.addBindValue(QLatin1String("ally"));
     q.addBindValue(name);
+    return q.exec();
+}
+
+
+QJsonObject DbSqlite::loadMailBody(quint64 char_id, quint64 mail_id)
+{
+    QJsonObject ret;
+    QMutexLocker lock(&m_cache_mutex);
+    if (!m_cache_db.isOpen()) {
+        return ret;
+    }
+    QSqlQuery q(m_cache_db);
+    q.prepare(QLatin1String("SELECT mail_json FROM mails_cache WHERE mail_id=? AND char_id=?"));
+    q.addBindValue(mail_id);
+    q.addBindValue(char_id);
+    if (q.exec()) {
+        if (q.next()) {
+            const QByteArray ba = q.value(0).toByteArray();
+            ret = QJsonDocument::fromJson(ba).object();
+        }
+    }
+    return ret;
+}
+
+
+bool DbSqlite::saveMailBody(quint64 char_id, quint64 mail_id, const QJsonObject &mailBody)
+{
+    QMutexLocker lock(&m_cache_mutex);
+    if (!m_cache_db.isOpen()) {
+        return false;
+    }
+    const QJsonDocument jdoc(mailBody);
+    QSqlQuery q(m_cache_db);
+    q.prepare(QLatin1String("INSERT OR REPLACE INTO mails_cache "
+                            " (mail_id, char_id, mail_json) "
+                            " VALUES (?, ?, ?)"));
+    q.addBindValue(mail_id);
+    q.addBindValue(char_id);
+    q.addBindValue(jdoc.toJson(QJsonDocument::Compact));
     return q.exec();
 }
 
