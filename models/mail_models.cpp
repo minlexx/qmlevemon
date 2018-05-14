@@ -1,4 +1,7 @@
 #include <QDataStream>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonValue>
 #include "mail_models.h"
 
 
@@ -94,6 +97,30 @@ void Mail::resolveLabels(const QVector<MailLabel> &charLabels)
         }
         labels_str.push_back(lbl_str);
     }
+}
+
+Mail Mail::fromJson(const QJsonObject &jobj)
+{
+    Mail ret;
+    ret.body = jobj.value(QLatin1String("body")).toString();
+    ret.from.id = jobj.value(QLatin1String("from")).toVariant().toULongLong();
+    ret.subject = jobj.value(QLatin1String("subject")).toString();
+    ret.timestamp = jobj.value(QLatin1String("timestamp")).toVariant().toDateTime();
+    const QJsonArray jlabels = jobj.value(QLatin1String("labels")).toArray();
+    const QJsonArray jrecipients = jobj.value(QLatin1String("recipients")).toArray();
+    for (const QJsonValue &jval: jlabels) {
+        ret.labels.append(static_cast<quint64>(jval.toInt()));
+    }
+    for (const QJsonValue &jval: jrecipients) {
+        const QJsonObject jrecipient = jval.toObject();
+        const quint64 recipient_id = static_cast<quint64>(jrecipient.value(QLatin1String("recipient_id")).toInt());
+        const QString recipient_type = jrecipient.value(QLatin1String("recipient_type")).toString();
+        MailRecipient rcpt;
+        rcpt.id = recipient_id;
+        rcpt.type = MailRecipient::typeFromString(recipient_type);
+        ret.recipients.push_back(std::move(rcpt));
+    }
+    return ret;
 }
 
 

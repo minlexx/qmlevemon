@@ -13,6 +13,7 @@
 
 
 QT_FORWARD_DECLARE_CLASS(QDataStream)
+QT_FORWARD_DECLARE_CLASS(QJsonObject)
 
 
 namespace EM {
@@ -85,6 +86,8 @@ public:
     bool operator!=(const Mail &other) const;
 
     void resolveLabels(const QVector<MailLabel> &charLabels);
+
+    static Mail fromJson(const QJsonObject &jobj);
 
 public:
     quint64 id = 0;
