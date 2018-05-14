@@ -293,6 +293,9 @@ public:
     void setMails(const CharacterMails &newMails);
     Q_INVOKABLE QObject *filterMailsForLabel(quint64 mailLabelId);
 
+    const QVector<MailRecipient> &mailingLists() const;
+    void setMailingLists(const QVector<MailRecipient> &lists);
+
     // auth info
     EveOAuthTokens getAuthTokens() const;
     void setAuthTokens(const EveOAuthTokens& tokens);
@@ -448,6 +451,7 @@ protected:
     // mails
     CharacterMailLabels m_mailLabels;
     CharacterMails m_mails;
+    QVector<MailRecipient> m_mailingLists;
     MailLabelFilteredMailsModel *m_mailsModel = nullptr;
 
     // auth info

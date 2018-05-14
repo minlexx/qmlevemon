@@ -100,6 +100,7 @@ Character& Character::operator=(const Character& other)
     // mails
     setMailLabels(other.m_mailLabels);
     setMails(other.m_mails);
+    setMailingLists(other.m_mailingLists);
     // auth info
     m_tokens = other.m_tokens;
     // last update date-times
@@ -171,6 +172,7 @@ Character& Character::operator=(Character&& other)
     // mails
     setMailLabels(std::move(other.m_mailLabels));
     setMails(std::move(other.m_mails));
+    setMailingLists(std::move(other.m_mailingLists));
     // auth info
     m_tokens = std::move(other.m_tokens);
     // last update date-times
@@ -758,6 +760,15 @@ QObject *Character::filterMailsForLabel(quint64 mailLabelId)
     return m_mailsModel;
 }
 
+const QVector<MailRecipient> &Character::mailingLists() const { return m_mailingLists; }
+
+void Character::setMailingLists(const QVector<MailRecipient> &lists)
+{
+    if (m_mailingLists != lists) {
+        m_mailingLists = lists;
+    }
+}
+
 // auth info
 EveOAuthTokens Character::getAuthTokens() const { return m_tokens; }
 void Character::setAuthTokens(const EveOAuthTokens& tokens) { m_tokens = tokens; }
@@ -924,7 +935,7 @@ void Character::calcSkillQueue()
 
 
 // increase version number when savedata format changes
-static const int SAVEDATA_VERSION = 23;
+static const int SAVEDATA_VERSION = 24;
 
 
 QDataStream& operator<<(QDataStream &stream, const EM::Character &character)
@@ -991,6 +1002,7 @@ QDataStream& operator<<(QDataStream &stream, const EM::Character &character)
     // mails
     stream << character.m_mailLabels;
     stream << character.m_mails;
+    stream << character.m_mailingLists;
     // auth tokens
     stream << character.m_tokens;
     // update timestamps
@@ -1072,6 +1084,7 @@ QDataStream& operator>>(QDataStream &stream, EM::Character &character)
     // mails
     stream >> character.m_mailLabels;
     stream >> character.m_mails;
+    stream >> character.m_mailingLists;
     // auth tokens
     stream >> character.m_tokens;
     // update timestamps
