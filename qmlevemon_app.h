@@ -68,6 +68,7 @@ public Q_SLOTS:
     void requestDeleteCharacter(quint64 characterId);
     // called from QML to request open specific mail
     void requestOpenMail(quint64 mailId);
+    void mailBodyDownloaded(quint64 charId, quint64 mailId, const QString &body);
 
 Q_SIGNALS:
     void settingsChanged();

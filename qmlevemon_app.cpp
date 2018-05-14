@@ -47,6 +47,9 @@ QmlEvemonApp::QmlEvemonApp(int& argc, char **argv):
     m_typeIconsProvider = new TypeIconsProvider();
     m_refresher = new PeriodicalRefresher(this);
 
+    QObject::connect(m_refresher, &PeriodicalRefresher::mailBodyDownloaded,
+                     this, &QmlEvemonApp::mailBodyDownloaded);
+
     QScreen *appScreen = primaryScreen();
     if (Q_LIKELY(appScreen)) {
         Qt::ScreenOrientation orientation = appScreen->primaryOrientation();
@@ -263,6 +266,26 @@ void QmlEvemonApp::requestOpenMail(quint64 mailId)
         return;
     }
     m_refresher->requestMailBody(ch, mailId);
+}
+
+void QmlEvemonApp::mailBodyDownloaded(quint64 charId, quint64 mailId, const QString &body)
+{
+    qCDebug(logApp) << "Mail body downlaoded: " << charId << mailId << body;
+
+    Character *ch = ModelManager::instance()->characterModel()->findCharacterById(m_curCharId);
+    if (ch == nullptr) {
+        // something goes completely wrong
+        qCWarning(logApp) << "requestOpenMail(): cannot find current char: " << m_curCharId << "!";
+        return;
+    }
+
+    Mail mail;
+    if (ch->findMailById(mailId, mail)) {
+        QVariant var = QVariant::fromValue(mail);
+        m_engine.rootContext()->setContextProperty(QLatin1String("curMail"), var);
+    } else {
+        m_engine.rootContext()->setContextProperty(QLatin1String("curMail"), nullptr);
+    }
 }
 
 
