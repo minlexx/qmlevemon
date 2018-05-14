@@ -389,7 +389,7 @@ void CharacterMails::setMailBody(quint64 mailId, const QString &body)
     }
 }
 
-bool CharacterMails::findMailById(quint64 mailId, Mail &ret)
+bool CharacterMails::findMailById(quint64 mailId, Mail &ret) const
 {
     for (const Mail &m: m_data) {
         if (m.id == mailId) {
