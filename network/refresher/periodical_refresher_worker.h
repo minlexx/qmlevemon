@@ -53,6 +53,8 @@ protected:
     void resolve_single_mail_recipient(MailRecipient &rcpt, const QVector<MailRecipient> &mailingLists);
     void resolve_mail_recipients(QVector<MailRecipient> &recipients, const QVector<MailRecipient> &mailingLists);
 
+    Mail requestMailBody(const Character *ch, quint64 mailId);
+
 protected:
     PeriodicalRefresher *m_owner = nullptr;
     QAtomicInteger<int> m_active;
