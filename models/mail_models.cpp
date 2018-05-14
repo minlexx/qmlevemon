@@ -363,6 +363,17 @@ void CharacterMails::setMailBody(quint64 mailId, const QString &body)
     }
 }
 
+bool CharacterMails::findMailById(quint64 mailId, Mail &ret)
+{
+    for (const Mail &m: m_data) {
+        if (m.id == mailId) {
+            ret = m;
+            return true;
+        }
+    }
+    return false;
+}
+
 
 MailLabelFilteredMailsModel::MailLabelFilteredMailsModel(QObject *parent)
     : QSortFilterProxyModel(parent)

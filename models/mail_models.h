@@ -161,7 +161,9 @@ public:
 public: // for internal use, m_data getter
     QVector<Mail> &internalData();
     const QVector<Mail> &internalData() const;
+
     void setMailBody(quint64 mailId, const QString &body);
+    bool findMailById(quint64 mailId, Mail &ret);
 
 protected:
     QVector<Mail> m_data;
