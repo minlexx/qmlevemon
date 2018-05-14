@@ -774,6 +774,11 @@ void Character::setMailBody(quint64 mailId, const QString &body)
     m_mails.setMailBody(mailId, body);
 }
 
+bool Character::findMailById(quint64 mailId, Mail &mail) const
+{
+    return m_mails.findMailById(mailId, mail);
+}
+
 // auth info
 EveOAuthTokens Character::getAuthTokens() const { return m_tokens; }
 void Character::setAuthTokens(const EveOAuthTokens& tokens) { m_tokens = tokens; }
