@@ -769,6 +769,11 @@ void Character::setMailingLists(const QVector<MailRecipient> &lists)
     }
 }
 
+void Character::setMailBody(quint64 mailId, const QString &body)
+{
+    m_mails.setMailBody(mailId, body);
+}
+
 // auth info
 EveOAuthTokens Character::getAuthTokens() const { return m_tokens; }
 void Character::setAuthTokens(const EveOAuthTokens& tokens) { m_tokens = tokens; }

@@ -296,6 +296,8 @@ public:
     const QVector<MailRecipient> &mailingLists() const;
     void setMailingLists(const QVector<MailRecipient> &lists);
 
+    void setMailBody(quint64 mailId, const QString &body);
+
     // auth info
     EveOAuthTokens getAuthTokens() const;
     void setAuthTokens(const EveOAuthTokens& tokens);
