@@ -357,6 +357,16 @@ bool MailLabelFilteredMailsModel::filterAcceptsRow(int sourceRow, const QModelIn
     if (sourceMail.labels.contains(m_filterMailLabelId)) {
         return true;
     }
+    // separate condition check for mailing lists
+    //   usually mails do not contain more than 1-2 recipients,
+    //   so no worries about loop here
+    for (const MailRecipient &recipient: sourceMail.recipients) {
+        if (recipient.type == MailRecipient::MailingList) {
+            if (recipient.id == m_filterMailLabelId) {
+                return true;
+            }
+        }
+    }
     return false;
 }
 
