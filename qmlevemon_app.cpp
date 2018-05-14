@@ -36,6 +36,9 @@ QmlEvemonApp::QmlEvemonApp(int& argc, char **argv):
     setApplicationDisplayName(QLatin1String("QML EVEMon"));
     setApplicationVersion(QLatin1String(QMLEVEMON_VERSION));
 
+    // register types
+    qRegisterMetaType<Mail>();
+
     m_settings = new AppSettings(this);
     QObject::connect(m_settings, &AppSettings::settingsChanged,
                      this, &QmlEvemonApp::settingsChanged);

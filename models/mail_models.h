@@ -76,6 +76,17 @@ public:
 
 
 class Mail {
+private:
+    Q_GADGET
+    Q_PROPERTY(quint64   id MEMBER id)
+    Q_PROPERTY(QString   body MEMBER body)
+    Q_PROPERTY(QString   subject MEMBER subject)
+    Q_PROPERTY(QString   fromName READ fromName)
+    Q_PROPERTY(bool      is_read MEMBER is_read)
+    Q_PROPERTY(QDateTime timestamp MEMBER timestamp)
+    Q_PROPERTY(QString   labelsString READ labelsString)
+    Q_PROPERTY(QString   recipientsString READ recipientsString)
+
 public:
     Mail() { }
     Mail(const Mail &) = default;
@@ -84,6 +95,10 @@ public:
     Mail &operator=(Mail &&) = default;
     bool operator==(const Mail &other) const;
     bool operator!=(const Mail &other) const;
+
+    QString fromName() const;
+    QString labelsString() const;
+    QString recipientsString() const;
 
     void resolveLabels(const QVector<MailLabel> &charLabels);
 
@@ -191,6 +206,8 @@ private:
 
 
 } // namespace
+
+Q_DECLARE_METATYPE(EM::Mail)
 
 
 QDataStream &operator<<(QDataStream &stream, const EM::MailLabel &label);

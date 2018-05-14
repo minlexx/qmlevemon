@@ -83,6 +83,32 @@ bool Mail::operator!=(const Mail &other) const
     return !(operator==(other));
 }
 
+QString Mail::fromName() const { return from.name; }
+
+QString Mail::labelsString() const
+{
+    QString ret;
+    for (const QString &lbl: labels_str) {
+        if (!ret.isEmpty()) {
+            ret.append(QLatin1String(", "));
+        }
+        ret.append(lbl);
+    }
+    return ret;
+}
+
+QString Mail::recipientsString() const
+{
+    QString ret;
+    for (const MailRecipient &rcpt: recipients) {
+        if (!ret.isEmpty()) {
+            ret.append(QLatin1String(", "));
+        }
+        ret.append(rcpt.name);
+    }
+    return ret;
+}
+
 void Mail::resolveLabels(const QVector<MailLabel> &charLabels)
 {
     labels_str.clear();
