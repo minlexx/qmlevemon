@@ -6,7 +6,7 @@
 #include <QLoggingCategory>
 #include "settings.h"
 
-class QQuickWindow;
+QT_FORWARD_DECLARE_CLASS(QQuickWindow);
 
 Q_DECLARE_LOGGING_CATEGORY(logApp)
 
