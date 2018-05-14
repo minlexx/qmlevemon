@@ -120,7 +120,8 @@ Mail PeriodicalRefresherWorker::requestMailBody(const Character *ch, quint64 mai
 {
     Mail ret;
 
-    QVector<MailRecipient> mailingLists; // TODO: how do we get char mailing lists?
+    const QVector<MailRecipient> &mailingLists = ch->mailingLists();
+    const QVector<MailLabel> &mailLabels = ch->mailLabels()->internalData();
 
     // 1. try from cache
     QmlEvemonApp *gApp = globalAppInstance();
@@ -130,7 +131,7 @@ Mail PeriodicalRefresherWorker::requestMailBody(const Character *ch, quint64 mai
             const QJsonObject mailJson = db->loadMailBody(ch->characterId(), mailId);
             if (!mailJson.isEmpty()) {
                 ret = Mail::fromJson(mailJson);
-                ret.resolveLabels(ch->mailLabels()->internalData());
+                ret.resolveLabels(mailLabels);
                 resolve_single_mail_recipient(ret.from, mailingLists);
                 resolve_mail_recipients(ret.recipients, mailingLists);
                 ret.id = mailId;
@@ -144,7 +145,7 @@ Mail PeriodicalRefresherWorker::requestMailBody(const Character *ch, quint64 mai
     qCDebug(logRefresher) << "  requesting mail body for:" << mailId;
     if (m_api->get_character_mail_id(mailJson, ch->characterId(), ch->getAuthTokens().access_token, mailId)) {
         ret = Mail::fromJson(mailJson);
-        ret.resolveLabels(ch->mailLabels()->internalData());
+        ret.resolveLabels(mailLabels);
         resolve_single_mail_recipient(ret.from, mailingLists);
         resolve_mail_recipients(ret.recipients, mailingLists);
         ret.id = mailId;
@@ -193,6 +194,9 @@ int PeriodicalRefresherWorker::refresh_mail(Character *ch)
             rcpt.name = mailing_list_name;
             mailingLists.push_back(std::move(rcpt));
         }
+
+        // save mailing lists in character
+        ch->setMailingLists(mailingLists);
     }
 
     // load mail labels
