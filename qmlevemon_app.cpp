@@ -106,6 +106,9 @@ bool QmlEvemonApp::initQmlEngine()
     rootContext->setContextProperty(QLatin1String("eveSsoLoginManager"),
                                     EveSsoLoginManager::instance());
 
+    // initial defaults
+    rootContext->setContextProperty(QLatin1String("curMail"), nullptr);
+
     DbSqlite::instance();  // init database
 
     // engine takes ownership of the image provider!
