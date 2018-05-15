@@ -121,8 +121,8 @@ void PeriodicalRefresherWorker::requestCharacterMailBody(Character *ch, quint64 
         // no error
         ch->setMailBody(mailId, mail.body);
     }
-    setMailDownloadInProgress(false);
     Q_EMIT mailBodyDownloaded(charId, mailId, mail.body);
+    setMailDownloadInProgress(false);
 }
 
 
