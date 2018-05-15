@@ -189,7 +189,11 @@ ApplicationWindow {
 
     Component {
         id: pageMailView
-        MailView { }
+        MailView {
+            onRequestSetPageTitle: {
+                navTitle.text = title;
+            }
+        }
     }
 
     // Main content
