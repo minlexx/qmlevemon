@@ -75,6 +75,7 @@ Q_SIGNALS:
     void curCharIdChanged();
     void isPortraitChanged();
     void isLandscapeChanged();
+    void mailReady();
 
 private:
     void initStorageDirectory();

@@ -273,12 +273,11 @@ void QmlEvemonApp::requestOpenMail(quint64 mailId)
 
 void QmlEvemonApp::mailBodyDownloaded(quint64 charId, quint64 mailId, const QString &body)
 {
-    qCDebug(logApp) << "Mail body downlaoded: " << charId << mailId << body;
-
-    Character *ch = ModelManager::instance()->characterModel()->findCharacterById(m_curCharId);
+    Q_UNUSED(body)
+    Character *ch = ModelManager::instance()->characterModel()->findCharacterById(charId);
     if (ch == nullptr) {
         // something goes completely wrong
-        qCWarning(logApp) << "requestOpenMail(): cannot find current char: " << m_curCharId << "!";
+        qCWarning(logApp) << "requestOpenMail(): cannot find char: " << charId << "!";
         return;
     }
 
@@ -286,6 +285,7 @@ void QmlEvemonApp::mailBodyDownloaded(quint64 charId, quint64 mailId, const QStr
     if (ch->findMailById(mailId, mail)) {
         QVariant var = QVariant::fromValue(mail);
         m_engine.rootContext()->setContextProperty(QLatin1String("curMail"), var);
+        Q_EMIT mailReady();
     } else {
         m_engine.rootContext()->setContextProperty(QLatin1String("curMail"), nullptr);
     }
