@@ -33,11 +33,12 @@ Rectangle {
         }
     }
 
-    property bool hasMailId: typeof(curMail) != "undefined"
-    onHasMailIdChanged: {
-        if (hasMailId) {
-            container.mailId = curMail.id;
-            console.log("here!")
-        }
-    }
+    //property bool hasMailId: typeof(curMail) != "undefined"
+    //property bool hasMailId: curMail !== undefined
+    //onHasMailIdChanged: {
+    //    if (hasMailId) {
+    //        container.mailId = curMail.id;
+    //        console.log("here!")
+    //    }
+    //}
 }
