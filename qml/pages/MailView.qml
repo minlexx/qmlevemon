@@ -108,15 +108,23 @@ Item {
             Rectangle {
                 anchors.fill: parent
                 color: AppStyle.textLightColor
-                Text {
-                    anchors.top: parent.top
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.leftMargin: AppStyle.marginSmall
-                    anchors.topMargin: AppStyle.marginSmall
-                    text: mailBody
-                    textFormat: Text.StyledText
-                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+
+                Flickable {
+                    anchors.fill: parent
+                    contentWidth: parent.width
+                    contentHeight: mailBodyText.height + AppStyle.marginBig*2
+
+                    Text {
+                        id: mailBodyText
+                        anchors.top: parent.top
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.leftMargin: AppStyle.marginSmall
+                        anchors.topMargin: AppStyle.marginSmall
+                        text: mailBody
+                        textFormat: Text.StyledText
+                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    }
                 }
             }
         }
