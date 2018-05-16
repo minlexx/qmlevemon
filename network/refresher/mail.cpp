@@ -201,11 +201,11 @@ int PeriodicalRefresherWorker::refresh_mail(Character *ch)
 
     // load mail labels
     CharacterMailLabels mailLabels;
+    int api_unread_count = 0;
     if (m_api->get_character_mail_labels(reply, ch->characterId(), ch->getAuthTokens().access_token)) {
         num_updates++;
-        int total_unread_count = reply.value(QLatin1String("total_unread_count")).toVariant().toInt();
+        api_unread_count = reply.value(QLatin1String("total_unread_count")).toVariant().toInt();
         QJsonArray jmailLabels = reply.value(QLatin1String("labels")).toArray();
-        qCDebug(logRefresher) << "  " << total_unread_count << "unread mails!";
         for (const QJsonValue &jval: jmailLabels) {
             const QJsonObject &jobj = jval.toObject();
             const quint64 label_id = jobj.value(QLatin1String("label_id")).toVariant().toULongLong();
@@ -239,6 +239,7 @@ int PeriodicalRefresherWorker::refresh_mail(Character *ch)
 
     // load mail headers list
     CharacterMails mails;
+    int actual_unread_count = 0;
     if (m_api->get_character_mail_headers(replyArr, ch->characterId(), ch->getAuthTokens().access_token)) {
         num_updates++;
         for (const QJsonValue &jval: replyArr) {
@@ -259,6 +260,8 @@ int PeriodicalRefresherWorker::refresh_mail(Character *ch)
             mail.is_read = is_read;
             mail.subject = subject;
             mail.timestamp = timestamp;
+
+            actual_unread_count += (is_read == false ? 1 : 0);
 
             // resolve sender
             resolve_single_mail_recipient(mail.from, mailingLists);
@@ -303,6 +306,11 @@ int PeriodicalRefresherWorker::refresh_mail(Character *ch)
         // save mails in character
         // qCDebug(logRefresher) << "   Parsed mails: " << mails.internalData();
         ch->setMails(mails);
+    }
+
+    if (api_unread_count != actual_unread_count) {
+        qCDebug(logRefresher) << "  " << api_unread_count << "unread mails from API,"
+                              << actual_unread_count << "counted manually from headers.";
     }
 
     if (num_updates > 0) {
