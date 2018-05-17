@@ -48,5 +48,8 @@ QtObject {
     property color errorPopupBorderColor: "#c64931"
     property color errorPopupBgColor: "#fccfcf"
     property color errorPopupTextColor: "#5e1414"
+
+    property color mailViewBgColor: "#444444"
+    property color mailViewTextDefaultColor: "#CCCCCC"
 }
 

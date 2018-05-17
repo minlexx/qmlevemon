@@ -122,7 +122,7 @@ Item {
 
             Rectangle {
                 anchors.fill: parent
-                color: AppStyle.textLightColor
+                color: AppStyle.mailViewBgColor
                 clip: true
 
                 Flickable {
@@ -137,7 +137,7 @@ Item {
                         anchors.right: parent.right
                         anchors.leftMargin: AppStyle.marginSmall
                         anchors.topMargin: AppStyle.marginSmall
-                        text: mailBody
+                        text: "<font color=\"" + AppStyle.mailViewTextDefaultColor + "\">" + mailBody + "</font>"
                         textFormat: Text.StyledText
                         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                     }
