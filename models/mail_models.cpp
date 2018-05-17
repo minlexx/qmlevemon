@@ -85,6 +85,8 @@ bool Mail::operator!=(const Mail &other) const
 
 QString Mail::fromName() const { return from.name; }
 
+quint64 Mail::fromId() const { return from.id; }
+
 QString Mail::labelsString() const
 {
     QString ret;

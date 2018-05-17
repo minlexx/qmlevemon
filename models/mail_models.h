@@ -82,6 +82,7 @@ private:
     Q_PROPERTY(QString   body MEMBER body)
     Q_PROPERTY(QString   subject MEMBER subject)
     Q_PROPERTY(QString   fromName READ fromName)
+    Q_PROPERTY(quint64   fromId READ fromId)
     Q_PROPERTY(bool      is_read MEMBER is_read)
     Q_PROPERTY(QDateTime timestamp MEMBER timestamp)
     Q_PROPERTY(QString   labelsString READ labelsString)
@@ -97,6 +98,7 @@ public:
     bool operator!=(const Mail &other) const;
 
     QString fromName() const;
+    quint64 fromId() const;
     QString labelsString() const;
     QString recipientsString() const;
 
