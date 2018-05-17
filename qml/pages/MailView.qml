@@ -13,6 +13,7 @@ Item {
     property string mailBody: ""
     property string mailDt: ""
     property string mailFromName: ""
+    property int    mailFromId: 0
     property bool   mailIsRead: true
     property string mailLabelsStr: ""
     property string mailRecipientsStr: ""
@@ -41,8 +42,22 @@ Item {
             height: childrenRect.height
             visible: mailView.mailId > 0
 
+            Image {
+                id: fromProfilePic
+                anchors.left: parent.left
+                anchors.top: parent.top
+                source: mailFromId > 0 ? "image://portrait/" + mailFromId : "qrc:///img/character_icon_128.jpg"
+                sourceSize.width: 64
+                sourceSize.height: 64
+                width: 64
+                height: 64
+            }
+
             Column {
                 id: mailHeadersCol
+                anchors.left: fromProfilePic.right
+                anchors.top: parent.top
+                anchors.leftMargin: AppStyle.marginNormal
 
                 Row {
                     Label {
@@ -108,6 +123,7 @@ Item {
             Rectangle {
                 anchors.fill: parent
                 color: AppStyle.textLightColor
+                clip: true
 
                 Flickable {
                     anchors.fill: parent
@@ -142,10 +158,11 @@ Item {
                 mailView.mailBody = curMail.body;
                 mailView.mailDt = Qt.formatDateTime(curMail.timestamp);
                 mailView.mailFromName = curMail.fromName;
+                mailView.mailFromId = curMail.fromId;
                 mailView.mailIsRead = curMail.is_read;
                 mailView.mailLabelsStr = curMail.labelsString;
                 mailView.mailRecipientsStr = curMail.recipientsString;
-                mailView.requestSetPageTitle(curChar.characterName + ": " + qsTr("Mail") + ": " + curMail.subject);
+                mailView.requestSetPageTitle(curChar.characterName + " / " + qsTr("Mail") + ": " + curMail.subject);
             }
         }
     }
