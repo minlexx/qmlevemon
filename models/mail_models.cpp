@@ -499,6 +499,7 @@ QDataStream &operator<<(QDataStream &stream, const EM::Mail &mail)
     stream << mail.is_read;
     stream << mail.timestamp;
     stream << mail.labels;
+    stream << mail.labels_str;
     stream << mail.recipients;
     return stream;
 }
@@ -512,6 +513,7 @@ QDataStream &operator>>(QDataStream &stream, EM::Mail &mail)
     stream >> mail.is_read;
     stream >> mail.timestamp;
     stream >> mail.labels;
+    stream >> mail.labels_str;
     stream >> mail.recipients;
     return stream;
 }
@@ -557,6 +559,7 @@ QDebug operator<<(QDebug &stream, const EM::Mail &mail)
 {
     stream.nospace() << "[Mail " << mail.id << "; Subject: " << mail.subject
                      << "; From: " << mail.from << "; Date: " << mail.timestamp
-                     << "; Labels:" << mail.labels << "; Recipients: " << mail.recipients << "]";
+                     << "; Labels:" << mail.labels << mail.labels_str
+                     << "; Recipients: " << mail.recipients << "]";
     return stream;
 }
