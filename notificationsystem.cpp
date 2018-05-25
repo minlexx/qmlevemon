@@ -7,7 +7,7 @@ Q_LOGGING_CATEGORY(logNotifications, "evemon.notifications")
 #ifdef Q_OS_ANDROID
 // TODO: android includes?
 #else
-//#include <QSystemTrayIcon>
+#include <QSystemTrayIcon>  // requires Qt Widgets library
 #endif
 
 namespace EM {
@@ -34,17 +34,40 @@ private:
 };
 
 
+#ifndef Q_OS_ANDROID
 class NotificationsTrayIconBackend: public NotificationsBackend
 {
     Q_OBJECT
 
 public:
-    void notify(const QString &title, const QString &message) override {
-        Q_UNUSED(title)
-        Q_UNUSED(message)
-        qCDebug(logNotifications) << Q_FUNC_INFO << title << message;
+    NotificationsTrayIconBackend() {
+        // TODO: create some icon?
+        m_trayIcon = new QSystemTrayIcon(m_icon, this);
+        m_trayIcon->show();
+        QObject::connect(m_trayIcon, &QSystemTrayIcon::activated,
+                         this, &NotificationsTrayIconBackend::onTrayIconActivated);
+        QObject::connect(m_trayIcon, &QSystemTrayIcon::messageClicked,
+                         this, &NotificationsTrayIconBackend::notificationMessageClicked);
     }
+
+    void notify(const QString &title, const QString &message) override {
+        m_trayIcon->showMessage(title, message, m_icon);
+    }
+
+public Q_SLOTS:
+    void onTrayIconActivated(QSystemTrayIcon::ActivationReason reason) {
+        switch (reason) {
+        case QSystemTrayIcon::Trigger: Q_EMIT trayIconClicked(); break;
+        case QSystemTrayIcon::Context: Q_EMIT trayIconRightClicked(); break;
+        default: break;
+        }
+    }
+
+private:
+    QSystemTrayIcon *m_trayIcon = nullptr;
+    QIcon m_icon;
 };
+#endif
 
 
 class NotificationSystemPrivate
@@ -73,18 +96,23 @@ void NotificationSystemPrivate::setBackend(NotificationSystem::BackendType t)
     if (backend) {
         delete backend;
         backend = nullptr;
+        backendType = NotificationSystem::None;
     }
-    backendType = t;
     switch (t) {
+#ifndef Q_OS_ANDROID
+    // desktop cases
     case NotificationSystem::TrayIcon: {
             backend = new NotificationsTrayIconBackend();
+            backendType = t;
         } break;
     case NotificationSystem::FreedesktopDbus: {
             // TODO: FreedesktopDbus
         } break;
+#endif
     case NotificationSystem::AndroidNative: {
             // TODO: AndroidNative
         } break;
+    default: break;
     }
 
     // connect signals from backend to owner (re-emit signals)

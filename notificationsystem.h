@@ -14,9 +14,10 @@ class NotificationSystem : public QObject
 
 public:
     enum BackendType {
-        TrayIcon = 0,
-        FreedesktopDbus = 1,
-        AndroidNative = 2
+        None = 0,
+        TrayIcon = 1,
+        FreedesktopDbus = 2,
+        AndroidNative = 3
     };
 public:
     explicit NotificationSystem(QObject *parent, BackendType backendType);
