@@ -12,7 +12,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(FeatureSummary)
 
-find_package(Qt5 5.9 CONFIG REQUIRED COMPONENTS
+option(BUILD_TESTING "Build tests (for developers)" OFF)
+option(BUILD_FOR_ANDROID "Build for android" OFF)
+
+set(QT_MIN_VERSION 5.9)
+
+find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS
     Core
     Network
     Xml
@@ -23,7 +28,10 @@ find_package(Qt5 5.9 CONFIG REQUIRED COMPONENTS
     QuickControls2
 )
 
-option(BUILD_TESTING "Build tests (for developers)" OFF)
+# Use Qt5Widgets only for desktop
+if (NOT BUILD_FOR_ANDROID)
+    find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Widgets)
+endif()
 
 set(qmlevemon_srcs
     "main.cpp"
@@ -113,6 +121,10 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
     QT_USE_QSTRINGBUILDER
 )
 
+if (BUILD_FOR_ANDROID)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE ANDROID_BUILD)
+endif()
+
 target_link_libraries(${PROJECT_NAME}
     Qt5::Core
     Qt5::Network
@@ -123,6 +135,11 @@ target_link_libraries(${PROJECT_NAME}
     Qt5::Quick
     Qt5::QuickControls2
 )
+
+# Link Qt5Widgets only for desktop
+if (NOT BUILD_FOR_ANDROID)
+    target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
+endif()
 
 if (BUILD_TESTING)
     message(STATUS "BUILD_TESTING is ON: Will build tests")
