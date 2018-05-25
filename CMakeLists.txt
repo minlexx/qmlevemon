@@ -99,10 +99,18 @@ set(qtwebserver_srcs
     "qtwebserver/css/cssruleset.cpp"
     "qtwebserver/weblayout.cpp")
 
-add_executable(${PROJECT_NAME} WIN32
-    ${qmlevemon_srcs}
-    ${qtwebserver_srcs}
-)
+if (BUILD_FOR_ANDROID)
+    set(ANDROID_TOOLCHAIN gcc)
+    add_library(${PROJECT_NAME} SHARED
+        ${qmlevemon_srcs}
+        ${qtwebserver_srcs}
+    )
+else()
+    add_executable(${PROJECT_NAME} WIN32
+        ${qmlevemon_srcs}
+        ${qtwebserver_srcs}
+    )
+endif()
 
 target_include_directories(${PROJECT_NAME} PRIVATE
     "qtwebserver"
@@ -121,8 +129,12 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
     QT_USE_QSTRINGBUILDER
 )
 
+# define ANDROID for android builds (I think qmake does this automatically)
 if (BUILD_FOR_ANDROID)
-    target_compile_definitions(${PROJECT_NAME} PRIVATE ANDROID_BUILD)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE
+        ANDROID
+        __ANDROID__
+    )
 endif()
 
 target_link_libraries(${PROJECT_NAME}
@@ -149,6 +161,7 @@ endif()
 install(
     TARGETS ${PROJECT_NAME}
     RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
 )
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
