@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+ cmake_minimum_required(VERSION 3.5)
 
 set(QMLEVEMON_VERSION 0.1.0)
 
@@ -29,6 +29,7 @@ set(qmlevemon_srcs
     "main.cpp"
     "settings.cpp"
     "qmlevemon_app.cpp"
+    "notificationsystem.cpp"
     "db/db.cpp"
     "db/db_sqlite.cpp"
     "db/portrait_cache.cpp"
