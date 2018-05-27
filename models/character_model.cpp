@@ -120,10 +120,7 @@ QVariant CharacterModel::data(const QModelIndex &index, int role) const
     case SecurityStatus: ret = ch->securityStatus(); break;
     case Bio: ret = ch->bio(); break;
         // wallet info
-    case ISK: {
-            const QLocale loc;
-            ret = loc.toCurrencyString(ch->iskAmount(), QStringLiteral("ISK"), 2);
-        } break;
+    case ISK: ret = ch->iskAmount(); break;
     case ISKAmountStr: ret = ch->iskAmountStr(); break;
         // skills info
     case TotalSP: ret = ch->totalSp(); break;
