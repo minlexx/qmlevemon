@@ -23,7 +23,7 @@ endforeach()
 
 if (ANDROID_EXTRA_LIBS)
     foreach (extralib ${ANDROID_EXTRA_LIBS})
-        message(STATUS "manually specified extra libray: " ${extralib})
+        message(STATUS "manually specified extra library: " ${extralib})
         list(APPEND extralibs ${extralib})
     endforeach()
 endif()
