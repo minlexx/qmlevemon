@@ -7,7 +7,18 @@ Before that, have an Android SDK & NDK installed.
 
 example command:
 ```
-cmake -DCMAKE_TOOLCHAIN_FILE=../qmlevemon/cmake/toolchain/Android.cmake -DBUILD_FOR_ANDROID=ON -DBUILD_TESTING=OFF -DCMAKE_ANDROID_NDK=/path/to/android-ndk-r16 -DANDROID_SDK_ROOT=/path/to/Android/Sdk -DCMAKE_BUILD_TYPE=Release -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_PREFIX_PATH=/path/to/qt/5.9.5/android_armv7 ../qmlevemon/
+cmake -DCMAKE_TOOLCHAIN_FILE=../qmlevemon/cmake/toolchain/Android.cmake \
+      -DBUILD_FOR_ANDROID=ON \
+      -DBUILD_TESTING=OFF \
+      -DCMAKE_ANDROID_NDK=/path/to/android-ndk-r16 \
+      -DANDROID_SDK_ROOT=/path/to/Android/Sdk \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_VERBOSE_MAKEFILE=ON \
+      -DCMAKE_PREFIX_PATH=/path/to/qt/5.9.5/android_armv7 \
+      -DANDROID_API_LEVEL=16 \
+      -DQTANDROID_EXPORTED_TARGET=QMLEVEMon \
+      -DANDROID_EXTRA_LIBS="/path/to/qmlevemon/android/arm-linux-androideabi-4.9/libcrypto.so;/path/to/qmlevemon/android/arm-linux-androideabi-4.9/libssl.so" \
+      ../qmlevemon/
 
 ```
 
