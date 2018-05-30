@@ -1,5 +1,9 @@
 <RCC>
     <qresource prefix="/">
+        <file>img/app_icon/32.png</file>
+        <file>img/app_icon/64.png</file>
+        <file>img/app_icon/128.png</file>
+        <file>img/app_icon/256.png</file>
         <file>img/eve-sso/EVE_SSO_Login_Buttons_Large_Black.png</file>
         <file>img/eve-sso/EVE_SSO_Login_Buttons_Large_White.png</file>
         <file>img/eve-sso/EVE_SSO_Login_Buttons_Small_Black.png</file>

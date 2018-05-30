@@ -41,7 +41,7 @@ class NotificationsTrayIconBackend: public NotificationsBackend
 
 public:
     NotificationsTrayIconBackend() {
-        // TODO: create some icon?
+        m_icon = QIcon(QLatin1String(":/img/app_icon/64.png"));
         m_trayIcon = new QSystemTrayIcon(m_icon, this);
         m_trayIcon->show();
         QObject::connect(m_trayIcon, &QSystemTrayIcon::activated,

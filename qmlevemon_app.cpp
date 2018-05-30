@@ -140,6 +140,10 @@ bool QmlEvemonApp::initQmlEngine()
     m_mainWindow = qobject_cast<QQuickWindow *>(firstRootObject);
     if (!m_mainWindow) {
         qCWarning(logApp) << "  Could not find mainWindow! Something is wrong with main QML?";
+    } else {
+        // setup window icon
+        const QIcon icon(QLatin1String(":/img/app_icon/128.png"));
+        m_mainWindow->setIcon(icon);
     }
 
     return true;
