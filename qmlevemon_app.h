@@ -13,10 +13,12 @@ Q_DECLARE_LOGGING_CATEGORY(logApp)
 
 namespace EM {
 
+
 class Db;
 class PortraitCache;
 class TypeIconsProvider;
 class PeriodicalRefresher;
+class NotificationSystem;
 
 
 class QmlEvemonApp: public QGuiApplication
@@ -57,6 +59,8 @@ public:
 public Q_SLOTS:
     quint64 curCharId() const;
     void onPrimaryOrientationChanged(Qt::ScreenOrientation orientation);
+    void onTrayIconClicked();
+    void onTrayIconRightClicked();
 
     // called from QML when selcting character page
     void setCurrentCharacter(quint64 char_id);
@@ -82,6 +86,7 @@ private:
 
 protected:
     AppSettings *m_settings = nullptr;
+    NotificationSystem *m_notifications = nullptr;
     QQmlApplicationEngine m_engine;
     QQuickWindow *m_mainWindow = nullptr;
     PortraitCache *m_portraitCache = nullptr;
@@ -89,6 +94,7 @@ protected:
     PeriodicalRefresher *m_refresher = nullptr;
     quint64 m_curCharId = 0;
     bool m_isPortraitOrientation = true;
+
 };
 
 

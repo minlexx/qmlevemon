@@ -16,6 +16,7 @@
 #include "models/model_manager.h"
 #include "eve_api/eve_sso.h"
 #include "network/periodical_refresher.h"
+#include "notificationsystem.h"
 #include "qmlevemon_app.h"
 
 
@@ -39,9 +40,17 @@ QmlEvemonApp::QmlEvemonApp(int& argc, char **argv):
     // register types
     qRegisterMetaType<Mail>();
 
+    // settings
     m_settings = new AppSettings(this);
     QObject::connect(m_settings, &AppSettings::settingsChanged,
                      this, &QmlEvemonApp::settingsChanged);
+
+    // notifications
+    m_notifications = new NotificationSystem(this, NotificationSystem::TrayIcon);
+    QObject::connect(m_notifications, &NotificationSystem::trayIconClicked,
+                     this, &QmlEvemonApp::onTrayIconClicked);
+    QObject::connect(m_notifications, &NotificationSystem::trayIconRightClicked,
+                     this, &QmlEvemonApp::onTrayIconRightClicked);
 
     m_portraitCache = new PortraitCache();
     m_typeIconsProvider = new TypeIconsProvider();
@@ -208,6 +217,21 @@ void QmlEvemonApp::onPrimaryOrientationChanged(Qt::ScreenOrientation orientation
         break;
     default: break;
     }
+}
+
+void QmlEvemonApp::onTrayIconClicked()
+{
+    if (!m_mainWindow) {
+        return;
+    }
+    // TODO: Wwndows-specific tweak about activating window
+    m_mainWindow->showNormal();
+    m_mainWindow->requestActivate();
+}
+
+void QmlEvemonApp::onTrayIconRightClicked()
+{
+    qCDebug(logApp) << Q_FUNC_INFO;
 }
 
 
