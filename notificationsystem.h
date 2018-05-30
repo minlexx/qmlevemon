@@ -11,6 +11,7 @@ class NotificationSystemPrivate;
 class NotificationSystem : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(int backendType READ backendTypeI WRITE setBackendType NOTIFY backendTypeChanged)
 
 public:
     enum BackendType {
@@ -19,17 +20,21 @@ public:
         FreedesktopDbus = 2,
         AndroidNative = 3
     };
+
 public:
     explicit NotificationSystem(QObject *parent, BackendType backendType);
     ~NotificationSystem() override;
 
     BackendType backendType() const;
+    int backendTypeI() const;
 
 public Q_SLOTS:
     void setBackend(BackendType backendType);
+    void setBackendType(int typ);
     void notify(const QString &title, const QString &message);
 
 Q_SIGNALS:
+    void backendTypeChanged();
     void trayIconClicked();
     void trayIconRightClicked();
     void notificationMessageClicked();

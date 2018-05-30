@@ -150,11 +150,24 @@ NotificationSystem::BackendType NotificationSystem::backendType() const
     return d->backendType;
 }
 
+int NotificationSystem::backendTypeI() const
+{
+    Q_D(const NotificationSystem);
+    return static_cast<int>(d->backendType);
+}
+
 
 void NotificationSystem::setBackend(BackendType backendType)
 {
     Q_D(NotificationSystem);
     d->setBackend(backendType);
+    Q_EMIT backendTypeChanged();
+}
+
+void NotificationSystem::setBackendType(int typ)
+{
+    BackendType btype = static_cast<BackendType>(typ);
+    setBackend(btype);
 }
 
 
