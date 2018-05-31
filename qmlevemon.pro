@@ -12,6 +12,7 @@ INCLUDEPATH += ./ ./qtwebserver
 SOURCES += \
     ./main.cpp \
     ./qmlevemon_app.cpp \
+    ./notificationsystem.cpp \
     ./settings.cpp \
     ./db/db.cpp \
     ./db/db_sqlite.cpp \
@@ -70,6 +71,7 @@ SOURCES += \
 
 HEADERS += \
     ./qmlevemon_app.h \
+    ./notificationsystem.h \
     ./settings.h \
     ./db/db.h \
     ./db/db_sqlite.h \
