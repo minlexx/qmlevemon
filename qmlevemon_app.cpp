@@ -46,7 +46,13 @@ QmlEvemonApp::QmlEvemonApp(int& argc, char **argv):
                      this, &QmlEvemonApp::settingsChanged);
 
     // notifications
-    m_notifications = new NotificationSystem(this, NotificationSystem::TrayIcon);
+    m_notifications = new NotificationSystem(this,
+#ifdef Q_OS_ANDROID
+                                             NotificationSystem::AndroidNative
+#else
+                                             NotificationSystem::TrayIcon
+#endif
+                                             );
     QObject::connect(m_notifications, &NotificationSystem::trayIconClicked,
                      this, &QmlEvemonApp::onTrayIconClicked);
     QObject::connect(m_notifications, &NotificationSystem::trayIconRightClicked,
@@ -57,7 +63,7 @@ QmlEvemonApp::QmlEvemonApp(int& argc, char **argv):
     m_refresher = new PeriodicalRefresher(this);
 
     QObject::connect(m_refresher, &PeriodicalRefresher::mailBodyDownloaded,
-                     this, &QmlEvemonApp::mailBodyDownloaded);
+                     this, &QmlEvemonApp::onMailBodyDownloaded);
 
     QScreen *appScreen = primaryScreen();
     if (Q_LIKELY(appScreen)) {
@@ -299,7 +305,13 @@ void QmlEvemonApp::requestOpenMail(quint64 mailId)
     m_refresher->requestMailBody(ch, mailId);
 }
 
-void QmlEvemonApp::mailBodyDownloaded(quint64 charId, quint64 mailId, const QString &body)
+void QmlEvemonApp::showNotification(const QString &title, const QString &message)
+{
+    if (!m_notifications) return;
+    m_notifications->notify(title, message);
+}
+
+void QmlEvemonApp::onMailBodyDownloaded(quint64 charId, quint64 mailId, const QString &body)
 {
     Q_UNUSED(body)
     Character *ch = ModelManager::instance()->characterModel()->findCharacterById(charId);

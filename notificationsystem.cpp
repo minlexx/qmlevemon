@@ -5,7 +5,7 @@
 Q_LOGGING_CATEGORY(logNotifications, "evemon.notifications")
 
 #ifdef Q_OS_ANDROID
-#include <QtAndroidExtras/QAndroidJniObject>
+#include <QtAndroidExtras/QAndroidJniObject>  // requires QtAndroidExtras
 #else
 #include <QSystemTrayIcon>  // requires Qt Widgets library
 #endif
@@ -84,7 +84,7 @@ public:
         QAndroidJniObject jsTitle = QAndroidJniObject::fromString(title);
         QAndroidJniObject jsMessage = QAndroidJniObject::fromString(message);
         QAndroidJniObject::callStaticMethod<void>(
-                    "ru/minlexx/qmlevemon/notification/NotificationClient",
+                    "ru/minlexx/qmlevemon/QMLEVEMonActivity",
                     "notify",
                     "(Ljava/lang/String;Ljava/lang/String;)V",
                     jsTitle.object<jstring>(),

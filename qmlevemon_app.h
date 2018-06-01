@@ -61,6 +61,7 @@ public Q_SLOTS:
     void onPrimaryOrientationChanged(Qt::ScreenOrientation orientation);
     void onTrayIconClicked();
     void onTrayIconRightClicked();
+    void onMailBodyDownloaded(quint64 charId, quint64 mailId, const QString &body);
 
     // called from QML when selcting character page
     void setCurrentCharacter(quint64 char_id);
@@ -72,7 +73,8 @@ public Q_SLOTS:
     void requestDeleteCharacter(quint64 characterId);
     // called from QML to request open specific mail
     void requestOpenMail(quint64 mailId);
-    void mailBodyDownloaded(quint64 charId, quint64 mailId, const QString &body);
+    // call from QML to show notification
+    void showNotification(const QString &title, const QString &message);
 
 Q_SIGNALS:
     void settingsChanged();

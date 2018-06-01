@@ -74,5 +74,11 @@ Rectangle {
             sourceSize.height: 32;
             source: "image://typeid/14264"
         }
+
+        Button {
+            id: testNotifyButton
+            text: "Test notification"
+            onClicked: evemonapp.showNotification("QML EVEMon", "Hello from QML!")
+        }
     }
 }
