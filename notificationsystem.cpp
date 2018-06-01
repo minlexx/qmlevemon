@@ -5,7 +5,7 @@
 Q_LOGGING_CATEGORY(logNotifications, "evemon.notifications")
 
 #ifdef Q_OS_ANDROID
-// TODO: android includes?
+#include <QtAndroidExtras/QAndroidJniObject>
 #else
 #include <QSystemTrayIcon>  // requires Qt Widgets library
 #endif
@@ -35,6 +35,8 @@ private:
 
 
 #ifndef Q_OS_ANDROID
+
+// Windows, Linux
 class NotificationsTrayIconBackend: public NotificationsBackend
 {
     Q_OBJECT
@@ -67,6 +69,29 @@ private:
     QSystemTrayIcon *m_trayIcon = nullptr;
     QIcon m_icon;
 };
+
+#else
+// Android only, requires QtAndroidExtras
+
+class NotificationsAndroidBackend: public NotificationsBackend
+{
+    Q_OBJECT
+
+public:
+    NotificationsAndroidBackend() { }
+
+    void notify(const QString &title, const QString &message) override {
+        QAndroidJniObject jsTitle = QAndroidJniObject::fromString(title);
+        QAndroidJniObject jsMessage = QAndroidJniObject::fromString(message);
+        QAndroidJniObject::callStaticMethod<void>(
+                    "ru/minlexx/qmlevemon/notification/NotificationClient",
+                    "notify",
+                    "(Ljava/lang/String;Ljava/lang/String;)V",
+                    jsTitle.object<jstring>(),
+                    jsMessage.object<jstring>());
+    }
+};
+
 #endif
 
 
@@ -111,6 +136,8 @@ void NotificationSystemPrivate::setBackend(NotificationSystem::BackendType t)
 #endif
     case NotificationSystem::AndroidNative: {
             // TODO: AndroidNative
+            backend = new NotificationsAndroidBackend();
+            backendType = t;
         } break;
     default: break;
     }
