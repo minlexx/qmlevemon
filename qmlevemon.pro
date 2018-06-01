@@ -1,6 +1,10 @@
-VERSION=0.1
-QT += core network xml sql gui qml quick quickcontrols2
+TEMPLATE = app
+VERSION = 0.1
 CONFIG += C++11
+QT += core network xml sql gui qml quick quickcontrols2
+win32: QT += widgets
+unix:!android: QT += widgets
+android: QT -= widgets
 
 DEFINES += QT_DEPRECATED_WARNINGS QT_DISABLE_DEPRECATED_BEFORE=0x060000
 DEFINES += QMLEVEMON_VERSION=\\\"$$VERSION\\\"
@@ -125,6 +129,8 @@ HEADERS += \
     ./qtwebserver/webwidget.h
 
 RESOURCES += qml.qrc img.qrc sql.qrc
+
+win32: RC_FILE = win32/windows_resources.rc
 
 OTHER_FILES += \
     ./.gitignore \
