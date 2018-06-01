@@ -130,7 +130,9 @@ HEADERS += \
 
 RESOURCES += qml.qrc img.qrc sql.qrc
 
-win32: RC_FILE = win32/windows_resources.rc
+# Windows native embedded resources
+win32: HEADERS += ./win32/win32_version.h
+win32: RC_FILE = ./win32/windows_resources.rc
 
 OTHER_FILES += \
     ./.gitignore \
