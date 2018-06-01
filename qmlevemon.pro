@@ -4,7 +4,10 @@ CONFIG += C++11
 QT += core network xml sql gui qml quick quickcontrols2
 win32: QT += widgets
 unix:!android: QT += widgets
-android: QT -= widgets
+android: {
+    QT -= widgets
+    QT += androidextras
+}
 
 DEFINES += QT_DEPRECATED_WARNINGS QT_DISABLE_DEPRECATED_BEFORE=0x060000
 DEFINES += QMLEVEMON_VERSION=\\\"$$VERSION\\\"
@@ -142,17 +145,22 @@ OTHER_FILES += \
 
 win32: OTHER_FILES += ./win32/windows_resources.rc
 
+android: {
+    OTHER_FILES += \
+        ./android/src/AndroidManifest.xml \
+        ./android/res/drawable/icon.png \
+        ./android/src/src/ru/minlexx/qmlevemon/notification/NotificationClient.java
+}
+
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
-
-# Additional import path used to resolve QML modules just for Qt Quick Designer
-QML_DESIGNER_IMPORT_PATH =
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
+ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android/src
 contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
     ANDROID_EXTRA_LIBS = \
         $$PWD/android/arm-linux-androideabi-4.9/libcrypto.so \
