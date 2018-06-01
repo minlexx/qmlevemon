@@ -148,8 +148,7 @@ win32: OTHER_FILES += ./win32/windows_resources.rc
 android: {
     OTHER_FILES += \
         ./android/src/AndroidManifest.xml \
-        ./android/res/drawable/icon.png \
-        ./android/src/src/ru/minlexx/qmlevemon/notification/NotificationClient.java
+        ./android/src/src/ru/minlexx/qmlevemon/QMLEVEMonActivity.java
 }
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
