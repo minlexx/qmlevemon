@@ -78,6 +78,11 @@ set(qmlevemon_srcs
     "sql.qrc"
 )
 
+if (WIN32)
+    list(APPEND qmlevemon_srcs
+        "win32/windows_resources.rc")
+endif()
+
 set(qtwebserver_srcs
     "qtwebserver/tcp/tcpmultithreadedserver.cpp"
     "qtwebserver/tcp/tcpserverthread.cpp"
