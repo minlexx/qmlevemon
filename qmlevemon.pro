@@ -140,6 +140,8 @@ OTHER_FILES += \
     ./LICENSE \
     ./README.md
 
+win32: OTHER_FILES += ./win32/windows_resources.rc
+
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
 
