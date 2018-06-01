@@ -125,7 +125,7 @@ void NotificationSystemPrivate::setBackend(NotificationSystem::BackendType t)
     }
     switch (t) {
 #ifndef Q_OS_ANDROID
-    // desktop cases
+    // desktop cases (Windows, Linux)
     case NotificationSystem::TrayIcon: {
             backend = new NotificationsTrayIconBackend();
             backendType = t;
@@ -133,12 +133,13 @@ void NotificationSystemPrivate::setBackend(NotificationSystem::BackendType t)
     case NotificationSystem::FreedesktopDbus: {
             // TODO: FreedesktopDbus
         } break;
-#endif
+#else
+    // Android only
     case NotificationSystem::AndroidNative: {
-            // TODO: AndroidNative
             backend = new NotificationsAndroidBackend();
             backendType = t;
         } break;
+#endif
     default: break;
     }
 
