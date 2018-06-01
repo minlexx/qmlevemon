@@ -3,7 +3,7 @@ VERSION = 0.1
 CONFIG += C++11
 QT += core network xml sql gui qml quick quickcontrols2
 win32: QT += widgets
-unix:!android: QT += widgets
+unix:!android: QT += widgets dbus
 android: {
     QT -= widgets
     QT += androidextras

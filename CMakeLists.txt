@@ -31,6 +31,10 @@ find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS
 # Use Qt5Widgets only for desktop
 if (NOT BUILD_FOR_ANDROID)
     find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Widgets)
+    # Also use QtDBus in Linux (NOT ANDROID and NOT WINDOWS)
+    if (NOT WIN32)
+        find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS DBus)
+    endif()
 endif()
 
 set(qmlevemon_srcs
