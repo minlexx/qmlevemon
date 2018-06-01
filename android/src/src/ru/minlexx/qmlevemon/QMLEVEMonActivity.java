@@ -1,16 +1,16 @@
-package ru.minlexx.qmlevemon.notification;
+package ru.minlexx.qmlevemon;
 
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 
-public class NotificationClient extends org.qtproject.qt5.android.bindings.QtActivity
+public class QMLEVEMonActivity extends org.qtproject.qt5.android.bindings.QtActivity
 {
     private static NotificationManager m_notificationManager;
     private static Notification.Builder m_builder;
-    private static NotificationClient m_instance;
+    private static QMLEVEMonActivity m_instance;
 
-    public NotificationClient()
+    public QMLEVEMonActivity()
     {
         m_instance = this;
     }
