@@ -21,7 +21,8 @@ public:
         CLONES,
         FATIGUE,
         ASSETS,
-        MAIL
+        MAIL,
+        NOTIFICATIONS,
     };
 
 public:
@@ -48,6 +49,7 @@ public:
     QDateTime dt_fatigue;
     QDateTime dt_assets;
     QDateTime dt_mail;
+    QDateTime dt_notifications;
 };
 
 
