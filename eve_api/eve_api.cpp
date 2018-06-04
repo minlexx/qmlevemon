@@ -648,6 +648,20 @@ bool EveApi::get_character_mailing_lists(QJsonArray &replyArr, quint64 char_id, 
     return true;
 }
 
+bool EveApi::get_character_notifications(QJsonArray &replyArr, quint64 char_id, const QByteArray &access_token)
+{
+    QJsonDocument replyJson;
+    int reply_http_status = 0;
+    QString url = QString(QLatin1String("/characters/%1/notifications/")).arg(char_id);
+    bool req_ok = this->send_general_esi_request_json(
+                EsiReqType::GET, url, QUrlQuery(), QByteArray(), 15, access_token,
+                reply_http_status, replyJson);
+    if (!req_ok || (reply_http_status != 200)) return false;
+    if (!replyJson.isArray()) return false;
+    replyArr = replyJson.array();
+    return true;
+}
+
 
 bool EveApi::get_character_ship(QJsonObject& reply, quint64 char_id, const QByteArray& access_token)
 {
