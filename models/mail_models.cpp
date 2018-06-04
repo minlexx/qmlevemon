@@ -205,7 +205,7 @@ int CharacterMailLabels::rowCount(const QModelIndex &parent) const
 
 QHash<int,QByteArray> CharacterMailLabels::roleNames() const
 {
-    QHash<int,QByteArray> roles = {
+    static QHash<int,QByteArray> roles = {
         {Qt::DisplayRole,    QByteArrayLiteral("display")},
         {Roles::Id,          QByteArrayLiteral("id")},
         {Roles::Name,        QByteArrayLiteral("name")},
