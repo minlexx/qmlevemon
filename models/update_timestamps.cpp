@@ -111,8 +111,12 @@ UpdateTimestamps& UpdateTimestamps::operator=(UpdateTimestamps&& other)
 
 
 // serializing functions
+
+static const int UTST_SAVEDATA_VERSION = 2;
+
 QDataStream& operator<<(QDataStream& stream, const EM::UpdateTimestamps& ts)
 {
+    stream << UTST_SAVEDATA_VERSION;
     stream << ts.dt_public;
     stream << ts.dt_skills;
     stream << ts.dt_wallet;
@@ -127,6 +131,9 @@ QDataStream& operator<<(QDataStream& stream, const EM::UpdateTimestamps& ts)
 
 QDataStream& operator>>(QDataStream& stream, EM::UpdateTimestamps& ts)
 {
+    int savedata_version = 0;
+    stream >> savedata_version;
+    //
     stream >> ts.dt_public;
     stream >> ts.dt_skills;
     stream >> ts.dt_wallet;

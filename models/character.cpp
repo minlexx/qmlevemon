@@ -961,7 +961,7 @@ void Character::calcSkillQueue()
 
 
 // increase version number when savedata format changes
-static const int SAVEDATA_VERSION = 26;
+static const int SAVEDATA_VERSION = 27;
 
 
 QDataStream& operator<<(QDataStream &stream, const EM::Character &character)
@@ -1043,7 +1043,7 @@ QDataStream& operator>>(QDataStream &stream, EM::Character &character)
     // first read and check version
     int savedata_version = 0;
     stream >> savedata_version;
-    if (savedata_version < 26) {
+    if (savedata_version < 27) {
         // old versions are not supported :(
         character.setCharacterId(0);
         character.setCharacterName(QLatin1String("Not loaded"));
