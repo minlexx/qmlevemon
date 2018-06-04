@@ -970,6 +970,10 @@ QDataStream& operator<<(QDataStream &stream, const EM::Character &character)
     stream << SAVEDATA_VERSION;
     // general
     stream << character.m_characterId;
+    // auth tokens, update timestamps
+    stream << character.m_tokens;
+    stream << character.m_update_timestamps;
+    // common
     stream << character.m_characterName;
     stream << character.m_corporationId;
     stream << character.m_corporationName;
@@ -1030,10 +1034,6 @@ QDataStream& operator<<(QDataStream &stream, const EM::Character &character)
     stream << character.m_mails;
     stream << character.m_mailingLists;
     stream << character.m_mailNotifications;
-    // auth tokens
-    stream << character.m_tokens;
-    // update timestamps
-    stream << character.m_update_timestamps;
     return stream;
 }
 
@@ -1043,7 +1043,7 @@ QDataStream& operator>>(QDataStream &stream, EM::Character &character)
     // first read and check version
     int savedata_version = 0;
     stream >> savedata_version;
-    if (savedata_version != SAVEDATA_VERSION) {
+    if (savedata_version < 26) {
         // old versions are not supported :(
         character.setCharacterId(0);
         character.setCharacterName(QLatin1String("Not loaded"));
@@ -1053,6 +1053,10 @@ QDataStream& operator>>(QDataStream &stream, EM::Character &character)
     }
     // general
     stream >> character.m_characterId;
+    // auth tokens, update timestamps
+    stream >> character.m_tokens;
+    stream >> character.m_update_timestamps;
+    // common
     stream >> character.m_characterName;
     stream >> character.m_corporationId;
     stream >> character.m_corporationName;
@@ -1113,11 +1117,8 @@ QDataStream& operator>>(QDataStream &stream, EM::Character &character)
     stream >> character.m_mails;
     stream >> character.m_mailingLists;
     stream >> character.m_mailNotifications;
-    // auth tokens
-    stream >> character.m_tokens;
-    // update timestamps
-    stream >> character.m_update_timestamps;
-    // some final calculations
+    //
+    // end of reading, some final calculations
     character.calcSkillQueue(); // now calls updateSkillGroupsModel()
     return stream;
 }
