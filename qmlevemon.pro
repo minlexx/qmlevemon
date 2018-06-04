@@ -42,6 +42,7 @@ SOURCES += \
     ./models/invtype.cpp \
     ./models/mail_models.cpp \
     ./models/model_manager.cpp \
+    ./models/notification.cpp \
     ./models/skill_group.cpp \
     ./models/skill_template.cpp \
     ./models/skill_tree_model.cpp \
@@ -101,6 +102,7 @@ HEADERS += \
     ./models/invtype.h \
     ./models/mail_models.h \
     ./models/model_manager.h \
+    ./models/notification.h \
     ./models/skill_group.h \
     ./models/skill_template.h \
     ./models/skill_tree_model.h \
