@@ -17,6 +17,7 @@ public:
         PUBLIC,
         SKILLS,
         WALLET,
+        WALLET_JOURNAL,
         LOCATION,
         CLONES,
         FATIGUE,
@@ -50,6 +51,7 @@ public:
     QDateTime dt_assets;
     QDateTime dt_mail;
     QDateTime dt_notifications;
+    QDateTime dt_wallet_journal;
 };
 
 
