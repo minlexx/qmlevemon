@@ -29,7 +29,13 @@ Rectangle {
 
             function mailLabelClicked(itemIndex, labelId) {
                 mailLabelsContainer.currentSelectedIndex = itemIndex;
-                mailHeadersLV.model = curChar.filterMailsForLabel(labelId);
+                if (labelId >= 0) {
+                    // user clicked some mail label or "All Mails" (labelId == 0)
+                    mailHeadersLV.model = curChar.filterMailsForLabel(labelId);
+                } else if (labelId === -1) {
+                    // user clicked "Notifications"
+                    // mailHeadersLV.model = curChar.notificationsModel // TODO
+                }
                 mailHeadersLV.currentIndex = -1;
             }
 
@@ -77,6 +83,20 @@ Rectangle {
                             onClicked: {
                                 sv1.mailLabelClicked(itemIndex, labelId);
                             }
+                        }
+                    }
+
+                    MailLabelRect {
+                        width: parent.width - AppStyle.marginSmall
+                        labelId: 0
+                        labelName: " " + qsTr("Notifications")
+                        fontBold: isCurrent
+                        fontPointSize: AppStyle.textSizeH2
+                        itemIndex: 1000
+                        isCurrent: mailLabelsContainer.currentSelectedIndex == itemIndex
+
+                        onClicked: {
+                            sv1.mailLabelClicked(itemIndex, -1);
                         }
                     }
                 }
