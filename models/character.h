@@ -16,6 +16,7 @@
 #include "character_clones_model.h"
 #include "eve_location.h"
 #include "mail_models.h"
+#include "notification.h"
 #include "eve_api/eve_api_tokens.h"
 #include "update_timestamps.h"
 
@@ -102,6 +103,7 @@ class Character: public QObject
     // mail
     Q_PROPERTY(QObject*   mailLabels               READ mailLabelsObj            NOTIFY mailLabelsChanged)
     Q_PROPERTY(QObject*   mails                    READ mailsObj                 NOTIFY mailsChanged)
+    Q_PROPERTY(QObject*   mailNotifications        READ mailsNotificationsObj    NOTIFY mailNotificationsChanged)
 
 public:
     Character(QObject *parent = nullptr);
@@ -292,6 +294,10 @@ public:
     const CharacterMails *mails() const;
     void setMails(const CharacterMails &newMails);
     Q_INVOKABLE QObject *filterMailsForLabel(quint64 mailLabelId);
+    QObject *mailsNotificationsObj();
+    CharacterNotifications *mailNotifications();
+    const CharacterNotifications *mailNotifications() const;
+    void setMailNotifications(const CharacterNotifications &ntfs);
 
     const QVector<MailRecipient> &mailingLists() const;
     void setMailingLists(const QVector<MailRecipient> &lists);
@@ -379,6 +385,7 @@ Q_SIGNALS:
     // mails
     void mailLabelsChanged();
     void mailsChanged();
+    void mailNotificationsChanged();
 
 protected:
     // general info
@@ -456,6 +463,7 @@ protected:
     CharacterMails m_mails;
     QVector<MailRecipient> m_mailingLists;
     MailLabelFilteredMailsModel *m_mailsModel = nullptr;
+    CharacterNotifications m_mailNotifications;
 
     // auth info
     EveOAuthTokens m_tokens;

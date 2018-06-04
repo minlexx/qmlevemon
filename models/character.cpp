@@ -101,6 +101,7 @@ Character& Character::operator=(const Character& other)
     setMailLabels(other.m_mailLabels);
     setMails(other.m_mails);
     setMailingLists(other.m_mailingLists);
+    setMailNotifications(other.m_mailNotifications);
     // auth info
     m_tokens = other.m_tokens;
     // last update date-times
@@ -173,6 +174,7 @@ Character& Character::operator=(Character&& other)
     setMailLabels(std::move(other.m_mailLabels));
     setMails(std::move(other.m_mails));
     setMailingLists(std::move(other.m_mailingLists));
+    setMailNotifications(std::move(other.m_mailNotifications));
     // auth info
     m_tokens = std::move(other.m_tokens);
     // last update date-times
@@ -760,6 +762,20 @@ QObject *Character::filterMailsForLabel(quint64 mailLabelId)
     return m_mailsModel;
 }
 
+QObject *Character::mailsNotificationsObj() { return static_cast<QObject *>(&m_mailNotifications); }
+
+CharacterNotifications *Character::mailNotifications() { return &m_mailNotifications; }
+
+const CharacterNotifications *Character::mailNotifications() const { return &m_mailNotifications; }
+
+void Character::setMailNotifications(const CharacterNotifications &ntfs)
+{
+    if (m_mailNotifications != ntfs) {
+        m_mailNotifications = ntfs;
+        Q_EMIT mailNotificationsChanged();
+    }
+}
+
 const QVector<MailRecipient> &Character::mailingLists() const { return m_mailingLists; }
 
 void Character::setMailingLists(const QVector<MailRecipient> &lists)
@@ -945,7 +961,7 @@ void Character::calcSkillQueue()
 
 
 // increase version number when savedata format changes
-static const int SAVEDATA_VERSION = 25;
+static const int SAVEDATA_VERSION = 26;
 
 
 QDataStream& operator<<(QDataStream &stream, const EM::Character &character)
@@ -1013,6 +1029,7 @@ QDataStream& operator<<(QDataStream &stream, const EM::Character &character)
     stream << character.m_mailLabels;
     stream << character.m_mails;
     stream << character.m_mailingLists;
+    stream << character.m_mailNotifications;
     // auth tokens
     stream << character.m_tokens;
     // update timestamps
@@ -1095,6 +1112,7 @@ QDataStream& operator>>(QDataStream &stream, EM::Character &character)
     stream >> character.m_mailLabels;
     stream >> character.m_mails;
     stream >> character.m_mailingLists;
+    stream >> character.m_mailNotifications;
     // auth tokens
     stream >> character.m_tokens;
     // update timestamps
