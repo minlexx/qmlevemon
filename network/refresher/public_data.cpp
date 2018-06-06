@@ -73,12 +73,12 @@ int PeriodicalRefresherWorker::refresh_public_data(Character *ch) {
     ch->setSecurityStatus(sec_status);
     //
     // resolve names for race, bloodline, ancestry
-    QmlEvemonApp *gApp = globalAppInstance();
-    if (!gApp) return 0;
-    Db *db = gApp->database();
-    ch->setRaceName(db->raceName(ch->raceId()));
-    ch->setBloodlineName(db->bloodlineName(ch->bloodlineId()));
-    ch->setAncestryName(db->ancestryName(ch->ancestryId()));
+    Db *db = globalAppDatabaseInstance();
+    if (db) {
+        ch->setRaceName(db->raceName(ch->raceId()));
+        ch->setBloodlineName(db->bloodlineName(ch->bloodlineId()));
+        ch->setAncestryName(db->ancestryName(ch->ancestryId()));
+    }
 
     // fetch corpporation name
     QJsonObject corpReply;

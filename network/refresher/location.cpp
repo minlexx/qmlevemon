@@ -118,9 +118,8 @@ int PeriodicalRefresherWorker::refresh_location(Character *ch) {
     }
     if (QThread::currentThread()->isInterruptionRequested()) return 0;
 
-    QmlEvemonApp *gApp = globalAppInstance();
-    if (!gApp) return 0;
-    Db *db = gApp->database();
+    Db *db = globalAppDatabaseInstance();
+
     quint64 ship_type_id = 0;
     QString ship_friendly_name = reply.value(QLatin1String("ship_name")).toString();
     ship_type_id = reply.value(QLatin1String("ship_type_id")).toVariant().toULongLong();
@@ -131,9 +130,11 @@ int PeriodicalRefresherWorker::refresh_location(Character *ch) {
     if (ch->currentShipTypeId() != ship_type_id) {
         ch->setCurrentShipTypeId(ship_type_id);
         // lookup ship type name;
-        QString shipTypeName = db->typeName(ship_type_id);
-        if (!shipTypeName.isEmpty()) {
-            ch->setCurrentShipTypeName(shipTypeName);
+        if (db) {
+            QString shipTypeName = db->typeName(ship_type_id);
+            if (!shipTypeName.isEmpty()) {
+                ch->setCurrentShipTypeName(shipTypeName);
+            }
         }
     }
 

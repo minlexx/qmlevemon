@@ -191,7 +191,7 @@ bool SkillTreeModel::hasChildren(const QModelIndex &parent) const
 bool SkillTreeModel::load()
 {
     int numGroups = 0, numSkills = 0;
-    Db *db = globalAppInstance()->database();
+    Db *db = globalAppDatabaseInstance();
 
     // load skill groups
     QJsonArray jskillGroups = db->loadSkillGroups();

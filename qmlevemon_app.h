@@ -102,6 +102,7 @@ protected:
 
 QmlEvemonApp *globalAppInstance();
 Db *globalAppDatabaseInstance();
+AppSettings *globalAppSettings();
 
 
 } // namespace

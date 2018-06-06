@@ -25,7 +25,12 @@ Q_GLOBAL_STATIC(DbSqlite, g_em_db_sqlite)
 
 DbSqlite::DbSqlite()
 {
-    QString appdata_dirname = globalAppInstance()->storageDirectory();
+    QmlEvemonApp *gApp = globalAppInstance(); // can return nullptr
+    if (!gApp) {
+        qCWarning(logDb) << "Failed to construct DbSqlite instance - application instance missing.";
+        return;
+    }
+    QString appdata_dirname = gApp->storageDirectory();
     QString db_filename = appdata_dirname + QLatin1String("/characters.db");
     QString sde_db_filename = appdata_dirname + QLatin1String("/eve_sde.db");
     QString cache_db_filename = appdata_dirname + QLatin1String("/cache.db");

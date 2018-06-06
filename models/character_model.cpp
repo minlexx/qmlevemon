@@ -182,7 +182,7 @@ void CharacterModel::loadCharacters()
         QMutexLocker locker(&m_mutex);
         m_characters.clear();
         beginResetModel();
-        Db *db = globalAppInstance()->database();
+        Db *db = globalAppDatabaseInstance();
         if (db) {
             db->loadCharacters(m_characters);
         }
@@ -199,7 +199,7 @@ void CharacterModel::addNewCharacter(Character *character)
         int firstRow = m_characters.size();  // we will append to list
         beginInsertRows(QModelIndex(), firstRow, firstRow);
         m_characters.push_back(character);
-        Db *db = globalAppInstance()->database();
+        Db *db = globalAppDatabaseInstance();
         if (db) {
             db->saveCharacters(m_characters);
         }
@@ -233,7 +233,7 @@ void CharacterModel::removeCharacter(quint64 char_id)
         Character *toRemoveCh = m_characters.takeAt(toRemoveRow);
         delete toRemoveCh;
 
-        Db *db = globalAppInstance()->database();
+        Db *db = globalAppDatabaseInstance();
         if (db) {
             db->deletePortrait(char_id);
             db->saveCharacters(m_characters);
@@ -296,7 +296,7 @@ void CharacterModel::updateCharacter(const Character *updatedCharacter)
         (*to_modify) = (*updatedCharacter);  // call lots of operator=()
 
         // save in DB
-        Db *db = globalAppInstance()->database();
+        Db *db = globalAppDatabaseInstance();
         if (db) {
             db->saveCharacter(to_modify);
         }

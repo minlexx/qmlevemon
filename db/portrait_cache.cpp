@@ -68,9 +68,7 @@ public:
         }
 
         // try to load portrait from cache
-        QmlEvemonApp *gApp = globalAppInstance();
-        if (!gApp) return;
-        Db *db = gApp->database();
+        Db *db = globalAppDatabaseInstance();
 
         if (!db->loadPortrait(char_id, m_image)) {
             // cache failed, download from eve image server
@@ -172,9 +170,8 @@ QQuickImageResponse *PortraitCache::requestImageResponse(
 // specific hack to clear cached image for character
 void PortraitCache::removeCachedImageForCharacter(quint64 char_id)
 {
-    QmlEvemonApp *gApp = globalAppInstance();
-    if (!gApp) return;
-    Db *db = gApp->database();
+    Db *db = globalAppDatabaseInstance();
+    if (!db) return;
     db->deletePortrait(char_id);
 }
 

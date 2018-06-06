@@ -55,12 +55,9 @@ bool eveapi_request_first_access_token(const QString& code,
     QNetworkAccessManager nam;
 
     // check for proxy settings
-    QmlEvemonApp *gApp = globalAppInstance();
-    if (gApp) {
-        AppSettings *settings = gApp->settings();
-        if (settings->isProxyEnabled()) {
-            nam.setProxy(settings->proxySettings());
-        }
+    AppSettings *settings = globalAppSettings();
+    if (settings->isProxyEnabled()) {
+        nam.setProxy(settings->proxySettings());
     }
 
     QObject::connect(&nam, &QNetworkAccessManager::finished,
@@ -167,12 +164,9 @@ bool eveapi_refresh_access_token(EveOAuthTokens& tokens)
     QNetworkAccessManager nam;
 
     // check for proxy settings
-    QmlEvemonApp *gApp = globalAppInstance();
-    if (gApp) {
-        AppSettings *settings = gApp->settings();
-        if (settings->isProxyEnabled()) {
-            nam.setProxy(settings->proxySettings());
-        }
+    AppSettings *settings = globalAppSettings();
+    if (settings->isProxyEnabled()) {
+        nam.setProxy(settings->proxySettings());
     }
 
     QObject::connect(&nam, &QNetworkAccessManager::finished,
@@ -264,14 +258,11 @@ EveApi::~EveApi()
 
 void EveApi::onProxySettingsChanged()
 {
-    QmlEvemonApp *gApp = globalAppInstance();
-    if (gApp) {
-        AppSettings *settings = gApp->settings();
-        if (settings->isProxyEnabled()) {
-            m_nam->setProxy(settings->proxySettings());
-        } else {
-            m_nam->setProxy(QNetworkProxy::NoProxy);
-        }
+    AppSettings *settings = globalAppSettings();
+    if (settings->isProxyEnabled()) {
+        m_nam->setProxy(settings->proxySettings());
+    } else {
+        m_nam->setProxy(QNetworkProxy::NoProxy);
     }
 }
 

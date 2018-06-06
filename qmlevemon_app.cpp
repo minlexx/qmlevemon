@@ -349,4 +349,13 @@ Db *globalAppDatabaseInstance()
     return ret;
 }
 
+AppSettings *globalAppSettings()
+{
+    AppSettings *ret = nullptr;
+    if (g_globalAppInstance) {
+        ret = g_globalAppInstance->settings();
+    }
+    return ret;
+}
+
 } // namespace

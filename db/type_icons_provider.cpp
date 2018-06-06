@@ -56,13 +56,7 @@ public:
         quint64 type_id = m_id.toULongLong();
 
         // try to load icon from cache
-        QmlEvemonApp *gApp = globalAppInstance();
-        if (!gApp) {
-            m_image.load(QLatin1String(":/img/unknown_type.png"));
-            Q_EMIT finished();
-            return;
-        }
-        Db *db = gApp->database();
+        Db *db = globalAppDatabaseInstance();
         if (!db) {
             m_image.load(QLatin1String(":/img/unknown_type.png"));
             Q_EMIT finished();
