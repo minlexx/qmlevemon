@@ -340,4 +340,13 @@ QmlEvemonApp *globalAppInstance()
     return g_globalAppInstance;
 }
 
+Db *globalAppDatabaseInstance()
+{
+    Db *ret = nullptr;
+    if (g_globalAppInstance) {
+        ret = g_globalAppInstance->database();
+    }
+    return ret;
+}
+
 } // namespace
