@@ -31,12 +31,15 @@ Rectangle {
                 mailLabelsContainer.currentSelectedIndex = itemIndex;
                 if (labelId >= 0) {
                     // user clicked some mail label or "All Mails" (labelId == 0)
+                    notificationsLV.visible = false;
+                    mailHeadersLV.visible = true;
                     mailHeadersLV.model = curChar.filterMailsForLabel(labelId);
+                    mailHeadersLV.currentIndex = -1;
                 } else if (labelId === -1) {
                     // user clicked "Notifications"
-                    // mailHeadersLV.model = curChar.notificationsModel // TODO
+                    mailHeadersLV.visible = false;
+                    notificationsLV.visible = true;
                 }
-                mailHeadersLV.currentIndex = -1;
             }
 
             Item {
@@ -180,8 +183,35 @@ Rectangle {
                             }
                         } // delegate rectangle
                     } // delegate item
+                } // mailHeadersLV
+
+                ListView {
+                    id: notificationsLV
+                    anchors.fill: parent
+                    model: curChar.mailNotifications
+                    currentIndex: -1
+                    visible: false
+                    delegate: ItemDelegate {
+                        width: mailHeadersRect.width
+                        height: col2.height
+                        Column {
+                            id: col2
+                            Rectangle {
+                                border.width: 2
+                                color: "yellow"
+                                width: 50
+                                height: 30
+                            }
+                            Rectangle {
+                                border.width: 2
+                                color: "green"
+                                width: 50
+                                height: 30
+                            }
+                        }
+                    }
                 }
-            }
+            } // mailHeadersRect
         }
     }
 }
