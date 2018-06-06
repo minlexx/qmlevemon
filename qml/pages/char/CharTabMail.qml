@@ -196,17 +196,31 @@ Rectangle {
                         height: col2.height
                         Column {
                             id: col2
-                            Rectangle {
-                                border.width: 2
-                                color: "yellow"
-                                width: 50
-                                height: 30
+                            Row {
+                                height: lblTs.height
+                                Label {
+                                    id: lblTs
+                                    text: qsTr("Date:") + " " + Qt.formatDateTime(model.timestamp)
+                                }
+                                Item { width: AppStyle.marginNormal; height: 1 }
+                                Label {
+                                    text: model.type
+                                }
                             }
-                            Rectangle {
-                                border.width: 2
-                                color: "green"
-                                width: 50
-                                height: 30
+
+                            Row {
+                                height: lblFromN.height
+                                Label {
+                                    id: lblFromN
+                                    text: qsTr("From:") + " "
+                                }
+                                Label {
+                                    text: model.senderType + " / " + model.senderId
+                                }
+                            }
+
+                            Label {
+                                text: model.text
                             }
                         }
                     }
