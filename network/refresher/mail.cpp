@@ -13,11 +13,7 @@ void PeriodicalRefresherWorker::resolve_single_mail_recipient(
         MailRecipient &rcpt,
         const QVector<MailRecipient> &mailingLists)
 {
-    QmlEvemonApp *gApp = globalAppInstance();
-    Db *db = nullptr;
-    if (gApp) {
-        db = gApp->database();
-    }
+    Db *db = globalAppDatabaseInstance();
 
     // For mailing lists - we know them
     if (rcpt.type == MailRecipient::MailingList) {
@@ -83,7 +79,7 @@ void PeriodicalRefresherWorker::resolve_single_mail_recipient(
                         nameFromCache = value_name;
 
                         // save it in cache
-                        if (db) {
+                        if (db && !value_name.isEmpty()) {
                             switch (rcpt.type) {
                             case MailRecipient::Character:   db->saveCachedCharacterName(rcpt.id, value_name);   break;
                             case MailRecipient::Corporation: db->saveCachedCorporationName(rcpt.id, value_name); break;
