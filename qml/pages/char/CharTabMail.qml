@@ -161,6 +161,7 @@ Rectangle {
                                 Label {
                                     id: lblSubject
                                     text: model.subject
+                                    color: AppStyle.textHighlightColor
                                     font.pointSize: AppStyle.textSizeH3
                                     font.bold: !model.isRead
                                 }
@@ -194,34 +195,61 @@ Rectangle {
                     delegate: ItemDelegate {
                         width: mailHeadersRect.width
                         height: col2.height
+                        anchors {
+                            left: parent.left
+                            leftMargin: AppStyle.marginNormal
+                        }
+
                         Column {
                             id: col2
-                            Row {
-                                height: lblTs.height
-                                Label {
-                                    id: lblTs
-                                    text: qsTr("Date:") + " " + Qt.formatDateTime(model.timestamp)
-                                }
-                                Item { width: AppStyle.marginNormal; height: 1 }
-                                Label {
-                                    text: model.type
-                                }
+
+                            Label {
+                                text: model.type
+                                font.bold: true
+                                color: AppStyle.textHighlightColor
                             }
 
                             Row {
                                 height: lblFromN.height
                                 Label {
                                     id: lblFromN
-                                    text: qsTr("From:") + " "
+                                    text: qsTr("From:")
+                                    font.pointSize: AppStyle.textSizeH3
                                 }
+                                Item { width: AppStyle.marginBig; height: 1 }
                                 Label {
                                     text: model.senderDisplayName
+                                    font.bold: true
+                                    font.pointSize: AppStyle.textSizeH3
+                                }
+                                Item { width: AppStyle.marginNormal; height: 1 }
+                                Label {
+                                    text: "(" + model.senderType + ")"
+                                    font.italic: true
+                                    font.pointSize: AppStyle.textSizeH3
+                                }
+                            }
+
+                            Row {
+                                height: lblTs.height
+                                Label {
+                                    id: lblTs
+                                    text: qsTr("Date:")
+                                    font.pointSize: AppStyle.textSizeH3
+                                }
+                                Item { width: AppStyle.marginBig; height: 1 }
+                                Label {
+                                    text: Qt.formatDateTime(model.timestamp)
+                                    font.pointSize: AppStyle.textSizeH3
                                 }
                             }
 
                             Label {
                                 text: model.text
+                                font.pointSize: AppStyle.textSizeH3
                             }
+
+                            Item { width: 1; height: AppStyle.marginSmall }
                         }
                     }
                 }

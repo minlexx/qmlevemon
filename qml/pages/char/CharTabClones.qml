@@ -128,7 +128,7 @@ Rectangle {
                                 anchors.leftMargin: AppStyle.marginBig
                                 font.pointSize: AppStyle.textSizeH3
                                 font.bold: true
-                                color: AppStyle.textQueuedSkillColor // AppStyle.textLightColor
+                                color: AppStyle.textHighlightColor // AppStyle.textLightColor
                                 text: model.cloneLocation.name
                             }
                         }

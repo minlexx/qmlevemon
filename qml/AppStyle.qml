@@ -18,6 +18,7 @@ QtObject {
     property color textUrlColor: "#EFC247"
     property color textQueuedSkillColor: "#6595ea"
     property color textAlphaSkillColor: "orange"
+    property color textHighlightColor: "#5585da"
     property color bgLightColor: "#d3d3d3"
     property color bgColorTrainingNow: "#EEFFEE"
 
