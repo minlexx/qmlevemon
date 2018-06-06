@@ -56,6 +56,7 @@ protected:
     EveLocation send_location_request(quint64 locationId, const QString &locationType, const QByteArray &accessToken);
     void resolve_single_mail_recipient(MailRecipient &rcpt, const QVector<MailRecipient> &mailingLists);
     void resolve_mail_recipients(QVector<MailRecipient> &recipients, const QVector<MailRecipient> &mailingLists);
+    void postprocess_notification_text(QString &text, const QString &type);
     // resolvers
     EveLocation resolve_location(quint64 locationId, const QString &locationType, const QByteArray &accessToken);
     QString resolve_corporation_name(quint64 corpId);

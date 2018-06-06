@@ -6,6 +6,22 @@
 namespace EM {
 
 
+void PeriodicalRefresherWorker::postprocess_notification_text(QString &text, const QString &type)
+{
+    const QStringList lines = text.split(QLatin1Char('\n'));
+    if (type == QStringLiteral("KillReportFinalBlow")) {
+        // killMailHash: 71d96e14914d1ee81dc0ee0164a8f750282a7b90
+        // killMailID: 68095595
+        // victimID: 91168769
+        // victimShipTypeID: 32880
+        QString newText;
+        for (const QString &line: lines) {
+            qCDebug(logRefresher) << line;
+        }
+    }
+}
+
+
 int PeriodicalRefresherWorker::refresh_notifications(Character *ch)
 {
     if (!ch->updateTimestamps().isUpdateNeeded(UpdateTimestamps::UTST::NOTIFICATIONS)) {
@@ -54,6 +70,8 @@ int PeriodicalRefresherWorker::refresh_notifications(Character *ch)
                 ntf.senderDisplayName = corpName + QLatin1String(" (") + tr("corporation") + QLatin1String(")");
             }
         }
+
+        postprocess_notification_text(ntf.text, ntf.notificationType);
 
         // store it in model
         notifications.internalData().append(std::move(ntf));
