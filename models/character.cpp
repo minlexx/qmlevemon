@@ -811,14 +811,16 @@ void Character::resetUpdateTimestamp(UpdateTimestamps::UTST kind) {
     m_update_timestamps.resetTs(kind);
 }
 
-void Character::forceRefreshPublicInfo() { resetUpdateTimestamp(UpdateTimestamps::UTST::PUBLIC); }
-void Character::forceRefreshSkills()  { resetUpdateTimestamp(UpdateTimestamps::UTST::SKILLS); }
-void Character::forceRefreshWallet()  { resetUpdateTimestamp(UpdateTimestamps::UTST::WALLET); }
-void Character::forceRefreshLocation() { resetUpdateTimestamp(UpdateTimestamps::UTST::LOCATION); }
-void Character::forceRefreshClones()  { resetUpdateTimestamp(UpdateTimestamps::UTST::CLONES); }
-void Character::forceRefreshAssets()  { resetUpdateTimestamp(UpdateTimestamps::UTST::ASSETS); }
-void Character::forceRefreshFatigue() { resetUpdateTimestamp(UpdateTimestamps::UTST::FATIGUE); }
-void Character::forceRefreshMail()    { resetUpdateTimestamp(UpdateTimestamps::UTST::MAIL); }
+void Character::forceRefreshPublicInfo()    { resetUpdateTimestamp(UpdateTimestamps::UTST::PUBLIC); }
+void Character::forceRefreshSkills()        { resetUpdateTimestamp(UpdateTimestamps::UTST::SKILLS); }
+void Character::forceRefreshWallet()        { resetUpdateTimestamp(UpdateTimestamps::UTST::WALLET); }
+void Character::forceRefreshWalletJournal() { resetUpdateTimestamp(UpdateTimestamps::UTST::WALLET_JOURNAL); }
+void Character::forceRefreshLocation()      { resetUpdateTimestamp(UpdateTimestamps::UTST::LOCATION); }
+void Character::forceRefreshClones()        { resetUpdateTimestamp(UpdateTimestamps::UTST::CLONES); }
+void Character::forceRefreshAssets()        { resetUpdateTimestamp(UpdateTimestamps::UTST::ASSETS); }
+void Character::forceRefreshFatigue()       { resetUpdateTimestamp(UpdateTimestamps::UTST::FATIGUE); }
+void Character::forceRefreshMail()          { resetUpdateTimestamp(UpdateTimestamps::UTST::MAIL); }
+void Character::forceRefreshNotifications() { resetUpdateTimestamp(UpdateTimestamps::UTST::NOTIFICATIONS); }
 
 QList<QObject *> Character::getSkillsForGroupId(quint64 groupId) const
 {

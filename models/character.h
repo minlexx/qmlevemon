@@ -318,11 +318,13 @@ public Q_SLOTS:
     void forceRefreshPublicInfo();
     void forceRefreshSkills();
     void forceRefreshWallet();
+    void forceRefreshWalletJournal();
     void forceRefreshLocation();
     void forceRefreshClones();
     void forceRefreshAssets();
     void forceRefreshFatigue();
     void forceRefreshMail();
+    void forceRefreshNotifications();
     // ^^ add more, if needed
 
     QList<QObject *> getSkillsForGroupId(quint64 groupId) const;

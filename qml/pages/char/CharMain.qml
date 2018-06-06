@@ -517,12 +517,20 @@ Rectangle {
                 onTriggered: { curChar.forceRefreshWallet(); evemonapp.forceRefresh(); }
             }
             EMPopupMenuItem {
+                text: qsTr("Refresh wallet journal");
+                onTriggered: { curChar.forceRefreshWalletJournal(); evemonapp.forceRefresh(); }
+            }
+            EMPopupMenuItem {
                 text: qsTr("Refresh assets");
                 onTriggered: { curChar.forceRefreshAssets(); evemonapp.forceRefresh(); }
             }
             EMPopupMenuItem {
                 text: qsTr("Refresh mail");
                 onTriggered: { curChar.forceRefreshMail(); evemonapp.forceRefresh(); }
+            }
+            EMPopupMenuItem {
+                text: qsTr("Refresh notifications");
+                onTriggered: { curChar.forceRefreshNotifications(); evemonapp.forceRefresh(); }
             }
 
             function popup(x, y) {
