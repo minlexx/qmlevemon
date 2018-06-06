@@ -215,7 +215,7 @@ Rectangle {
                                     text: qsTr("From:") + " "
                                 }
                                 Label {
-                                    text: model.senderType + " / " + model.senderId
+                                    text: model.senderDisplayName
                                 }
                             }
 

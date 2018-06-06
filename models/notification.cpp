@@ -89,7 +89,7 @@ QHash<int, QByteArray> CharacterNotifications::roleNames() const
         {Role::SenderType,        QByteArrayLiteral("senderType")},
         {Role::Timestamp,         QByteArrayLiteral("timestamp")},
         {Role::Text,              QByteArrayLiteral("text")},
-        {Role::SenderDisplayName, QByteArrayLiteral("SenderDisplayName")},
+        {Role::SenderDisplayName, QByteArrayLiteral("senderDisplayName")},
     };
     return roles;
 }
