@@ -75,6 +75,7 @@ set(qmlevemon_srcs
     "network/refresher/notifications.cpp"
     "network/refresher/periodical_refresher_worker.cpp"
     "network/refresher/public_data.cpp"
+    "network/refresher/resolvers.cpp"
     "network/refresher/server_status.cpp"
     "network/refresher/skills.cpp"
     "network/refresher/wallet.cpp"

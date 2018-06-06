@@ -54,6 +54,7 @@ SOURCES += \
     ./network/refresher/mail.cpp \
     ./network/refresher/notifications.cpp \
     ./network/refresher/public_data.cpp \
+    ./network/refresher/resolvers.cpp \
     ./network/refresher/server_status.cpp \
     ./network/refresher/skills.cpp \
     ./network/refresher/wallet.cpp \
