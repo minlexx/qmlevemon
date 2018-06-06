@@ -13,8 +13,6 @@ void PeriodicalRefresherWorker::resolve_single_mail_recipient(
         MailRecipient &rcpt,
         const QVector<MailRecipient> &mailingLists)
 {
-    Db *db = globalAppDatabaseInstance();
-
     // For mailing lists - we know them
     if (rcpt.type == MailRecipient::MailingList) {
         // get recipient name from mailing lists
@@ -30,66 +28,13 @@ void PeriodicalRefresherWorker::resolve_single_mail_recipient(
             rcpt.name = this->tr("Uknown mailing list", "API parser");
         }
     } else {
-        // Try to resolve recipient name from DB cache
+        // Try to resolve recipient name using our resolver
         QString nameFromCache;
-        if (db) {
-            switch (rcpt.type) {
-            case MailRecipient::Character:   nameFromCache = db->findCachedCharacterName(rcpt.id);   break;
-            case MailRecipient::Corporation: nameFromCache = db->findCachedCorporationName(rcpt.id); break;
-            case MailRecipient::Alliance:    nameFromCache = db->findCachedAllianceName(rcpt.id);    break;
-            default: break;
-            }
-        }
-        if (nameFromCache.isEmpty()) {
-            // cache lookup failed, send API request
-            QVector<quint64> ids{rcpt.id};
-            QJsonArray replyArr;
-            bool api_ok = false;
-
-            switch (rcpt.type) {
-            case MailRecipient::Character:   api_ok = m_api->get_characters_names(replyArr, ids);   break;
-            case MailRecipient::Corporation: api_ok = m_api->get_corporations_names(replyArr, ids); break;
-            case MailRecipient::Alliance:    api_ok = m_api->get_alliances_names(replyArr, ids);    break;
-            default: break;
-            }
-
-            if (api_ok) {
-                for (const QJsonValue &jval: replyArr) {
-                    const QJsonObject &jobj = jval.toObject();
-                    quint64 value_id = 0;
-                    QString value_name;
-                    switch (rcpt.type) {
-                    case MailRecipient::Character: {
-                            value_id   = jobj.value(QLatin1String("character_id")).toVariant().toULongLong();
-                            value_name = jobj.value(QLatin1String("character_name")).toString();
-                        } break;
-                    case MailRecipient::Corporation: {
-                            value_id   = jobj.value(QLatin1String("corporation_id")).toVariant().toULongLong();
-                            value_name = jobj.value(QLatin1String("corporation_name")).toString();
-                        } break;
-                    case MailRecipient::Alliance: {
-                            value_id   = jobj.value(QLatin1String("alliance_id")).toVariant().toULongLong();
-                            value_name = jobj.value(QLatin1String("alliance_name")).toString();
-                        } break;
-                    default: break;
-                    }
-
-                    if (value_id == rcpt.id) {
-                        // found needed id in reply
-                        nameFromCache = value_name;
-
-                        // save it in cache
-                        if (db && !value_name.isEmpty()) {
-                            switch (rcpt.type) {
-                            case MailRecipient::Character:   db->saveCachedCharacterName(rcpt.id, value_name);   break;
-                            case MailRecipient::Corporation: db->saveCachedCorporationName(rcpt.id, value_name); break;
-                            case MailRecipient::Alliance:    db->saveCachedAllianceName(rcpt.id, value_name);    break;
-                            default: break;
-                            }
-                        }
-                    }
-                }
-            }
+        switch (rcpt.type) {
+        case MailRecipient::Character:   nameFromCache = resolve_character_name(rcpt.id);   break;
+        case MailRecipient::Corporation: nameFromCache = resolve_corporation_name(rcpt.id); break;
+        case MailRecipient::Alliance:    nameFromCache = resolve_alliance_name(rcpt.id);    break;
+        default: break;
         }
 
         // finally remember looked up name
@@ -120,19 +65,16 @@ Mail PeriodicalRefresherWorker::requestMailBody(const Character *ch, quint64 mai
     const QVector<MailLabel> &mailLabels = ch->mailLabels()->internalData();
 
     // 1. try from cache
-    QmlEvemonApp *gApp = globalAppInstance();
-    if (gApp) {
-        Db *db = gApp->database();
-        if (db) {
-            const QJsonObject mailJson = db->loadMailBody(ch->characterId(), mailId);
-            if (!mailJson.isEmpty()) {
-                ret = Mail::fromJson(mailJson);
-                ret.resolveLabels(mailLabels);
-                resolve_single_mail_recipient(ret.from, mailingLists);
-                resolve_mail_recipients(ret.recipients, mailingLists);
-                ret.id = mailId;
-                return ret;
-            }
+    Db *db = globalAppDatabaseInstance();
+    if (db) {
+        const QJsonObject mailJson = db->loadMailBody(ch->characterId(), mailId);
+        if (!mailJson.isEmpty()) {
+            ret = Mail::fromJson(mailJson);
+            ret.resolveLabels(mailLabels);
+            resolve_single_mail_recipient(ret.from, mailingLists);
+            resolve_mail_recipients(ret.recipients, mailingLists);
+            ret.id = mailId;
+            return ret;
         }
     }
 
@@ -147,11 +89,8 @@ Mail PeriodicalRefresherWorker::requestMailBody(const Character *ch, quint64 mai
         ret.id = mailId;
 
         // save mail body into cache
-        if (gApp) {
-            Db *db = gApp->database();
-            if (db) {
-                db->saveMailBody(ch->characterId(), mailId, mailJson);
-            }
+        if (db) {
+            db->saveMailBody(ch->characterId(), mailId, mailJson);
         }
     }
     return ret;
