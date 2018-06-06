@@ -7,12 +7,16 @@ namespace EM {
 
 bool Notification::operator==(const Notification &o) const
 {
-    if ((notificationId == o.notificationId)
+    if (
+            (notificationId == o.notificationId)
             && (notificationType == o.notificationType)
             && (senderId == o.senderId)
             && (senderType == o.senderType)
             && (timestamp == o.timestamp)
-            && (text == o.text)) {
+            && (text == o.text)
+            && (senderDisplayName == o.senderDisplayName)
+        )
+    {
         return true;
     }
     return false;
@@ -78,13 +82,14 @@ int CharacterNotifications::rowCount(const QModelIndex &parent) const
 QHash<int, QByteArray> CharacterNotifications::roleNames() const
 {
     static QHash<int,QByteArray> roles = {
-        {Qt::DisplayRole,    QByteArrayLiteral("type")},
-        {Roles::Id,          QByteArrayLiteral("id")},
-        {Roles::Type,        QByteArrayLiteral("type")},
-        {Roles::SenderId,    QByteArrayLiteral("senderId")},
-        {Roles::SenderType,  QByteArrayLiteral("senderType")},
-        {Roles::Timestamp,   QByteArrayLiteral("timestamp")},
-        {Roles::Text,        QByteArrayLiteral("text")},
+        {Qt::DisplayRole,         QByteArrayLiteral("type")},
+        {Role::Id,                QByteArrayLiteral("id")},
+        {Role::Type,              QByteArrayLiteral("type")},
+        {Role::SenderId,          QByteArrayLiteral("senderId")},
+        {Role::SenderType,        QByteArrayLiteral("senderType")},
+        {Role::Timestamp,         QByteArrayLiteral("timestamp")},
+        {Role::Text,              QByteArrayLiteral("text")},
+        {Role::SenderDisplayName, QByteArrayLiteral("SenderDisplayName")},
     };
     return roles;
 }
@@ -102,23 +107,26 @@ QVariant CharacterNotifications::data(const QModelIndex &index, int role) const
     const Notification &ntf = m_data.at(row);
     switch (role) {
     case Qt::DisplayRole:
-    case Roles::Type:
+    case Role::Type:
         ret = ntf.notificationType;
         break;
-    case Roles::Id:
+    case Role::Id:
         ret = ntf.notificationId;
         break;
-    case Roles::SenderId:
+    case Role::SenderId:
         ret = ntf.senderId;
         break;
-    case Roles::SenderType:
+    case Role::SenderType:
         ret = ntf.senderType;
         break;
-    case Roles::Timestamp:
+    case Role::Timestamp:
         ret = ntf.timestamp;
         break;
-    case Roles::Text:
+    case Role::Text:
         ret = ntf.text;
+        break;
+    case Role::SenderDisplayName:
+        ret = ntf.senderDisplayName;
         break;
     }
     return ret;
@@ -146,6 +154,7 @@ QDataStream &operator<<(QDataStream &stream, const EM::Notification &ntf)
     stream << ntf.senderType;
     stream << ntf.timestamp;
     stream << ntf.text;
+    stream << ntf.senderDisplayName;
     return stream;
 }
 
@@ -157,6 +166,7 @@ QDataStream &operator>>(QDataStream &stream, EM::Notification &ntf)
     stream >> ntf.senderType;
     stream >> ntf.timestamp;
     stream >> ntf.text;
+    stream >> ntf.senderDisplayName;
     return stream;
 }
 

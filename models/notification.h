@@ -46,6 +46,7 @@ public:
     QString senderType;
     QDateTime timestamp;
     QString text;
+    QString senderDisplayName;
 };
 
 
@@ -53,8 +54,9 @@ class CharacterNotifications: public QAbstractListModel
 {
     Q_OBJECT
 private:
-    enum Roles {
-        Id = Qt::UserRole + 1, Type, SenderId, SenderType, Timestamp, Text
+    enum Role {
+        Id = Qt::UserRole + 1, Type, SenderId, SenderType, Timestamp, Text,
+        SenderDisplayName
     };
 
 public:
