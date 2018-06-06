@@ -1,8 +1,6 @@
 #include "periodical_refresher_worker.h"
 #include "../periodical_refresher.h" // logging category
 #include "eve_api/eve_api.h"
-#include "qmlevemon_app.h"
-#include "db/db.h"
 
 
 namespace EM {
@@ -36,8 +34,6 @@ int PeriodicalRefresherWorker::refresh_notifications(Character *ch)
     //      "type": "SeasonalChallengeCompleted"
     //    },
 
-    QmlEvemonApp *gApp = globalAppInstance();
-
     CharacterNotifications notifications;
     for (const QJsonValue &jv: replyArr) {
         const QJsonObject jobj = jv.toObject();
@@ -53,11 +49,9 @@ int PeriodicalRefresherWorker::refresh_notifications(Character *ch)
         // resolve sender
         ntf.senderDisplayName = QString(QLatin1String("%1 / %2")).arg(ntf.senderType).arg(ntf.senderId);
         if (ntf.senderType == QStringLiteral("corporation")) {
-            if (gApp) {
-                Db *db = gApp->database();
-                if (db) {
-                    //
-                }
+            QString corpName = this->resolve_corporation_name(ntf.senderId);
+            if (!corpName.isEmpty()) {
+                ntf.senderDisplayName = corpName + QLatin1String(" (") + tr("corporation") + QLatin1String(")");
             }
         }
 
