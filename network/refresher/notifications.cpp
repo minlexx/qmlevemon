@@ -1,13 +1,27 @@
 #include "periodical_refresher_worker.h"
 #include "../periodical_refresher.h" // logging category
 #include "eve_api/eve_api.h"
+#include "qmlevemon_app.h"
+#include "db/db.h"
 
 
 namespace EM {
 
 
+static QString ntfline_value(const QString &line)
+{
+    QString ret;
+    const QStringList lst = line.split(QLatin1String(": "));
+    if (lst.size() == 2) {
+        ret = lst.at(1).trimmed();
+    }
+    return ret;
+}
+
+
 void PeriodicalRefresherWorker::postprocess_notification_text(QString &text, const QString &type)
 {
+    Db *db = globalAppDatabaseInstance();
     const QStringList lines = text.split(QLatin1Char('\n'));
     if (type == QStringLiteral("KillReportFinalBlow")) {
         // killMailHash: 71d96e14914d1ee81dc0ee0164a8f750282a7b90
@@ -15,8 +29,43 @@ void PeriodicalRefresherWorker::postprocess_notification_text(QString &text, con
         // victimID: 91168769
         // victimShipTypeID: 32880
         QString newText;
+        quint64 victimId = 0;
+        quint64 shipTypeId = 0;
         for (const QString &line: lines) {
-            qCDebug(logRefresher) << line;
+            if (line.startsWith(QLatin1String("victimID: "))) {
+                victimId = ntfline_value(line).toULongLong();
+            }
+            if (line.startsWith(QLatin1String("victimShipTypeID: "))) {
+                shipTypeId = ntfline_value(line).toULongLong();
+            }
+        }
+        if ((victimId > 0) && (shipTypeId > 0) && db) {
+            const QString charName = resolve_character_name(victimId);
+            const QString shipName = db->typeName(shipTypeId);
+            newText = QString(QLatin1String("<b>%1</b>  lost a  <b>%2</b>")).arg(charName).arg(shipName);
+        }
+
+        if (!newText.isEmpty()) {
+            text = newText;
+        }
+    } else if (type == QStringLiteral("KillReportVictim")) {
+        // killMailHash: 71d96e14914d1ee81dc0ee0164a8f750282a7b90
+        // killMailID: 68095595
+        // victimShipTypeID: 32880
+        QString newText;
+        quint64 shipTypeId = 0;
+        for (const QString &line: lines) {
+            if (line.startsWith(QLatin1String("victimShipTypeID: "))) {
+                shipTypeId = ntfline_value(line).toULongLong();
+            }
+        }
+        if ((shipTypeId > 0) && db) {
+            const QString shipName = db->typeName(shipTypeId);
+            newText = QString(QLatin1String("<b>You</b>  lost a  <b>%2</b>")).arg(shipName);
+        }
+
+        if (!newText.isEmpty()) {
+            text = newText;
         }
     }
 }
@@ -67,7 +116,12 @@ int PeriodicalRefresherWorker::refresh_notifications(Character *ch)
         if (ntf.senderType == QStringLiteral("corporation")) {
             QString corpName = this->resolve_corporation_name(ntf.senderId);
             if (!corpName.isEmpty()) {
-                ntf.senderDisplayName = corpName + QLatin1String(" (") + tr("corporation") + QLatin1String(")");
+                ntf.senderDisplayName = corpName;
+            }
+        } else if (ntf.senderType == QStringLiteral("character")) {
+            QString charName = this->resolve_character_name(ntf.senderId);
+            if (!charName.isEmpty()) {
+                ntf.senderDisplayName = charName;
             }
         }
 
