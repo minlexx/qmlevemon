@@ -39,8 +39,9 @@ Q_SIGNALS:
     void localHttpServerPortChanged();
 
 private:
+    Q_DISABLE_COPY(EveSsoLoginManager)
     Q_DECLARE_PRIVATE(EveSsoLoginManager)
-    EveSsoLoginManagerPrivate *const d_ptr;
+    EveSsoLoginManagerPrivate *d_ptr = nullptr;
 };
 
 
