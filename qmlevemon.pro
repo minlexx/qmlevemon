@@ -1,5 +1,5 @@
 TEMPLATE = app
-VERSION = 0.1
+VERSION = 0.2
 CONFIG += C++11
 QT += core network xml sql gui qml quick quickcontrols2
 win32: QT += widgets
