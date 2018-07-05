@@ -71,3 +71,14 @@ target_link_libraries(test_character_skillqueue_info
     Qt5::Test
 )
 add_test(NAME test_character_skillqueue_info COMMAND test_character_skillqueue_info)
+
+
+add_executable(test_eveapi "test_eveapi.cpp"  "../eve_api/eve_api.cpp")
+target_include_directories(test_eveapi PRIVATE "../")
+target_compile_definitions(test_eveapi PRIVATE INSIDE_TEST)
+target_link_libraries(test_eveapi
+    Qt5::Core
+    Qt5::Network
+    Qt5::Test
+)
+add_test(NAME test_eveapi COMMAND test_eveapi)
