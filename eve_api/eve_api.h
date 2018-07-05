@@ -76,6 +76,7 @@ public:
     // universe
     bool get_universe_bloodlines(QJsonArray& replyArr);
     bool get_universe_constellation(QJsonObject& reply, quint64 constellation_id);
+    bool post_universe_names(QJsonArray &replyArr, const QVector<quint64> &ids);
     bool get_universe_races(QJsonArray& replyArr);
     bool get_universe_region(QJsonObject& reply, quint64 region_id);
     bool get_universe_station(QJsonObject& reply, quint64 station_id);

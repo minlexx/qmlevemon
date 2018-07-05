@@ -810,6 +810,33 @@ bool EveApi::get_universe_constellation(QJsonObject& reply, quint64 constellatio
     return true;
 }
 
+bool EveApi::post_universe_names(QJsonArray &replyArr, const QVector<quint64> &ids)
+{
+    if (ids.isEmpty()) {
+        return true;
+    }
+    // https://esi.evetech.net/ui/?version=latest#/Universe/post_universe_names
+    QJsonDocument jdoc;
+    QByteArray ids_str("["); // future POST data
+    for (quint64 id: ids) {
+        if (ids_str.size() > 1) { // more than just "["
+            ids_str.append(",");
+        }
+        const QByteArray id_str = QByteArray::number(id, 10);
+        ids_str.append(id_str);
+    }
+    ids_str.append("]");
+    int reply_http_status = 0;
+    QString url = QString(QLatin1String("/universe/names/"));
+    bool req_ok = this->send_general_esi_request_json(
+                EsiReqType::POST, url, QUrlQuery(), ids_str, 15, QByteArray(),
+                reply_http_status, jdoc);
+    if (!req_ok || (reply_http_status != 200)) return false;
+    if (!jdoc.isObject()) return false;
+    replyArr = jdoc.array();
+    return true;
+}
+
 
 bool EveApi::get_universe_races(QJsonArray& replyArr)
 {
