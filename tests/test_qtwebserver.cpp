@@ -1,16 +1,22 @@
 #include <QCoreApplication>
 #include <QFile>
 #include <QTimer>
+#include <QtTest>
 #include <QDebug>
+#include <QLoggingCategory>
 
 #include "tcp/tcpmultithreadedserver.h"
 #include "http/httpwebengine.h"
 #include "http/httpiodeviceresource.h"
 
+Q_LOGGING_CATEGORY(logQtWebServer, "qtwebserver")
+Q_LOGGING_CATEGORY(logQuitResource, "qtwebserver.quit")
+
 using namespace QtWebServer;
 
 
 class QuitResource: public Http::Resource {
+    Q_OBJECT
 public:
     QuitResource(QString uniqueIdentifier, QObject *parent = nullptr):
         Http::Resource(uniqueIdentifier, parent)
@@ -23,46 +29,56 @@ public:
         if (request.method() == "get") {
             response.setBody(QByteArray("quit requested, exiting"));
             response.setStatusCode(Http::Ok);
-            qDebug() << "quit requested!";
+            qCDebug(logQuitResource) << "quit requested!";
             QTimer::singleShot(1000, this, &QuitResource::delayedQuit);
         }
     }
 
 public Q_SLOTS:
     void delayedQuit() {
-        qDebug() << "calling qApp()->quit()";
+        qCDebug(logQuitResource) << "calling qApp()->quit()";
         QCoreApplication::instance()->quit();
     }
 };
 
 
-int main(int argc, char *argv[])
+class TestQtWebServer: public QObject
 {
-    QCoreApplication app(argc, argv);
+    Q_OBJECT
+private:
+    QtWebServer::Tcp::MultithreadedServer m_server;
+    QtWebServer::Http::WebEngine m_webengine;
 
-    QtWebServer::Tcp::MultithreadedServer server;
-    QtWebServer::Http::WebEngine webengine;
+private Q_SLOTS:
+    void initTestCase() {
+        QtWebServer::Http::IODeviceResource *test_file = new QtWebServer::Http::IODeviceResource(
+                    "/test", new QFile("hello.txt"));
+        QtWebServer::Http::IODeviceResource *test_html = new QtWebServer::Http::IODeviceResource(
+                    "/html", new QFile("html_test.html"));
 
-    QtWebServer::Http::IODeviceResource *test_file = new QtWebServer::Http::IODeviceResource(
-                "/test", new QFile("hello.txt"));
-    QtWebServer::Http::IODeviceResource *test_html = new QtWebServer::Http::IODeviceResource(
-                "/html", new QFile("html_test.html"));
+        m_webengine.addResource(test_file);
+        m_webengine.addResource(test_html);
+        m_webengine.addResource(new QuitResource("/quit"));
 
-    webengine.addResource(test_file);
-    webengine.addResource(test_html);
-    webengine.addResource(new QuitResource("/quit"));
+        m_server.setResponder(&m_webengine);
+    }
 
-    server.setResponder(&webengine);
+    void cleanupTestCase() {
+        m_server.close();
+    }
 
-    qDebug() << "Before listen()";
+    void test_listen() {
+        qCDebug(logQtWebServer) << "Before listen()";
+        m_server.listen(QHostAddress::Any, 3000);
+        qCDebug(logQtWebServer) << "After listen()";
+    }
 
-    server.listen(QHostAddress::Any, 3000);
+    void test_run() {
+        // int mainret = app.exec();
+        qCDebug(logQtWebServer) << "TODO: run webserver for a period of time (not implemented yet)";
+    }
+};
 
-    qDebug() << "After listen()";
+QTEST_GUILESS_MAIN(TestQtWebServer)
 
-    int mainret = app.exec();
-
-    server.close();
-
-    return mainret;
-}
+#include "test_qtwebserver.moc"
