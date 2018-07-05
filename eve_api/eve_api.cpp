@@ -15,7 +15,12 @@
 #include <QDebug>
 
 #include "eve_api.h"
+
+#ifndef INSIDE_TEST
+// INSIDE_TEST is defined when building tests,
+//  and in tests we don't want to pull extra dependencies and libs
 #include "qmlevemon_app.h"
+#endif
 
 
 Q_LOGGING_CATEGORY(logApi, "evemon.eveapi")
@@ -34,13 +39,16 @@ QByteArray evesso_client_secret_key() {
 
 QByteArray evesso_user_agent() {
     QByteArray ret;
+#ifndef INSIDE_TEST
     QmlEvemonApp *gApp = globalAppInstance();
     if (!gApp) return ret;
     ret.append(gApp->applicationName().toUtf8());
     ret.append("/");
     ret.append(gApp->applicationVersion().toUtf8());
     ret.append(", alexey.min@gmail.com");
-    // "qmlevemon/0.1.0, alexey.min@gmail.com"
+#else
+    ret = "qmlevemon/0.2.0, alexey.min@gmail.com";
+#endif
     return ret;
 }
 
@@ -55,10 +63,12 @@ bool eveapi_request_first_access_token(const QString& code,
     QNetworkAccessManager nam;
 
     // check for proxy settings
+#ifndef INSIDE_TEST
     AppSettings *settings = globalAppSettings();
     if (settings->isProxyEnabled()) {
         nam.setProxy(settings->proxySettings());
     }
+#endif
 
     QObject::connect(&nam, &QNetworkAccessManager::finished,
                      &local_event_loop, &QEventLoop::quit);
@@ -149,7 +159,7 @@ bool eveapi_request_first_access_token(const QString& code,
         return false;
     }
 
-#ifdef QT_DEBUG
+#if defined(QT_DEBUG) && !defined(INSIDE_TEST)
     qCDebug(logApi) << result.toString();
 #endif
 
@@ -164,10 +174,12 @@ bool eveapi_refresh_access_token(EveOAuthTokens& tokens)
     QNetworkAccessManager nam;
 
     // check for proxy settings
+#ifndef INSIDE_TEST
     AppSettings *settings = globalAppSettings();
     if (settings->isProxyEnabled()) {
         nam.setProxy(settings->proxySettings());
     }
+#endif
 
     QObject::connect(&nam, &QNetworkAccessManager::finished,
                      &local_event_loop, &QEventLoop::quit);
@@ -241,11 +253,14 @@ EveApi::EveApi(QObject *parent):
     m_esi_base_url = QLatin1String("https://esi.tech.ccp.is/latest");
 
     // check for proxy settings
+#ifndef INSIDE_TEST
     QmlEvemonApp *gApp = globalAppInstance();
     if (gApp) {
         QObject::connect(gApp, &QmlEvemonApp::settingsChanged,
                          this, &EveApi::onProxySettingsChanged);
     }
+#endif
+
     // call slot to update proxy settings
     onProxySettingsChanged();
 }
@@ -258,12 +273,14 @@ EveApi::~EveApi()
 
 void EveApi::onProxySettingsChanged()
 {
+#ifndef INSIDE_TEST
     AppSettings *settings = globalAppSettings();
     if (settings->isProxyEnabled()) {
         m_nam->setProxy(settings->proxySettings());
     } else {
         m_nam->setProxy(QNetworkProxy::NoProxy);
     }
+#endif
 }
 
 
