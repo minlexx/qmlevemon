@@ -12,7 +12,7 @@ using namespace QtWebServer;
 
 class QuitResource: public Http::Resource {
 public:
-    QuitResource(QString uniqueIdentifier, QObject *parent = 0):
+    QuitResource(QString uniqueIdentifier, QObject *parent = nullptr):
         Http::Resource(uniqueIdentifier, parent)
     {
         setContentType("text/plain");
