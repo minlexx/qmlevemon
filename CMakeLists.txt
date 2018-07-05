@@ -166,6 +166,7 @@ endif()
 
 if (BUILD_TESTING)
     message(STATUS "BUILD_TESTING is ON: Will build tests")
+    enable_testing()
     add_subdirectory(tests)
 endif()
 

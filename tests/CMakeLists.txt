@@ -31,7 +31,9 @@ target_link_libraries(test_qtwebserver
     Qt5::Network
     Qt5::Sql
     Qt5::Xml
+    Qt5::Test
 )
+add_test(NAME test_qtwebserver COMMAND test_qtwebserver)
 
 
 #set(test_character_datastream_srcs
@@ -68,3 +70,4 @@ target_link_libraries(test_character_skillqueue_info
     Qt5::Core
     Qt5::Test
 )
+add_test(NAME test_character_skillqueue_info COMMAND test_character_skillqueue_info)
