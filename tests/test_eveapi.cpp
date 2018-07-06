@@ -6,12 +6,29 @@
 #include <QtTest>
 #include <QDebug>
 #include <QLoggingCategory>
-//#include <QNetworkProxy>
-//#include <QNetworkProxyFactory>
+#include <QNetworkProxy>
+#include <QNetworkProxyFactory>
 
 #include "eve_api/eve_api.h"
 
+
 Q_LOGGING_CATEGORY(logTestApi, "test.eveapi")
+Q_LOGGING_CATEGORY(logProxyFactory, "test.proxyfactory")
+
+
+class SystemProxyFactory: public QNetworkProxyFactory
+{
+public:
+    SystemProxyFactory(): QNetworkProxyFactory() {}
+    virtual ~SystemProxyFactory() override {}
+
+    QList<QNetworkProxy> queryProxy(const QNetworkProxyQuery &query = QNetworkProxyQuery()) override {
+        QList<QNetworkProxy> ret = QNetworkProxyFactory::systemProxyForQuery(query);
+        qCDebug(logProxyFactory) << "Returning proxy:" << ret;
+        return ret;
+    }
+};
+
 
 class TestEveApi: public QObject
 {
@@ -29,9 +46,11 @@ private Q_SLOTS:
         ids_vector << 91205062; // Lexx Min
         ids_vector << 95367553; // Alya Kastra
 
-        // app global proxy
-        //QNetworkProxyFactory *f = m_api.nam()->proxyFactory();
-        //qCDebug(logTestApi) << "API's proxy factory:" << f;
+        m_api.setAutoRetry(10);
+
+        // access manager proxy
+        QNetworkProxyFactory *fct = new SystemProxyFactory();
+        m_api.nam()->setProxyFactory(fct);
     }
 
     void cleanupTestCase() { }
