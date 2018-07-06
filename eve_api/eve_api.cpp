@@ -378,10 +378,23 @@ bool EveApi::send_general_esi_request(
         return false;
     }
 
+    if (reply_http_status >= 300) {
+        qCWarning(logApi) << "ESI request returned bad HTTP code:" << reply_http_status
+                          << url.toString();
+    }
+
     const QList<QByteArray> &hlist = reply->rawHeaderList();
     reply_headers.clear();
     for (const QByteArray &rawheader: hlist) {
-        reply_headers.insert(rawheader, reply->rawHeader(rawheader));
+        const QByteArray headerValue = reply->rawHeader(rawheader);
+        reply_headers.insert(rawheader, headerValue);
+#ifdef QT_DEBUG
+        // not compiled in Release builds
+        if (reply_http_status != 200) {
+            // debug out put all reply headers if HTTP reply code is not 200
+            qCDebug(logApi).nospace() << "    " << rawheader << ": " << headerValue;
+        }
+#endif
     }
 
     return true;
@@ -878,7 +891,7 @@ bool EveApi::post_universe_names(QJsonArray &replyArr, const QVector<quint64> &i
                 EsiReqType::POST, url, QUrlQuery(), ids_str, 15, QByteArray(),
                 reply_http_status, jdoc);
     if (!req_ok || (reply_http_status != 200)) return false;
-    if (!jdoc.isObject()) return false;
+    if (!jdoc.isArray()) return false;
     replyArr = jdoc.array();
     return true;
 }
