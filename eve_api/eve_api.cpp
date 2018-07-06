@@ -917,6 +917,9 @@ bool EveApi::post_universe_names(QJsonArray &replyArr, const QVector<quint64> &i
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!jdoc.isArray()) return false;
     replyArr = jdoc.array();
+    // return value example:
+    // QJsonArray([{"category":"character","id":91205062,"name":"Lexx Min"},
+    //             {"category":"character","id":95367553,"name":"Alya Kastra"}])
     return true;
 }
 
