@@ -250,7 +250,8 @@ EveApi::EveApi(QObject *parent):
     QObject(parent),
     m_nam(new QNetworkAccessManager(this))
 {
-    m_esi_base_url = QLatin1String("https://esi.tech.ccp.is/latest");
+    //m_esi_base_url = QLatin1String("https://esi.tech.ccp.is/latest");
+    m_esi_base_url = QLatin1String("https://esi.evetech.net/latest");
 
     // check for proxy settings
 #ifndef INSIDE_TEST
@@ -371,6 +372,17 @@ bool EveApi::send_general_esi_request(
         req_timer.stop();
         reply_http_status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
         replyBa = reply->readAll();
+
+        if (reply_http_status == 0 || replyBa.isEmpty()) {
+            QNetworkReply::NetworkError reply_error = reply->error();
+            QString reply_error_string = reply->errorString();
+            if (reply_error != QNetworkReply::NoError) {
+                reply_http_status = -2;
+                qCWarning(logApi) << "Network error:" << reply_error
+                                  << reply_error_string;
+                return false;
+            }
+        }
     } else {
         reply_http_status = -1; // indicate timeout
         qCWarning(logApi) << "ESI request:" << url.toString()
@@ -378,7 +390,7 @@ bool EveApi::send_general_esi_request(
         return false;
     }
 
-    if (reply_http_status >= 300) {
+    if ((reply_http_status >= 300) || (reply_http_status < 200)) {
         qCWarning(logApi) << "ESI request returned bad HTTP code:" << reply_http_status
                           << url.toString();
     }
