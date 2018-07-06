@@ -47,6 +47,9 @@ public:
     QString esiBaseUrl() const;
     void setEsiBaseUrl(const QString &esiUrl);
 
+    int timeoutSecs() const;
+    void setTimeoutSecs(int t);
+
 protected Q_SLOTS:
     void onProxySettingsChanged();
 
@@ -98,7 +101,6 @@ protected:
             const QUrlQuery &get_params,
             const QByteArray &post_data,
             const QMap<QByteArray, QByteArray> &req_headers, // any extra request headers
-            int timeout_seconds,
             const QByteArray &access_token, // empty string, if not needed
             // output arguments
             int &reply_http_status,  // returns HTTP status code, or -1 on timeout
@@ -112,7 +114,6 @@ protected:
             const QString& api_url,
             const QUrlQuery& get_params,
             const QByteArray& post_data,
-            int timeout_seconds,
             const QByteArray &access_token,
             // output arguments
             int& reply_http_status,
@@ -125,15 +126,15 @@ protected:
             const QString& api_url,
             const QUrlQuery& get_params,
             const QByteArray& post_data,
-            int timeout_seconds,
             const QByteArray &access_token,
             // output arguments
             int& reply_http_status,
             QJsonDocument& replyJson);
 
 protected:
-    QNetworkAccessManager *m_nam;
+    QNetworkAccessManager *m_nam = nullptr;
     QString m_esi_base_url;
+    int m_timeoutSecs = 15;
 };
 
 

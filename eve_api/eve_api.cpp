@@ -267,25 +267,17 @@ EveApi::EveApi(QObject *parent):
 }
 
 
-EveApi::~EveApi()
-{
-    // nothing?
-}
+EveApi::~EveApi() { }
 
-QNetworkAccessManager *EveApi::nam()
-{
-    return m_nam;
-}
+QNetworkAccessManager *EveApi::nam() { return m_nam; }
 
-QString EveApi::esiBaseUrl() const
-{
-    return m_esi_base_url;
-}
+QString EveApi::esiBaseUrl() const { return m_esi_base_url; }
 
-void EveApi::setEsiBaseUrl(const QString &esiUrl)
-{
-    m_esi_base_url = esiUrl;
-}
+void EveApi::setEsiBaseUrl(const QString &esiUrl) { m_esi_base_url = esiUrl; }
+
+int EveApi::timeoutSecs() const { return m_timeoutSecs; }
+
+void EveApi::setTimeoutSecs(int t) { m_timeoutSecs = t; }
 
 void EveApi::onProxySettingsChanged()
 {
@@ -307,7 +299,6 @@ bool EveApi::send_general_esi_request(
         const QUrlQuery &get_params,
         const QByteArray &post_data,
         const QMap<QByteArray, QByteArray> &req_headers,
-        int timeout_seconds,
         const QByteArray &access_token,
         // output arguments
         int &reply_http_status,
@@ -356,7 +347,7 @@ bool EveApi::send_general_esi_request(
 
     // init timer
     req_timer.setSingleShot(true);
-    req_timer.setInterval(1000 * timeout_seconds);
+    req_timer.setInterval(1000 * m_timeoutSecs);
     req_timer.start();
 
     QScopedPointer<QNetworkReply> reply(Q_NULLPTR);
@@ -420,7 +411,6 @@ bool EveApi::send_general_esi_request_simplified(
         const QString &api_url,
         const QUrlQuery &get_params,
         const QByteArray &post_data,
-        int timeout_seconds,
         const QByteArray &access_token,
         // output arguments
         int &reply_http_status,
@@ -430,8 +420,8 @@ bool EveApi::send_general_esi_request_simplified(
     QMap<QByteArray, QByteArray> reply_headers;
     return this->send_general_esi_request(
                 rtype, api_url, get_params, post_data,
-                req_headers, timeout_seconds, access_token,
-                reply_http_status, reply_headers, replyBa);
+                req_headers, access_token, reply_http_status,
+                reply_headers, replyBa);
 }
 
 
@@ -442,7 +432,6 @@ bool EveApi::send_general_esi_request_json(
         const QString &api_url,
         const QUrlQuery &get_params,
         const QByteArray &post_data,
-        int timeout_seconds,
         const QByteArray &access_token,
         // output arguments
         int &reply_http_status,
@@ -458,7 +447,7 @@ bool EveApi::send_general_esi_request_json(
 
     bool req_ok = this->send_general_esi_request(
                 rtype, api_url, get_params,
-                post_data, req_headers, timeout_seconds,
+                post_data, req_headers,
                 access_token, reply_http_status,
                 reply_headers, replyBa);
     if (!req_ok) {
@@ -488,7 +477,7 @@ bool EveApi::get_server_status(QJsonObject &reply)
     int reply_http_status = 0;
     bool req_ok = this->send_general_esi_request_json(
                 EsiReqType::GET, QLatin1String("/status/"),
-                QUrlQuery(), QByteArray(), 15, QByteArray(),
+                QUrlQuery(), QByteArray(), QByteArray(),
                 reply_http_status, reply_doc);
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!reply_doc.isObject()) return false;
@@ -517,7 +506,7 @@ bool EveApi::get_characters_names(QJsonArray &replyArr, const QVector<quint64> &
     urlQuery.addQueryItem(QLatin1String("character_ids"), convert_ids_to_string(ids));
     bool req_ok = this->send_general_esi_request_json(
                 EsiReqType::GET, QLatin1String("/characters/names/"),
-                urlQuery, QByteArray(), 15, QByteArray(),
+                urlQuery, QByteArray(), QByteArray(),
                 reply_http_status, reply_doc);
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!reply_doc.isArray()) return false;
@@ -537,7 +526,7 @@ bool EveApi::get_corporations_names(QJsonArray &replyArr, const QVector<quint64>
     urlQuery.addQueryItem(QLatin1String("corporation_ids"), convert_ids_to_string(ids));
     bool req_ok = this->send_general_esi_request_json(
                 EsiReqType::GET, QLatin1String("/corporations/names/"),
-                urlQuery, QByteArray(), 15, QByteArray(),
+                urlQuery, QByteArray(), QByteArray(),
                 reply_http_status, reply_doc);
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!reply_doc.isArray()) return false;
@@ -557,7 +546,7 @@ bool EveApi::get_alliances_names(QJsonArray &replyArr, const QVector<quint64> &i
     urlQuery.addQueryItem(QLatin1String("alliance_ids"), convert_ids_to_string(ids));
     bool req_ok = this->send_general_esi_request_json(
                 EsiReqType::GET, QLatin1String("/alliances/names/"),
-                urlQuery, QByteArray(), 15, QByteArray(),
+                urlQuery, QByteArray(), QByteArray(),
                 reply_http_status, reply_doc);
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!reply_doc.isArray()) return false;
@@ -576,7 +565,7 @@ bool EveApi::get_character_attributes(QJsonObject &reply, quint64 char_id, const
     int reply_http_status = 0;
     QString url = QString(QLatin1String("/characters/%1/attributes/")).arg(char_id);
     bool req_ok = this->send_general_esi_request_json(
-                EsiReqType::GET, url, QUrlQuery(), QByteArray(), 15, access_token,
+                EsiReqType::GET, url, QUrlQuery(), QByteArray(), access_token,
                 reply_http_status, replyJson);
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!replyJson.isObject()) return false;
@@ -590,7 +579,7 @@ bool EveApi::get_character_clones(QJsonObject &reply, quint64 char_id, const QBy
     int reply_http_status = 0;
     QString url = QString(QLatin1String("/characters/%1/clones/")).arg(char_id);
     bool req_ok = this->send_general_esi_request_json(
-                EsiReqType::GET, url, QUrlQuery(), QByteArray(), 15, access_token,
+                EsiReqType::GET, url, QUrlQuery(), QByteArray(), access_token,
                 reply_http_status, replyJson);
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!replyJson.isObject()) return false;
@@ -604,7 +593,7 @@ bool EveApi::get_character_fatigue(QJsonObject &reply, quint64 char_id, const QB
     int reply_http_status = 0;
     QString url = QString(QLatin1String("/characters/%1/fatigue/")).arg(char_id);
     bool req_ok = this->send_general_esi_request_json(
-                EsiReqType::GET, url, QUrlQuery(), QByteArray(), 15, access_token,
+                EsiReqType::GET, url, QUrlQuery(), QByteArray(), access_token,
                 reply_http_status, replyJson);
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!replyJson.isObject()) return false;
@@ -618,7 +607,7 @@ bool EveApi::get_character_implants(QJsonArray &replyArr, quint64 char_id, const
     int reply_http_status = 0;
     QString url = QString(QLatin1String("/characters/%1/implants/")).arg(char_id);
     bool req_ok = this->send_general_esi_request_json(
-                EsiReqType::GET, url, QUrlQuery(), QByteArray(), 15, access_token,
+                EsiReqType::GET, url, QUrlQuery(), QByteArray(), access_token,
                 reply_http_status, replyJson);
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!replyJson.isArray()) return false;
@@ -633,7 +622,7 @@ bool EveApi::get_character_public_info(QJsonObject &reply, quint64 char_id)
     int reply_http_status = 0;
     QString url = QString(QLatin1String("/characters/%1/")).arg(char_id);
     bool req_ok = this->send_general_esi_request_json(
-                EsiReqType::GET, url, QUrlQuery(), QByteArray(), 15, QByteArray(),
+                EsiReqType::GET, url, QUrlQuery(), QByteArray(), QByteArray(),
                 reply_http_status, replyJson);
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!replyJson.isObject()) return false;
@@ -648,7 +637,7 @@ bool EveApi::get_character_location(QJsonObject &reply, quint64 char_id, const Q
     int reply_http_status = 0;
     QString url = QString(QLatin1String("/characters/%1/location/")).arg(char_id);
     bool req_ok = this->send_general_esi_request_json(
-                EsiReqType::GET, url, QUrlQuery(), QByteArray(), 15, access_token,
+                EsiReqType::GET, url, QUrlQuery(), QByteArray(), access_token,
                 reply_http_status, replyJson);
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!replyJson.isObject()) return false;
@@ -666,7 +655,7 @@ bool EveApi::get_character_mail_headers(QJsonArray &replyArr, quint64 char_id, c
         query.addQueryItem(QLatin1String("last_mail_id"), QString::number(last_mail_id));
     }
     bool req_ok = this->send_general_esi_request_json(
-                EsiReqType::GET, url, query, QByteArray(), 15, access_token,
+                EsiReqType::GET, url, query, QByteArray(), access_token,
                 reply_http_status, replyJson);
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!replyJson.isArray()) return false;
@@ -680,7 +669,7 @@ bool EveApi::get_character_mail_id(QJsonObject &reply, quint64 char_id, const QB
     int reply_http_status = 0;
     QString url = QString(QLatin1String("/characters/%1/mail/%2/")).arg(char_id).arg(mail_id);
     bool req_ok = this->send_general_esi_request_json(
-                EsiReqType::GET, url, QUrlQuery(), QByteArray(), 15, access_token,
+                EsiReqType::GET, url, QUrlQuery(), QByteArray(), access_token,
                 reply_http_status, replyJson);
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!replyJson.isObject()) return false;
@@ -694,7 +683,7 @@ bool EveApi::get_character_mail_labels(QJsonObject &reply, quint64 char_id, cons
     int reply_http_status = 0;
     QString url = QString(QLatin1String("/characters/%1/mail/labels/")).arg(char_id);
     bool req_ok = this->send_general_esi_request_json(
-                EsiReqType::GET, url, QUrlQuery(), QByteArray(), 15, access_token,
+                EsiReqType::GET, url, QUrlQuery(), QByteArray(), access_token,
                 reply_http_status, replyJson);
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!replyJson.isObject()) return false;
@@ -708,7 +697,7 @@ bool EveApi::get_character_mailing_lists(QJsonArray &replyArr, quint64 char_id, 
     int reply_http_status = 0;
     QString url = QString(QLatin1String("/characters/%1/mail/lists/")).arg(char_id);
     bool req_ok = this->send_general_esi_request_json(
-                EsiReqType::GET, url, QUrlQuery(), QByteArray(), 15, access_token,
+                EsiReqType::GET, url, QUrlQuery(), QByteArray(), access_token,
                 reply_http_status, replyJson);
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!replyJson.isArray()) return false;
@@ -722,7 +711,7 @@ bool EveApi::get_character_notifications(QJsonArray &replyArr, quint64 char_id, 
     int reply_http_status = 0;
     QString url = QString(QLatin1String("/characters/%1/notifications/")).arg(char_id);
     bool req_ok = this->send_general_esi_request_json(
-                EsiReqType::GET, url, QUrlQuery(), QByteArray(), 15, access_token,
+                EsiReqType::GET, url, QUrlQuery(), QByteArray(), access_token,
                 reply_http_status, replyJson);
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!replyJson.isArray()) return false;
@@ -737,7 +726,7 @@ bool EveApi::get_character_ship(QJsonObject &reply, quint64 char_id, const QByte
     int reply_http_status = 0;
     QString url = QString(QLatin1String("/characters/%1/ship/")).arg(char_id);
     bool req_ok = this->send_general_esi_request_json(
-                EsiReqType::GET, url, QUrlQuery(), QByteArray(), 15, access_token,
+                EsiReqType::GET, url, QUrlQuery(), QByteArray(), access_token,
                 reply_http_status, replyJson);
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!replyJson.isObject()) return false;
@@ -752,7 +741,7 @@ bool EveApi::get_character_skillqueue(QJsonArray &replyArr, quint64 char_id, con
     int reply_http_status = 0;
     QString url = QString(QLatin1String("/characters/%1/skillqueue/")).arg(char_id);
     bool req_ok = this->send_general_esi_request_json(
-                EsiReqType::GET, url, QUrlQuery(), QByteArray(), 15, access_token,
+                EsiReqType::GET, url, QUrlQuery(), QByteArray(), access_token,
                 reply_http_status, replyJson);
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!replyJson.isArray()) return false;
@@ -767,7 +756,7 @@ bool EveApi::get_character_skills(QJsonObject &reply, quint64 char_id, const QBy
     int reply_http_status = 0;
     QString url = QString(QLatin1String("/characters/%1/skills/")).arg(char_id);
     bool req_ok = this->send_general_esi_request_json(
-                EsiReqType::GET, url, QUrlQuery(), QByteArray(), 15, access_token,
+                EsiReqType::GET, url, QUrlQuery(), QByteArray(), access_token,
                 reply_http_status, replyJson);
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!replyJson.isObject()) return false;
@@ -783,7 +772,7 @@ bool EveApi::get_character_wallet(float &reply, quint64 char_id, const QByteArra
     int reply_http_status = 0;
     QString url = QString(QLatin1String("/characters/%1/wallet/")).arg(char_id);
     bool req_ok = this->send_general_esi_request_simplified(
-                EsiReqType::GET, url, QUrlQuery(), QByteArray(), 15, access_token,
+                EsiReqType::GET, url, QUrlQuery(), QByteArray(), access_token,
                 reply_http_status, replyBa);
     if (!req_ok || (reply_http_status != 200)) return false;
     bool ok = false;
@@ -801,7 +790,7 @@ bool EveApi::get_character_wallet_journal(QJsonArray &replyArr, quint64 char_id,
         query.addQueryItem(QLatin1String("page"), QString::number(page));
     }
     bool req_ok = this->send_general_esi_request_json(
-                EsiReqType::GET, url, query, QByteArray(), 15, access_token,
+                EsiReqType::GET, url, query, QByteArray(), access_token,
                 reply_http_status, replyJson);
     if (!req_ok || (reply_http_status != 200)) return false;
     bool ok = false;
@@ -819,7 +808,7 @@ bool EveApi::get_character_wallet_transactions(QJsonArray &replyArr, quint64 cha
         query.addQueryItem(QLatin1String("from_id"), QString::number(from_id));
     }
     bool req_ok = this->send_general_esi_request_json(
-                EsiReqType::GET, url, query, QByteArray(), 15, access_token,
+                EsiReqType::GET, url, query, QByteArray(), access_token,
                 reply_http_status, replyJson);
     if (!req_ok || (reply_http_status != 200)) return false;
     bool ok = false;
@@ -834,7 +823,7 @@ bool EveApi::get_corporation_public_data(QJsonObject &reply, quint64 corp_id)
     int reply_http_status = 0;
     QString url = QString(QLatin1String("/corporations/%1/")).arg(corp_id);
     bool req_ok = this->send_general_esi_request_json(
-                EsiReqType::GET, url, QUrlQuery(), QByteArray(), 15, QByteArray(),
+                EsiReqType::GET, url, QUrlQuery(), QByteArray(), QByteArray(),
                 reply_http_status, replyJson);
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!replyJson.isObject()) return false;
@@ -849,7 +838,7 @@ bool EveApi::get_alliance_public_data(QJsonObject &reply, quint64 ally_id)
     int reply_http_status = 0;
     QString url = QString(QLatin1String("/alliances/%1/")).arg(ally_id);
     bool req_ok = this->send_general_esi_request_json(
-                EsiReqType::GET, url, QUrlQuery(), QByteArray(), 15, QByteArray(),
+                EsiReqType::GET, url, QUrlQuery(), QByteArray(), QByteArray(),
                 reply_http_status, replyJson);
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!replyJson.isObject()) return false;
@@ -864,7 +853,7 @@ bool EveApi::get_universe_bloodlines(QJsonArray &replyArr)
     int reply_http_status = 0; // √
     QString url = QString(QLatin1String("/universe/bloodlines/"));
     bool req_ok = this->send_general_esi_request_json(
-                EsiReqType::GET, url, QUrlQuery(), QByteArray(), 15, QByteArray(),
+                EsiReqType::GET, url, QUrlQuery(), QByteArray(), QByteArray(),
                 reply_http_status, jdoc);
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!jdoc.isArray()) return false;
@@ -879,7 +868,7 @@ bool EveApi::get_universe_constellation(QJsonObject &reply, quint64 constellatio
     int reply_http_status = 0; // √
     QString url = QString(QLatin1String("/universe/constellations/%1/")).arg(constellation_id);
     bool req_ok = this->send_general_esi_request_json(
-                EsiReqType::GET, url, QUrlQuery(), QByteArray(), 15, QByteArray(),
+                EsiReqType::GET, url, QUrlQuery(), QByteArray(), QByteArray(),
                 reply_http_status, jdoc);
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!jdoc.isObject()) return false;
@@ -900,7 +889,7 @@ bool EveApi::post_universe_names(QJsonArray &replyArr, const QVector<quint64> &i
     int reply_http_status = 0;
     QString url = QString(QLatin1String("/universe/names/"));
     bool req_ok = this->send_general_esi_request_json(
-                EsiReqType::POST, url, QUrlQuery(), ids_str, 15, QByteArray(),
+                EsiReqType::POST, url, QUrlQuery(), ids_str, QByteArray(),
                 reply_http_status, jdoc);
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!jdoc.isArray()) return false;
@@ -915,7 +904,7 @@ bool EveApi::get_universe_races(QJsonArray &replyArr)
     int reply_http_status = 0; // √
     QString url = QString(QLatin1String("/universe/races/"));
     bool req_ok = this->send_general_esi_request_json(
-                EsiReqType::GET, url, QUrlQuery(), QByteArray(), 15, QByteArray(),
+                EsiReqType::GET, url, QUrlQuery(), QByteArray(), QByteArray(),
                 reply_http_status, jdoc);
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!jdoc.isArray()) return false;
@@ -930,7 +919,7 @@ bool EveApi::get_universe_region(QJsonObject &reply, quint64 region_id)
     int reply_http_status = 0; // √
     QString url = QString(QLatin1String("/universe/regions/%1/")).arg(region_id);
     bool req_ok = this->send_general_esi_request_json(
-                EsiReqType::GET, url, QUrlQuery(), QByteArray(), 15, QByteArray(),
+                EsiReqType::GET, url, QUrlQuery(), QByteArray(), QByteArray(),
                 reply_http_status, jdoc);
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!jdoc.isObject()) return false;
@@ -945,7 +934,7 @@ bool EveApi::get_universe_station(QJsonObject &reply, quint64 station_id)
     int reply_http_status = 0; // √
     QString url = QString(QLatin1String("/universe/stations/%1/")).arg(station_id);
     bool req_ok = this->send_general_esi_request_json(
-                EsiReqType::GET, url, QUrlQuery(), QByteArray(), 15, QByteArray(),
+                EsiReqType::GET, url, QUrlQuery(), QByteArray(), QByteArray(),
                 reply_http_status, jdoc);
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!jdoc.isObject()) return false;
@@ -995,7 +984,7 @@ bool EveApi::get_universe_structure(QJsonObject &reply, quint64 structure_id, co
     int reply_http_status = 0; // √
     QString url = QString(QLatin1String("/universe/structures/%1/")).arg(structure_id);
     bool req_ok = this->send_general_esi_request_json(
-                EsiReqType::GET, url, QUrlQuery(), QByteArray(), 15, access_token,
+                EsiReqType::GET, url, QUrlQuery(), QByteArray(), access_token,
                 reply_http_status, jdoc);
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!jdoc.isObject()) return false;
@@ -1021,7 +1010,7 @@ bool EveApi::get_universe_system(QJsonObject &reply, quint64 ss_id)
     int reply_http_status = 0; // √
     QString url = QString(QLatin1String("/universe/systems/%1/")).arg(ss_id);
     bool req_ok = this->send_general_esi_request_json(
-                EsiReqType::GET, url, QUrlQuery(), QByteArray(), 15, QByteArray(),
+                EsiReqType::GET, url, QUrlQuery(), QByteArray(), QByteArray(),
                 reply_http_status, jdoc);
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!jdoc.isObject()) return false;
@@ -1036,7 +1025,7 @@ bool EveApi::get_universe_typeid(QJsonObject &reply, quint64 type_id)
     int reply_http_status = 0; // √
     QString url = QString(QLatin1String("/universe/types/%1/")).arg(type_id);
     bool req_ok = this->send_general_esi_request_json(
-                EsiReqType::GET, url, QUrlQuery(), QByteArray(), 15, QByteArray(),
+                EsiReqType::GET, url, QUrlQuery(), QByteArray(), QByteArray(),
                 reply_http_status, jdoc);
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!jdoc.isObject()) return false;
