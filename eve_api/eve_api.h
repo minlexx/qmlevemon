@@ -42,6 +42,7 @@ public:
     explicit EveApi(QObject *parent = Q_NULLPTR);
     ~EveApi() override;
 
+public:
     QNetworkAccessManager *nam();
 
     QString esiBaseUrl() const;
@@ -49,6 +50,9 @@ public:
 
     int timeoutSecs() const;
     void setTimeoutSecs(int t);
+
+    int maxAutoRetries() const;
+    void setAutoRetry(int max_retries);
 
 protected Q_SLOTS:
     void onProxySettingsChanged();
@@ -135,6 +139,7 @@ protected:
     QNetworkAccessManager *m_nam = nullptr;
     QString m_esi_base_url;
     int m_timeoutSecs = 15;
+    int m_max_retries = 5;
 };
 
 

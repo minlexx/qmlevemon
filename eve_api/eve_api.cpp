@@ -279,6 +279,10 @@ int EveApi::timeoutSecs() const { return m_timeoutSecs; }
 
 void EveApi::setTimeoutSecs(int t) { m_timeoutSecs = t; }
 
+int EveApi::maxAutoRetries() const { return m_max_retries; }
+
+void EveApi::setAutoRetry(int max_retries) { m_max_retries = max_retries; }
+
 void EveApi::onProxySettingsChanged()
 {
 #ifndef INSIDE_TEST
@@ -320,64 +324,83 @@ bool EveApi::send_general_esi_request(
         url.setQuery(get_params);
     }
 
-    // construct request object
-    QNetworkRequest req;
-    req.setUrl(url);
-    req.setHeader(QNetworkRequest::UserAgentHeader, evesso_user_agent());
-    // if auth token was given, set auth header
-    if (!access_token.isEmpty()) {
-        req.setRawHeader("Authorization", QByteArray("Bearer ") + access_token);
-    }
-
-    // for POST, set content-type
-    if (rtype == EsiReqType::POST) {
-        if (!req_headers.contains(QByteArrayLiteral("Content-Type"))) {
-            req.setHeader(QNetworkRequest::ContentTypeHeader, QByteArrayLiteral("application/x-www-form-urlencoded"));
-        }
-    }
-
-    // set any custom headers
-    // order thist last, custom headers may overwrite any automatically set headers
-    if (!req_headers.isEmpty()) {
-        const QList<QByteArray> &keys = req_headers.keys();
-        for (const QByteArray &key: keys) {
-            req.setRawHeader(key, req_headers.value(key));
-        }
-    }
-
-    // init timer
-    req_timer.setSingleShot(true);
-    req_timer.setInterval(1000 * m_timeoutSecs);
-    req_timer.start();
-
+    int retries_left = m_max_retries;
+    bool was_network_error = true;
     QScopedPointer<QNetworkReply> reply(Q_NULLPTR);
-    switch (rtype)
-    {
-        case EsiReqType::GET: reply.reset(m_nam->get(req)); break;
-        case EsiReqType::POST: reply.reset(m_nam->post(req, post_data)); break;
-    }
 
-    local_event_loop.exec();
+    while ((retries_left > 0) && (was_network_error)) {
+        // construct request object
+        QNetworkRequest req;
+        req.setUrl(url);
+        req.setHeader(QNetworkRequest::UserAgentHeader, evesso_user_agent());
+        // if auth token was given, set auth header
+        if (!access_token.isEmpty()) {
+            req.setRawHeader("Authorization", QByteArray("Bearer ") + access_token);
+        }
 
-    if (reply->isFinished()) {
-        req_timer.stop();
-        reply_http_status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-        replyBa = reply->readAll();
-
-        if (reply_http_status == 0 || replyBa.isEmpty()) {
-            QNetworkReply::NetworkError reply_error = reply->error();
-            QString reply_error_string = reply->errorString();
-            if (reply_error != QNetworkReply::NoError) {
-                reply_http_status = -2;
-                qCWarning(logApi) << "Network error:" << reply_error
-                                  << reply_error_string;
-                return false;
+        // for POST, set content-type, if
+        if (rtype == EsiReqType::POST) {
+            if (!req_headers.contains(QByteArrayLiteral("Content-Type"))) {
+                req.setHeader(QNetworkRequest::ContentTypeHeader, QByteArrayLiteral("application/x-www-form-urlencoded"));
             }
         }
-    } else {
-        reply_http_status = -1; // indicate timeout
-        qCWarning(logApi) << "ESI request:" << url.toString()
-                          << ": timed out.";
+
+        // set any custom headers
+        // order thist last, custom headers may overwrite any automatically set headers
+        if (!req_headers.isEmpty()) {
+            const QList<QByteArray> &keys = req_headers.keys();
+            for (const QByteArray &key: keys) {
+                req.setRawHeader(key, req_headers.value(key));
+            }
+        }
+
+        // init timer
+        req_timer.setSingleShot(true);
+        req_timer.setInterval(1000 * m_timeoutSecs);
+        req_timer.start();
+
+        switch (rtype)
+        {
+            case EsiReqType::GET: reply.reset(m_nam->get(req)); break;
+            case EsiReqType::POST: reply.reset(m_nam->post(req, post_data)); break;
+        }
+
+        retries_left--;             // we use one retry
+        was_network_error = false;  // we hope that all will be OK
+        local_event_loop.exec();    // wait for reply here
+
+        if (reply->isFinished()) {
+            // reply finished by its own, not timeout; read results
+            req_timer.stop();
+            reply_http_status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+            replyBa = reply->readAll();
+
+            // check for network error
+            if (reply_http_status == 0 || replyBa.isEmpty()) {
+                QNetworkReply::NetworkError reply_error = reply->error();
+                QString reply_error_string = reply->errorString();
+                if (reply_error != QNetworkReply::NoError) {
+                    was_network_error = true;
+                    reply_http_status = -2;
+                    qCWarning(logApi) << "Network error:" << reply_error
+                                      << reply_error_string;
+                    qCWarning(logApi) << "Retries left:" << retries_left;
+                    continue;
+                }
+            }
+        } else {
+            reply_http_status = -1; // indicate timeout
+            qCWarning(logApi) << "ESI request:" << url.toString()
+                              << ": timed out.";
+            qCWarning(logApi) << "Retries left:" << retries_left;
+            continue;
+        }
+    }
+
+    // it is possible that we consumed all retries and still got error
+    if (was_network_error && (retries_left <= 0)) {
+        // finally fail
+        qCWarning(logApi) << "Request failed after " << m_max_retries << " retries.";
         return false;
     }
 
