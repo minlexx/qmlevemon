@@ -326,6 +326,7 @@ bool EveApi::send_general_esi_request(
 
     int retries_left = m_max_retries;
     bool was_network_error = true;
+    QString last_network_error_string;
     QScopedPointer<QNetworkReply> reply(Q_NULLPTR);
 
     while ((retries_left > 0) && (was_network_error)) {
@@ -378,12 +379,12 @@ bool EveApi::send_general_esi_request(
             // check for network error
             if (reply_http_status == 0 || replyBa.isEmpty()) {
                 QNetworkReply::NetworkError reply_error = reply->error();
-                QString reply_error_string = reply->errorString();
+                last_network_error_string = reply->errorString();
                 if (reply_error != QNetworkReply::NoError) {
                     was_network_error = true;
                     reply_http_status = -2;
                     qCWarning(logApi) << "Network error:" << reply_error
-                                      << reply_error_string;
+                                      << last_network_error_string;
                     qCWarning(logApi) << "Retries left:" << retries_left;
                     continue;
                 }
@@ -401,6 +402,7 @@ bool EveApi::send_general_esi_request(
     if (was_network_error && (retries_left <= 0)) {
         // finally fail
         qCWarning(logApi) << "Request failed after " << m_max_retries << " retries.";
+        Q_EMIT networkError(last_network_error_string);
         return false;
     }
 

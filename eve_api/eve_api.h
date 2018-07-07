@@ -57,6 +57,9 @@ public:
 protected Q_SLOTS:
     void onProxySettingsChanged();
 
+Q_SIGNALS:
+    void networkError(const QString &desc);
+
 public:
     // character
     bool get_character_attributes(QJsonObject &reply, quint64 char_id, const QByteArray &access_token);
