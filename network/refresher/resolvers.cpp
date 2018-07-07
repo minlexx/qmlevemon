@@ -79,47 +79,6 @@ EveLocation PeriodicalRefresherWorker::resolve_location(quint64 locationId, cons
 /**
  * First tries to load cached data;
  * If not in cache, requests from ESI, saves into cache.
- * @brief PeriodicalRefresherWorker::resolve_corporation_name
- * @param corpId
- * @return corporation name, or empty string on fail
- */
-QString PeriodicalRefresherWorker::resolve_corporation_name(quint64 corpId)
-{
-    QString corpName;
-
-    Db *db = globalAppDatabaseInstance();
-    if (db) {
-        corpName = db->findCachedCorporationName(corpId);
-    }
-
-    if (corpName.isEmpty()) {
-        QJsonArray jarr;
-        if (m_api->get_corporations_names(jarr, {corpId})) {
-            for (const QJsonValue &jval: jarr) {
-                const QJsonObject jobj = jval.toObject();
-
-                const quint64 value_id   = jobj.value(QLatin1String("corporation_id")).toVariant().toULongLong();
-                const QString value_name = jobj.value(QLatin1String("corporation_name")).toString();
-
-                if (value_id == corpId) {
-                    corpName = value_name;
-                    break;
-                }
-            }
-
-            if (!corpName.isEmpty() && db) {
-                db->saveCachedCorporationName(corpId, corpName);
-            }
-        }
-    }
-
-    return corpName;
-}
-
-
-/**
- * First tries to load cached data;
- * If not in cache, requests from ESI, saves into cache.
  * @brief PeriodicalRefresherWorker::resolve_character_name
  * @param charId
  * @return character name, or empty string on fail
@@ -135,14 +94,15 @@ QString PeriodicalRefresherWorker::resolve_character_name(quint64 charId)
 
     if (charName.isEmpty()) {
         QJsonArray jarr;
-        if (m_api->get_characters_names(jarr, {charId})) {
+        if (m_api->post_universe_names(jarr, {charId})) {
             for (const QJsonValue &jval: jarr) {
                 const QJsonObject jobj = jval.toObject();
 
-                const quint64 value_id   = jobj.value(QLatin1String("character_id")).toVariant().toULongLong();
-                const QString value_name = jobj.value(QLatin1String("character_name")).toString();
+                const QString value_category = jobj.value(QLatin1String("category")).toString();
+                const quint64 value_id       = jobj.value(QLatin1String("id")).toVariant().toULongLong();
+                const QString value_name     = jobj.value(QLatin1String("name")).toString();
 
-                if (value_id == charId) {
+                if ((value_id == charId) && (value_category == QLatin1String("character"))) {
                     charName = value_name;
                     break;
                 }
@@ -155,6 +115,49 @@ QString PeriodicalRefresherWorker::resolve_character_name(quint64 charId)
     }
 
     return charName;
+}
+
+
+
+/**
+ * First tries to load cached data;
+ * If not in cache, requests from ESI, saves into cache.
+ * @brief PeriodicalRefresherWorker::resolve_corporation_name
+ * @param corpId
+ * @return corporation name, or empty string on fail
+ */
+QString PeriodicalRefresherWorker::resolve_corporation_name(quint64 corpId)
+{
+    QString corpName;
+
+    Db *db = globalAppDatabaseInstance();
+    if (db) {
+        corpName = db->findCachedCorporationName(corpId);
+    }
+
+    if (corpName.isEmpty()) {
+        QJsonArray jarr;
+        if (m_api->post_universe_names(jarr, {corpId})) {
+            for (const QJsonValue &jval: jarr) {
+                const QJsonObject jobj = jval.toObject();
+
+                const QString value_category = jobj.value(QLatin1String("category")).toString();
+                const quint64 value_id       = jobj.value(QLatin1String("id")).toVariant().toULongLong();
+                const QString value_name     = jobj.value(QLatin1String("name")).toString();
+
+                if ((value_id == corpId) && (value_category == QLatin1String("corporation"))) {
+                    corpName = value_name;
+                    break;
+                }
+            }
+
+            if (!corpName.isEmpty() && db) {
+                db->saveCachedCorporationName(corpId, corpName);
+            }
+        }
+    }
+
+    return corpName;
 }
 
 
@@ -176,14 +179,15 @@ QString PeriodicalRefresherWorker::resolve_alliance_name(quint64 allyId)
 
     if (allyName.isEmpty()) {
         QJsonArray jarr;
-        if (m_api->get_alliances_names(jarr, {allyId})) {
+        if (m_api->post_universe_names(jarr, {allyId})) {
             for (const QJsonValue &jval: jarr) {
                 const QJsonObject jobj = jval.toObject();
 
-                const quint64 value_id   = jobj.value(QLatin1String("alliance_id")).toVariant().toULongLong();
-                const QString value_name = jobj.value(QLatin1String("alliance_name")).toString();
+                const QString value_category = jobj.value(QLatin1String("category")).toString();
+                const quint64 value_id       = jobj.value(QLatin1String("id")).toVariant().toULongLong();
+                const QString value_name     = jobj.value(QLatin1String("name")).toString();
 
-                if (value_id == allyId) {
+                if ((value_id == allyId) && (value_category == QLatin1String("alliance"))) {
                     allyName = value_name;
                     break;
                 }
