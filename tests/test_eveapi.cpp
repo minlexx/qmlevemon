@@ -55,14 +55,13 @@ private Q_SLOTS:
 
     void cleanupTestCase() { }
 
-    void test_characters_names() {
-        QJsonArray replyArr;
-        qCDebug(logTestApi) << "calling get_characters_names()";
-        bool api_ret = m_api.get_characters_names(replyArr, ids_vector);
-        qCDebug(logTestApi) << " get_characters_names() = " << api_ret << replyArr;
-
-        QVERIFY2(!api_ret, "Api call get_characters_names() should fail");
-    }
+    //void test_characters_names() {
+    //    QJsonArray replyArr;
+    //    qCDebug(logTestApi) << "calling get_characters_names()";
+    //    bool api_ret = m_api.get_characters_names(replyArr, ids_vector);
+    //    qCDebug(logTestApi) << " get_characters_names() = " << api_ret << replyArr;
+    //    QVERIFY2(!api_ret, "Api call get_characters_names() should fail");
+    //}
 
     void test_universe_names() {
         QJsonArray replyArr;
