@@ -82,9 +82,9 @@ public:
     // common
     bool get_server_status(QJsonObject &reply);
     // names resolving
-    bool get_characters_names(QJsonArray &replyArr, const QVector<quint64> &ids);
-    bool get_corporations_names(QJsonArray &replyArr, const QVector<quint64> &ids);
-    bool get_alliances_names(QJsonArray &replyArr, const QVector<quint64> &ids);
+    [[deprecated]] bool get_characters_names(QJsonArray &replyArr, const QVector<quint64> &ids);
+    [[deprecated]] bool get_corporations_names(QJsonArray &replyArr, const QVector<quint64> &ids);
+    [[deprecated]] bool get_alliances_names(QJsonArray &replyArr, const QVector<quint64> &ids);
     // universe
     bool get_universe_bloodlines(QJsonArray &replyArr);
     bool get_universe_constellation(QJsonObject &reply, quint64 constellation_id);

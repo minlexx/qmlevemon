@@ -521,7 +521,7 @@ static QString convert_ids_to_string(const QVector<quint64> &ids) {
 }
 
 
-bool EveApi::get_characters_names(QJsonArray &replyArr, const QVector<quint64> &ids)
+[[deprecated]] bool EveApi::get_characters_names(QJsonArray &replyArr, const QVector<quint64> &ids)
 {
     QJsonDocument reply_doc;
     int reply_http_status = 0;
@@ -541,7 +541,7 @@ bool EveApi::get_characters_names(QJsonArray &replyArr, const QVector<quint64> &
     return true;
 }
 
-bool EveApi::get_corporations_names(QJsonArray &replyArr, const QVector<quint64> &ids)
+[[deprecated]] bool EveApi::get_corporations_names(QJsonArray &replyArr, const QVector<quint64> &ids)
 {
     QJsonDocument reply_doc;
     int reply_http_status = 0;
@@ -561,7 +561,7 @@ bool EveApi::get_corporations_names(QJsonArray &replyArr, const QVector<quint64>
     return true;
 }
 
-bool EveApi::get_alliances_names(QJsonArray &replyArr, const QVector<quint64> &ids)
+[[deprecated]] bool EveApi::get_alliances_names(QJsonArray &replyArr, const QVector<quint64> &ids)
 {
     QJsonDocument reply_doc;
     int reply_http_status = 0;
