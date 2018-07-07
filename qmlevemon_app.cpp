@@ -64,6 +64,8 @@ QmlEvemonApp::QmlEvemonApp(int& argc, char **argv):
 
     QObject::connect(m_refresher, &PeriodicalRefresher::mailBodyDownloaded,
                      this, &QmlEvemonApp::onMailBodyDownloaded);
+    QObject::connect(m_refresher, &PeriodicalRefresher::networkError,
+                     this, &QmlEvemonApp::networkError);
 
     QScreen *appScreen = primaryScreen();
     if (Q_LIKELY(appScreen)) {

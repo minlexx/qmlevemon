@@ -82,6 +82,7 @@ Q_SIGNALS:
     void isPortraitChanged();
     void isLandscapeChanged();
     void mailReady();
+    void networkError(const QString &desc);
 
 private:
     void initStorageDirectory();
