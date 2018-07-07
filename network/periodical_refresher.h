@@ -43,6 +43,7 @@ Q_SIGNALS:
 
     void doRequestMailBody(Character *ch, quint64 mailId);
     void mailBodyDownloaded(quint64 charId, quint64 mailId, const QString &body);
+    void networkError(const QString &desc);
 
 protected:
     QThread m_thread;

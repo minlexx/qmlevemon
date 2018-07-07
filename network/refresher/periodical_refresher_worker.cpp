@@ -17,6 +17,8 @@ PeriodicalRefresherWorker::PeriodicalRefresherWorker(PeriodicalRefresher *parent
     m_owner = parent;
     m_active = 0;
     m_server_players = 0;
+
+    QObject::connect(m_api, &EveApi::networkError, this, &PeriodicalRefresherWorker::networkError);
 }
 
 

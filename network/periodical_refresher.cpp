@@ -55,6 +55,9 @@ PeriodicalRefresher::PeriodicalRefresher(QObject *parent):
     QObject::connect(m_worker, &PeriodicalRefresherWorker::mailBodyDownloaded,
                      this, &PeriodicalRefresher::mailBodyDownloaded,
                      Qt::QueuedConnection);
+    QObject::connect(m_worker, &PeriodicalRefresherWorker::networkError,
+                     this, &PeriodicalRefresher::networkError,
+                     Qt::QueuedConnection);
 
     m_thread.start(QThread::LowPriority);
     m_refreshTimer.start();

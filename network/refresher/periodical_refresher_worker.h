@@ -29,6 +29,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     void characterUpdated(Character *character);
     void mailBodyDownloaded(quint64 charId, quint64 mailId, const QString &body);
+    void networkError(const QString &desc);
 
 
 protected:
