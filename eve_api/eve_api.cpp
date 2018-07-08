@@ -296,6 +296,12 @@ void EveApi::onProxySettingsChanged()
 }
 
 
+static QString reqTypeToString(EveApi::EsiReqType r) {
+    if (r == EveApi::EsiReqType::GET) return QStringLiteral("GET");
+    return QStringLiteral("POST");
+}
+
+
 bool EveApi::send_general_esi_request(
         // input arguments
         EsiReqType rtype,
@@ -391,8 +397,8 @@ bool EveApi::send_general_esi_request(
             }
         } else {
             reply_http_status = -1; // indicate timeout
-            qCWarning(logApi) << "ESI request:" << url.toString()
-                              << ": timed out.";
+            qCWarning(logApi) << "ESI request:" << reqTypeToString(rtype)
+                              << url.toString() << ": timed out.";
             qCWarning(logApi) << "Retries left:" << retries_left;
             continue;
         }
@@ -408,7 +414,7 @@ bool EveApi::send_general_esi_request(
 
     if ((reply_http_status >= 300) || (reply_http_status < 200)) {
         qCWarning(logApi) << "ESI request returned bad HTTP code:" << reply_http_status
-                          << url.toString();
+                          << reqTypeToString(rtype) << url.toString();
     }
 
     const QList<QByteArray> &hlist = reply->rawHeaderList();
