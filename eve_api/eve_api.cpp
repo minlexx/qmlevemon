@@ -421,6 +421,28 @@ bool EveApi::send_general_esi_request(
         if (rtype == EsiReqType::POST) {
             qCWarning(logApi) << "POST data: " << post_data;
         }
+
+        // try also to read actual error message from JSON
+        QJsonParseError jparseError;
+        const QJsonDocument errorDoc = QJsonDocument::fromJson(replyBa, &jparseError);
+        if (!errorDoc.isNull()) {
+            if (errorDoc.isObject()) {
+                const QJsonObject errorObj = errorDoc.object();
+                const QString errorStr = errorObj.value(QLatin1String("error")).toString();
+                if (!errorStr.isEmpty()) {
+                    qCWarning(logApi) << " returned JSON error was:" << errorStr;
+                } else {
+                    // else, log whole reply
+                    qCWarning(logApi) << " returned JSON was:" << errorObj;
+                }
+            } else {
+                // else, log whole reply
+                qCWarning(logApi) << " returned JSON was:" << errorDoc;
+            }
+        } else {
+            qCWarning(logApi) << "And failed to parse error JSON:" << jparseError.errorString();
+            qCWarning(logApi) << "    Reply was:" << replyBa;
+        }
     }
 
     const QList<QByteArray> &hlist = reply->rawHeaderList();
