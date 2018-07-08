@@ -423,6 +423,7 @@ bool EveApi::send_general_esi_request(
         }
 
         // try also to read actual error message from JSON
+        QString jsonErrorString;
         QJsonParseError jparseError;
         const QJsonDocument errorDoc = QJsonDocument::fromJson(replyBa, &jparseError);
         if (!errorDoc.isNull()) {
@@ -431,6 +432,7 @@ bool EveApi::send_general_esi_request(
                 const QString errorStr = errorObj.value(QLatin1String("error")).toString();
                 if (!errorStr.isEmpty()) {
                     qCWarning(logApi) << " returned JSON error was:" << errorStr;
+                    jsonErrorString = errorStr;
                 } else {
                     // else, log whole reply
                     qCWarning(logApi) << " returned JSON was:" << errorObj;
@@ -442,6 +444,12 @@ bool EveApi::send_general_esi_request(
         } else {
             qCWarning(logApi) << "And failed to parse error JSON:" << jparseError.errorString();
             qCWarning(logApi) << "    Reply was:" << replyBa;
+        }
+
+        if ((reply_http_status == 503)
+                && (jsonErrorString == QLatin1String("The datasource tranquility is temporarily unavailable"))) {
+            // downtime detected
+            qCWarning(logApi) << "EVE server Tranquility is at downtime now.";
         }
     }
 
