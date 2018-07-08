@@ -9,7 +9,7 @@ CREATE TABLE "dgmAttributeTypes" (
   "unitID" INTEGER, 
   "stackable" BOOLEAN, 
   "highIsGood" BOOLEAN, 
-  "categoryID" INTEGER
+  "categoryID" INTEGER, 
   PRIMARY KEY ("attributeID") 
 );
 INSERT INTO dgmAttributeTypes VALUES(2, 'isOnline', 'Boolean to store status of online effect', NULL, 0.0, 0, 'NULL', NULL, 1, 1, 9);

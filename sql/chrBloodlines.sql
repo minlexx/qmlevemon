@@ -9,7 +9,7 @@ CREATE TABLE "chrBloodlines" (
   "charisma" INTEGER, 
   "memory" INTEGER, 
   "intelligence" INTEGER, 
-  "iconID" INTEGER
+  "iconID" INTEGER, 
   PRIMARY KEY ("bloodlineID") 
 );
 INSERT INTO chrBloodlines VALUES(1, 'Deteis', 1, 601, 1000006, 5, 5, 6, 7, 7, 1633);

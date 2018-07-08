@@ -2,7 +2,7 @@ CREATE TABLE "invGroups" (
   "groupID" INTEGER NOT NULL, 
   "categoryID" INTEGER, 
   "groupName" VARCHAR(100), 
-  "iconID" INTEGER
+  "iconID" INTEGER, 
   PRIMARY KEY ("groupID") 
 );
 INSERT INTO invGroups VALUES(0, 0, '#System', NULL);

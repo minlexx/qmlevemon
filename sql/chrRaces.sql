@@ -1,7 +1,7 @@
 CREATE TABLE "chrRaces" ( 
   "raceID" INTEGER NOT NULL, 
   "raceName" VARCHAR(100), 
-  "iconID" INTEGER
+  "iconID" INTEGER, 
   PRIMARY KEY ("raceID") 
 );
 INSERT INTO chrRaces VALUES(1, 'Caldari', 1439);

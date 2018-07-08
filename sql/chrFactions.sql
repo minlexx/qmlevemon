@@ -4,7 +4,7 @@ CREATE TABLE "chrFactions" (
   "raceIDs" INTEGER, 
   "solarSystemID" INTEGER, 
   "corporationID" INTEGER, 
-  "iconID" INTEGER
+  "iconID" INTEGER, 
   PRIMARY KEY ("factionID") 
 );
 INSERT INTO chrFactions VALUES(500001, 'Caldari State', 1, 30000145, 1000035, 1439);

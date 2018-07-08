@@ -3,7 +3,7 @@ CREATE TABLE "invTypes" (
   "groupID" INTEGER, 
   "typeName" VARCHAR(100), 
   "iconID" INTEGER, 
-  "graphicID" INTEGER
+  "graphicID" INTEGER, 
   PRIMARY KEY ("typeID") 
 );
 INSERT INTO invTypes VALUES(0, 0, '#System', NULL, 0);

@@ -1,7 +1,7 @@
 CREATE TABLE "invCategories" ( 
   "categoryID" INTEGER NOT NULL, 
   "categoryName" VARCHAR(100), 
-  "iconID" INTEGER
+  "iconID" INTEGER, 
   PRIMARY KEY ("categoryID") 
 );
 INSERT INTO invCategories VALUES(0, '#System', NULL);

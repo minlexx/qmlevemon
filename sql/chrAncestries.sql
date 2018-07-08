@@ -7,7 +7,7 @@ CREATE TABLE "chrAncestries" (
   "charisma" INTEGER, 
   "memory" INTEGER, 
   "intelligence" INTEGER, 
-  "iconID" INTEGER
+  "iconID" INTEGER, 
   PRIMARY KEY ("ancestryID") 
 );
 INSERT INTO chrAncestries VALUES(1, 'Liberal Holders', 5, 0, 1, 3, 0, 0, 1641);
