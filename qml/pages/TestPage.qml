@@ -75,10 +75,32 @@ Rectangle {
             source: "image://typeid/14264"
         }
 
-        Button {
-            id: testNotifyButton
-            text: "Test notification"
-            onClicked: evemonapp.showNotification("QML EVEMon", "Hello from QML!")
+        Row {
+            spacing: 5
+
+            Button {
+                id: testNotifyButton
+                text: "Test notification"
+                onClicked: evemonapp.showNotification("QML EVEMon", "Hello from QML!")
+            }
+
+            Button {
+                id: testErrorPopupButton
+                text: "Test error popup"
+                onClicked: evemonapp.testErrorHandler("error", "Test error")
+            }
+
+            Button {
+                id: testInfoPopupButton
+                text: "Test info popup"
+                onClicked: evemonapp.testErrorHandler("info", "Test info")
+            }
+
+            Button {
+                id: testWarningPopupButton
+                text: "Test warning popup"
+                onClicked: evemonapp.testErrorHandler("warning", "Test warning")
+            }
         }
     }
 }
