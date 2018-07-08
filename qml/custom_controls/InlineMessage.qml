@@ -94,8 +94,8 @@ Rectangle {
                     _accumulatedMessage += msg;
                     messageText.text = _accumulatedMessage;
                 } else {
-                    // more than 5 messages? show messages + "(N more)"
-                    messageText.text = _accumulatedMessage + "(" + _numMessages + " " + qsTr("more") + ")";
+                    // more than 5 messages? show messages + " (N more)"
+                    messageText.text = _accumulatedMessage + " (" + _numMessages + " " + qsTr("more") + ")";
                 }
 
                 // override rect color for worst case
