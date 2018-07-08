@@ -61,6 +61,18 @@ Rectangle {
                     // more than 5 messages? show messages + "(N more)"
                     messageText.text = _accumulatedMessage + "(" + _numMessages + " " + qsTr("more") + ")";
                 }
+
+                // override rect color for worst case
+                if (mtype === "error") {
+                    // "error" overwrites everything
+                    setColorType(mtype);
+                } else if (mtype === "warning") {
+                    // "warning" can overwrite only "info"
+                    if (_colorType === "info") {
+                        setColorType(mtype);
+                    }
+                    // "info" cannot overwrite anything :)
+                }
             } else {
                 _accumulatedMessage = msg;
                 container.setColorType(mtype); // change color only on first show
