@@ -75,6 +75,12 @@ ApplicationWindow {
         }
     }
 
+    footer: InlineMessage {
+        id: footerMessage
+        visible: false
+        showCloseButton: true
+    }
+
     Drawer {
         id: mainDrawer
         y: header.height
@@ -302,6 +308,13 @@ ApplicationWindow {
             // console.log(navStack, navState);
         } else {
             console.warn("Unhandled nav page: " + page);
+        }
+    }
+
+    Connections {
+        target: evemonapp
+        onMessagePopup: {
+            footerMessage.addMessage(type, message);
         }
     }
 }
