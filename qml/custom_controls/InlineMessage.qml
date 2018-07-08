@@ -31,7 +31,7 @@ Rectangle {
             anchors.top: parent.top
             anchors.left: parent.left
             anchors.topMargin: AppStyle.marginSmall / 2
-            anchors.leftMargin: AppStyle.marginSmall / 2
+            anchors.leftMargin: AppStyle.marginSmall
             color: AppStyle.errorPopupTextColor
             text: "Error text"
             font.family: AppStyle.fontFamily
