@@ -13,9 +13,18 @@ Rectangle {
         radius: AppStyle.marginSmall / 2
         height: messageText.height + AppStyle.marginSmall
 
+        // public properties
+        /**
+         * showCloseButton: bool
+         * When enabled, a close button is shown.
+         * The default is false.
+         */
+        property bool showCloseButton: false
+
+        // private variables
         property int _numMessages: 0
         property string _colorType: "error"
-        property string _accumulatedMessage: ""
+        property string _accumulatedMessage
 
         Text {
             id: messageText
@@ -27,6 +36,33 @@ Rectangle {
             text: "Error text"
             font.family: AppStyle.fontFamily
             font.pointSize: AppStyle.textSizeH4
+        }
+
+        Rectangle {
+            visible: showCloseButton
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.topMargin: AppStyle.marginSmall / 2
+            anchors.rightMargin: AppStyle.marginSmall
+
+            width: 15
+            height: 15
+
+            color: "red"
+
+            Text {
+                anchors.centerIn: parent
+                color: "white"
+                text: "X"
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                onClicked: {
+                    container.clearMessage();
+                }
+            }
         }
 
         function setColorType(s) {
@@ -81,7 +117,7 @@ Rectangle {
             }
         }
 
-        function clear() {
+        function clearMessage() {
             visible = false;
             _numMessages = 0;
             _accumulatedMessage = "";
