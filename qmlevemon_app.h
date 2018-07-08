@@ -62,6 +62,7 @@ public Q_SLOTS:
     void onTrayIconClicked();
     void onTrayIconRightClicked();
     void onMailBodyDownloaded(quint64 charId, quint64 mailId, const QString &body);
+    void onNetworkError(const QString &desc);
 
     // called from QML when selcting character page
     void setCurrentCharacter(quint64 char_id);
@@ -76,13 +77,16 @@ public Q_SLOTS:
     // call from QML to show notification
     void showNotification(const QString &title, const QString &message);
 
+    // use in tests only. trigger displaying test notification
+    void testErrorHandler(const QString &t, const QString &s);
+
 Q_SIGNALS:
     void settingsChanged();
     void curCharIdChanged();
     void isPortraitChanged();
     void isLandscapeChanged();
     void mailReady();
-    void networkError(const QString &desc);
+    void messagePopup(const QString &type, const QString &message);
 
 private:
     void initStorageDirectory();

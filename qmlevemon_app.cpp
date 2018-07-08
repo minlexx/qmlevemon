@@ -65,7 +65,7 @@ QmlEvemonApp::QmlEvemonApp(int& argc, char **argv):
     QObject::connect(m_refresher, &PeriodicalRefresher::mailBodyDownloaded,
                      this, &QmlEvemonApp::onMailBodyDownloaded);
     QObject::connect(m_refresher, &PeriodicalRefresher::networkError,
-                     this, &QmlEvemonApp::networkError);
+                     this, &QmlEvemonApp::onNetworkError);
 
     QScreen *appScreen = primaryScreen();
     if (Q_LIKELY(appScreen)) {
@@ -313,6 +313,15 @@ void QmlEvemonApp::showNotification(const QString &title, const QString &message
     m_notifications->notify(title, message);
 }
 
+void QmlEvemonApp::testErrorHandler(const QString &t, const QString &s)
+{
+    if (t == QLatin1String("error")) {
+        onNetworkError(s);
+    } else {
+        Q_EMIT messagePopup(t, s);
+    }
+}
+
 void QmlEvemonApp::onMailBodyDownloaded(quint64 charId, quint64 mailId, const QString &body)
 {
     Q_UNUSED(body)
@@ -333,6 +342,11 @@ void QmlEvemonApp::onMailBodyDownloaded(quint64 charId, quint64 mailId, const QS
     }
 }
 
+void QmlEvemonApp::onNetworkError(const QString &desc)
+{
+    const QString msg = QStringLiteral("Net error: ") + desc;
+    Q_EMIT messagePopup(QStringLiteral("error"), msg);
+}
 
 
 QmlEvemonApp *globalAppInstance()
