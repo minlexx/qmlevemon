@@ -53,7 +53,7 @@ def write_table_dump(db: sqlite3.Connection, tbl_name: str, columns: list):
     i = 0
     for pk in primary_keys:
         if i == 0:
-            create_stmt += '\n'
+            create_stmt += ', \n'
             create_stmt += '  PRIMARY KEY ('
         else:
             create_stmt += ', '
