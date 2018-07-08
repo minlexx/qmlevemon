@@ -399,6 +399,9 @@ bool EveApi::send_general_esi_request(
             reply_http_status = -1; // indicate timeout
             qCWarning(logApi) << "ESI request:" << reqTypeToString(rtype)
                               << url.toString() << ": timed out.";
+            if (rtype == EsiReqType::POST) {
+                qCWarning(logApi) << "POST data: " << post_data;
+            }
             qCWarning(logApi) << "Retries left:" << retries_left;
             continue;
         }
@@ -415,6 +418,9 @@ bool EveApi::send_general_esi_request(
     if ((reply_http_status >= 300) || (reply_http_status < 200)) {
         qCWarning(logApi) << "ESI request returned bad HTTP code:" << reply_http_status
                           << reqTypeToString(rtype) << url.toString();
+        if (rtype == EsiReqType::POST) {
+            qCWarning(logApi) << "POST data: " << post_data;
+        }
     }
 
     const QList<QByteArray> &hlist = reply->rawHeaderList();
