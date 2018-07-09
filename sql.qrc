@@ -9,5 +9,6 @@
         <file>sql/invTypes.sql</file>
         <file>sql/invGroups.sql</file>
         <file>sql/invCategories.sql</file>
+        <file>sql/sde_version.txt</file>
     </qresource>
 </RCC>

@@ -30,10 +30,10 @@ DbSqlite::DbSqlite()
         qCWarning(logDb) << "Failed to construct DbSqlite instance - application instance missing.";
         return;
     }
-    QString appdata_dirname = gApp->storageDirectory();
-    QString db_filename = appdata_dirname + QLatin1String("/characters.db");
-    QString sde_db_filename = appdata_dirname + QLatin1String("/eve_sde.db");
-    QString cache_db_filename = appdata_dirname + QLatin1String("/cache.db");
+    const QString appdata_dirname = gApp->storageDirectory();
+    const QString db_filename = appdata_dirname + QLatin1String("/characters.db");
+    const QString sde_db_filename = appdata_dirname + QLatin1String("/eve_sde.db");
+    const QString cache_db_filename = appdata_dirname + QLatin1String("/cache.db");
     this->open_chars(db_filename);
     this->open_sde(sde_db_filename);
     this->open_cache(cache_db_filename);
@@ -101,6 +101,24 @@ bool DbSqlite::open_chars(const QString& db_filename)
 }
 
 
+static int read_version_from_file(const QString &fileName) {
+    QFile f(fileName);
+    if (!f.open(QIODevice::ReadOnly)) {
+        qCWarning(logDb) << "Failed to open file for reading:" << fileName;
+        return 0;
+    }
+    QByteArray line = f.readLine(16).trimmed();
+    f.close();
+    bool ok = true;
+    int ret = line.toInt(&ok, 10);
+    if (!ok) {
+        qCWarning(logDb) << "Failed to parse version from file:" << fileName << line;
+        return 0;
+    }
+    return ret;
+}
+
+
 bool DbSqlite::open_sde(const QString& db_filename)
 {
     QMutexLocker lock(&m_sde_mutex);
@@ -113,6 +131,33 @@ bool DbSqlite::open_sde(const QString& db_filename)
         qCWarning(logDb) << "cannot open SDE DB: failed to load sqlite driver?!";
         return false;
     }
+
+    // check if forced update is needed
+    // compare db version from resources and from installed filesystem file
+    bool sde_forced_reinstall = false;
+    QString installedVersionFileName;
+    int resourcesVersion = 0;
+    QmlEvemonApp *gApp = globalAppInstance();
+    if (gApp) {
+        qCDebug(logDb) << "Checking for forced SDE update...";
+        const QString appdataDirname = gApp->storageDirectory();
+        installedVersionFileName = appdataDirname + QLatin1String("/sde_version.txt");
+        int installedVersion = read_version_from_file(installedVersionFileName);
+        resourcesVersion = read_version_from_file(QLatin1String(":/sql/sde_version.txt"));
+
+        if ((installedVersion > 0) || (resourcesVersion > 0)) {
+            // reaading was OK
+            if (installedVersion < resourcesVersion) {
+                // we need to reinstall SDE
+                qCDebug(logDb) << "SDE database version check: installed < resource ("
+                               << installedVersion << "<" << resourcesVersion << ")";
+                qCDebug(logDb) << "We need to (re)install SDE database.";
+                sde_forced_reinstall = true;
+                QFile::remove(db_filename);
+            }
+        }
+    }
+
     m_eve_sde_db.setDatabaseName(db_filename);
     if (!m_eve_sde_db.open()) {
         qCWarning(logDb) << "cannot open SDE DB: failed to open file:" << db_filename;
@@ -149,6 +194,22 @@ bool DbSqlite::open_sde(const QString& db_filename)
             ok &= this->execSqlFile(&m_eve_sde_db, sql_file);
         }
     }
+
+    if (ok && sde_forced_reinstall) {
+        // save installed SDE version to file
+        QFile f(installedVersionFileName);
+        if (f.open(QIODevice::WriteOnly)) {
+            QByteArray line = QByteArray::number(resourcesVersion, 10);
+            f.write(line);
+            f.write("\n");
+            f.close();
+            qCDebug(logDb) << "Installed SDE database version" << resourcesVersion;
+        } else {
+            qCWarning(logDb) << "Failed to save installed SDE version! "
+                                "Failed to open file for writing:" << installedVersionFileName;
+        }
+    }
+
     return ok;
 }
 
