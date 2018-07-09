@@ -15,63 +15,24 @@ ApplicationWindow {
     height: 768
     title: qsTr("QML EVEMon")
 
-    header: ToolBar {
-        RowLayout {
-            anchors.fill: parent
-
-            // main menu icon
-            HamburgerIcon {
-                id: mainHamburger
-                color: "white"
-                colorArrows: "black"
-                iconState: "menu"
-                onClicked: {
-                    if (mainDrawer.visible) {
-                        mainDrawer.close();
-                    } else {
-                        if (mainHamburger.iconState == "menu") {
-                            mainDrawer.open();
-                        } else {
-                            nav_back();
-                        }
-                    }
+    header: HeaderToolbar {
+        id: headerToolbar
+        onHamburgerClicked: {
+            // onHamburgerClicked(string iconState)
+            // state of hamburger arrow icon: "menu" / "back"
+            if (mainDrawer.visible) {
+                mainDrawer.close();
+            } else {
+                if (iconState === "menu") {
+                    mainDrawer.open();
+                } else {
+                    nav_back();
                 }
             }
+        }
 
-            Text {
-                id: navTitle
-                text: qsTr("Overview")
-                font.family: AppStyle.fontFamily
-                font.pointSize: AppStyle.textSizeH3
-            }
-
-            CharacterPickerSidebar {
-                id: toolbarCharacterPicker
-                isVertical: false
-                visible: evemonapp.isPortrait
-                onCharacterSelected: {
-                    nav_to("select_character", char_id);
-                }
-            }
-
-            // spacer
-            Item { Layout.fillWidth: true }
-
-            Text {
-                id: serverPlayersOnline
-                text: "TQ: " + refresher.serverPlayersOnline + qsTr(" players") + " "
-                font.pointSize: AppStyle.textSizeH3
-                visible: evemonapp.isDesktopPlatform ? true : (!refresher.networkActivity)
-                anchors.rightMargin: AppStyle.marginSmall
-            }
-
-            BusyIndicator {
-                id: networkActivityIndicator
-                implicitWidth: 48
-                implicitHeight: 48
-                running: refresher.networkActivity
-                visible: refresher.networkActivity
-            }
+        onCharacterSelected: {
+            nav_to("select_character", char_id);
         }
     }
 
@@ -197,7 +158,7 @@ ApplicationWindow {
         id: pageMailView
         MailView {
             onRequestSetPageTitle: {
-                navTitle.text = title;
+                headerToolbar.navTitleText = title;
             }
         }
     }
@@ -249,9 +210,9 @@ ApplicationWindow {
             navStack.pop();
             navTitleStack.pop();
             navState = navStack[navStack.length - 1];
-            navTitle.text = navTitleStack[navTitleStack.length - 1]
+            headerToolbar.navTitleText = navTitleStack[navTitleStack.length - 1]
             if (mainStack.depth == 1) {
-                mainHamburger.iconState = "menu";
+                headerToolbar.iconState = "menu";
                 evemonapp.setCurrentCharacter(0);
             }
         }
@@ -303,8 +264,8 @@ ApplicationWindow {
             navStack.push(page);
             navState = page;
             navTitleStack.push(nav_title)
-            navTitle.text = nav_title
-            mainHamburger.iconState = "back";
+            headerToolbar.navTitleText = nav_title
+            headerToolbar.iconState = "back";
             // console.log(navStack, navState);
         } else {
             console.warn("Unhandled nav page: " + page);

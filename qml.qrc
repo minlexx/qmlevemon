@@ -29,5 +29,6 @@
         <file>qml/pages/Settings.qml</file>
         <file>qml/pages/TestPage.qml</file>
         <file>qml/utils.js</file>
+        <file>qml/custom_controls/HeaderToolbar.qml</file>
     </qresource>
 </RCC>
