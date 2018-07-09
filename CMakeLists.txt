@@ -112,7 +112,6 @@ set(qtwebserver_srcs
     "qtwebserver/weblayout.cpp")
 
 if (BUILD_FOR_ANDROID)
-    set(ANDROID_TOOLCHAIN gcc)
     add_library(${PROJECT_NAME} SHARED
         ${qmlevemon_srcs}
         ${qtwebserver_srcs}
@@ -146,6 +145,7 @@ if (BUILD_FOR_ANDROID)
         ANDROID
         __ANDROID__
     )
+    set(ANDROID_TOOLCHAIN gcc)
 endif()
 
 target_link_libraries(${PROJECT_NAME}
