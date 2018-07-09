@@ -34,7 +34,7 @@ ToolBar {
         CharacterPickerSidebar {
             id: toolbarCharacterPicker
             isVertical: false
-            visible: evemonapp.isPortrait
+            visible: evemonapp.isPortrait && (evemonapp.curCharId > 0)
             onCharacterSelected: toolbar.characterSelected(char_id);
         }
 
