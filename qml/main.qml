@@ -232,12 +232,18 @@ ApplicationWindow {
             if (evemonapp.curCharId === characterId) {
                 return;
             }
-            // current page is viewing other character - navigate back first
-            if (navState == "select_character") {
+            // current page is viewing other character
+            if (navState == "select_character" || navState =="mail_view") {
+                if (navState =="mail_view") {
+                    nav_back(); // extra step back
+                }
                 nav_back();
+                evemonapp.setCurrentCharacter(characterId);
+                mainStack.push(pageCharacterMain)
+            } else {
+                evemonapp.setCurrentCharacter(characterId);
+                mainStack.push(pageCharacterMain);
             }
-            evemonapp.setCurrentCharacter(characterId);
-            mainStack.push(pageCharacterMain);
             nav_title = qsTr("Char: ") + curChar.characterName
             handled = true;
         } else if (page === "mail_view") {
