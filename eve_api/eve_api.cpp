@@ -400,21 +400,23 @@ bool EveApi::send_general_esi_request(
             //  eveapi: ESI request returned bad HTTP code: 504 "GET" "https://esi.evetech.net/latest/..."
             //  eveapi:  returned JSON error was: "Timeout contacting tranquility"
             if (reply_http_status == 504) {
+                last_network_error_string.clear();
                 const QJsonDocument errorDoc = QJsonDocument::fromJson(replyBa);
                 if (!errorDoc.isNull()) {
                     if (errorDoc.isObject()) {
                         const QJsonObject errorObj = errorDoc.object();
                         const QString errorStr = errorObj.value(QLatin1String("error")).toString();
-                        last_network_error_string = errorStr;
                         if (!errorStr.isEmpty()) {
-                            if (errorStr == QLatin1String("Timeout contacting tranquility")) {
-                                qCWarning(logApi) << "504 Timeout contacting tranquility, retries left:" << retries_left;;
-                                was_network_error = true;
-                                continue;
-                            }
+                            last_network_error_string = errorStr;
                         }
                     }
                 }
+                if (last_network_error_string.isEmpty()) {
+                    last_network_error_string = QLatin1String("Gateway Timeout");
+                }
+                qCWarning(logApi) << "504" << last_network_error_string << ", retries left:" << retries_left;
+                was_network_error = true;
+                continue;
             }
 
         } else {
