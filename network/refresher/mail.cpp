@@ -13,19 +13,43 @@ void PeriodicalRefresherWorker::resolve_single_mail_recipient(
         MailRecipient &rcpt,
         const QVector<MailRecipient> &mailingLists)
 {
+    if (rcpt.type == MailRecipient::None) {
+        // recipient type is unknown, this is for mail sender
+        // where the type of sender is not specified in API
+        // we should guess what the type is. It can be a mailing list
+
+        for (const MailRecipient &ml: mailingLists) {
+            if (ml.id == rcpt.id) {
+                rcpt.type = MailRecipient::MailingList;
+                rcpt.name = ml.name;
+                if (rcpt.name.isEmpty()) {
+                    // unknown mailing list, this can happen if character WAS in this ML
+                    // in the past, but now he's not in this list, so we can't know its name.
+                    rcpt.name = this->tr("Uknown mailing list", "API parser");
+                }
+                // resolved
+                return;
+            }
+        }
+
+        // if we are here, this is not mailing list; then we assume that this is a character,
+        // but can we have corporation or alliance as sender?
+        rcpt.type = MailRecipient::Character;
+    }
+
     // For mailing lists - we know them
     if (rcpt.type == MailRecipient::MailingList) {
         // get recipient name from mailing lists
         for (const MailRecipient &ml: mailingLists) {
             if (ml.id == rcpt.id) {
                 rcpt.name = ml.name;
+                if (rcpt.name.isEmpty()) {
+                    // unknown mailing list, this can happen if character WAS in this ML
+                    // in the past, but now he's not in this list, so we can't know its name.
+                    rcpt.name = this->tr("Uknown mailing list", "API parser");
+                }
                 break;
             }
-        }
-        if (rcpt.name.isEmpty()) {
-            // unknown mailing list, this can happen if character WAS in this ML
-            // in the past, but now he's not in this list, so we can't know its name.
-            rcpt.name = this->tr("Uknown mailing list", "API parser");
         }
     } else {
         // Try to resolve recipient name using our resolver
@@ -84,6 +108,14 @@ Mail PeriodicalRefresherWorker::requestMailBody(const Character *ch, quint64 mai
     if (m_api->get_character_mail_id(mailJson, ch->characterId(), ch->getAuthTokens().access_token, mailId)) {
         ret = Mail::fromJson(mailJson);
         ret.resolveLabels(mailLabels);
+        // quick fix for sender type: if sender is in recipients list,
+        //       inherit its recipient type for sender
+        for (const auto &rcpt: ret.recipients) {
+            if (rcpt.id == ret.from.id) {
+                ret.from.type = rcpt.type;
+                break;
+            }
+        }
         resolve_single_mail_recipient(ret.from, mailingLists);
         resolve_mail_recipients(ret.recipients, mailingLists);
         ret.id = mailId;
@@ -191,15 +223,12 @@ int PeriodicalRefresherWorker::refresh_mail(Character *ch)
             Mail mail;
             mail.id = mail_id;
             mail.from.id = from_id;
-            mail.from.type = MailRecipient::Character;
+            mail.from.type = MailRecipient::None; // we don't know exactly sender type; it can be mailing list
             mail.is_read = is_read;
             mail.subject = subject;
             mail.timestamp = timestamp;
 
             actual_unread_count += (is_read == false ? 1 : 0);
-
-            // resolve sender
-            resolve_single_mail_recipient(mail.from, mailingLists);
 
             // fill labels
             QVector<quint64> vlabels;
@@ -230,6 +259,18 @@ int PeriodicalRefresherWorker::refresh_mail(Character *ch)
             }
 
             mail.recipients = mailRecipients;
+
+            // quick fix for sender type: if sender is in recipients list,
+            //       inherit its recipient type for sender.
+            // TODO: fix this when API will have this field explicitly (from_type or sender_type)
+            for (const auto &rcpt: mail.recipients) {
+                if (rcpt.id == mail.from.id) {
+                    mail.from.type = rcpt.type;
+                    break;
+                }
+            }
+            // resolve sender
+            resolve_single_mail_recipient(mail.from, mailingLists);
 
             // resolve mail recipient names
             resolve_mail_recipients(mail.recipients, mailingLists);

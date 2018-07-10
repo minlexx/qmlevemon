@@ -132,6 +132,8 @@ Mail Mail::fromJson(const QJsonObject &jobj)
     Mail ret;
     ret.body = jobj.value(QLatin1String("body")).toString();
     ret.from.id = jobj.value(QLatin1String("from")).toVariant().toULongLong();
+    ret.from.type = MailRecipient::None; // ID type unknown;
+    // TODO: fix this when API will have this field explicitly (from_type or sender_type) ^^
     ret.subject = jobj.value(QLatin1String("subject")).toString();
     ret.timestamp = jobj.value(QLatin1String("timestamp")).toVariant().toDateTime();
     const QJsonArray jlabels = jobj.value(QLatin1String("labels")).toArray();
