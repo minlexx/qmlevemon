@@ -389,6 +389,10 @@ Q_SIGNALS:
     void mailsChanged();
     void mailNotificationsChanged();
 
+    // for manual emitting, not for QML properties
+Q_SIGNALS:
+    void skillTrainingCompleted(const CharacterSkill &skill);
+
 protected:
     // general info
     quint64   m_characterId = 0;
