@@ -236,7 +236,7 @@ void QmlEvemonApp::onTrayIconClicked()
     if (!m_mainWindow) {
         return;
     }
-    // TODO: Wwndows-specific tweak about activating window
+    // TODO: probably needs Windows-specific tweak about activating window
     m_mainWindow->showNormal();
     m_mainWindow->requestActivate();
 }
