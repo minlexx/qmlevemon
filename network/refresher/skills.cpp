@@ -187,7 +187,11 @@ int PeriodicalRefresherWorker::refresh_skills(Character *ch) {
             ++real_qpos;
         }
 
-        ch->calcSkillQueue();
+        // ch->calcSkillQueue();
+        // NOTE: ^^ Character::calcSkillQueue() will be called from Character::setSkillQueue(),
+        // which wuill be called from Character::operator=(...) in
+        // CharacterModel::updateCharacter(..)
+        // So, we do not need to call clacSkillQueue() here.
 
         // qCDebug(logRefresher) << Q_FUNC_INFO << "parsed skillqueue";
     }
