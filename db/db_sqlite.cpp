@@ -52,7 +52,7 @@ Db* DbSqlite::instance()
 }
 
 
-bool DbSqlite::open_chars(const QString& db_filename)
+bool DbSqlite::open_chars(const QString &db_filename)
 {
     QMutexLocker lock(&m_chars_mutex);
     if (m_chars_db.isOpen()) {
@@ -119,7 +119,7 @@ static int read_version_from_file(const QString &fileName) {
 }
 
 
-bool DbSqlite::open_sde(const QString& db_filename)
+bool DbSqlite::open_sde(const QString &db_filename)
 {
     QMutexLocker lock(&m_sde_mutex);
     if (m_eve_sde_db.isOpen()) {
@@ -300,7 +300,7 @@ void DbSqlite::close()
 }
 
 
-bool DbSqlite::execSqlFile(QSqlDatabase *db, const QString& filename)
+bool DbSqlite::execSqlFile(QSqlDatabase *db, const QString &filename)
 {
     QFile f(filename);
     if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -355,7 +355,7 @@ bool DbSqlite::execSqlFile(QSqlDatabase *db, const QString& filename)
 }
 
 
-bool DbSqlite::loadCharacters(QVector<Character *>& charList)
+bool DbSqlite::loadCharacters(QVector<Character *> &charList)
 {
     QMutexLocker lock(&m_chars_mutex);
     if (!m_chars_db.isOpen()) {
@@ -384,7 +384,7 @@ bool DbSqlite::loadCharacters(QVector<Character *>& charList)
 }
 
 
-bool DbSqlite::saveCharacters(const QVector<Character *>& charList)
+bool DbSqlite::saveCharacters(const QVector<Character *> &charList)
 {
     QMutexLocker lock(&m_chars_mutex);
     if (!m_chars_db.isOpen()) {
@@ -429,7 +429,7 @@ bool DbSqlite::saveCharacter(const Character *character)
 }
 
 
-bool DbSqlite::loadPortrait(quint64 char_id, QImage& img)
+bool DbSqlite::loadPortrait(quint64 char_id, QImage &img)
 {
     QMutexLocker lock(&m_chars_mutex);
     if (!m_chars_db.isOpen()) {
@@ -451,7 +451,7 @@ bool DbSqlite::loadPortrait(quint64 char_id, QImage& img)
 }
 
 
-bool DbSqlite::savePortrait(quint64 char_id, const QImage& img)
+bool DbSqlite::savePortrait(quint64 char_id, const QImage &img)
 {
     QMutexLocker lock(&m_chars_mutex);
     if (!m_chars_db.isOpen() || img.isNull()) {

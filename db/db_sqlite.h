@@ -17,12 +17,12 @@ public:
     static Db* instance();
 
 public:
-    bool loadCharacters(QVector<Character *>& charList) override;
-    bool saveCharacters(const QVector<Character *>& charList) override;
+    bool loadCharacters(QVector<Character *> &charList) override;
+    bool saveCharacters(const QVector<Character *> &charList) override;
     bool saveCharacter(const Character *character) override;
 
-    bool loadPortrait(quint64 char_id, QImage& img) override;
-    bool savePortrait(quint64 char_id, const QImage& img) override;
+    bool loadPortrait(quint64 char_id, QImage &img) override;
+    bool savePortrait(quint64 char_id, const QImage &img) override;
     bool deletePortrait(quint64 char_id) override;
 
     QString raceName(quint64 race_id) override;
@@ -39,8 +39,8 @@ public:
     QJsonObject loadCachedLocation(quint64 location_id) override;
     bool saveCachedLocation(quint64 location_id, const QJsonObject &location) override;
 
-    bool loadTypeIcon(quint64 type_id, QImage& img) override;
-    bool saveTypeIcon(quint64 type_id, const QImage& img) override;
+    bool loadTypeIcon(quint64 type_id, QImage &img) override;
+    bool saveTypeIcon(quint64 type_id, const QImage &img) override;
 
     QString findCachedCharacterName(quint64 char_id) override;
     QString findCachedCorporationName(quint64 corp_id) override;
@@ -53,11 +53,11 @@ public:
     bool saveMailBody(quint64 char_id, quint64 mail_id, const QJsonObject &mailBody) override;
 
 protected:
-    bool open_chars(const QString& db_filename);
-    bool open_sde(const QString& db_filename);
-    bool open_cache(const QString& db_filename);
+    bool open_chars(const QString &db_filename);
+    bool open_sde(const QString &db_filename);
+    bool open_cache(const QString &db_filename);
     void close();
-    bool execSqlFile(QSqlDatabase *db, const QString& filename);
+    bool execSqlFile(QSqlDatabase *db, const QString &filename);
 
 protected:
     QSqlDatabase m_chars_db;
