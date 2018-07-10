@@ -185,6 +185,11 @@ void CharacterModel::loadCharacters()
         Db *db = globalAppDatabaseInstance();
         if (db) {
             db->loadCharacters(m_characters);
+            // connect all characters signals
+            for (Character *character: m_characters) {
+                QObject::connect(character, &Character::skillTrainingCompleted,
+                                 this, &CharacterModel::onSkillTrainingCompleted);
+            }
         }
         // unlock mutex before emitting any signals
     }
@@ -199,6 +204,8 @@ void CharacterModel::addNewCharacter(Character *character)
         int firstRow = m_characters.size();  // we will append to list
         beginInsertRows(QModelIndex(), firstRow, firstRow);
         m_characters.push_back(character);
+        QObject::connect(character, &Character::skillTrainingCompleted,
+                         this, &CharacterModel::onSkillTrainingCompleted);
         Db *db = globalAppDatabaseInstance();
         if (db) {
             db->saveCharacters(m_characters);
@@ -334,6 +341,17 @@ void CharacterModel::calcCharactersSkillQueue()
         };
         Q_EMIT dataChanged(first, last, changedRoles);
     }
+}
+
+void CharacterModel::onSkillTrainingCompleted(Character *ch, const CharacterSkill &skill)
+{
+    qCDebug(logCharacterModel) << ch->characterName() << "has trained"
+                               << skill.skillName() << skill.trainedLevel();
+    const QString msg = QString(tr("%1 has trained %2 level %3"))
+            .arg(ch->characterName())
+            .arg(skill.skillName())
+            .arg(skill.trainedLevel());
+    Q_EMIT skillCompletedNotification(msg);
 }
 
 

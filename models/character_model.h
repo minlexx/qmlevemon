@@ -11,8 +11,8 @@
 
 namespace EM {
 
-
 class Character;
+class CharacterSkill;
 
 class CharacterModel: public QAbstractListModel
 {
@@ -68,10 +68,12 @@ public:  // reimplmented interface
 public Q_SLOTS:
     void updateCharacter(const Character *character);
     void calcCharactersSkillQueue();
+    void onSkillTrainingCompleted(Character *ch, const CharacterSkill &skill);
 
 Q_SIGNALS:
     void newCharacterAdded();
     void characterRemoved(quint64 char_id);
+    void skillCompletedNotification(const QString &msg);
 
 private:
     QHash<int, QByteArray> m_roles;
