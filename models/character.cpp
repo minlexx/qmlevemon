@@ -880,7 +880,7 @@ void Character::calcSkillQueue()
                                       << ": removing finished skill from queue and leveling it up:"
                                       << (*sk) << iter->finishDate << "<" << dtCur;
                 sk->trainLevelUp();
-                Q_EMIT skillTrainingCompleted(*sk);
+                Q_EMIT skillTrainingCompleted(this, *sk);
             }
             iter = m_skillQueue.erase(iter);
             --iter;

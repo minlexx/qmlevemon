@@ -391,7 +391,7 @@ Q_SIGNALS:
 
     // for manual emitting, not for QML properties
 Q_SIGNALS:
-    void skillTrainingCompleted(const CharacterSkill &skill);
+    void skillTrainingCompleted(Character *ch, const CharacterSkill &skill);
 
 protected:
     // general info
