@@ -348,6 +348,12 @@ void QmlEvemonApp::onNetworkError(const QString &desc)
     Q_EMIT messagePopup(QStringLiteral("error"), msg);
 }
 
+void QmlEvemonApp::onSkillCompletedMessage(const QString &msg)
+{
+    Q_EMIT messagePopup(QStringLiteral("info"), msg);
+    showNotification(applicationDisplayName() + tr(": Skill completed"), msg);
+}
+
 
 QmlEvemonApp *globalAppInstance()
 {
