@@ -76,6 +76,10 @@ QmlEvemonApp::QmlEvemonApp(int& argc, char **argv):
                          this, &QmlEvemonApp::onPrimaryOrientationChanged);
     }
 
+    CharacterModel *charModel = ModelManager::instance()->characterModel();
+    QObject::connect(charModel, &CharacterModel::skillCompletedNotification,
+                     this, &QmlEvemonApp::onSkillCompletedMessage);
+
     this->initStorageDirectory();
 }
 
