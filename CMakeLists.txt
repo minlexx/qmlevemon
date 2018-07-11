@@ -180,4 +180,16 @@ install(
     LIBRARY DESTINATION lib
 )
 
+if (UNIX)
+    find_program(FLATPAK_BUILDER
+        NAMES flatpak-builder
+        DOC "Path to flatpak-builder execatable (optional)"
+    )
+    if (NOT FLATPAK_BUILDER)
+        message(STATUS "Flatpak-builder not found, will not build flatpak package")
+    else()
+        message(STATUS "Flatpak-builder found: ${FLATPAK_BUILDER}")
+    endif()
+endif()
+
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
