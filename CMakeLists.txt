@@ -35,6 +35,8 @@ if (NOT BUILD_FOR_ANDROID)
     if (NOT WIN32)
         find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS DBus)
     endif()
+else()
+    find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS AndroidExtras)
 endif()
 
 set(qmlevemon_srcs
@@ -162,6 +164,8 @@ target_link_libraries(${PROJECT_NAME}
 # Link Qt5Widgets only for desktop
 if (NOT BUILD_FOR_ANDROID)
     target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
+else()
+    target_link_libraries(${PROJECT_NAME} Qt5::AndroidExtras)
 endif()
 
 if (BUILD_TESTING)
