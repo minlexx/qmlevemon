@@ -1,0 +1,28 @@
+{
+    "app-id": "ru.minlexx.qmlevemon",
+    "runtime": "org.kde.Platform",
+    "runtime-version": "5.9",
+    "branch": "master",
+    "sdk": "org.kde.Sdk",
+    "command": "QMLEVEMon",
+
+    "modules": [
+        {
+            "name": "qmlevemon",
+            "buildsystem": "cmake",
+            "builddir": true,
+            "config-opts": [
+                "-DCMAKE_BUILD_TYPE=Relase",
+                "-DBUILD_TESTING=OFF",
+                "-DBUILD_FOR_ANDROID=OFF"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/minlexx/qmlevemon.git",
+                    "branch": "master"
+                }
+            ]
+        }
+    ]
+}
