@@ -6,7 +6,9 @@
 #include <QVariant>
 #include <QAbstractListModel>
 #include <QList>
+#include <QMap>
 #include <QMutex>
+#include <QTimer>
 
 
 namespace EM {
@@ -69,6 +71,7 @@ public Q_SLOTS:
     void updateCharacter(const Character *character);
     void calcCharactersSkillQueue();
     void onSkillTrainingCompleted(Character *ch, const CharacterSkill &skill);
+    void squashNotifications();
 
 Q_SIGNALS:
     void newCharacterAdded();
@@ -78,6 +81,8 @@ Q_SIGNALS:
 private:
     QHash<int, QByteArray> m_roles;
     QVector<Character *> m_characters;
+    QTimer m_notificationSquashTimer;
+    QMap<Character *, QString> m_collectedNotifications;
     mutable QMutex m_mutex;
 };
 

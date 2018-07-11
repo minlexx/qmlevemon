@@ -56,6 +56,13 @@ CharacterModel::CharacterModel(QObject *parent):
 
     // model init
     m_characters.clear();
+
+    // timer properties
+    m_notificationSquashTimer.setSingleShot(false);
+    m_notificationSquashTimer.setTimerType(Qt::CoarseTimer);
+    m_notificationSquashTimer.setInterval(3000);
+    QObject::connect(&m_notificationSquashTimer, &QTimer::timeout,
+                     this, &CharacterModel::squashNotifications);
 }
 
 
@@ -345,12 +352,39 @@ void CharacterModel::calcCharactersSkillQueue()
 
 void CharacterModel::onSkillTrainingCompleted(Character *ch, const CharacterSkill &skill)
 {
-    qCDebug(logCharacterModel) << ch->characterName() << "has trained"
-                               << skill.skillName() << skill.trainedLevel();
-    const QString msg = QString(tr("%1 has trained %2 level %3"))
-            .arg(ch->characterName())
-            .arg(skill.skillName())
-            .arg(skill.trainedLevel());
+    QMutexLocker lock(&m_mutex);
+    const QString msg = QString(tr("%1 lv %2")).arg(skill.skillName()).arg(skill.trainedLevel());
+    if (m_collectedNotifications.contains(ch)) {
+        QString existingString = m_collectedNotifications.value(ch);
+        existingString.append(QLatin1String(", "));
+        existingString.append(msg);
+        m_collectedNotifications.insert(ch, existingString);
+    } else {
+        m_collectedNotifications.insert(ch, msg);
+    }
+
+    m_notificationSquashTimer.start();
+    // ^^ wll call squashNotifications() in 3 seconds
+}
+
+void CharacterModel::squashNotifications()
+{
+    QMutexLocker lock(&m_mutex);
+    if (m_collectedNotifications.isEmpty()) {
+        return;
+    }
+    QString msg;
+    for (Character *ch: m_collectedNotifications.keys()) {
+        const QString valueSkills = m_collectedNotifications.value(ch);
+        if (!msg.isEmpty()) {
+            msg.append(QLatin1String("\n"));
+        }
+        msg.append(ch->characterName());
+        msg.append(tr(" learned "));
+        msg.append(valueSkills);
+    }
+    m_collectedNotifications.clear();
+    m_notificationSquashTimer.stop();
     Q_EMIT skillCompletedNotification(msg);
 }
 
