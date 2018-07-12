@@ -188,7 +188,12 @@ if (UNIX)
     if (NOT FLATPAK_BUILDER)
         message(STATUS "Flatpak-builder not found, will not build flatpak package")
     else()
-        message(STATUS "Flatpak-builder found: ${FLATPAK_BUILDER}")
+        message(STATUS "Found flatpak-builder: ${FLATPAK_BUILDER}")
+
+        add_custom_target(flatpak-package
+            COMMAND ${FLATPAK_BUILDER} flatpak-package ${CMAKE_CURRENT_LIST_DIR}/ru.minlexx.qmlevemon.json
+            COMMENT "Build flatpak package"
+            SOURCES ru.minlexx.qmlevemon.json)
     endif()
 endif()
 
