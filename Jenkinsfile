@@ -1,10 +1,14 @@
 pipeline {
-    agent {
-        label 'qt5 && windows && android'
-    }
+    //agent {
+    //    label 'qt5 && windows && android'
+    //}
+    agent none
 
     stages {
         stage('Build') {
+            agent {
+                label 'windows && qt5'
+            }
             steps {
                 echo 'Building...'
                 checkout scm
@@ -24,6 +28,9 @@ pipeline {
             }
         }
         stage('windeployqt') {
+            agent {
+                label 'windows && qt5'
+            }
             steps {
                 bat '''
                     if exist build\\out rmdir /s /q build\\out
@@ -38,6 +45,9 @@ pipeline {
             }
         }
         stage('Build (android)') {
+            agent {
+                label 'android && qt5'
+            } 
             steps {
                 bat '''
                     set NDK_TOOLCHAIN_PATH=%ANDROID_NDK_ROOT%/toolchains/%ANDROID_NDK_TOOLCHAIN_PREFIX%-%ANDROID_NDK_TOOLCHAIN_VERSION%/prebuilt/%ANDROID_NDK_HOST%
@@ -57,6 +67,9 @@ pipeline {
             }
         }
         stage('androiddeployqt') {
+            agent {
+                label 'android && qt5'
+            }
             steps {
                 bat '''
                     cd build_android
