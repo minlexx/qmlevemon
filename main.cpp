@@ -1,4 +1,4 @@
-#include <QGuiApplication>
+#include <QCoreApplication>
 #include <QQuickStyle>
 #include "qmlevemon_app.h"
 

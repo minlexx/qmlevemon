@@ -30,7 +30,11 @@ static QmlEvemonApp *g_globalAppInstance = nullptr;
 
 
 QmlEvemonApp::QmlEvemonApp(int& argc, char **argv):
+#ifdef Q_OS_ANDROID
     QGuiApplication(argc, argv)
+#else
+    QApplication(argc, argv)
+#endif
 {
     g_globalAppInstance = this;
     setApplicationName(QLatin1String("qmlevemon"));

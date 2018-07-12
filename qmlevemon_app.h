@@ -1,7 +1,12 @@
 #ifndef H_QMLEVEMON_APP
 #define H_QMLEVEMON_APP
 
+#include <QtGlobal>  // needed to define Q_OS_ANDROID or not
+#ifdef Q_OS_ANDROID
 #include <QGuiApplication>
+#else
+#include <QApplication>
+#endif
 #include <QQmlApplicationEngine>
 #include <QLoggingCategory>
 #include "settings.h"
@@ -21,7 +26,12 @@ class PeriodicalRefresher;
 class NotificationSystem;
 
 
-class QmlEvemonApp: public QGuiApplication
+class QmlEvemonApp:
+#ifdef Q_OS_ANDROID
+        public QGuiApplication
+#else
+        public QApplication
+#endif
 {
     Q_OBJECT
     Q_PROPERTY(quint64 curCharId       READ curCharId          NOTIFY curCharIdChanged)
