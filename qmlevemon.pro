@@ -145,7 +145,8 @@ OTHER_FILES += \
     ./.gitignore \
     ./CMakeLists.txt \
     ./LICENSE \
-    ./README.md
+    ./README.md \
+    ./ru.minlexx.qmlevemon.json
 
 win32: OTHER_FILES += ./win32/windows_resources.rc
 
