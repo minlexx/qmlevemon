@@ -191,7 +191,7 @@ if (UNIX)
         message(STATUS "Found flatpak-builder: ${FLATPAK_BUILDER}")
 
         add_custom_target(flatpak-package
-            COMMAND ${FLATPAK_BUILDER} flatpak-package ${CMAKE_CURRENT_LIST_DIR}/ru.minlexx.qmlevemon.json
+            COMMAND ${FLATPAK_BUILDER}  --verbose flatpak-package ${CMAKE_CURRENT_LIST_DIR}/ru.minlexx.qmlevemon.json
             COMMENT "Build flatpak package"
             SOURCES ru.minlexx.qmlevemon.json)
     endif()
