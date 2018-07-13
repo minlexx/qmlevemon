@@ -91,7 +91,8 @@ pipeline {
                 rm -rf build_linux/
                 mkdir -p build_linux/
                 cd build_linux/
-                cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=%QT_PREFIX% -DBUILD_TESTING=OFF ../
+                echo CMake options: -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=$QT_PREFIX -DBUILD_TESTING=OFF
+                cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=$QT_PREFIX -DBUILD_TESTING=OFF ../
                 cmake --build . --target all
                 '''
             }
