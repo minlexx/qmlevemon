@@ -103,6 +103,7 @@ pipeline {
             }
             steps {
                 sh '''
+                cd build_linux/
                 cmake --build . --target flatpak-package
                 '''
             }
