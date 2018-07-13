@@ -31,6 +31,8 @@
         "--socket=wayland",
         "--share=network",
         "--device=dri",
-        "--socket=pulseaudio"
+        "--socket=pulseaudio",
+        "--talk-name=org.kde.StatusNotifierWatcher",
+        "--talk-name=org.freedesktop.Notifications"
     ]
 }
