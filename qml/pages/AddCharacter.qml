@@ -42,7 +42,7 @@ Item {
             text: qsTr("You must login with your EVE Online account. \
 When you click <b>\"LOG IN with EVE Online\"</b>, your default browser \
 should open, and you will be redirected to <b>https://login.eveonline.com</b>, \
-where you should eneter your account details. After successfull \
+where you should enter your account details. After successfull \
 authorization you should select character to login with, confirm \
 permissions, and then you should see a page saying that your login \
 was successful. Then switch back to this application.")
