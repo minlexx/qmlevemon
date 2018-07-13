@@ -96,6 +96,11 @@ pipeline {
                 cmake --build . --target all
                 '''
             }
+            steps {
+                sh '''
+                cmake --build . --target flatpak-package
+                '''
+            }
         }
     }
 }
