@@ -81,5 +81,20 @@ pipeline {
                 archiveArtifacts 'build_android/qmlevemon-debug.apk'
             }
         }
+        stage('Build (linux)') {
+            agent {
+                label 'linux && qt5'
+            }
+            steps {
+                sh '''
+                echo QT_PREFIX=$QT_PREFIX
+                rm -rf build_linux/
+                mkdir -p build_linux/
+                cd build_linux/
+                cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=%QT_PREFIX% -DBUILD_TESTING=OFF ../
+                cmake --build . --target all
+                '''
+            }
+        }
     }
 }
