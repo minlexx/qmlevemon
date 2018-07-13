@@ -5,7 +5,7 @@ pipeline {
     agent none
 
     stages {
-        stage('Build') {
+        stage('Build (Windows)') {
             agent {
                 label 'windows && qt5'
             }
@@ -44,7 +44,7 @@ pipeline {
                 archiveArtifacts 'build/out/'
             }
         }
-        stage('Build (android)') {
+        stage('Build (Android)') {
             agent {
                 label 'android && qt5'
             } 
@@ -81,7 +81,7 @@ pipeline {
                 archiveArtifacts 'build_android/qmlevemon-debug.apk'
             }
         }
-        stage('Build (linux)') {
+        stage('Build (Linux)') {
             agent {
                 label 'linux && qt5'
             }
@@ -95,6 +95,10 @@ pipeline {
                 cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=$QT_PREFIX -DBUILD_TESTING=OFF ../
                 cmake --build . --target all
                 '''
+            }
+        stage('Build (Linux flatpak)') {
+            agent {
+                label 'linux && qt5'
             }
             steps {
                 sh '''
