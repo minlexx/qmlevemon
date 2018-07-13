@@ -96,6 +96,7 @@ pipeline {
                 cmake --build . --target all
                 '''
             }
+        }
         stage('Build (Linux flatpak)') {
             agent {
                 label 'linux && qt5'
