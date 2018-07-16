@@ -181,6 +181,23 @@ if (BUILD_TESTING)
 endif()
 
 
+if (WIN32)
+    find_program(MAKENSIS
+        NAMES makensis.exe
+        DOC "Path to makensis executable (to make installer)"
+        HINTS "C:/Program Files (x86)/NSIS" "C:/Program Files/NSIS"
+    )
+    if (MAKENSIS)
+        message(STATUS "Found makensis: ${MAKENSIS}")
+        add_custom_target(windows-installer
+            COMMAND ${MAKENSIS} ${CMAKE_CURRENT_SOURCE_DIR}\\win32\\qmlevemon_installer.nsi
+            COMMENT "Build Windows installer using NSIS"
+            SOURCES "win32/qmlevemon_installer.nsi"
+            VERBATIM)
+    endif()
+endif()
+
+
 if (UNIX)
     include(GNUInstallDirs)
 
@@ -238,7 +255,7 @@ if (UNIX)
     # To use it, run "make flatpak-package"
     find_program(FLATPAK_BUILDER
         NAMES flatpak-builder
-        DOC "Path to flatpak-builder execatable (optional)"
+        DOC "Path to flatpak-builder executable (optional)"
     )
     if (NOT FLATPAK_BUILDER)
         message(STATUS "Flatpak-builder not found, will not build flatpak package")
