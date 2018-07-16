@@ -188,27 +188,27 @@ if (UNIX)
     # install icons
     install(
         FILES "img/app_icon/32.png"
-        DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/32x32/"
+        DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/32x32/apps"
         RENAME "ru.minlexx.qmlevemon.png")
     install(
         FILES "img/app_icon/48.png"
-        DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/48x48/"
+        DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/48x48/apps"
         RENAME "ru.minlexx.qmlevemon.png")
     install(
         FILES "img/app_icon/64.png"
-        DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/64x64/"
+        DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/64x64/apps"
         RENAME "ru.minlexx.qmlevemon.png")
     install(
         FILES "img/app_icon/128.png"
-        DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/128x128/"
+        DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/128x128/apps"
         RENAME "ru.minlexx.qmlevemon.png")
     install(
         FILES "img/app_icon/256.png"
-        DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/256x256/"
+        DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/256x256/apps"
         RENAME "ru.minlexx.qmlevemon.png")
     install(
         FILES "img/app_icon/512.png"
-        DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/512x512/"
+        DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/512x512/apps"
         RENAME "ru.minlexx.qmlevemon.png")
     install(
         FILES "img/app_icon/ru.minlexx.qmlevemon.svg"
