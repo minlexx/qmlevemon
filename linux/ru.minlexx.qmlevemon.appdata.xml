@@ -2,7 +2,7 @@
 <component type="desktop">
  <id>ru.minlexx.qmlevemon.desktop</id>
  <name>QML EVEMon</name>
- <summary>EVE Online MMO game character monitor.</summary>
+ <summary>EVE Online MMO game character monitor</summary>
  <metadata_license>CC0-1.0</metadata_license>
  <project_license>GPL-3.0</project_license>
  <description>
@@ -13,6 +13,12 @@
   </p>
  </description>
  <url type="homepage">https://qmlevemon.eve-wh.space/</url>
+ <translation type="qt">qmlevemon</translation>
+ <screenshots>
+  <screenshot type="default">
+   <image>https://eve-wh.space/static/img/qmlevemon_screen.png</image>
+  </screenshot>
+ </screenshots>
  <categories>
   <category>Game</category>
  ​</categories>
@@ -23,4 +29,5 @@
   <binary>QMLEVEMon</binary>
  </provides>
  <developer_name>Alexey Min</developer_name>
+ <update_contact>alexey.min_AT_gmail.com</update_contact>
 </component>
