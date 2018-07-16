@@ -28,6 +28,7 @@
  <provides>
   <binary>QMLEVEMon</binary>
  </provides>
+ <launchable type="desktop-id">ru.minlexx.qmlevemon.desktop</launchable>
  <developer_name>Alexey Min</developer_name>
  <update_contact>alexey.min_AT_gmail.com</update_contact>
 </component>
