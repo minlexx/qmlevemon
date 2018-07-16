@@ -191,7 +191,7 @@ if (UNIX)
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     )
 
-    # install icons
+    # install icons to to /usr/share/icons/hicolor/..x../apps
     install(
         FILES "img/app_icon/32.png"
         DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/32x32/apps"
@@ -220,9 +220,13 @@ if (UNIX)
         FILES "img/app_icon/ru.minlexx.qmlevemon.svg"
         DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/scalable/apps")
 
-    # install desktop file
+    # install desktop file to /usr/share/applications
     install(FILES "linux/ru.minlexx.qmlevemon.desktop"
         DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/applications")
+
+    # install app metadata to /usr/share/metainfo
+    install(FILES "linux/ru.minlexx.qmlevemon.appdata.xml"
+        DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/metainfo")
 
     # To show files in IDE project tree
     add_custom_target(linux-files COMMAND "" SOURCES
