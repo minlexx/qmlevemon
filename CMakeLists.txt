@@ -15,6 +15,12 @@ include(FeatureSummary)
 option(BUILD_TESTING "Build tests (for developers)" OFF)
 option(BUILD_FOR_ANDROID "Build for android" OFF)
 
+# In debug builds install executables without stripping rpath
+if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+    set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+    set(CMAKE_SKIP_INSTALL_RPATH FALSE)
+endif()
+
 set(QT_MIN_VERSION 5.9)
 
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS
