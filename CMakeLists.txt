@@ -195,6 +195,7 @@ if (WIN32)
             COMMENT "Build Windows installer using NSIS"
             SOURCES "win32/qmlevemon_installer.nsi"
             VERBATIM)
+        add_dependencies(windows-installer ${PROJECT_NAME})
     endif()
 endif()
 
@@ -267,6 +268,7 @@ if (UNIX)
             COMMAND ${FLATPAK_BUILDER}  --verbose flatpak-package ${CMAKE_CURRENT_LIST_DIR}/ru.minlexx.qmlevemon.json
             COMMENT "Build flatpak package"
             SOURCES ru.minlexx.qmlevemon.json)
+        add_dependencies(flatpak-package ${PROJECT_NAME})
     endif()
 endif()
 
