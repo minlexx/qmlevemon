@@ -3,9 +3,9 @@
 EM::AppSettings::AppSettings(QObject *parent)
     : QSettings(IniFormat, UserScope, QLatin1String("evemonsoft"),
                 QLatin1String("qmlevemon"), parent)
-{
-    //
-}
+{ }
+
+EM::AppSettings::~AppSettings() { }
 
 bool EM::AppSettings::isProxyEnabled() const
 {

@@ -19,6 +19,7 @@ class AppSettings: public QSettings
 
 public:
     explicit AppSettings(QObject *parent = nullptr);
+    virtual ~AppSettings() override;
 
 public:
     bool          isProxyEnabled() const;
@@ -41,6 +42,9 @@ public Q_SLOTS:
 Q_SIGNALS:
     void settingsChanged();
     void proxyConfigChanged();
+
+private:
+    Q_DISABLE_COPY(AppSettings)
 };
 
 
