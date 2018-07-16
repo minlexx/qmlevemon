@@ -190,6 +190,7 @@ if (WIN32)
     if (MAKENSIS)
         message(STATUS "Found makensis: ${MAKENSIS}")
         add_custom_target(windows-installer
+#            COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}\\win32\\qmlevemon_installer.nsi ${CMAKE_CURRENT_BINARY_DIR}
             COMMAND ${MAKENSIS} ${CMAKE_CURRENT_SOURCE_DIR}\\win32\\qmlevemon_installer.nsi
             COMMENT "Build Windows installer using NSIS"
             SOURCES "win32/qmlevemon_installer.nsi"
