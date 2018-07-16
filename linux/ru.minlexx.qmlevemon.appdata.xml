@@ -1,1 +1,26 @@
- 
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+ <id>ru.minlexx.qmlevemon.desktop</id>
+ <name>QML EVEMon</name>
+ <summary>EVE Online MMO game character monitor.</summary>
+ <metadata_license>CC0-1.0</metadata_license>
+ <project_license>GPL-3.0</project_license>
+ <description>
+  <p>
+   QML EVEMon is an application that allows you to monitor
+   your EVE Online character events like skill queue, wallet,
+   assets, mails, notifications.
+  </p>
+ </description>
+ <url type="homepage">https://qmlevemon.eve-wh.space/</url>
+ <categories>
+  <category>Game</category>
+ ​</categories>
+ <content_rating type="oars-1.0">
+  <content_attribute id="social-chat">moderate</content_attribute>
+ </content_rating>
+ <provides>
+  <binary>QMLEVEMon</binary>
+ </provides>
+ <developer_name>Alexey Min</developer_name>
+</component>
