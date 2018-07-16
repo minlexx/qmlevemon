@@ -1,4 +1,4 @@
- cmake_minimum_required(VERSION 3.7)
+cmake_minimum_required(VERSION 3.7)
 
 set(QMLEVEMON_VERSION 0.2.0)
 
@@ -174,13 +174,58 @@ if (BUILD_TESTING)
     add_subdirectory(tests)
 endif()
 
-install(
-    TARGETS ${PROJECT_NAME}
-    RUNTIME DESTINATION bin
-    LIBRARY DESTINATION lib
-)
 
 if (UNIX)
+    include(GNUInstallDirs)
+
+    # install main executable
+    install(
+        TARGETS ${PROJECT_NAME}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    )
+
+    # install icons
+    install(
+        FILES "img/app_icon/32.png"
+        DESTINATION "${CMAKE_INSTALL_SHAREDSTATEDIR}/icons/hicolor/32x32/"
+        RENAME "ru.minlexx.qmlevemon.png")
+    install(
+        FILES "img/app_icon/48.png"
+        DESTINATION "${CMAKE_INSTALL_SHAREDSTATEDIR}/icons/hicolor/48x48/"
+        RENAME "ru.minlexx.qmlevemon.png")
+    install(
+        FILES "img/app_icon/64.png"
+        DESTINATION "${CMAKE_INSTALL_SHAREDSTATEDIR}/icons/hicolor/64x64/"
+        RENAME "ru.minlexx.qmlevemon.png")
+    install(
+        FILES "img/app_icon/128.png"
+        DESTINATION "${CMAKE_INSTALL_SHAREDSTATEDIR}/icons/hicolor/128x128/"
+        RENAME "ru.minlexx.qmlevemon.png")
+    install(
+        FILES "img/app_icon/256.png"
+        DESTINATION "${CMAKE_INSTALL_SHAREDSTATEDIR}/icons/hicolor/256x256/"
+        RENAME "ru.minlexx.qmlevemon.png")
+    install(
+        FILES "img/app_icon/512.png"
+        DESTINATION "${CMAKE_INSTALL_SHAREDSTATEDIR}/icons/hicolor/512x512/"
+        RENAME "ru.minlexx.qmlevemon.png")
+    install(
+        FILES "img/app_icon/ru.minlexx.qmevemon.svg"
+        DESTINATION "${CMAKE_INSTALL_SHAREDSTATEDIR}/icons/hicolor/scalable/apps")
+
+    # install desktop file
+    install(FILES "linux/ru.minlexx.qmlevemon.desktop"
+        DESTINATION "${CMAKE_INSTALL_SHAREDSTATEDIR}/applications")
+
+    # To show files in IDE project tree
+    add_custom_target(linux-files COMMAND "" SOURCES
+        "linux/ru.minlexx.qmlevemon.appdata.xml"
+        "linux/ru.minlexx.qmlevemon.desktop"
+    )
+
+    # Optionally add make target to build flatpak bundle, if flatpak-builder is installed
+    # To use it, run "make flatpak-package"
     find_program(FLATPAK_BUILDER
         NAMES flatpak-builder
         DOC "Path to flatpak-builder execatable (optional)"
