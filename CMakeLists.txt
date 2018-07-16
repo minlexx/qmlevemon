@@ -188,35 +188,35 @@ if (UNIX)
     # install icons
     install(
         FILES "img/app_icon/32.png"
-        DESTINATION "${CMAKE_INSTALL_SHAREDSTATEDIR}/icons/hicolor/32x32/"
+        DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/32x32/"
         RENAME "ru.minlexx.qmlevemon.png")
     install(
         FILES "img/app_icon/48.png"
-        DESTINATION "${CMAKE_INSTALL_SHAREDSTATEDIR}/icons/hicolor/48x48/"
+        DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/48x48/"
         RENAME "ru.minlexx.qmlevemon.png")
     install(
         FILES "img/app_icon/64.png"
-        DESTINATION "${CMAKE_INSTALL_SHAREDSTATEDIR}/icons/hicolor/64x64/"
+        DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/64x64/"
         RENAME "ru.minlexx.qmlevemon.png")
     install(
         FILES "img/app_icon/128.png"
-        DESTINATION "${CMAKE_INSTALL_SHAREDSTATEDIR}/icons/hicolor/128x128/"
+        DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/128x128/"
         RENAME "ru.minlexx.qmlevemon.png")
     install(
         FILES "img/app_icon/256.png"
-        DESTINATION "${CMAKE_INSTALL_SHAREDSTATEDIR}/icons/hicolor/256x256/"
+        DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/256x256/"
         RENAME "ru.minlexx.qmlevemon.png")
     install(
         FILES "img/app_icon/512.png"
-        DESTINATION "${CMAKE_INSTALL_SHAREDSTATEDIR}/icons/hicolor/512x512/"
+        DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/512x512/"
         RENAME "ru.minlexx.qmlevemon.png")
     install(
-        FILES "img/app_icon/ru.minlexx.qmevemon.svg"
-        DESTINATION "${CMAKE_INSTALL_SHAREDSTATEDIR}/icons/hicolor/scalable/apps")
+        FILES "img/app_icon/ru.minlexx.qmlevemon.svg"
+        DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/scalable/apps")
 
     # install desktop file
     install(FILES "linux/ru.minlexx.qmlevemon.desktop"
-        DESTINATION "${CMAKE_INSTALL_SHAREDSTATEDIR}/applications")
+        DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/applications")
 
     # To show files in IDE project tree
     add_custom_target(linux-files COMMAND "" SOURCES
