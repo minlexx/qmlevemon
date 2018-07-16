@@ -1,1 +1,10 @@
- 
+[Desktop Entry]
+Type=Application
+Exec=qmlevemon
+Name=QML EVEMon
+GenericName=EVE Character Monitor
+GenericName=EVE Online Character Monitor
+X-KDE-StartupNotify=true
+Icon=ru.minlexx.qmlevemon
+Terminal=false
+Categories=Game;RolePlaying;Monitor;Qt;
