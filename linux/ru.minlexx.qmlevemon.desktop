@@ -2,7 +2,6 @@
 Type=Application
 Exec=QMLEVEMon
 Name=QML EVEMon
-GenericName=EVE Character Monitor
 GenericName=EVE Online Character Monitor
 X-KDE-StartupNotify=true
 Icon=ru.minlexx.qmlevemon
