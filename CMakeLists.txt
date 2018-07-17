@@ -228,12 +228,6 @@ if (UNIX)
     install(FILES "linux/ru.minlexx.qmlevemon.appdata.xml"
         DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/metainfo")
 
-    # To show files in IDE project tree
-    add_custom_target(linux-files COMMAND "" SOURCES
-        "linux/ru.minlexx.qmlevemon.appdata.xml"
-        "linux/ru.minlexx.qmlevemon.desktop"
-    )
-
     # Optionally add make target to build flatpak bundle, if flatpak-builder is installed
     # To use it, run "make flatpak-package"
     find_program(FLATPAK_BUILDER
@@ -248,7 +242,11 @@ if (UNIX)
         add_custom_target(flatpak-package
             COMMAND ${FLATPAK_BUILDER}  --verbose flatpak-package ${CMAKE_CURRENT_LIST_DIR}/ru.minlexx.qmlevemon.json
             COMMENT "Build flatpak package"
-            SOURCES ru.minlexx.qmlevemon.json)
+            SOURCES
+                "ru.minlexx.qmlevemon.json"
+                "linux/ru.minlexx.qmlevemon.appdata.xml"
+                "linux/ru.minlexx.qmlevemon.desktop"
+        )
     endif()
 endif()
 
