@@ -253,13 +253,16 @@ if (UNIX)
         NAMES flatpak-builder
         DOC "Path to flatpak-builder executable (optional)"
     )
+    find_program(FLATPAK NAMES flatpak DOC "Flatpak main executable")
     if (NOT FLATPAK_BUILDER)
         message(STATUS "Flatpak-builder not found, will not build flatpak package")
     else()
+        message(STATUS "Found flatpak: ${FLATPAK}")
         message(STATUS "Found flatpak-builder: ${FLATPAK_BUILDER}")
 
         add_custom_target(flatpak-package
-            COMMAND ${FLATPAK_BUILDER}  --verbose flatpak-package ${CMAKE_CURRENT_LIST_DIR}/ru.minlexx.qmlevemon.json
+            COMMAND ${FLATPAK_BUILDER}  --verbose --repo=repo --force-clean flatpak-package ${CMAKE_CURRENT_LIST_DIR}/ru.minlexx.qmlevemon.json
+            COMMAND ${FLATPAK} build-bundle repo qmlevemon.flatpak ru.minlexx.qmlevemon
             COMMENT "Build flatpak package"
             SOURCES
                 "ru.minlexx.qmlevemon.json"
