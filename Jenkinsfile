@@ -93,7 +93,7 @@ pipeline {
                 cd build_linux/
                 echo CMake options: -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=$QT_PREFIX -DBUILD_TESTING=OFF
                 cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=$QT_PREFIX -DBUILD_TESTING=OFF ../
-                make -j $(($(nproc)+1))
+                make -j$(($(nproc)+1))
                 '''
             }
         }
