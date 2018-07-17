@@ -22,7 +22,7 @@ pipeline {
                     mkdir build
                     cd build
                     echo CMake options: -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=%QT_PREFIX% -DBUILD_TESTING=OFF
-                    cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=%QT_PREFIX% -DBUILD_TESTING=OFF ../
+                    cmake -G "NMake Makefiles JOM" -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=%QT_PREFIX% -DBUILD_TESTING=OFF ../
                     cmake --build . --target all
                 '''
             }
@@ -62,7 +62,7 @@ pipeline {
                     cd build_android
                     "%QT_ANDROID_PREFIX%\\bin\\qmake.exe" ..\\qmlevemon.pro -spec android-g++ "CONFIG+=release"
                     "%ANDROID_NDK_ROOT%\\prebuilt\\%ANDROID_NDK_HOST%\\bin\\make.exe" qmake_all
-                    "%ANDROID_NDK_ROOT%\\prebuilt\\%ANDROID_NDK_HOST%\\bin\\make.exe"
+                    "%ANDROID_NDK_ROOT%\\prebuilt\\%ANDROID_NDK_HOST%\\bin\\make.exe" -j%NUMBER_OF_PROCESSORS%
                 '''
             }
         }
@@ -93,7 +93,7 @@ pipeline {
                 cd build_linux/
                 echo CMake options: -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=$QT_PREFIX -DBUILD_TESTING=OFF
                 cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=$QT_PREFIX -DBUILD_TESTING=OFF ../
-                cmake --build . --target all
+                make -j $(($(nproc)+1))
                 '''
             }
         }
@@ -106,6 +106,7 @@ pipeline {
                 cd build_linux/
                 cmake --build . --target flatpak-package
                 '''
+                archiveArtifacts 'build_linux/qmlevemon.flatpak'
             }
         }
     }
