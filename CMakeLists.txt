@@ -14,6 +14,9 @@ include(FeatureSummary)
 
 option(BUILD_TESTING "Build tests (for developers)" OFF)
 option(BUILD_FOR_ANDROID "Build for android" OFF)
+if (UNIX)
+    option(BUILD_FOR_FLATPAK "Should only be set to ON during flatpak build. Do not set manually!" OFF)
+endif()
 
 # In debug builds install executables without stripping rpath
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
@@ -154,6 +157,11 @@ if (BUILD_FOR_ANDROID)
         __ANDROID__
     )
     set(ANDROID_TOOLCHAIN gcc)
+endif()
+
+# Define FLATPAK_BUILD for flatpak build. Enables some icon theme customization
+if (BUILD_FOR_FLATPAK)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE FLATPAK_BUILD)
 endif()
 
 target_link_libraries(${PROJECT_NAME}

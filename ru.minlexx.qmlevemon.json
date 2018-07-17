@@ -14,7 +14,8 @@
             "config-opts": [
                 "-DCMAKE_BUILD_TYPE=Relase",
                 "-DBUILD_TESTING=OFF",
-                "-DBUILD_FOR_ANDROID=OFF"
+                "-DBUILD_FOR_ANDROID=OFF",
+                "-DBUILD_FOR_FLATPAK=ON"
             ],
             "sources": [
                 {
