@@ -28,6 +28,10 @@
  <provides>
   <binary>QMLEVEMon</binary>
  </provides>
+ <releases>
+ ​ <release version="0.2" type="stable" date="2018-06-30" />
+  <release version="0.1" type="development" date="2018-04-26" />
+ ​</releases>
  <launchable type="desktop-id">ru.minlexx.qmlevemon.desktop</launchable>
  <developer_name>Alexey Min</developer_name>
  <update_contact>alexey.min_AT_gmail.com</update_contact>
