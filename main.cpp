@@ -14,11 +14,14 @@ int main(int argc, char *argv[])
     // QQuickStyle::setStyle(QLatin1String("Material"));
 
 #if defined(FLATPAK_BUILD)
-    QIcon::setThemeName(QStringLiteral("breeze"));
+    // The style must be configured before loading QML that imports Qt Quick Controls 2
     QQuickStyle::setStyle(QLatin1String("Default"));
 #endif
 
     EM::QmlEvemonApp app(argc, argv);
+#if defined(FLATPAK_BUILD)
+    QIcon::setThemeName(QStringLiteral("breeze")); // after qApp is constructed only
+#endif
     if (!app.initQmlEngine()) {
         return -1;
     }
