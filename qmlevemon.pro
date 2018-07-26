@@ -135,7 +135,7 @@ HEADERS += \
     ./src/qtwebserver/weblayout.h \
     ./src/qtwebserver/webwidget.h
 
-RESOURCES += qml.qrc img.qrc sql.qrc
+RESOURCES += ./src/qml.qrc ./src/img.qrc ./src/sql.qrc
 
 # Windows native embedded resources
 win32: HEADERS += ./win32/win32_version.h
