@@ -1,17 +1,17 @@
 # qmlevemon
 Qt5/QML based EVE Online character monitor
 
-Download last successful artifacts from CI [lastSuccessfulBuild](https://jenkins.minlexx.ru/job/qmlevemon_github/job/master/lastSuccessfulBuild/artifact/) :
+Download last successful build from CI [lastSuccessfulBuild](https://jenkins.minlexx.ru/job/qmlevemon_github/job/master/lastSuccessfulBuild/artifact/) :
 - [Windows x64 build](https://jenkins.minlexx.ru/job/qmlevemon_github/job/master/lastSuccessfulBuild/artifact/build/out/*zip*/out.zip) 30 Mb
 - [Android APK](https://jenkins.minlexx.ru/job/qmlevemon_github/job/master/lastSuccessfulBuild/artifact/build_android/qmlevemon-debug.apk) 12.8 Mb
-- [Linux Flatpak single-file bundle](https://jenkins.minlexx.ru/job/qmlevemon_github/job/master/lastSuccessfulBuild/artifact/build_linux/qmlevemon.flatpak) 1.9 Mb
+- [Linux Flatpak single-file bundle](https://jenkins.minlexx.ru/job/qmlevemon_github/job/master/lastSuccessfulBuild/artifact/build_linux/qmlevemon.flatpak) 1.9 Mb (Needs flatpak's runtime `org.kde.Platform//5.9` from [FlatHub](https://flathub.org))
 
+## Building from source
 
-## Build for desktop (Windows / Linux)
+### Build for desktop (Windows / Linux)
 You need only Qt5 >= 5.9 installed.
 
-For any build questions look  at CI script (Jenkinsfile in repo root) and build logs at https://jenkins.minlexx.ru/job/qmlevemon_github/job/master/ .
-Last successful windows build:
+For any build questions look  at CI script (Jenkinsfile in repo root) and [build logs](https://jenkins.minlexx.ru/job/qmlevemon_github/job/master/).
 
 Open in Qt Creator, select toolkit, build.
 
@@ -28,10 +28,10 @@ cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -DCMAK
 cmake --build . -- target all
 ```
 
-## Build for Android platform using qmake
+### Build for Android platform using qmake
 Just open `qmlevemon.pro` in QtCreator with a properly set up Android Kit (JDK, Android SDK and Andoird NDK paths) and press Build.
 
-## Build for Android platform using cmake
+### Build for Android platform using cmake
 Before that, have an Android SDK & NDK installed.
 
 example command:
