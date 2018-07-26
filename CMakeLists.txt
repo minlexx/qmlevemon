@@ -49,51 +49,51 @@ else()
 endif()
 
 set(qmlevemon_srcs
-    "main.cpp"
-    "settings.cpp"
-    "qmlevemon_app.cpp"
-    "notificationsystem.cpp"
-    "db/db.cpp"
-    "db/db_sqlite.cpp"
-    "db/portrait_cache.cpp"
-    "db/type_icons_provider.cpp"
-    "eve_api/eve_sso.cpp"
-    "eve_api/eve_api.cpp"
-    "eve_api/eve_api_tokens.cpp"
-    "models/character.cpp"
-    "models/character_clone.cpp"
-    "models/character_clones_model.cpp"
-    "models/character_implants_group.cpp"
-    "models/character_model.cpp"
-    "models/character_skill.cpp"
-    "models/character_skillgroups_model.cpp"
-    "models/character_skillqueue.cpp"
-    "models/character_skillqueue_model.cpp"
-    "models/eve_location.cpp"
-    "models/formulas.cpp"
-    "models/invtype.cpp"
-    "models/mail_models.cpp"
-    "models/model_manager.cpp"
-    "models/notification.cpp"
-    "models/skill_group.cpp"
-    "models/skill_template.cpp"
-    "models/skill_tree_model.cpp"
-    "models/update_timestamps.cpp"
-    "network/periodical_refresher.cpp"
-    "network/refresher/clones.cpp"
-    "network/refresher/location.cpp"
-    "network/refresher/mail.cpp"
-    "network/refresher/notifications.cpp"
-    "network/refresher/periodical_refresher_worker.cpp"
-    "network/refresher/public_data.cpp"
-    "network/refresher/resolvers.cpp"
-    "network/refresher/server_status.cpp"
-    "network/refresher/skills.cpp"
-    "network/refresher/wallet.cpp"
-    "utils/str_utils.cpp"
-    "qml.qrc"
-    "img.qrc"
-    "sql.qrc"
+    "src/main.cpp"
+    "src/settings.cpp"
+    "src/qmlevemon_app.cpp"
+    "src/notificationsystem.cpp"
+    "src/db/db.cpp"
+    "src/db/db_sqlite.cpp"
+    "src/db/portrait_cache.cpp"
+    "src/db/type_icons_provider.cpp"
+    "src/eve_api/eve_sso.cpp"
+    "src/eve_api/eve_api.cpp"
+    "src/eve_api/eve_api_tokens.cpp"
+    "src/models/character.cpp"
+    "src/models/character_clone.cpp"
+    "src/models/character_clones_model.cpp"
+    "src/models/character_implants_group.cpp"
+    "src/models/character_model.cpp"
+    "src/models/character_skill.cpp"
+    "src/models/character_skillgroups_model.cpp"
+    "src/models/character_skillqueue.cpp"
+    "src/models/character_skillqueue_model.cpp"
+    "src/models/eve_location.cpp"
+    "src/models/formulas.cpp"
+    "src/models/invtype.cpp"
+    "src/models/mail_models.cpp"
+    "src/models/model_manager.cpp"
+    "src/models/notification.cpp"
+    "src/models/skill_group.cpp"
+    "src/models/skill_template.cpp"
+    "src/models/skill_tree_model.cpp"
+    "src/models/update_timestamps.cpp"
+    "src/network/periodical_refresher.cpp"
+    "src/network/refresher/clones.cpp"
+    "src/network/refresher/location.cpp"
+    "src/network/refresher/mail.cpp"
+    "src/network/refresher/notifications.cpp"
+    "src/network/refresher/periodical_refresher_worker.cpp"
+    "src/network/refresher/public_data.cpp"
+    "src/network/refresher/resolvers.cpp"
+    "src/network/refresher/server_status.cpp"
+    "src/network/refresher/skills.cpp"
+    "src/network/refresher/wallet.cpp"
+    "src/utils/str_utils.cpp"
+    "src/qml.qrc"
+    "src/img.qrc"
+    "src/sql.qrc"
 )
 
 if (WIN32)
@@ -102,25 +102,25 @@ if (WIN32)
 endif()
 
 set(qtwebserver_srcs
-    "qtwebserver/tcp/tcpmultithreadedserver.cpp"
-    "qtwebserver/tcp/tcpserverthread.cpp"
-    "qtwebserver/http/httprequest.cpp"
-    "qtwebserver/http/httpstatuscodes.cpp"
-    "qtwebserver/http/httpwebengine.cpp"
-    "qtwebserver/http/httpresource.cpp"
-    "qtwebserver/http/httpiodeviceresource.cpp"
-    "qtwebserver/misc/log.cpp"
-    "qtwebserver/misc/logger.cpp"
-    "qtwebserver/sql/sqlconnectionpool.cpp"
-    "qtwebserver/html/htmldocument.cpp"
-    "qtwebserver/util/utilassetsresource.cpp"
-    "qtwebserver/http/httpresponse.cpp"
-    "qtwebserver/http/httpheaders.cpp"
-    "qtwebserver/util/utildataurlcodec.cpp"
-    "qtwebserver/util/utilformurlcodec.cpp"
-    "qtwebserver/css/cssdocument.cpp"
-    "qtwebserver/css/cssruleset.cpp"
-    "qtwebserver/weblayout.cpp")
+    "src/qtwebserver/tcp/tcpmultithreadedserver.cpp"
+    "src/qtwebserver/tcp/tcpserverthread.cpp"
+    "src/qtwebserver/http/httprequest.cpp"
+    "src/qtwebserver/http/httpstatuscodes.cpp"
+    "src/qtwebserver/http/httpwebengine.cpp"
+    "src/qtwebserver/http/httpresource.cpp"
+    "src/qtwebserver/http/httpiodeviceresource.cpp"
+    "src/qtwebserver/misc/log.cpp"
+    "src/qtwebserver/misc/logger.cpp"
+    "src/qtwebserver/sql/sqlconnectionpool.cpp"
+    "src/qtwebserver/html/htmldocument.cpp"
+    "src/qtwebserver/util/utilassetsresource.cpp"
+    "src/qtwebserver/http/httpresponse.cpp"
+    "src/qtwebserver/http/httpheaders.cpp"
+    "src/qtwebserver/util/utildataurlcodec.cpp"
+    "src/qtwebserver/util/utilformurlcodec.cpp"
+    "src/qtwebserver/css/cssdocument.cpp"
+    "src/qtwebserver/css/cssruleset.cpp"
+    "src/qtwebserver/weblayout.cpp")
 
 if (BUILD_FOR_ANDROID)
     add_library(${PROJECT_NAME} SHARED
@@ -135,7 +135,8 @@ else()
 endif()
 
 target_include_directories(${PROJECT_NAME} PRIVATE
-    "qtwebserver"
+    "src/qtwebserver"
+    "src/"
 )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE
@@ -185,7 +186,7 @@ endif()
 if (BUILD_TESTING)
     message(STATUS "BUILD_TESTING is ON: Will build tests")
     enable_testing()
-    add_subdirectory(tests)
+    add_subdirectory(src/tests)
 endif()
 
 
@@ -220,31 +221,31 @@ if (UNIX)
 
     # install icons to to /usr/share/icons/hicolor/..x../apps
     install(
-        FILES "img/app_icon/32.png"
+        FILES "src/img/app_icon/32.png"
         DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/32x32/apps"
         RENAME "ru.minlexx.qmlevemon.png")
     install(
-        FILES "img/app_icon/48.png"
+        FILES "src/img/app_icon/48.png"
         DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/48x48/apps"
         RENAME "ru.minlexx.qmlevemon.png")
     install(
-        FILES "img/app_icon/64.png"
+        FILES "src/img/app_icon/64.png"
         DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/64x64/apps"
         RENAME "ru.minlexx.qmlevemon.png")
     install(
-        FILES "img/app_icon/128.png"
+        FILES "src/img/app_icon/128.png"
         DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/128x128/apps"
         RENAME "ru.minlexx.qmlevemon.png")
     install(
-        FILES "img/app_icon/256.png"
+        FILES "src/img/app_icon/256.png"
         DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/256x256/apps"
         RENAME "ru.minlexx.qmlevemon.png")
     install(
-        FILES "img/app_icon/512.png"
+        FILES "src/img/app_icon/512.png"
         DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/512x512/apps"
         RENAME "ru.minlexx.qmlevemon.png")
     install(
-        FILES "img/app_icon/ru.minlexx.qmlevemon.svg"
+        FILES "src/img/app_icon/ru.minlexx.qmlevemon.svg"
         DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/scalable/apps")
 
     # install desktop file to /usr/share/applications
