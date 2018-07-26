@@ -37,7 +37,7 @@ pipeline {
                     mkdir build\\out
                     cd build\\out
                     copy /y ..\\QMLEVEMon.exe .
-                    %QT_PREFIX%\\bin\\windeployqt.exe --release --qmldir ..\\..\\qml --compiler-runtime QMLEVEMon.exe
+                    %QT_PREFIX%\\bin\\windeployqt.exe --release --qmldir ..\\..\\src\\qml --compiler-runtime QMLEVEMon.exe
                     copy /y %windir%\\system32\\libeay32.dll .
                     copy /y %windir%\\system32\\ssleay32.dll .
                 '''
