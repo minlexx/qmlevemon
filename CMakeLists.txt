@@ -79,6 +79,7 @@ set(qmlevemon_srcs
     "src/models/skill_template.cpp"
     "src/models/skill_tree_model.cpp"
     "src/models/update_timestamps.cpp"
+    "src/models/wallet_models.cpp"
     "src/network/periodical_refresher.cpp"
     "src/network/refresher/clones.cpp"
     "src/network/refresher/location.cpp"
