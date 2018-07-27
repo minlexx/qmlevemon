@@ -14,7 +14,14 @@ class WalletJournalEntry
     Q_GADGET
 public:
     WalletJournalEntry() = default;
+    WalletJournalEntry(const WalletJournalEntry &) = default;
+    WalletJournalEntry(WalletJournalEntry &&) = default;
     ~WalletJournalEntry() = default;
+    WalletJournalEntry &operator=(const WalletJournalEntry &) = default;
+    WalletJournalEntry &operator=(WalletJournalEntry &&) = default;
+    bool operator==(const WalletJournalEntry &o) const;
+    bool operator!=(const WalletJournalEntry &o) const;
+    bool isValid() const;
 
 public:
     enum ContextType {
