@@ -32,22 +32,22 @@ SOURCES += \
     ./src/models/character_clone.cpp \
     ./src/models/character_clones_model.cpp \
     ./src/models/character_implants_group.cpp \
+    ./src/models/character_mail_models.cpp \
     ./src/models/character_model.cpp \
+    ./src/models/character_notifications.cpp \
     ./src/models/character_skill.cpp \
     ./src/models/character_skillgroups_model.cpp \
     ./src/models/character_skillqueue.cpp \
     ./src/models/character_skillqueue_model.cpp \
+    ./src/models/character_wallet_models.cpp \
     ./src/models/eve_location.cpp \
     ./src/models/formulas.cpp \
     ./src/models/invtype.cpp \
-    ./src/models/mail_models.cpp \
     ./src/models/model_manager.cpp \
-    ./src/models/notification.cpp \
     ./src/models/skill_group.cpp \
     ./src/models/skill_template.cpp \
     ./src/models/skill_tree_model.cpp \
     ./src/models/update_timestamps.cpp \
-    ./src/models/wallet_models.cpp \
     ./src/network/periodical_refresher.cpp \
     ./src/network/refresher/periodical_refresher_worker.cpp \
     ./src/network/refresher/clones.cpp \
@@ -95,23 +95,23 @@ HEADERS += \
     ./src/models/character_clone.h \
     ./src/models/character_clones_model.h \
     ./src/models/character_implants_group.h \
+    ./src/models/character_mail_models.h \
     ./src/models/character_model.h \
+    ./src/models/character_notifications.h \
     ./src/models/character_skill.h \
     ./src/models/character_skillgroups_model.h \
     ./src/models/character_skillqueue.h \
     ./src/models/character_skillqueue_model.h \
+    ./src/models/character_wallet_models.h \
     ./src/models/common_model_base.h \
     ./src/models/eve_location.h \
     ./src/models/formulas.h \
     ./src/models/invtype.h \
-    ./src/models/mail_models.h \
     ./src/models/model_manager.h \
-    ./src/models/notification.h \
     ./src/models/skill_group.h \
     ./src/models/skill_template.h \
     ./src/models/skill_tree_model.h \
     ./src/models/update_timestamps.h \
-    ./src/models/wallet_models.h \
     ./src/network/periodical_refresher.h \
     ./src/network/refresher/periodical_refresher_worker.h \
     ./src/utils/str_utils.h \
