@@ -589,67 +589,6 @@ static QString convert_ids_to_string(const QVector<quint64> &ids) {
 }
 
 
-[[deprecated]] bool EveApi::get_characters_names(QJsonArray &replyArr, const QVector<quint64> &ids)
-{
-    QJsonDocument reply_doc;
-    int reply_http_status = 0;
-    QUrlQuery urlQuery;
-    urlQuery.addQueryItem(QLatin1String("character_ids"), convert_ids_to_string(ids));
-    bool req_ok = this->send_general_esi_request_json(
-                EsiReqType::GET, QLatin1String("/characters/names/"),
-                urlQuery, QByteArray(), QByteArray(),
-                reply_http_status, reply_doc);
-    if (!req_ok || (reply_http_status != 200)) return false;
-    if (!reply_doc.isArray()) return false;
-    replyArr = reply_doc.array();
-    //   [{
-    //      "character_id": 91205062,
-    //      "character_name": "Lexx Min"
-    //    }, ...]
-    return true;
-}
-
-[[deprecated]] bool EveApi::get_corporations_names(QJsonArray &replyArr, const QVector<quint64> &ids)
-{
-    QJsonDocument reply_doc;
-    int reply_http_status = 0;
-    QUrlQuery urlQuery;
-    urlQuery.addQueryItem(QLatin1String("corporation_ids"), convert_ids_to_string(ids));
-    bool req_ok = this->send_general_esi_request_json(
-                EsiReqType::GET, QLatin1String("/corporations/names/"),
-                urlQuery, QByteArray(), QByteArray(),
-                reply_http_status, reply_doc);
-    if (!req_ok || (reply_http_status != 200)) return false;
-    if (!reply_doc.isArray()) return false;
-    replyArr = reply_doc.array();
-    //   [{
-    //      "corporation_id": 98441646,
-    //      "corporation_name": "Ice Nine."
-    //    }, ...]
-    return true;
-}
-
-[[deprecated]] bool EveApi::get_alliances_names(QJsonArray &replyArr, const QVector<quint64> &ids)
-{
-    QJsonDocument reply_doc;
-    int reply_http_status = 0;
-    QUrlQuery urlQuery;
-    urlQuery.addQueryItem(QLatin1String("alliance_ids"), convert_ids_to_string(ids));
-    bool req_ok = this->send_general_esi_request_json(
-                EsiReqType::GET, QLatin1String("/alliances/names/"),
-                urlQuery, QByteArray(), QByteArray(),
-                reply_http_status, reply_doc);
-    if (!req_ok || (reply_http_status != 200)) return false;
-    if (!reply_doc.isArray()) return false;
-    replyArr = reply_doc.array();
-    //   [{
-    //      "alliance_id": 1683694957,
-    //      "alliance_name": "COASTAL BROTHERHOOD"
-    //    }, ...]
-    return true;
-}
-
-
 bool EveApi::get_character_attributes(QJsonObject &reply, quint64 char_id, const QByteArray &access_token)
 {
     QJsonDocument replyJson;

@@ -84,14 +84,10 @@ public:
     bool get_alliance_public_data(QJsonObject &reply, quint64 ally_id);
     // common
     bool get_server_status(QJsonObject &reply);
-    // names resolving
-    [[deprecated]] bool get_characters_names(QJsonArray &replyArr, const QVector<quint64> &ids);
-    [[deprecated]] bool get_corporations_names(QJsonArray &replyArr, const QVector<quint64> &ids);
-    [[deprecated]] bool get_alliances_names(QJsonArray &replyArr, const QVector<quint64> &ids);
     // universe
     bool get_universe_bloodlines(QJsonArray &replyArr);
     bool get_universe_constellation(QJsonObject &reply, quint64 constellation_id);
-    bool post_universe_names(QJsonArray &replyArr, const QVector<quint64> &ids);
+    bool post_universe_names(QJsonArray &replyArr, const QVector<quint64> &ids); // new names resolving
     bool get_universe_races(QJsonArray &replyArr);
     bool get_universe_region(QJsonObject &reply, quint64 region_id);
     bool get_universe_station(QJsonObject &reply, quint64 station_id);
