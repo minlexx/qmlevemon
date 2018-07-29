@@ -69,6 +69,7 @@ set(qmlevemon_srcs
     "src/models/character_skillgroups_model.cpp"
     "src/models/character_skillqueue.cpp"
     "src/models/character_skillqueue_model.cpp"
+    "src/models/common_model_base.h"
     "src/models/eve_location.cpp"
     "src/models/formulas.cpp"
     "src/models/invtype.cpp"
