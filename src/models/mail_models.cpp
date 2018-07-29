@@ -155,54 +155,8 @@ Mail Mail::fromJson(const QJsonObject &jobj)
 
 
 CharacterMailLabels::CharacterMailLabels(QObject *parent)
-    : QAbstractListModel(parent)
+    : CommonModelBase<MailLabel>(parent)
 {
-}
-
-CharacterMailLabels::CharacterMailLabels(const CharacterMailLabels &other)
-    : QAbstractListModel(other.parent())
-{
-    (*this) = other;
-}
-
-CharacterMailLabels::CharacterMailLabels(CharacterMailLabels &&other)
-    : QAbstractListModel(other.parent())
-{
-    (*this) = std::move(other);
-}
-
-CharacterMailLabels &CharacterMailLabels::operator=(const CharacterMailLabels &other)
-{
-    if (this == &other) return (*this);
-    beginResetModel();
-    m_data = other.m_data;
-    endResetModel();
-    return (*this);
-}
-
-CharacterMailLabels &CharacterMailLabels::operator=(CharacterMailLabels &&other)
-{
-    if (this == &other) return (*this);
-    beginResetModel();
-    m_data = std::move(other.m_data);
-    endResetModel();
-    return (*this);
-}
-
-bool CharacterMailLabels::operator==(const CharacterMailLabels &other) const
-{
-    return m_data == other.m_data;
-}
-
-bool CharacterMailLabels::operator!=(const CharacterMailLabels &other) const
-{
-    return !(operator==(other));
-}
-
-int CharacterMailLabels::rowCount(const QModelIndex &parent) const
-{
-    Q_UNUSED(parent)
-    return m_data.size();
 }
 
 QHash<int,QByteArray> CharacterMailLabels::roleNames() const
@@ -220,92 +174,32 @@ QHash<int,QByteArray> CharacterMailLabels::roleNames() const
 QVariant CharacterMailLabels::data(const QModelIndex &index, int role) const
 {
     QVariant ret;
-    if (!index.isValid()) {
-        return ret;
-    }
-    int row = index.row();
-    if ((row < 0) || (row >= m_data.size())) {
-        return ret;
-    }
-    const MailLabel &mailLabel = m_data.at(row);
+    bool valid = true;
+    const MailLabel *mailLabel = validateIndexAndGetData(index, valid);
+    if (!valid) return ret;
     switch (role) {
     case Qt::DisplayRole:
     case Roles::Name:
-        ret = mailLabel.name;
+        ret = mailLabel->name;
         break;
     case Roles::Id:
-        ret = mailLabel.id;
+        ret = mailLabel->id;
         break;
     case Roles::Color:
-        ret = mailLabel.color;
+        ret = mailLabel->color;
         break;
     case Roles::UnreadCount:
-        ret = mailLabel.unread_count;
+        ret = mailLabel->unread_count;
         break;
     }
     return ret;
 }
 
-QVector<MailLabel> &CharacterMailLabels::internalData()
-{
-    return m_data;
-}
-
-const QVector<MailLabel> &CharacterMailLabels::internalData() const
-{
-    return m_data;
-}
 
 
 CharacterMails::CharacterMails(QObject *parent)
-    : QAbstractListModel(parent)
+    : CommonModelBase<Mail>(parent)
 {
-}
-
-CharacterMails::CharacterMails(const CharacterMails &other)
-    : QAbstractListModel(other.parent())
-{
-    (*this) = other;
-}
-
-CharacterMails::CharacterMails(CharacterMails &&other)
-    : QAbstractListModel(other.parent())
-{
-    (*this) = std::move(other);
-}
-
-CharacterMails &CharacterMails::operator=(const CharacterMails &other)
-{
-    if (this == &other) return (*this);
-    beginResetModel();
-    m_data = other.m_data;
-    endResetModel();
-    return (*this);
-}
-
-CharacterMails &CharacterMails::operator=(CharacterMails &&other)
-{
-    if (this == &other) return (*this);
-    beginResetModel();
-    m_data = std::move(other.m_data);
-    endResetModel();
-    return (*this);
-}
-
-bool CharacterMails::operator==(const CharacterMails &other) const
-{
-    return m_data == other.m_data;
-}
-
-bool CharacterMails::operator!=(const CharacterMails &other) const
-{
-    return !(operator==(other));
-}
-
-int CharacterMails::rowCount(const QModelIndex &parent) const
-{
-    Q_UNUSED(parent);
-    return m_data.size();
 }
 
 QHash<int,QByteArray> CharacterMails::roleNames() const
@@ -328,56 +222,41 @@ QHash<int,QByteArray> CharacterMails::roleNames() const
 QVariant CharacterMails::data(const QModelIndex &index, int role) const
 {
     QVariant ret;
-    if (!index.isValid()) {
-        return ret;
-    }
-    int row = index.row();
-    if ((row < 0) || (row >= m_data.size())) {
-        return ret;
-    }
-    const Mail &mail = m_data.at(row);
+    bool valid = true;
+    const Mail *mail = validateIndexAndGetData(index, valid);
+    if (!valid) return ret;
     switch (role) {
     case Qt::DisplayRole:
     case Roles::Subject:
-        ret = mail.subject;
+        ret = mail->subject;
         break;
     case Roles::Id:
-        ret = mail.id;
+        ret = mail->id;
         break;
     case Roles::Body:
-        ret = mail.body;
+        ret = mail->body;
         break;
     case Roles::FromId:
-        ret = mail.from.id;
+        ret = mail->from.id;
         break;
     case Roles::FromName:
-        ret = mail.from.name;
+        ret = mail->from.name;
         break;
     case Roles::IsRead:
-        ret = mail.is_read;
+        ret = mail->is_read;
         break;
     case Roles::Timestamp:
-        ret = mail.timestamp;
+        ret = mail->timestamp;
         break;
     case Roles::Labels: {
             QStringList lblList;
-            for (const QString &lblName: mail.labels_str) {
+            for (const QString &lblName: mail->labels_str) {
                 lblList.append(lblName);
             }
             ret = lblList;
         } break;
     }
     return ret;
-}
-
-QVector<Mail> &CharacterMails::internalData()
-{
-    return m_data;
-}
-
-const QVector<Mail> &CharacterMails::internalData() const
-{
-    return m_data;
 }
 
 void CharacterMails::setMailBody(quint64 mailId, const QString &body)
@@ -520,29 +399,6 @@ QDataStream &operator>>(QDataStream &stream, EM::Mail &mail)
     return stream;
 }
 
-QDataStream &operator<<(QDataStream &stream, const EM::CharacterMailLabels &charMailLabels)
-{
-    stream << charMailLabels.m_data;
-    return stream;
-}
-
-QDataStream &operator>>(QDataStream &stream, EM::CharacterMailLabels &charMailLabels)
-{
-    stream >> charMailLabels.m_data;
-    return stream;
-}
-
-QDataStream &operator<<(QDataStream &stream, const EM::CharacterMails &charMails)
-{
-    stream << charMails.m_data;
-    return stream;
-}
-
-QDataStream &operator>>(QDataStream &stream, EM::CharacterMails &charMails)
-{
-    stream >> charMails.m_data;
-    return stream;
-}
 
 QDebug operator<<(QDebug &stream, const EM::MailLabel &label)
 {
