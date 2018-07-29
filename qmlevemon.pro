@@ -47,6 +47,7 @@ SOURCES += \
     ./src/models/skill_template.cpp \
     ./src/models/skill_tree_model.cpp \
     ./src/models/update_timestamps.cpp \
+    ./src/models/wallet_models.cpp \
     ./src/network/periodical_refresher.cpp \
     ./src/network/refresher/periodical_refresher_worker.cpp \
     ./src/network/refresher/clones.cpp \
@@ -99,6 +100,7 @@ HEADERS += \
     ./src/models/character_skillgroups_model.h \
     ./src/models/character_skillqueue.h \
     ./src/models/character_skillqueue_model.h \
+    ./src/models/common_model_base.h \
     ./src/models/eve_location.h \
     ./src/models/formulas.h \
     ./src/models/invtype.h \
@@ -109,6 +111,7 @@ HEADERS += \
     ./src/models/skill_template.h \
     ./src/models/skill_tree_model.h \
     ./src/models/update_timestamps.h \
+    ./src/models/wallet_models.h \
     ./src/network/periodical_refresher.h \
     ./src/network/refresher/periodical_refresher_worker.h \
     ./src/utils/str_utils.h \
