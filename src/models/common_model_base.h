@@ -90,8 +90,7 @@ public: // for internal use, m_data getter
 protected:
     // call this method from overriden data() method to validate index
     //      and get data at index at the same time
-    const T *validateIndexAndGetData(const QModelIndex &index, bool &valid) const {
-        valid = false;
+    const T *validateIndexAndGetData(const QModelIndex &index) const {
         if (!index.isValid()) {
             return nullptr;
         }
@@ -99,7 +98,6 @@ protected:
         if ((row < 0) || (row >= m_data.size())) {
             return nullptr;
         }
-        valid = true;
         return &(m_data.at(row));
     }
 

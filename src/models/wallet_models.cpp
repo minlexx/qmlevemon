@@ -101,11 +101,8 @@ QHash<int, QByteArray> CharacterWalletJournal::roleNames() const
 QVariant CharacterWalletJournal::data(const QModelIndex &index, int role) const
 {
     QVariant ret;
-    bool valid = true;
-    const WalletJournalEntry *entry = validateIndexAndGetData(index, valid);
-    if (!valid) {
-        return ret;
-    }
+    const WalletJournalEntry *entry = validateIndexAndGetData(index);
+    if (!entry) return ret;
     switch (role) {
     case Qt::DisplayRole:
     case Roles::RefType: ret = entry->ref_type; break;
@@ -149,11 +146,8 @@ QHash<int, QByteArray> CharacterWalletTransactions::roleNames() const
 QVariant CharacterWalletTransactions::data(const QModelIndex &index, int role) const
 {
     QVariant ret;
-    bool valid = true;
-    const WalletSingleTransaction *entry = validateIndexAndGetData(index, valid);
-    if (!valid) {
-        return ret;
-    }
+    const WalletSingleTransaction *entry = validateIndexAndGetData(index);
+    if (!entry) return ret;
     switch (role) {
     case Roles::ClientId: ret = entry->client_id; break;
     case Roles::Date: ret = entry->date; break;

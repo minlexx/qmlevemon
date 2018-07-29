@@ -39,9 +39,8 @@ QHash<int, QByteArray> CharacterClonesModel::roleNames() const
 QVariant CharacterClonesModel::data(const QModelIndex &index, int role) const
 {
     QVariant ret;
-    bool valid = true;
-    const CharacterClone *clone = validateIndexAndGetData(index, valid);
-    if (!valid) return ret;
+    const CharacterClone *clone = validateIndexAndGetData(index);
+    if (!clone) return ret;
     switch (role) {
     case Roles::CloneId:
         ret = clone->cloneId();

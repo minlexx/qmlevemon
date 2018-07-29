@@ -174,9 +174,8 @@ QHash<int,QByteArray> CharacterMailLabels::roleNames() const
 QVariant CharacterMailLabels::data(const QModelIndex &index, int role) const
 {
     QVariant ret;
-    bool valid = true;
-    const MailLabel *mailLabel = validateIndexAndGetData(index, valid);
-    if (!valid) return ret;
+    const MailLabel *mailLabel = validateIndexAndGetData(index);
+    if (!mailLabel) return ret;
     switch (role) {
     case Qt::DisplayRole:
     case Roles::Name:
@@ -222,9 +221,8 @@ QHash<int,QByteArray> CharacterMails::roleNames() const
 QVariant CharacterMails::data(const QModelIndex &index, int role) const
 {
     QVariant ret;
-    bool valid = true;
-    const Mail *mail = validateIndexAndGetData(index, valid);
-    if (!valid) return ret;
+    const Mail *mail = validateIndexAndGetData(index);
+    if (!mail) return ret;
     switch (role) {
     case Qt::DisplayRole:
     case Roles::Subject:
