@@ -1,5 +1,5 @@
 #include <QDataStream>
-#include "notification.h"
+#include "character_notifications.h"
 
 
 namespace EM {
