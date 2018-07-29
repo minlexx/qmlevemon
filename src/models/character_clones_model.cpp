@@ -9,6 +9,22 @@ CharacterClonesModel::CharacterClonesModel(QObject *parent)
 {
 }
 
+
+// base class's operator=() resets model, but our method setClones() does very nice model update
+// without resetting whole model
+CharacterClonesModel &CharacterClonesModel::operator=(const CharacterClonesModel &o)
+{
+    setClones(o.m_data);
+    return *this;
+}
+
+CharacterClonesModel &CharacterClonesModel::operator=(CharacterClonesModel &&o)
+{
+    setClones(std::move(o.m_data));
+    return *this;
+}
+
+
 QHash<int, QByteArray> CharacterClonesModel::roleNames() const
 {
     static QHash<int, QByteArray> roles = {

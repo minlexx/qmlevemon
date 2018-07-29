@@ -27,6 +27,8 @@ class CharacterClonesModel : public CommonModelBase<CharacterClone>
 
 public:
     explicit CharacterClonesModel(QObject *parent = nullptr);
+    CharacterClonesModel &operator=(const CharacterClonesModel &o);
+    CharacterClonesModel &operator=(CharacterClonesModel &&o);
 
 public:  // reimplmented interface
     QHash<int, QByteArray> roleNames() const override;
