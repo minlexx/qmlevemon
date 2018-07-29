@@ -1,4 +1,4 @@
-#include "wallet_models.h"
+#include "character_wallet_models.h"
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QVariant>
