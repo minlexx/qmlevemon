@@ -73,6 +73,25 @@ bool WalletSingleTransaction::operator!=(const WalletSingleTransaction &o) const
     return !((*this) == o);
 }
 
+WalletSingleTransaction WalletSingleTransaction::fromJsonObject(const QJsonObject &jobj)
+{
+    WalletSingleTransaction t;
+    t.transaction_id = 0;
+    //
+    t.client_id = jobj.value(QLatin1String("client_id")).toVariant().toULongLong();
+    t.date = jobj.value(QLatin1String("date")).toVariant().toDateTime();
+    t.is_buy = jobj.value(QLatin1String("is_buy")).toBool();
+    t.is_personal = jobj.value(QLatin1String("is_personal")).toBool();
+    t.journal_ref_id = jobj.value(QLatin1String("journal_ref_id")).toVariant().toULongLong();
+    t.location_id = jobj.value(QLatin1String("location_id")).toVariant().toULongLong();
+    t.quantity = jobj.value(QLatin1String("quantity")).toVariant().toLongLong();
+    t.transaction_id = jobj.value(QLatin1String("transaction_id")).toVariant().toULongLong();
+    t.type_id = jobj.value(QLatin1String("type_id")).toVariant().toULongLong();
+    t.unit_price = jobj.value(QLatin1String("unit_price")).toDouble();
+    //
+    return t;
+}
+
 
 CharacterWalletJournal::CharacterWalletJournal(QObject *parent): CommonModelBase(parent)
 {

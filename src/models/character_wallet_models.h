@@ -71,8 +71,10 @@ public:
     WalletSingleTransaction &operator=(WalletSingleTransaction &&) = default;
     bool operator==(const WalletSingleTransaction &o) const;
     bool operator!=(const WalletSingleTransaction &o) const;
-public:
 
+    static WalletSingleTransaction fromJsonObject(const QJsonObject &jobj);
+
+public:
     quint64 client_id = 0;
     QDateTime date;
     bool is_buy = false;
