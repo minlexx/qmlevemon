@@ -8,12 +8,13 @@
 #include <QByteArray>
 #include <QMutex>
 #include "character_clone.h"
+#include "common_model_base.h"
 
 
 namespace EM {
 
 
-class CharacterClonesModel : public QAbstractListModel
+class CharacterClonesModel : public CommonModelBase<CharacterClone>
 {
     Q_OBJECT
 
@@ -29,18 +30,10 @@ public:
 
 public:  // reimplmented interface
     QHash<int, QByteArray> roleNames() const override;
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
 public:
-    QVector<CharacterClone> &clones();
-    const QVector<CharacterClone> &clones() const;
     void setClones(const QVector<CharacterClone> &clns);
-
-private:
-    QHash<int, QByteArray>  m_roles;
-    QVector<CharacterClone> m_clones;
-    mutable QMutex m_mutex;
 };
 
 

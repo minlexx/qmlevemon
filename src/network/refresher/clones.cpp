@@ -86,7 +86,7 @@ int PeriodicalRefresherWorker::resresh_clones(Character *ch)
         ch->setLastCloneJumpDate(dtLastCloneJump);
 
         // parse jump clones
-        QVector<CharacterClone> newClones;
+        CharacterClonesModel clonesModel;
         for (const QJsonValue &jval: jjump_clones) {
             const QJsonObject jobj = jval.toObject();
             const QString cloneName = jobj.value(QLatin1String("name")).toString();
@@ -120,10 +120,10 @@ int PeriodicalRefresherWorker::resresh_clones(Character *ch)
             newClone.setLocation(loc);
             newClone.setImplantsGroup(newCloneImplants);
 
-            newClones.append(std::move(newClone));
+            clonesModel.internalData().push_back(std::move(newClone));
         }
 
-        ch->setClones(newClones);
+        ch->setClones(clonesModel);
 
         nChanges++;
     }

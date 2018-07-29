@@ -91,7 +91,7 @@ Character& Character::operator=(const Character& other)
     setSkillQueue(other.m_skillQueue);
     // clones, implants, home station
     setCurrentClone(other.m_currentClone);
-    setClones(other.clonesModel()->clones());
+    setClones(other.m_clonesModel);
     setLastCloneJumpDate(other.m_lastCloneJumpDate);
     setHomeLocation(other.m_homeLocation);
     // fatigue
@@ -167,7 +167,7 @@ Character& Character::operator=(Character&& other)
     setSkillQueue(std::move(other.m_skillQueue));
     // clones, implants, home station
     setCurrentClone(other.m_currentClone);
-    setClones(std::move(other.clonesModel()->clones()));
+    setClones(std::move(other.m_clonesModel));
     setLastCloneJumpDate(std::move(other.m_lastCloneJumpDate));
     setHomeLocation(std::move(other.m_homeLocation));
     // fatigue
@@ -663,7 +663,7 @@ CharacterClone *Character::currentClone() { return &m_currentClone; }
 
 const CharacterClone *Character::findCloneById(quint64 cloneId) const
 {
-    const QVector<CharacterClone> &clones = clonesModel()->clones();
+    const QVector<CharacterClone> &clones = m_clonesModel.internalData();
     for (const CharacterClone &cl : clones) {
         if (cl.cloneId() == cloneId) {
             return &cl;
@@ -686,10 +686,10 @@ const CharacterClonesModel *Character::clonesModel() const { return &m_clonesMod
 
 QObject *Character::clonesModelObj() { return static_cast<QObject *>(&m_clonesModel); }
 
-void Character::setClones(const QVector<CharacterClone> &clones)
+void Character::setClones(const CharacterClonesModel &clones)
 {
-    m_clonesModel.setClones(clones);
-    // Q_EMIT clonesChanged(); // ned needed, model should emit all signals itself
+    m_clonesModel = clones;
+    // Q_EMIT clonesChanged(); // not needed, model should emit all signals itself
 }
 
 QDateTime Character::lastCloneJumpDate() const { return m_lastCloneJumpDate; }
@@ -1060,7 +1060,7 @@ QDataStream& operator<<(QDataStream &stream, const EM::Character &character)
     stream << character.m_skillQueue;
     // clones, implants, home station
     stream << character.m_currentClone;
-    stream << character.m_clonesModel.clones();
+    stream << character.m_clonesModel;
     stream << character.m_lastCloneJumpDate;
     stream << character.m_homeLocation;
     // fatigue
@@ -1147,7 +1147,7 @@ QDataStream& operator>>(QDataStream &stream, EM::Character &character)
     stream >> character.m_skillQueue;
     // clones, implants, home station
     stream >> character.m_currentClone;
-    stream >> character.m_clonesModel.clones();
+    stream >> character.m_clonesModel;
     stream >> character.m_lastCloneJumpDate;
     stream >> character.m_homeLocation;
     // fatigue

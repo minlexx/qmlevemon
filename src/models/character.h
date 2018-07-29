@@ -272,7 +272,7 @@ public:
     CharacterClonesModel *clonesModel();
     const CharacterClonesModel *clonesModel() const;
     QObject *clonesModelObj();
-    void setClones(const QVector<CharacterClone> &clones);
+    void setClones(const CharacterClonesModel &clones);
 
     QDateTime lastCloneJumpDate() const;
     void setLastCloneJumpDate(const QDateTime &dt);
