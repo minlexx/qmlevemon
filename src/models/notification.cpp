@@ -29,54 +29,8 @@ bool Notification::operator!=(const Notification &o) const
 
 
 EM::CharacterNotifications::CharacterNotifications(QObject *parent)
-    : QAbstractListModel(parent)
+    : CommonModelBase<Notification>(parent)
 {
-}
-
-CharacterNotifications::CharacterNotifications(const CharacterNotifications &other)
-    : QAbstractListModel(other.parent())
-{
-    (*this) = other;
-}
-
-CharacterNotifications::CharacterNotifications(CharacterNotifications &&other)
-    : QAbstractListModel(other.parent())
-{
-    (*this) = std::move(other);
-}
-
-CharacterNotifications &CharacterNotifications::operator=(const CharacterNotifications &other)
-{
-    if (this == &other) return (*this);
-    beginResetModel();
-    m_data = other.m_data;
-    endResetModel();
-    return (*this);
-}
-
-CharacterNotifications &CharacterNotifications::operator=(CharacterNotifications &&other)
-{
-    if (this == &other) return (*this);
-    beginResetModel();
-    m_data = std::move(other.m_data);
-    endResetModel();
-    return (*this);
-}
-
-bool CharacterNotifications::operator==(const CharacterNotifications &other) const
-{
-    return m_data == other.m_data;
-}
-
-bool CharacterNotifications::operator!=(const CharacterNotifications &other) const
-{
-    return !((*this) == other);
-}
-
-int CharacterNotifications::rowCount(const QModelIndex &parent) const
-{
-    Q_UNUSED(parent)
-    return m_data.size();
 }
 
 QHash<int, QByteArray> CharacterNotifications::roleNames() const
@@ -97,49 +51,33 @@ QHash<int, QByteArray> CharacterNotifications::roleNames() const
 QVariant CharacterNotifications::data(const QModelIndex &index, int role) const
 {
     QVariant ret;
-    if (!index.isValid()) {
-        return ret;
-    }
-    int row = index.row();
-    if ((row < 0) || (row >= m_data.size())) {
-        return ret;
-    }
-    const Notification &ntf = m_data.at(row);
+    const Notification *ntf = validateIndexAndGetData(index);
+    if (!ntf) return ret;
     switch (role) {
     case Qt::DisplayRole:
     case Role::Type:
-        ret = ntf.notificationType;
+        ret = ntf->notificationType;
         break;
     case Role::Id:
-        ret = ntf.notificationId;
+        ret = ntf->notificationId;
         break;
     case Role::SenderId:
-        ret = ntf.senderId;
+        ret = ntf->senderId;
         break;
     case Role::SenderType:
-        ret = ntf.senderType;
+        ret = ntf->senderType;
         break;
     case Role::Timestamp:
-        ret = ntf.timestamp;
+        ret = ntf->timestamp;
         break;
     case Role::Text:
-        ret = ntf.text;
+        ret = ntf->text;
         break;
     case Role::SenderDisplayName:
-        ret = ntf.senderDisplayName;
+        ret = ntf->senderDisplayName;
         break;
     }
     return ret;
-}
-
-QVector<Notification> &CharacterNotifications::internalData()
-{
-    return m_data;
-}
-
-const QVector<Notification> &CharacterNotifications::internalData() const
-{
-    return m_data;
 }
 
 
@@ -169,16 +107,3 @@ QDataStream &operator>>(QDataStream &stream, EM::Notification &ntf)
     stream >> ntf.senderDisplayName;
     return stream;
 }
-
-QDataStream &operator<<(QDataStream &stream, const EM::CharacterNotifications &charNotifications)
-{
-    stream << charNotifications.m_data;
-    return stream;
-}
-
-QDataStream &operator>>(QDataStream &stream, EM::CharacterNotifications &charNotifications)
-{
-    stream >> charNotifications.m_data;
-    return stream;
-}
-

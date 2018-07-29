@@ -1,13 +1,10 @@
 #ifndef NOTIFICATION_H
 #define NOTIFICATION_H
 
-#include <QByteArray>
 #include <QString>
 #include <QDateTime>
 #include <QObject>
-#include <QVector>
-#include <QHash>
-#include <QAbstractListModel>
+#include "common_model_base.h"
 
 QT_FORWARD_DECLARE_CLASS(QDataStream)
 
@@ -21,9 +18,6 @@ namespace EM {
 
 QDataStream& operator<<(QDataStream &stream, const EM::Notification &ntf);
 QDataStream& operator>>(QDataStream &stream, EM::Notification &ntf);
-
-QDataStream& operator<<(QDataStream &stream, const EM::CharacterNotifications &charMailLabels);
-QDataStream& operator>>(QDataStream &stream, EM::CharacterNotifications &charMailLabels);
 
 
 namespace EM {
@@ -50,38 +44,18 @@ public:
 };
 
 
-class CharacterNotifications: public QAbstractListModel
+class CharacterNotifications: public CommonModelBase<Notification>
 {
     Q_OBJECT
-private:
     enum Role {
         Id = Qt::UserRole + 1, Type, SenderId, SenderType, Timestamp, Text,
         SenderDisplayName
     };
-
 public:
     CharacterNotifications(QObject *parent = nullptr);
-    CharacterNotifications(const CharacterNotifications &other);
-    CharacterNotifications(CharacterNotifications &&other);
-    CharacterNotifications &operator=(const CharacterNotifications &other);
-    CharacterNotifications &operator=(CharacterNotifications &&other);
-    bool operator==(const CharacterNotifications &other) const;
-    bool operator!=(const CharacterNotifications &other) const;
-
 public:
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QHash<int,QByteArray> roleNames() const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
-
-public: // for internal use, m_data getter
-    QVector<Notification> &internalData();
-    const QVector<Notification> &internalData() const;
-
-protected:
-    QVector<Notification> m_data;
-
-    friend QDataStream& (::operator<<)(QDataStream &stream, const EM::CharacterNotifications &charNotifications);
-    friend QDataStream& (::operator>>)(QDataStream &stream, EM::CharacterNotifications &charNotifications);
 };
 
 
@@ -90,9 +64,6 @@ protected:
 
 QDataStream& operator<<(QDataStream &stream, const EM::Notification &ntf);
 QDataStream& operator>>(QDataStream &stream, EM::Notification &ntf);
-
-QDataStream& operator<<(QDataStream &stream, const EM::CharacterNotifications &charNotifications);
-QDataStream& operator>>(QDataStream &stream, EM::CharacterNotifications &charNotifications);
 
 
 #endif // NOTIFICATION_H
