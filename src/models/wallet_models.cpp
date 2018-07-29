@@ -80,7 +80,7 @@ CharacterWalletJournal::CharacterWalletJournal(QObject *parent): CommonModelBase
 
 QHash<int, QByteArray> CharacterWalletJournal::roleNames() const
 {
-    QHash<int,QByteArray> roles = {
+    static QHash<int, QByteArray> roles = {
         {Qt::DisplayRole,       QByteArrayLiteral("refType")},
         {Roles::Amount,         QByteArrayLiteral("amount")},
         {Roles::Balance,        QByteArrayLiteral("body")},
@@ -131,7 +131,7 @@ CharacterWalletTransactions::CharacterWalletTransactions(QObject *parent)
 
 QHash<int, QByteArray> CharacterWalletTransactions::roleNames() const
 {
-    QHash<int,QByteArray> roles = {
+    static QHash<int, QByteArray> roles = {
         {Roles::ClientId,       QByteArrayLiteral("clientId")},
         {Roles::Date,           QByteArrayLiteral("date")},
         {Roles::IsBuy,          QByteArrayLiteral("isBuy")},
