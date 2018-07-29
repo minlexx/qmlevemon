@@ -3,8 +3,10 @@
 
 #include <QObject>
 #include <QDateTime>
+#include "common_model_base.h"
 
 QT_FORWARD_DECLARE_CLASS(QJsonObject)
+QT_FORWARD_DECLARE_CLASS(QDataStream)
 
 namespace EM {
 
@@ -84,7 +86,45 @@ public:
 };
 
 
+class CharacterWalletJournal: public CommonModelBase<WalletJournalEntry>
+{
+    Q_OBJECT
+    enum Roles {
+        Id = Qt::UserRole + 1, Amount, Balance, ContextId, ContextIdType, Date, Description,
+        FirstPartyId, SecondPartyId, Reason, RefType, Tax, TaxReceiverId
+    };
+public:
+    CharacterWalletJournal(QObject *parent = nullptr);
+public:  // only these methods need to be overriden
+    QHash<int,QByteArray> roleNames() const override;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    // since this class does not add any data members,
+    // base class's operators=, ==, stream save/load should work
+};
+
+
+class CharacterWalletTransactions: public CommonModelBase<WalletSingleTransaction>
+{
+    Q_OBJECT
+    enum Roles {
+        ClientId, Date, IsBuy, IsPersonal, JournalRefId, LocationId, Quantity,
+        TransactionId, TypeId, UnitPrice
+    };
+public:
+    CharacterWalletTransactions(QObject *parent = nullptr);
+public:  // only these methods need to be overriden
+    QHash<int,QByteArray> roleNames() const override;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+};
+
+
 } // namespace EM
+
+
+QDataStream &operator<<(QDataStream &stream, const EM::WalletJournalEntry &o);
+QDataStream &operator>>(QDataStream &stream, EM::WalletJournalEntry &o);
+QDataStream &operator<<(QDataStream &stream, const EM::WalletSingleTransaction &o);
+QDataStream &operator>>(QDataStream &stream, EM::WalletSingleTransaction &o);
 
 
 #endif
