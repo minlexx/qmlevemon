@@ -106,8 +106,8 @@ protected:
 protected:
     QVector<T> m_data;
 
-    friend QDataStream& (::operator<<)(QDataStream &stream, const EM::CommonModelBase<T> &mdl);
-    friend QDataStream& (::operator>>)(QDataStream &stream, EM::CommonModelBase<T> &mdl);
+    friend QDataStream& (::operator<< <T>)(QDataStream &stream, const EM::CommonModelBase<T> &mdl);
+    friend QDataStream& (::operator>> <T>)(QDataStream &stream, EM::CommonModelBase<T> &mdl);
 };
 
 
