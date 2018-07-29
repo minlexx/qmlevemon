@@ -102,6 +102,9 @@ Character& Character::operator=(const Character& other)
     setMails(other.m_mails);
     setMailingLists(other.m_mailingLists);
     setMailNotifications(other.m_mailNotifications);
+    // wallet journal/transactions
+    setWalletJournal(other.m_walletJournal);
+    setWalletTransactions(other.m_walletTransactions);
     // auth info
     m_tokens = other.m_tokens;
     // last update date-times
@@ -175,6 +178,9 @@ Character& Character::operator=(Character&& other)
     setMails(std::move(other.m_mails));
     setMailingLists(std::move(other.m_mailingLists));
     setMailNotifications(std::move(other.m_mailNotifications));
+    // wallet journal/transactions
+    setWalletJournal(std::move(other.m_walletJournal));
+    setWalletTransactions(std::move(other.m_walletTransactions));
     // auth info
     m_tokens = std::move(other.m_tokens);
     // last update date-times
@@ -795,6 +801,34 @@ bool Character::findMailById(quint64 mailId, Mail &mail) const
     return m_mails.findMailById(mailId, mail);
 }
 
+QObject *Character::walletJournalObj() { return static_cast<QObject *>(&m_walletJournal); }
+
+CharacterWalletJournal *Character::walletJournal() { return &m_walletJournal; }
+
+const CharacterWalletJournal *Character::walletJournal() const { return &m_walletJournal; }
+
+QObject *Character::walletTransactionsObj() { return static_cast<QObject *>(&m_walletTransactions); }
+
+CharacterWalletTransactions *Character::walletTransactions() { return &m_walletTransactions; }
+
+const CharacterWalletTransactions *Character::walletTransactions() const { return &m_walletTransactions; }
+
+void Character::setWalletJournal(const CharacterWalletJournal &j)
+{
+    if (m_walletJournal != j) {
+        m_walletJournal = j;
+        Q_EMIT walletJournalChanged();
+    }
+}
+
+void Character::setWalletTransactions(const CharacterWalletTransactions &t)
+{
+    if (m_walletTransactions != t) {
+        m_walletTransactions = t;
+        Q_EMIT walletTransactionsChanged();
+    }
+}
+
 // auth info
 EveOAuthTokens Character::getAuthTokens() const { return m_tokens; }
 void Character::setAuthTokens(const EveOAuthTokens& tokens) { m_tokens = tokens; }
@@ -964,7 +998,7 @@ void Character::calcSkillQueue()
 
 
 // increase version number when savedata format changes
-static const int SAVEDATA_VERSION = 27;
+static const int SAVEDATA_VERSION = 28;
 
 
 QDataStream& operator<<(QDataStream &stream, const EM::Character &character)
@@ -1037,6 +1071,10 @@ QDataStream& operator<<(QDataStream &stream, const EM::Character &character)
     stream << character.m_mails;
     stream << character.m_mailingLists;
     stream << character.m_mailNotifications;
+    // since savedata version 28
+    // wallet history
+    stream << character.m_walletJournal;
+    stream << character.m_walletTransactions;
     return stream;
 }
 
@@ -1120,6 +1158,13 @@ QDataStream& operator>>(QDataStream &stream, EM::Character &character)
     stream >> character.m_mails;
     stream >> character.m_mailingLists;
     stream >> character.m_mailNotifications;
+    // wallet history (since savedata version 28)
+    if (savedata_version >= 28) {
+        stream >> character.m_walletJournal;
+        stream >> character.m_walletTransactions;
+    } else {
+        qCDebug(logCharacter) << "Skipped loading of wallet history, savedata version < 28:" << savedata_version;
+    }
     //
     // end of reading, some final calculations
     character.calcSkillQueue(); // now calls updateSkillGroupsModel()

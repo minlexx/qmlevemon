@@ -17,6 +17,7 @@
 #include "eve_location.h"
 #include "mail_models.h"
 #include "notification.h"
+#include "wallet_models.h"
 #include "eve_api/eve_api_tokens.h"
 #include "update_timestamps.h"
 
@@ -104,6 +105,9 @@ class Character: public QObject
     Q_PROPERTY(QObject*   mailLabels               READ mailLabelsObj            NOTIFY mailLabelsChanged)
     Q_PROPERTY(QObject*   mails                    READ mailsObj                 NOTIFY mailsChanged)
     Q_PROPERTY(QObject*   mailNotifications        READ mailsNotificationsObj    NOTIFY mailNotificationsChanged)
+    // wallet history
+    Q_PROPERTY(QObject*   walletJournal            READ walletJournalObj         NOTIFY walletJournalChanged)
+    Q_PROPERTY(QObject*   walletTransactions       READ walletTransactionsObj    NOTIFY walletTransactionsChanged)
 
 public:
     Character(QObject *parent = nullptr);
@@ -305,6 +309,16 @@ public:
     void setMailBody(quint64 mailId, const QString &body);
     bool findMailById(quint64 mailId, Mail &mail) const;
 
+    // wallet history
+    QObject *walletJournalObj();
+    CharacterWalletJournal *walletJournal();
+    const CharacterWalletJournal *walletJournal() const;
+    QObject *walletTransactionsObj();
+    CharacterWalletTransactions *walletTransactions();
+    const CharacterWalletTransactions *walletTransactions() const;
+    void setWalletJournal(const CharacterWalletJournal &j);
+    void setWalletTransactions(const CharacterWalletTransactions &t);
+
     // auth info
     EveOAuthTokens getAuthTokens() const;
     void setAuthTokens(const EveOAuthTokens& tokens);
@@ -388,6 +402,9 @@ Q_SIGNALS:
     void mailLabelsChanged();
     void mailsChanged();
     void mailNotificationsChanged();
+    // wallet history
+    void walletJournalChanged();
+    void walletTransactionsChanged();
 
     // for manual emitting, not for QML properties
 Q_SIGNALS:
@@ -470,6 +487,10 @@ protected:
     QVector<MailRecipient> m_mailingLists;
     MailLabelFilteredMailsModel *m_mailsModel = nullptr;
     CharacterNotifications m_mailNotifications;
+
+    // wallet history
+    CharacterWalletJournal m_walletJournal;
+    CharacterWalletTransactions m_walletTransactions;
 
     // auth info
     EveOAuthTokens m_tokens;
