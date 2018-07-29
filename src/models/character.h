@@ -16,7 +16,7 @@
 #include "character_clones_model.h"
 #include "character_notifications.h"
 #include "eve_location.h"
-#include "mail_models.h"
+#include "character_mail_models.h"
 #include "wallet_models.h"
 #include "eve_api/eve_api_tokens.h"
 #include "update_timestamps.h"

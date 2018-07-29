@@ -2,7 +2,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonValue>
-#include "mail_models.h"
+#include "character_mail_models.h"
 
 
 namespace EM {
