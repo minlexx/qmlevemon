@@ -28,7 +28,6 @@ int PeriodicalRefresherWorker::refresh_wallet_history(Character *ch)
         for (const QJsonValue &jval: replyArr) {
             const QJsonObject jobj = jval.toObject();
             WalletJournalEntry entry = WalletJournalEntry::fromJsonObject(jobj);
-            // TODO: postprocess entry
             journalModel.internalData().push_back(std::move(entry));
         }
         ch->setWalletJournal(journalModel);
