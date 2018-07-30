@@ -823,9 +823,11 @@ bool EveApi::get_character_wallet_journal(QJsonArray &replyArr, quint64 char_id,
                 EsiReqType::GET, url, query, QByteArray(), access_token,
                 reply_http_status, replyJson);
     if (!req_ok || (reply_http_status != 200)) return false;
-    bool ok = false;
-    replyArr = replyJson.array();
-    return ok;
+    if (replyJson.isArray()) {
+        replyArr = replyJson.array();
+        return true;
+    }
+    return false;
 }
 
 bool EveApi::get_character_wallet_transactions(QJsonArray &replyArr, quint64 char_id, const QByteArray &access_token, quint64 from_id)
@@ -841,9 +843,11 @@ bool EveApi::get_character_wallet_transactions(QJsonArray &replyArr, quint64 cha
                 EsiReqType::GET, url, query, QByteArray(), access_token,
                 reply_http_status, replyJson);
     if (!req_ok || (reply_http_status != 200)) return false;
-    bool ok = false;
-    replyArr = replyJson.array();
-    return ok;
+    if (replyJson.isArray()) {
+        replyArr = replyJson.array();
+        return true;
+    }
+    return false;
 }
 
 
