@@ -85,6 +85,10 @@ public:
     quint64 transaction_id = 0;
     quint64 type_id = 0;
     double unit_price = 0.0;
+    // for names resolving
+    QString client_name;
+    QString location_name;
+    QString type_name;
 };
 
 
