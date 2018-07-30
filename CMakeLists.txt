@@ -92,6 +92,7 @@ set(qmlevemon_srcs
     "src/network/refresher/server_status.cpp"
     "src/network/refresher/skills.cpp"
     "src/network/refresher/wallet.cpp"
+    "src/network/refresher/wallet_history.cpp"
     "src/utils/str_utils.cpp"
     "src/qml.qrc"
     "src/img.qrc"

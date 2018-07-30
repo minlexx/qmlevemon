@@ -52,6 +52,7 @@ protected:
     int refresh_wallet(Character *ch);
     int refresh_mail(Character *ch);
     int refresh_notifications(Character *ch);
+    int refresh_wallet_history(Character *ch);
 
     // utility
     EveLocation send_location_request(quint64 locationId, const QString &locationType, const QByteArray &accessToken);

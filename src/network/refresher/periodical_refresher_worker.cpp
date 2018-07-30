@@ -73,6 +73,10 @@ void PeriodicalRefresherWorker::refresh()
         num_updates += this->refresh_wallet(ch);
         if (QThread::currentThread()->isInterruptionRequested()) break; // break early
 
+        // wallet history
+        num_updates += this->refresh_wallet_history(ch);
+        if (QThread::currentThread()->isInterruptionRequested()) break; // break early
+
         // mails
         num_updates += this->refresh_mail(ch);
         if (QThread::currentThread()->isInterruptionRequested()) break; // break early
