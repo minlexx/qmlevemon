@@ -52,5 +52,9 @@ QtObject {
 
     property color mailViewBgColor: "#444444"
     property color mailViewTextDefaultColor: "#CCCCCC"
+
+    // for wallet/ISK
+    property color iskPositiveChangeColor: "#008800"
+    property color iskNegativeChangeColor: "#880000"
 }
 
