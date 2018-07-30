@@ -42,7 +42,7 @@ WalletJournalEntry::ContextType WalletJournalEntry::contextStypeFromString(const
     return ContextType::Unknown;
 }
 
-WalletJournalEntry WalletJournalEntry::fromJsonSobject(const QJsonObject &jobj)
+WalletJournalEntry WalletJournalEntry::fromJsonObject(const QJsonObject &jobj)
 {
     WalletJournalEntry ret;
     ret.id = jobj.value(QLatin1String("id")).toVariant().toULongLong();
@@ -102,7 +102,7 @@ QHash<int, QByteArray> CharacterWalletJournal::roleNames() const
     static QHash<int, QByteArray> roles = {
         {Qt::DisplayRole,       QByteArrayLiteral("refType")},
         {Roles::Amount,         QByteArrayLiteral("amount")},
-        {Roles::Balance,        QByteArrayLiteral("body")},
+        {Roles::Balance,        QByteArrayLiteral("balance")},
         {Roles::ContextId,      QByteArrayLiteral("contextId")},
         {Roles::ContextIdType,  QByteArrayLiteral("contextIdType")},
         {Roles::Date,           QByteArrayLiteral("date")},

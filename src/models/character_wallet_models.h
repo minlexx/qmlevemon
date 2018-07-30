@@ -32,7 +32,7 @@ public:
     };
 
     static ContextType contextStypeFromString(const QString &st);
-    static WalletJournalEntry fromJsonSobject(const QJsonObject &jobj);
+    static WalletJournalEntry fromJsonObject(const QJsonObject &jobj);
 
 public:
     quint64 id = 0; // Unique journal reference ID
