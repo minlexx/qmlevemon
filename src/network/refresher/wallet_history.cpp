@@ -2,6 +2,7 @@
 #include "../periodical_refresher.h"
 #include "eve_api/eve_api.h"
 #include "models/character_wallet_models.h"
+#include "models/eve_location.h"
 
 namespace EM {
 
@@ -41,7 +42,12 @@ int PeriodicalRefresherWorker::refresh_wallet_history(Character *ch)
         for (const QJsonValue &jval: replyArr) {
             const QJsonObject jobj = jval.toObject();
             WalletSingleTransaction entry = WalletSingleTransaction::fromJsonObject(jobj);
-            // TODO: postprocess entry
+            // Postprocess entry: we need to resolve IDs to names
+            EveLocation loc;
+            loc = resolve_location_guess_type(entry.location_id, ch->getAuthTokens().access_token);
+            if (!loc.isEmpty()) {
+                entry.location_name = loc.name();
+            }
             transactionsModel.internalData().push_back(std::move(entry));
         }
         ch->setWalletTransactions(transactionsModel);
