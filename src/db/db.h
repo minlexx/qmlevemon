@@ -48,6 +48,7 @@ public:
 
     virtual QJsonObject loadCachedLocation(quint64 location_id) = 0;
     virtual bool        saveCachedLocation(quint64 location_id, const QJsonObject &location) = 0;
+    virtual bool        deleteCachedLocation(quint64 location_id) = 0;
 
     virtual bool loadTypeIcon(quint64 type_id, QImage& img) = 0;
     virtual bool saveTypeIcon(quint64 type_id, const QImage& img) = 0;

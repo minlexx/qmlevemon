@@ -38,6 +38,7 @@ public:
 
     QJsonObject loadCachedLocation(quint64 location_id) override;
     bool saveCachedLocation(quint64 location_id, const QJsonObject &location) override;
+    bool deleteCachedLocation(quint64 location_id) override;
 
     bool loadTypeIcon(quint64 type_id, QImage &img) override;
     bool saveTypeIcon(quint64 type_id, const QImage &img) override;

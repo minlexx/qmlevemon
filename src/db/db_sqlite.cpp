@@ -774,6 +774,18 @@ bool DbSqlite::saveCachedLocation(quint64 location_id, const QJsonObject &locati
     return q.exec();
 }
 
+bool DbSqlite::deleteCachedLocation(quint64 location_id)
+{
+    QMutexLocker lock(&m_cache_mutex);
+    if (!m_cache_db.isOpen()) {
+        return false;
+    }
+    QSqlQuery q(m_cache_db);
+    q.prepare(QLatin1String("DELETE FROM location_cache WHERE location_id = ?"));
+    q.addBindValue(location_id, QSql::In);
+    return q.exec();
+}
+
 bool DbSqlite::loadTypeIcon(quint64 type_id, QImage &img)
 {
     QMutexLocker lock(&m_cache_mutex);
