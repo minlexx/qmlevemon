@@ -59,7 +59,7 @@ EveLocation PeriodicalRefresherWorker::resolve_location(quint64 locationId, cons
     // try to load from cache
     Db *db = globalAppDatabaseInstance();
     if (db) {
-        QJsonObject locationObj = db->loadCachedLocation(locationId);
+        const QJsonObject locationObj = db->loadCachedLocation(locationId);
         if (!locationObj.isEmpty()) {
             // loaded from cache OK
             EveLocation loc = EveLocation::fromJson(locationObj);
@@ -72,12 +72,60 @@ EveLocation PeriodicalRefresherWorker::resolve_location(quint64 locationId, cons
     const EveLocation loc = send_location_request(locationId, locationType, accessToken);
     // save in cache, only if network request was successful
     //   prevent empty locations to get into the cache :(
-    if ((loc.typeId() != 0) && (!loc.name().isEmpty()) && (loc.solarSystemId() != 0)) {
+    //if ((loc.typeId() != 0) && (!loc.name().isEmpty()) && (loc.solarSystemId() != 0)) {
+    if (!loc.isEmpty()) {
         if (db) {
             db->saveCachedLocation(locationId, loc.toJson());
         }
     }
     return loc;
+}
+
+EveLocation PeriodicalRefresherWorker::resolve_location_guess_type(quint64 locationId, const QByteArray &accessToken)
+{
+    // first try to query from cache
+    Db *db = globalAppDatabaseInstance();
+    if (db) {
+        const QJsonObject locationObj = db->loadCachedLocation(locationId);
+        if (!locationObj.isEmpty()) {
+            // loaded from cache OK
+            EveLocation loc = EveLocation::fromJson(locationObj);
+            loc.setLocationId(locationId);
+            // check that it has type filled in
+            if (!loc.type().isEmpty()) {
+                return loc;
+            }
+            // else, we need to make a new request anyway
+        }
+    }
+
+    QJsonArray replyArr;
+    if (m_api->post_universe_names(replyArr, {locationId})) {
+        QString found_type;
+        for (const QJsonValue &jval: replyArr) {
+            const QJsonObject jobj = jval.toObject();
+            const QString value_category = jobj.value(QLatin1String("category")).toString();
+            const quint64 value_id       = jobj.value(QLatin1String("id")).toVariant().toULongLong();
+            const QString value_name     = jobj.value(QLatin1String("name")).toString();
+            if (value_id == locationId) {
+                found_type = value_category; // "station" / "structure" ?
+            }
+        }
+        if (!found_type.isEmpty()) {
+            // now we know the type, resolve location details
+            return resolve_location(locationId, found_type, accessToken);
+        } else {
+            // fail :(
+            qCWarning(logRefresher) << "resolve_location_guess_type(): We failed to resolve a location id: "
+                                    << locationId << ": request OK, but not found.";
+            return EveLocation();
+        }
+    } else {
+        // fail :(
+        qCWarning(logRefresher) << "resolve_location_guess_type(): We failed to resolve a location id: "
+                                << locationId << ": request failed!";
+        return EveLocation();
+    }
 }
 
 

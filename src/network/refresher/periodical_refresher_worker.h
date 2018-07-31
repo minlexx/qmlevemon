@@ -61,6 +61,7 @@ protected:
     void postprocess_notification_text(QString &text, const QString &type);
     // location resolver
     EveLocation resolve_location(quint64 locationId, const QString &locationType, const QByteArray &accessToken);
+    EveLocation resolve_location_guess_type(quint64 locationId, const QByteArray &accessToken);
     // name resolvers
     QString resolve_character_name(quint64 charId);
     QString resolve_corporation_name(quint64 corpId);
