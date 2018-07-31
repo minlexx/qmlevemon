@@ -54,8 +54,9 @@ int PeriodicalRefresherWorker::refresh_wallet_history(Character *ch)
                 entry.location_name = loc.name();
             }
 
-            // client
-            entry.client_name = resolve_character_name(entry.client_id);
+            // client (this may be a corporation ID)
+            QString idCategory; // will contain ID type on return
+            entry.client_name = resolve_universe_name(entry.client_id, idCategory);
 
             // type
             if (db) {
