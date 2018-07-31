@@ -183,5 +183,7 @@ Rectangle {
                 }
             }
         } // List item
+
+        ScrollIndicator.vertical: ScrollIndicator { }
     } // ListView
 }

@@ -51,5 +51,7 @@ Rectangle {
             ladderRectHeight: evemonapp.isDesktopPlatform ? 7 : 5
             attributeIconSize: evemonapp.isDesktopPlatform ? 32 : 20
         }
+
+        ScrollIndicator.vertical: ScrollIndicator { }
     }
 }
