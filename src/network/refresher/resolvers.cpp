@@ -96,6 +96,9 @@ EveLocation PeriodicalRefresherWorker::resolve_location_guess_type(quint64 locat
                 return loc;
             }
             // else, we need to make a new request anyway
+            // also, clear Db from previously incorrectly saved entry
+            db->deleteCachedLocation(locationId);
+            // so it will be refreshed from network again
         }
     }
 
