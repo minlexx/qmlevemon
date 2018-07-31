@@ -258,5 +258,58 @@ QString PeriodicalRefresherWorker::resolve_alliance_name(quint64 allyId)
     return allyName;
 }
 
+QString PeriodicalRefresherWorker::resolve_universe_name(quint64 anyId, QString &idCategory)
+{
+    QString ret;
+    // try to lookup in cache
+    Db *db = globalAppDatabaseInstance();
+    if (db) {
+        ret = db->findCachedCharacterName(anyId);
+        if (!ret.isEmpty()) {
+            idCategory = QLatin1String("character");
+            return ret;
+        }
+        ret = db->findCachedCorporationName(anyId);
+        if (!ret.isEmpty()) {
+            idCategory = QLatin1String("corporation");
+            return ret;
+        }
+        ret = db->findCachedAllianceName(anyId);
+        if (!ret.isEmpty()) {
+            idCategory = QLatin1String("alliance");
+            return ret;
+        }
+    }
+    // not found in cache
+    QJsonArray jarr;
+    if (m_api->post_universe_names(jarr, {anyId})) {
+        for (const QJsonValue &jval: jarr) {
+            const QJsonObject jobj = jval.toObject();
+
+            const QString value_category = jobj.value(QLatin1String("category")).toString();
+            const quint64 value_id       = jobj.value(QLatin1String("id")).toVariant().toULongLong();
+            const QString value_name     = jobj.value(QLatin1String("name")).toString();
+
+            if (value_id == anyId) {
+                ret = value_name;
+                idCategory = value_category;
+                break;
+            }
+        }
+
+        if (!ret.isEmpty() && db) {
+            if (idCategory == QLatin1String("character")) {
+                db->saveCachedCharacterName(anyId, ret);
+            }
+            if (idCategory == QLatin1String("corporation")) {
+                db->saveCachedCorporationName(anyId, ret);
+            }
+            if (idCategory == QLatin1String("alliance")) {
+                db->saveCachedAllianceName(anyId, ret);
+            }
+        }
+    }
+}
+
 
 } // namespace EM

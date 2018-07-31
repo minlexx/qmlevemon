@@ -66,6 +66,7 @@ protected:
     QString resolve_character_name(quint64 charId);
     QString resolve_corporation_name(quint64 corpId);
     QString resolve_alliance_name(quint64 allyId);
+    QString resolve_universe_name(quint64 anyId, QString &idCategory);
 
     Mail requestMailBody(const Character *ch, quint64 mailId);
 
