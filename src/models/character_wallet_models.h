@@ -113,8 +113,9 @@ class CharacterWalletTransactions: public CommonModelBase<WalletSingleTransactio
 {
     Q_OBJECT
     enum Roles {
-        ClientId, Date, IsBuy, IsPersonal, JournalRefId, LocationId, Quantity,
-        TransactionId, TypeId, UnitPrice
+        ClientId, ClientName, Date, IsBuy, IsPersonal, JournalRefId,
+        LocationId, LocationName, Quantity, TransactionId,
+        TypeId, TypeName, UnitPrice
     };
 public:
     CharacterWalletTransactions(QObject *parent = nullptr);

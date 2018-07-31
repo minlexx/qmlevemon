@@ -149,14 +149,17 @@ QHash<int, QByteArray> CharacterWalletTransactions::roleNames() const
 {
     static QHash<int, QByteArray> roles = {
         {Roles::ClientId,       QByteArrayLiteral("clientId")},
+        {Roles::ClientName,     QByteArrayLiteral("clientName")},
         {Roles::Date,           QByteArrayLiteral("date")},
         {Roles::IsBuy,          QByteArrayLiteral("isBuy")},
         {Roles::IsPersonal,     QByteArrayLiteral("isPersonal")},
         {Roles::JournalRefId,   QByteArrayLiteral("journalRefId")},
         {Roles::LocationId,     QByteArrayLiteral("locationId")},
+        {Roles::LocationName,   QByteArrayLiteral("locationName")},
         {Roles::Quantity,       QByteArrayLiteral("quantity")},
         {Roles::TransactionId,  QByteArrayLiteral("transactionId")},
         {Roles::TypeId,         QByteArrayLiteral("typeId")},
+        {Roles::TypeName,       QByteArrayLiteral("typeName")},
         {Roles::UnitPrice,      QByteArrayLiteral("unitPrice")},
     };
     return roles;
@@ -169,14 +172,17 @@ QVariant CharacterWalletTransactions::data(const QModelIndex &index, int role) c
     if (!entry) return ret;
     switch (role) {
     case Roles::ClientId: ret = entry->client_id; break;
+    case Roles::ClientName: ret = entry->client_name; break;
     case Roles::Date: ret = entry->date; break;
     case Roles::IsBuy: ret = entry->is_buy; break;
     case Roles::IsPersonal: ret = entry->is_personal; break;
     case Roles::JournalRefId: ret = entry->journal_ref_id; break;
     case Roles::LocationId: ret = entry->location_id; break;
+    case Roles::LocationName: ret = entry->location_name; break;
     case Roles::Quantity: ret = entry->quantity; break;
     case Roles::TransactionId: ret = entry->transaction_id; break;
     case Roles::TypeId: ret = entry->type_id; break;
+    case Roles::TypeName: ret = entry->type_name; break;
     case Roles::UnitPrice: ret = entry->unit_price; break;
     }
     return ret;
