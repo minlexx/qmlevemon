@@ -931,6 +931,7 @@ bool EveApi::post_universe_names(QJsonArray &replyArr, const QVector<quint64> &i
     // return value example:
     // QJsonArray([{"category":"character","id":91205062,"name":"Lexx Min"},
     //             {"category":"character","id":95367553,"name":"Alya Kastra"}])
+    // other categories: "station", "solar_system"
     return true;
 }
 
