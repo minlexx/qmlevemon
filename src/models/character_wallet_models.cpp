@@ -255,10 +255,9 @@ QDataStream &operator>>(QDataStream &stream, EM::WalletSingleTransaction &o)
     stream >> o.transaction_id;
     stream >> o.type_id;
     stream >> o.unit_price;
-    // TODO: uncomment
     // load resolved names
-    //stream >> o.client_name;
-    //stream >> o.location_name;
-    //stream >> o.type_name;
+    stream >> o.client_name;
+    stream >> o.location_name;
+    stream >> o.type_name;
     return stream;
 }
