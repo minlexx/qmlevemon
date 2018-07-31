@@ -212,7 +212,6 @@ Rectangle {
             }
             Item {
                 id: lblTClientName
-                // anchors.left: lblTBalance.right
                 anchors.leftMargin: AppStyle.marginSmall
                 anchors.top: parent.top
                 anchors.right: parent.right
@@ -220,9 +219,9 @@ Rectangle {
                 height: 32
                 Image {
                     id: clientPic
-                    visible: !isClientNPCCorp
                     anchors.fill: parent
-                    source: "image://portrait/" + model.clientId
+                    source: isClientNPCCorp ? ("image://corporation/" + model.clientId)
+                                            : ("image://portrait/" + model.clientId)
                     sourceSize.width: 32
                     sourceSize.height: 32
                     MouseArea {
