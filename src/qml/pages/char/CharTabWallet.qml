@@ -63,6 +63,7 @@ Rectangle {
 
     ListView {
         id: listViewWalletJournal
+        visible: !viewSelectionSwitch.checked
         anchors {
             top: walletTabToolbar.bottom
             left: parent.left
@@ -73,6 +74,7 @@ Rectangle {
         model: curChar.walletJournal
         interactive: true
         currentIndex: -1
+        clip: true
 
         delegate: ItemDelegate {
             implicitWidth: listViewWalletJournal.width
@@ -100,7 +102,7 @@ Rectangle {
                 font.bold: true
                 horizontalAlignment: Text.AlignRight
                 color: model.amount >= 0 ? AppStyle.iskPositiveChangeColor : AppStyle.iskNegativeChangeColor
-                text: Number(model.amount).toLocaleString(Qt.locale(), 'f', 0)
+                text: (model.amount >= 0 ? "+" : "") + Number(model.amount).toLocaleString(Qt.locale(), 'f', 0)
             }
             Label {
                 id: lblBalance
@@ -124,7 +126,113 @@ Rectangle {
                 anchors.topMargin: AppStyle.marginSmall/2
                 height: lblDate.height
                 font.family: AppStyle.fontFamily
+                font.pointSize: AppStyle.textSizeH4
                 text: model.description
+            }
+        }
+
+        ScrollIndicator.vertical: ScrollIndicator { }
+    }
+
+    ListView {
+        id: listViewWalletTransactions
+        visible: viewSelectionSwitch.checked
+        anchors {
+            top: walletTabToolbar.bottom
+            left: parent.left
+            right: parent.right
+            bottom: parent.bottom
+            margins: 2
+        }
+        model: curChar.walletTransactions
+        interactive: true
+        currentIndex: -1
+        clip: true
+
+        delegate: ItemDelegate {
+            implicitWidth: listViewWalletJournal.width
+            implicitHeight: 32
+
+            property bool isClientNPCCorp: (model.clientId >= 1000000) && (model.clientId <= 2000000)
+            // ^^ https://gist.github.com/a-tal/5ff5199fdbeb745b77cb633b7f4400bb
+
+            Label {
+                id: lblTDate
+                anchors.left: parent.left
+                anchors.top: parent.top
+                anchors.leftMargin: AppStyle.marginSmall
+                anchors.topMargin: AppStyle.marginSmall/2
+                height: parent.height
+                verticalAlignment: Text.AlignVCenter
+                font.family: "Courier"
+                color: AppStyle.textLightColor
+                text: Qt.formatDateTime(model.date, "yyyy.dd.MM hh:mm")
+            }
+            Label {
+                id: lblTBalance
+                anchors.left: lblTDate.right
+                anchors.top: parent.top
+                anchors.topMargin: AppStyle.marginSmall/2
+                width: 110
+                height: parent.height
+                verticalAlignment: Text.AlignVCenter
+                font.family: "Courier"
+                font.bold: true
+                horizontalAlignment: Text.AlignRight
+                color: model.isBuy ? AppStyle.iskNegativeChangeColor : AppStyle.iskPositiveChangeColor
+                text: (model.isBuy ? "-" : "+") + Number(model.quantity * model.unitPrice).toLocaleString(Qt.locale(), 'f', 0)
+            }
+            Label {
+                id: lblTTypeName
+                anchors.left: lblTBalance.right
+                anchors.top: parent.top
+                anchors.topMargin: AppStyle.marginSmall/2
+                anchors.leftMargin: AppStyle.marginSmall
+                width: 330
+                height: parent.height
+                verticalAlignment: Text.AlignVCenter
+                font.family: AppStyle.fontFamily
+                font.pointSize: AppStyle.textSizeH4
+                text: model.quantity + " x " + model.typeName
+                wrapMode: Text.Wrap
+            }
+            Label {
+                id: lblTLocation
+                anchors.left: lblTTypeName.right
+                anchors.leftMargin: AppStyle.marginNormal
+                anchors.right: lblTClientName.left
+                anchors.top: parent.top
+                anchors.topMargin: AppStyle.marginSmall/2
+                height: parent.height
+                verticalAlignment: Text.AlignVCenter
+                font.family: AppStyle.fontFamily
+                font.pointSize: AppStyle.textSizeH4
+                text: model.locationName
+                wrapMode: Text.Wrap
+            }
+            Item {
+                id: lblTClientName
+                // anchors.left: lblTBalance.right
+                anchors.leftMargin: AppStyle.marginSmall
+                anchors.top: parent.top
+                anchors.right: parent.right
+                width: 32
+                height: 32
+                Image {
+                    id: clientPic
+                    visible: !isClientNPCCorp
+                    anchors.fill: parent
+                    source: "image://portrait/" + model.clientId
+                    sourceSize.width: 32
+                    sourceSize.height: 32
+                    MouseArea {
+                        id: clientPicMa
+                        hoverEnabled: true
+                        anchors.fill: parent
+                    }
+                    ToolTip.visible: clientPicMa.containsMouse
+                    ToolTip.text: model.clientName
+                }
             }
         }
 
