@@ -22,20 +22,25 @@ namespace EM {
 EveLocation PeriodicalRefresherWorker::send_location_request(quint64 locationId, const QString &locationType, const QByteArray &accessToken)
 {
     EveLocation loc;
+    bool success = false;
     if (locationType == QLatin1String("station")) {
         QJsonObject jstation;
         if (m_api->get_universe_station(jstation, locationId)) {
             loc = EveLocation::fromJson(jstation);
+            success = true;
         }
     } else if (locationType == QLatin1String("structure")) {
         QJsonObject jstructure;
         if (m_api->get_universe_structure(jstructure, locationId, accessToken)) {
             loc = EveLocation::fromJson(jstructure);
+            success = true;
         }
     }
-    // forcefully set location id/type, because factory does not do that
-    loc.setLocationId(locationId);
-    loc.setType(locationType);
+    if (success) {
+        // forcefully set location id/type, because factory does not do that
+        loc.setLocationId(locationId);
+        loc.setType(locationType);
+    }
     return loc;
 }
 
