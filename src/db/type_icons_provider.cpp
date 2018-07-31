@@ -39,7 +39,6 @@ public:
 
     ~TypeIconsAsyncImageResponse() override
     {
-        //qCDebug(logPcache) << Q_FUNC_INFO;
     }
 
     QQuickTextureFactory *textureFactory() const override
@@ -49,8 +48,8 @@ public:
 
     void run() override
     {
-        qCDebug(logTypeIcons) << "Requested typeIcon:" << m_id <<
-                              "of size:" << m_requestedSize;
+        //qCDebug(logTypeIcons) << "Requested typeIcon:" << m_id <<
+        //                      "of size:" << m_requestedSize;
 
         // get type_id from requested image id
         quint64 type_id = m_id.toULongLong();
