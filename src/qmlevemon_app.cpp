@@ -10,6 +10,7 @@
 #include "db/db_sqlite.h"
 #include "db/portrait_cache.h"
 #include "db/type_icons_provider.h"
+#include "db/corp_icons_provider.h"
 #include "models/character.h"
 #include "models/character_model.h"
 #include "models/skill_tree_model.h"
@@ -64,6 +65,7 @@ QmlEvemonApp::QmlEvemonApp(int& argc, char **argv):
 
     m_portraitCache = new PortraitCache();
     m_typeIconsProvider = new TypeIconsProvider();
+    m_corpIconsProvider = new CorpIconsProvider();
     m_refresher = new PeriodicalRefresher(this);
 
     QObject::connect(m_refresher, &PeriodicalRefresher::mailBodyDownloaded,
@@ -140,6 +142,7 @@ bool QmlEvemonApp::initQmlEngine()
     // so we should not and cannot delete m_portraitCache
     m_engine.addImageProvider(QLatin1String("portrait"), m_portraitCache);
     m_engine.addImageProvider(QLatin1String("typeid"), m_typeIconsProvider);
+    m_engine.addImageProvider(QLatin1String("corporation"), m_corpIconsProvider);
 
     QObject::connect(ModelManager::instance()->characterModel(),
                      &CharacterModel::newCharacterAdded,

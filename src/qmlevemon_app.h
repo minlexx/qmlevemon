@@ -22,6 +22,7 @@ namespace EM {
 class Db;
 class PortraitCache;
 class TypeIconsProvider;
+class CorpIconsProvider;
 class PeriodicalRefresher;
 class NotificationSystem;
 
@@ -109,6 +110,7 @@ protected:
     QQuickWindow *m_mainWindow = nullptr;
     PortraitCache *m_portraitCache = nullptr;
     TypeIconsProvider *m_typeIconsProvider = nullptr;
+    CorpIconsProvider *m_corpIconsProvider = nullptr;
     PeriodicalRefresher *m_refresher = nullptr;
     quint64 m_curCharId = 0;
     bool m_isPortraitOrientation = true;
