@@ -56,6 +56,7 @@ set(qmlevemon_srcs
     "src/db/db.cpp"
     "src/db/db_sqlite.cpp"
     "src/db/portrait_cache.cpp"
+    "src/db/corp_icons_provider.cpp"
     "src/db/type_icons_provider.cpp"
     "src/eve_api/eve_sso.cpp"
     "src/eve_api/eve_api.cpp"
