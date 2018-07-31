@@ -61,6 +61,11 @@ bool EveLocation::operator!=(const EveLocation &other) const
     return !((*this) == other);
 }
 
+bool EveLocation::isEmpty() const
+{
+    return ((m_locationId == 0) || (m_typeId == 0) || (m_solarSystemId == 0) || (m_name.isEmpty()));
+}
+
 quint64 EveLocation::locationId() const
 {
     return m_locationId;
@@ -179,6 +184,10 @@ EveLocation EveLocation::fromJson(const QJsonObject &jobj)
         z = jpos.value(QLatin1String("z")).toDouble();
         ret.setCoords(x, y, z);
     }
+    // location type (station/structure)
+    if (jobj.contains(QLatin1String("location_type"))) {
+        ret.m_type = jobj.value(QLatin1String("location_type")).toString();
+    }
     return ret;
 }
 
@@ -188,6 +197,7 @@ QJsonObject EveLocation::toJson() const
     ret.insert(QLatin1String("name"), m_name);
     ret.insert(QLatin1String("solar_system_id"), static_cast<qint64>(m_solarSystemId));
     ret.insert(QLatin1String("type_id"), static_cast<qint64>(m_typeId));
+    ret.insert(QLatin1String("location_type"), m_type);
     QJsonObject position;
     position.insert(QLatin1String("x"), m_x);
     position.insert(QLatin1String("y"), m_y);

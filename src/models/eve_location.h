@@ -38,6 +38,8 @@ public:
     bool operator==(const EveLocation &other) const;
     bool operator!=(const EveLocation &other) const;
 
+    bool isEmpty() const;
+
     // fabric
     static EveLocation fromJson(const QJsonObject &jobj);
     QJsonObject toJson() const;
