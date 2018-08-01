@@ -40,7 +40,6 @@ public:
 
     ~PortraitCacheAsyncImageResponse() override
     {
-        //qCDebug(logPcache) << Q_FUNC_INFO;
     }
 
     QQuickTextureFactory *textureFactory() const override
@@ -50,8 +49,8 @@ public:
 
     void run() override
     {
-        qCDebug(logPcache) << "Requested portrait:" << m_id <<
-                              "of size:" << m_requestedSize;
+        //qCDebug(logPcache) << "Requested portrait:" << m_id <<
+        //                      "of size:" << m_requestedSize;
 
         // get char_id from requested image id
         quint64 char_id = 0;
@@ -107,7 +106,8 @@ public:
                     if (m_image.load(&buf, "JPG")) {
                         qCDebug(logPcache) << "Portrait download OK.";
                     } else {
-                        qCWarning(logPcache) << "Portrait downloaded, but open as image failed!";
+                        qCWarning(logPcache) << "Portrait downloaded, but open as image failed! "
+                                                "Bytes downloaded: " << replyImage.size();
                         m_image = QImage();
                     }
                 } else {
