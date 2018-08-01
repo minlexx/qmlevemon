@@ -832,6 +832,7 @@ void Character::setWalletTransactions(const CharacterWalletTransactions &t)
 // auth info
 EveOAuthTokens Character::getAuthTokens() const { return m_tokens; }
 void Character::setAuthTokens(const EveOAuthTokens& tokens) { m_tokens = tokens; }
+const QByteArray &Character::accessToken() const { return m_tokens.access_token; }
 
 UpdateTimestamps Character::updateTimestamps() const { return m_update_timestamps; }
 void Character::setUpdateTimestamps(const UpdateTimestamps& ts) { m_update_timestamps = ts; }

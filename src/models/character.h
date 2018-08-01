@@ -322,6 +322,7 @@ public:
     // auth info
     EveOAuthTokens getAuthTokens() const;
     void setAuthTokens(const EveOAuthTokens& tokens);
+    const QByteArray &accessToken() const;
 
     UpdateTimestamps updateTimestamps() const;
     void setUpdateTimestamps(const UpdateTimestamps& ts);
