@@ -106,7 +106,8 @@ public:
                     if (m_image.load(&buf, "JPG")) {
                         qCDebug(logPcache) << "Portrait download OK.";
                     } else {
-                        qCWarning(logPcache) << "Portrait downloaded, but open as image failed!";
+                        qCWarning(logPcache) << "Portrait downloaded, but open as image failed! "
+                                                "Bytes downloaded: " << replyImage.size();
                         m_image = QImage();
                     }
                 } else {
