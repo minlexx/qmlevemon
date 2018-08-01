@@ -2,6 +2,7 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QVariant>
+#include <QDataStream>
 
 
 EM::AssetLocationType EM::parseLocationType(const QString &typ)
@@ -130,4 +131,77 @@ EM::AssetEntry EM::AssetEntry::fromJson(const QJsonObject &jobj)
     ret.quantity       = jobj.value(QLatin1String("quantity")).toVariant().toULongLong();
     ret.type_id        = jobj.value(QLatin1String("type_id")).toVariant().toULongLong();
     return ret;
+}
+
+EM::CharacterAssetsModel::CharacterAssetsModel(QObject *parent)
+    : CommonModelBase<AssetEntry>(parent)
+{
+}
+
+QHash<int, QByteArray> EM::CharacterAssetsModel::roleNames() const
+{
+    static QHash<int, QByteArray> roles = {
+        {ItemId,       QByteArrayLiteral("itemId")},
+        {TypeId,       QByteArrayLiteral("typeId")},
+        {TypeName,     QByteArrayLiteral("typeName")},
+        {IsSingleton,  QByteArrayLiteral("isSingleton")},
+        {Quantity,     QByteArrayLiteral("quantity")},
+        {LocationId,   QByteArrayLiteral("locationId")},
+        {LocationName, QByteArrayLiteral("locationName")},
+        {LocationType, QByteArrayLiteral("locationType")},
+        {LocationFlag, QByteArrayLiteral("locationFlag")},
+    };
+}
+
+QVariant EM::CharacterAssetsModel::data(const QModelIndex &index, int role) const
+{
+    QVariant ret;
+    const AssetEntry *entry = validateIndexAndGetData(index);
+    if (!entry) return ret;
+    switch (role) {
+    case Roles::ItemId: ret = entry->item_id; break;
+    case Roles::TypeId: ret = entry->type_id; break;
+    case Roles::TypeName: ret = entry->type_name; break;
+    case Roles::IsSingleton: ret = entry->is_singleton; break;
+    case Roles::Quantity: ret = entry->quantity; break;
+    case Roles::LocationId: ret = entry->location_id; break;
+    case Roles::LocationName: ret = entry->location_name; break;
+    case Roles::LocationType: ret = entry->location_type; break;
+    case Roles::LocationFlag: ret = entry->location_flag; break;
+    }
+    return ret;
+}
+
+
+QDataStream &operator<<(QDataStream &stream, const EM::AssetEntry &o)
+{
+    stream << o.item_id;
+    stream << o.type_id;
+    stream << o.is_singleton;
+    stream << o.quantity;
+    stream << o.location_id;
+    stream << static_cast<int>(o.location_type);
+    stream << static_cast<int>(o.location_flag);
+    // calculated fields - resolving related
+    stream << o.type_name;
+    stream << o.location_name;
+    return stream;
+}
+
+
+QDataStream &operator>>(QDataStream &stream, EM::AssetEntry &o)
+{
+    int i;
+    //
+    stream >> o.item_id;
+    stream >> o.type_id;
+    stream >> o.is_singleton;
+    stream >> o.quantity;
+    stream >> o.location_id;
+    stream >> i;    o.location_type = static_cast<EM::AssetLocationType>(i);
+    stream >> i;    o.location_flag = static_cast<EM::AssetLocationFlag>(i);
+    // calculated fields - resolving related
+    stream >> o.type_name;
+    stream >> o.location_name;
+    return stream;
 }

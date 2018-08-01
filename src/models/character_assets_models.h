@@ -2,7 +2,11 @@
 #define CHARACTER_ASSETS_MODELS_H
 
 #include <QObject>
+#include "common_model_base.h"
+
 QT_FORWARD_DECLARE_CLASS(QJsonObject)
+QT_FORWARD_DECLARE_CLASS(QDataStream)
+
 
 namespace EM {
 
@@ -63,11 +67,24 @@ public:
 };
 
 
-//class CharacterAssetsModels: public QObject
-//{
-//    Q_OBJECT
-//};
+class CharacterAssetsModel: public CommonModelBase<AssetEntry>
+{
+    Q_OBJECT
+    enum Roles {
+        ItemId, TypeId, TypeName, IsSingleton, Quantity,
+        LocationId, LocationName, LocationType, LocationFlag
+    };
+public:
+    CharacterAssetsModel(QObject *parent = nullptr);
+    QHash<int,QByteArray> roleNames() const override;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+};
 
 } // namespace EM
+
+
+QDataStream &operator<<(QDataStream &stream, const EM::AssetEntry &o);
+QDataStream &operator>>(QDataStream &stream, EM::AssetEntry &o);
+
 
 #endif // CHARACTER_ASSETS_MODELS_H
