@@ -105,6 +105,8 @@ Character& Character::operator=(const Character& other)
     // wallet journal/transactions
     setWalletJournal(other.m_walletJournal);
     setWalletTransactions(other.m_walletTransactions);
+    // assets
+    setAssetsModel(other.m_assetsModel);
     // auth info
     m_tokens = other.m_tokens;
     // last update date-times
@@ -181,6 +183,8 @@ Character& Character::operator=(Character&& other)
     // wallet journal/transactions
     setWalletJournal(std::move(other.m_walletJournal));
     setWalletTransactions(std::move(other.m_walletTransactions));
+    // assets
+    setAssetsModel(std::move(other.m_assetsModel));
     // auth info
     m_tokens = std::move(other.m_tokens);
     // last update date-times
@@ -829,6 +833,18 @@ void Character::setWalletTransactions(const CharacterWalletTransactions &t)
     }
 }
 
+QObject *Character::assetsModelObj() { return static_cast<QObject *>(&m_assetsModel); }
+CharacterAssetsModel *Character::assetsModel() { return &m_assetsModel; }
+const CharacterAssetsModel *Character::assetsModel() const { return &m_assetsModel; }
+
+void Character::setAssetsModel(const CharacterAssetsModel &mdl)
+{
+    if (m_assetsModel != mdl) {
+        m_assetsModel = mdl;
+        Q_EMIT assetsModelChanged();
+    }
+}
+
 // auth info
 EveOAuthTokens Character::getAuthTokens() const { return m_tokens; }
 void Character::setAuthTokens(const EveOAuthTokens& tokens) { m_tokens = tokens; }
@@ -999,7 +1015,7 @@ void Character::calcSkillQueue()
 
 
 // increase version number when savedata format changes
-static const int SAVEDATA_VERSION = 28;
+static const int SAVEDATA_VERSION = 29;
 
 
 QDataStream& operator<<(QDataStream &stream, const EM::Character &character)
@@ -1076,6 +1092,8 @@ QDataStream& operator<<(QDataStream &stream, const EM::Character &character)
     // wallet history
     stream << character.m_walletJournal;
     stream << character.m_walletTransactions;
+    // since savedata version 29
+    stream << character.m_assetsModel;
     return stream;
 }
 
@@ -1163,8 +1181,10 @@ QDataStream& operator>>(QDataStream &stream, EM::Character &character)
     if (savedata_version >= 28) {
         stream >> character.m_walletJournal;
         stream >> character.m_walletTransactions;
-    } else {
-        qCDebug(logCharacter) << "Skipped loading of wallet history, savedata version < 28:" << savedata_version;
+    }
+    // assets (since v29)
+    if (savedata_version >= 29) {
+        stream >> character.m_assetsModel;
     }
     //
     // end of reading, some final calculations

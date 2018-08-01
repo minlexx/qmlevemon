@@ -18,6 +18,7 @@
 #include "eve_location.h"
 #include "character_mail_models.h"
 #include "character_wallet_models.h"
+#include "character_assets_models.h"
 #include "eve_api/eve_api_tokens.h"
 #include "update_timestamps.h"
 
@@ -108,6 +109,8 @@ class Character: public QObject
     // wallet history
     Q_PROPERTY(QObject*   walletJournal            READ walletJournalObj         NOTIFY walletJournalChanged)
     Q_PROPERTY(QObject*   walletTransactions       READ walletTransactionsObj    NOTIFY walletTransactionsChanged)
+    // assets
+    Q_PROPERTY(QObject*   assets                   READ assetsModelObj           NOTIFY assetsModelChanged)
 
 public:
     Character(QObject *parent = nullptr);
@@ -319,6 +322,12 @@ public:
     void setWalletJournal(const CharacterWalletJournal &j);
     void setWalletTransactions(const CharacterWalletTransactions &t);
 
+    // first rough iteration of assets model
+    QObject *assetsModelObj();
+    CharacterAssetsModel *assetsModel();
+    const CharacterAssetsModel *assetsModel() const;
+    void setAssetsModel(const CharacterAssetsModel &mdl);
+
     // auth info
     EveOAuthTokens getAuthTokens() const;
     void setAuthTokens(const EveOAuthTokens& tokens);
@@ -406,6 +415,8 @@ Q_SIGNALS:
     // wallet history
     void walletJournalChanged();
     void walletTransactionsChanged();
+    // assets
+    void assetsModelChanged();
 
     // for manual emitting, not for QML properties
 Q_SIGNALS:
@@ -492,6 +503,9 @@ protected:
     // wallet history
     CharacterWalletJournal m_walletJournal;
     CharacterWalletTransactions m_walletTransactions;
+
+    // assets
+    CharacterAssetsModel m_assetsModel;
 
     // auth info
     EveOAuthTokens m_tokens;
