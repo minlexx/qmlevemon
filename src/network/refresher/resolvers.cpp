@@ -309,6 +309,7 @@ QString PeriodicalRefresherWorker::resolve_universe_name(quint64 anyId, QString 
             }
         }
     }
+    return ret;
 }
 
 
