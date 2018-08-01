@@ -62,6 +62,7 @@ Q_SIGNALS:
 
 public:
     // character
+    bool get_character_assets(QJsonArray &replyArr, quint64 char_id, const QByteArray &access_token);
     bool get_character_attributes(QJsonObject &reply, quint64 char_id, const QByteArray &access_token);
     bool get_character_clones(QJsonObject &reply, quint64 char_id, const QByteArray &access_token);
     bool get_character_fatigue(QJsonObject &reply, quint64 char_id, const QByteArray &access_token);

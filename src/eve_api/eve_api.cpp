@@ -589,6 +589,21 @@ static QString convert_ids_to_string(const QVector<quint64> &ids) {
 }
 
 
+bool EveApi::get_character_assets(QJsonArray &replyArr, quint64 char_id, const QByteArray &access_token)
+{
+    QJsonDocument replyJson;
+    int reply_http_status = 0;
+    QString url = QString(QLatin1String("/characters/%1/assets/")).arg(char_id);
+    bool req_ok = this->send_general_esi_request_json(
+                EsiReqType::GET, url, QUrlQuery(), QByteArray(), access_token,
+                reply_http_status, replyJson);
+    if (!req_ok || (reply_http_status != 200)) return false;
+    if (!replyJson.isArray()) return false;
+    replyArr = replyJson.array();
+    return true;
+}
+
+
 bool EveApi::get_character_attributes(QJsonObject &reply, quint64 char_id, const QByteArray &access_token)
 {
     QJsonDocument replyJson;
