@@ -34,7 +34,7 @@ int PeriodicalRefresherWorker::resresh_clones(Character *ch)
     QJsonObject reply;
 
     // 1. refresh clones
-    if (m_api->get_character_clones(reply, ch->characterId(), ch->getAuthTokens().access_token)) {
+    if (m_api->get_character_clones(reply, ch->characterId(), ch->accessToken())) {
         // example response:
         //      {
         //        "jump_clones": [
@@ -77,7 +77,7 @@ int PeriodicalRefresherWorker::resresh_clones(Character *ch)
             // check if character's home station has changed;
             if (ch->currentClone()->location()->locationId() != locationId) {
                 // need load info about new location
-                const EveLocation loc = resolve_location(locationId, locationType, ch->getAuthTokens().access_token);
+                const EveLocation loc = resolve_location(locationId, locationType, ch->accessToken());
                 qCDebug(logRefresher) << "location info:" << loc;
                 ch->setHomeLocation(loc);
             }
@@ -111,7 +111,7 @@ int PeriodicalRefresherWorker::resresh_clones(Character *ch)
             }
 
             // load location
-            const EveLocation loc = resolve_location(locationId, locationType, ch->getAuthTokens().access_token);
+            const EveLocation loc = resolve_location(locationId, locationType, ch->accessToken());
 
             // construct clone object
             CharacterClone newClone;
@@ -132,7 +132,7 @@ int PeriodicalRefresherWorker::resresh_clones(Character *ch)
 
     // 2, refresh implants
     QJsonArray replyArr;
-    if (m_api->get_character_implants(replyArr, ch->characterId(), ch->getAuthTokens().access_token)) {
+    if (m_api->get_character_implants(replyArr, ch->characterId(), ch->accessToken())) {
         // example response : [ 22107, 22108, 22111, 22109, 22110, 13229, 13249 ]
         CharacterImplantsGroup currentCloneImps;
         for (const QJsonValue& jval: replyArr) {
@@ -180,7 +180,7 @@ int PeriodicalRefresherWorker::refresh_jump_fatigue(Character *ch)
     qCDebug(logRefresher) << " refreshing jump fatigue for" << ch->toString();
     QJsonObject reply;
 
-    if (m_api->get_character_fatigue(reply, ch->characterId(), ch->getAuthTokens().access_token)) {
+    if (m_api->get_character_fatigue(reply, ch->characterId(), ch->accessToken())) {
         // {
         //   "jump_fatigue_expire_date": "2017-01-07T19:17:51Z",
         //   "last_jump_date": "2017-01-07T18:21:31Z",

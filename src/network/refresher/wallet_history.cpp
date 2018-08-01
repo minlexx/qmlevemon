@@ -26,7 +26,7 @@ int PeriodicalRefresherWorker::refresh_wallet_history(Character *ch)
     QJsonArray replyArr;
     int page = 0;
     qCDebug(logRefresher) << " refreshing wallet journal for" << ch->toString();
-    if (m_api->get_character_wallet_journal(replyArr, ch->characterId(), ch->getAuthTokens().access_token, page)) {
+    if (m_api->get_character_wallet_journal(replyArr, ch->characterId(), ch->accessToken(), page)) {
         for (const QJsonValue &jval: replyArr) {
             const QJsonObject jobj = jval.toObject();
             WalletJournalEntry entry = WalletJournalEntry::fromJsonObject(jobj);
@@ -40,7 +40,7 @@ int PeriodicalRefresherWorker::refresh_wallet_history(Character *ch)
 
     qCDebug(logRefresher) << " refreshing wallet transactions for" << ch->toString();
     quint64 from_id = 0;
-    if (m_api->get_character_wallet_transactions(replyArr, ch->characterId(), ch->getAuthTokens().access_token, from_id)) {
+    if (m_api->get_character_wallet_transactions(replyArr, ch->characterId(), ch->accessToken(), from_id)) {
         for (const QJsonValue &jval: replyArr) {
             const QJsonObject jobj = jval.toObject();
             // parse json
@@ -49,7 +49,7 @@ int PeriodicalRefresherWorker::refresh_wallet_history(Character *ch)
             // Postprocess entry: we need to resolve IDs to names
             // location
             EveLocation loc;
-            loc = resolve_location_guess_type(entry.location_id, ch->getAuthTokens().access_token);
+            loc = resolve_location_guess_type(entry.location_id, ch->accessToken());
             if (!loc.isEmpty()) {
                 entry.location_name = loc.name();
             }

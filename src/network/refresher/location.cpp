@@ -27,7 +27,7 @@ int PeriodicalRefresherWorker::refresh_location(Character *ch) {
 
      // get current location
 
-    if (!m_api->get_character_location(reply, ch->characterId(), ch->getAuthTokens().access_token)) {
+    if (!m_api->get_character_location(reply, ch->characterId(), ch->accessToken())) {
         qCWarning(logRefresher) << "Get character location failed!";
         return 0; // req failed
     }
@@ -52,7 +52,7 @@ int PeriodicalRefresherWorker::refresh_location(Character *ch) {
 
     if ((structure_id > 0) && (prev_structure_id != structure_id)) {
         // resolve structure name
-        if (m_api->get_universe_structure(reply, structure_id, ch->getAuthTokens().access_token)) {
+        if (m_api->get_universe_structure(reply, structure_id, ch->accessToken())) {
             if (QThread::currentThread()->isInterruptionRequested()) return 0;
             QString structure_name = reply.value(QLatin1String("name")).toString();
             ch->setCurrentStructureName(structure_name);
@@ -112,7 +112,7 @@ int PeriodicalRefresherWorker::refresh_location(Character *ch) {
     // qCDebug(logRefresher) << "     region:" << ch->currentRegionId() << ch->currentRegionName();
 
     // get current ship
-    if (!m_api->get_character_ship(reply, ch->characterId(), ch->getAuthTokens().access_token)) {
+    if (!m_api->get_character_ship(reply, ch->characterId(), ch->accessToken())) {
         // req failed
         return 0;
     }

@@ -84,7 +84,7 @@ int PeriodicalRefresherWorker::refresh_notifications(Character *ch)
 
     qCDebug(logRefresher) << " refreshing notifications for" << ch->toString();
     QJsonArray replyArr;
-    if (!m_api->get_character_notifications(replyArr, ch->characterId(), ch->getAuthTokens().access_token)) {
+    if (!m_api->get_character_notifications(replyArr, ch->characterId(), ch->accessToken())) {
         return 0; // req failed
     }
     if (QThread::currentThread()->isInterruptionRequested()) return 0;

@@ -22,7 +22,7 @@ int PeriodicalRefresherWorker::refresh_wallet(Character *ch) {
     }
     qCDebug(logRefresher) << " refreshing wallet for" << ch->toString();
     float isk = 0.0f;
-    if (!m_api->get_character_wallet(isk, ch->characterId(), ch->getAuthTokens().access_token)) {
+    if (!m_api->get_character_wallet(isk, ch->characterId(), ch->accessToken())) {
         return 0; // req failed
     }
     if (QThread::currentThread()->isInterruptionRequested()) return 0;

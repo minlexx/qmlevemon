@@ -30,7 +30,7 @@ int PeriodicalRefresherWorker::refresh_skills(Character *ch) {
 
     // refresh character attributes
     qCDebug(logRefresher) << " refreshing attributes for" << ch->toString();
-    if (m_api->get_character_attributes(reply, ch->characterId(), ch->getAuthTokens().access_token)) {
+    if (m_api->get_character_attributes(reply, ch->characterId(), ch->accessToken())) {
         if (QThread::currentThread()->isInterruptionRequested()) return 0;
 
         num_updates++;
@@ -86,7 +86,7 @@ int PeriodicalRefresherWorker::refresh_skills(Character *ch) {
     SkillTreeModel *skillTree = ModelManager::instance()->skillTreeModel();
     // get ALL character's skills
     qCDebug(logRefresher) << " refreshing skills for" << ch->toString();
-    if (m_api->get_character_skills(reply, ch->characterId(), ch->getAuthTokens().access_token)) {
+    if (m_api->get_character_skills(reply, ch->characterId(), ch->accessToken())) {
         if (QThread::currentThread()->isInterruptionRequested()) return 0;
 
         bool isAlphaClone = false;
@@ -141,7 +141,7 @@ int PeriodicalRefresherWorker::refresh_skills(Character *ch) {
 
     // refresh character skillqueue
     qCDebug(logRefresher) << " refreshing skill queue for" << ch->toString();
-    if (m_api->get_character_skillqueue(replyArr, ch->characterId(), ch->getAuthTokens().access_token)) {
+    if (m_api->get_character_skillqueue(replyArr, ch->characterId(), ch->accessToken())) {
         if (QThread::currentThread()->isInterruptionRequested()) return 0;
         // qCDebug(logRefresher) << replyArr;
 

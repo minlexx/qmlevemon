@@ -105,7 +105,7 @@ Mail PeriodicalRefresherWorker::requestMailBody(const Character *ch, quint64 mai
     // 2. try from network, eve api
     QJsonObject mailJson;
     qCDebug(logRefresher) << "  requesting mail body for:" << mailId;
-    if (m_api->get_character_mail_id(mailJson, ch->characterId(), ch->getAuthTokens().access_token, mailId)) {
+    if (m_api->get_character_mail_id(mailJson, ch->characterId(), ch->accessToken(), mailId)) {
         ret = Mail::fromJson(mailJson);
         ret.resolveLabels(mailLabels);
         // quick fix for sender type: if sender is in recipients list,
@@ -149,7 +149,7 @@ int PeriodicalRefresherWorker::refresh_mail(Character *ch)
 
     // load mailing lists
     QVector<MailRecipient> mailingLists;
-    if (m_api->get_character_mailing_lists(replyArr, ch->characterId(), ch->getAuthTokens().access_token)) {
+    if (m_api->get_character_mailing_lists(replyArr, ch->characterId(), ch->accessToken())) {
         num_updates++;
         for (const QJsonValue &jval: replyArr) {
             const QJsonObject &jobj = jval.toObject();
@@ -169,7 +169,7 @@ int PeriodicalRefresherWorker::refresh_mail(Character *ch)
     // load mail labels
     CharacterMailLabels mailLabels;
     int api_unread_count = 0;
-    if (m_api->get_character_mail_labels(reply, ch->characterId(), ch->getAuthTokens().access_token)) {
+    if (m_api->get_character_mail_labels(reply, ch->characterId(), ch->accessToken())) {
         num_updates++;
         api_unread_count = reply.value(QLatin1String("total_unread_count")).toVariant().toInt();
         QJsonArray jmailLabels = reply.value(QLatin1String("labels")).toArray();
@@ -207,7 +207,7 @@ int PeriodicalRefresherWorker::refresh_mail(Character *ch)
     // load mail headers list
     CharacterMails mails;
     int actual_unread_count = 0;
-    if (m_api->get_character_mail_headers(replyArr, ch->characterId(), ch->getAuthTokens().access_token)) {
+    if (m_api->get_character_mail_headers(replyArr, ch->characterId(), ch->accessToken())) {
         num_updates++;
         for (const QJsonValue &jval: replyArr) {
             const QJsonObject &jobj = jval.toObject();
