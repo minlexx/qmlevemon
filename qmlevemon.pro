@@ -30,6 +30,7 @@ SOURCES += \
     ./src/eve_api/eve_api.cpp \
     ./src/eve_api/eve_api_tokens.cpp \
     ./src/models/character.cpp \
+    ./src/models/character_assets_models.cpp \
     ./src/models/character_clone.cpp \
     ./src/models/character_clones_model.cpp \
     ./src/models/character_implants_group.cpp \
@@ -95,6 +96,7 @@ HEADERS += \
     ./src/eve_api/eve_api_tokens.h \
     ./src/eve_api/eve_sso.h \
     ./src/models/character.h \
+    ./src/models/character_assets_models.h \
     ./src/models/character_clone.h \
     ./src/models/character_clones_model.h \
     ./src/models/character_implants_group.h \

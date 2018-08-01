@@ -62,6 +62,7 @@ set(qmlevemon_srcs
     "src/eve_api/eve_api.cpp"
     "src/eve_api/eve_api_tokens.cpp"
     "src/models/character.cpp"
+    "src/models/character_assets_models.cpp"
     "src/models/character_clone.cpp"
     "src/models/character_clones_model.cpp"
     "src/models/character_implants_group.cpp"
