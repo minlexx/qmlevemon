@@ -151,6 +151,7 @@ QHash<int, QByteArray> EM::CharacterAssetsModel::roleNames() const
         {LocationType, QByteArrayLiteral("locationType")},
         {LocationFlag, QByteArrayLiteral("locationFlag")},
     };
+    return roles;
 }
 
 QVariant EM::CharacterAssetsModel::data(const QModelIndex &index, int role) const
