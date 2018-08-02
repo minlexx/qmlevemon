@@ -33,11 +33,16 @@ enum AssetLocationFlag {
     SpecializedOreHold, SpecializedPlanetaryCommoditiesHold, SpecializedSalvageHold,
     SpecializedShipHold, SpecializedSmallShipHold, SubSystemBay, SubSystemSlot0,
     SubSystemSlot1, SubSystemSlot2, SubSystemSlot3, SubSystemSlot4, SubSystemSlot5,
-    SubSystemSlot6, SubSystemSlot7, Unlocked, Wardrobe,
+    SubSystemSlot6, SubSystemSlot7,
+    Unlocked,  // probably means - unlocked inside a container
+    Wardrobe,
 };
 
 AssetLocationType parseLocationType(const QString &typ);
 AssetLocationFlag parseLocationFlag(const QString &fl);
+
+bool isAssetFitted(AssetLocationFlag fl);
+bool isAssetInsideContainer(AssetLocationFlag fl);
 
 
 class AssetEntry {

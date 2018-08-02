@@ -206,3 +206,26 @@ QDataStream &operator>>(QDataStream &stream, EM::AssetEntry &o)
     stream >> o.location_name;
     return stream;
 }
+
+bool EM::isAssetFitted(EM::AssetLocationFlag fl)
+{
+    if ((fl >= HiSlot0) && (fl <= HiSlot7)) return true;
+    if ((fl >= LoSlot0) && (fl <= LoSlot7)) return true;
+    if ((fl >= MedSlot0) && (fl <= MedSlot7)) return true;
+    if ((fl >= RigSlot0) && (fl <= RigSlot7)) return true;
+    if ((fl >= SubSystemSlot0) && (fl <= SubSystemSlot7)) return true;
+    if ((fl >= FighterTube0) && (fl <= FighterTube4)) return true;
+    if ((fl == BoosterBay) || (fl == Cargo) || (fl == CorpseBay)
+            || (fl == DroneBay) || (fl == FighterBay) || (fl == FleetHangar)
+            || (fl == QuafeBay) || (fl == SubSystemBay)) return true;
+    if ((fl >= SpecializedAmmoHold) && (fl <= SpecializedSmallShipHold)) return true;
+    return false;
+}
+
+bool EM::isAssetInsideContainer(EM::AssetLocationFlag fl)
+{
+    if ((fl == Locked) || (fl == Unlocked)) return true;
+    // if ((fl == AssetSafety) || (fl == Deliveries)) return true;
+    // if ((fl == Hangar) || (fl == HangarAll) || (fl == ShipHangar)) return true;
+    return false;
+}
