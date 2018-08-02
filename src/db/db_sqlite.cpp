@@ -139,7 +139,7 @@ bool DbSqlite::open_sde(const QString &db_filename)
     int resourcesVersion = 0;
     QmlEvemonApp *gApp = globalAppInstance();
     if (gApp) {
-        qCDebug(logDb) << "Checking for forced SDE update...";
+        // qCDebug(logDb) << "Checking for forced SDE update...";
         const QString appdataDirname = gApp->storageDirectory();
         installedVersionFileName = appdataDirname + QLatin1String("/sde_version.txt");
         int installedVersion = read_version_from_file(installedVersionFileName);
