@@ -2,6 +2,7 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QThread>
+#include <QSet>
 
 #include "periodical_refresher_worker.h"
 #include "../periodical_refresher.h"
@@ -27,7 +28,7 @@ int PeriodicalRefresherWorker::refresh_assets(Character *ch)
     }
 
     CharacterAssetsModel assetsModel;
-    // Db *db = globalAppDatabaseInstance();
+    Db *db = globalAppDatabaseInstance();
 
     QJsonArray replyArr;
     qCDebug(logRefresher) << " refreshing assets for" << ch->toString();
@@ -53,6 +54,59 @@ int PeriodicalRefresherWorker::refresh_assets(Character *ch)
             }
         }
         qCDebug(logRefresher) << "     total assets fetched:" << assetsModel.rowCount();
+
+        // postprocess all assets
+        QVector<AssetEntry> &assets = assetsModel.internalData();
+        QSet<quint64> location_ids_to_resolve; // to store unique values
+        for (AssetEntry &entry: assets) {
+            // resolve type name
+            if (db) {
+                entry.type_name = db->typeName(entry.type_id);
+            }
+            // location name
+            //  we can easily resolve location name if it is a station
+            if (entry.location_type == AssetLocationType::Station) {
+                EveLocation loc = resolve_location_guess_type(entry.location_id, ch->accessToken());
+                if (!loc.isEmpty()) {
+                    entry.location_name = loc.name();
+                }
+            } else if (entry.location_type == AssetLocationType::Other) {
+                // not all location ids are resolvable in this case
+                if (isAssetFitted(entry.location_flag) || isAssetInsideContainer(entry.location_flag)) {
+                    // probably means that this item is inside another container
+                    // add its location id to list of ids to resolve
+                    location_ids_to_resolve << entry.location_id;
+                    // we will collect them and resolve later in one call
+                }
+            } else if (entry.location_type == AssetLocationType::SolarSystem) {
+                // TODO: I don't have items in assets labelled as located in "solarsystem"
+                // what to do?
+                qCWarning(logRefresher) << " !!! entry.location_type == AssetLocationType::SolarSystem !!!";
+            }
+        }
+
+        // resolve locations names
+        if (!location_ids_to_resolve.isEmpty()) {
+            const QVector<quint64> locations_ids_vec = location_ids_to_resolve.toList().toVector();
+            qCDebug(logRefresher) << "   Need to resolve" << locations_ids_vec.size() << " loc names";
+            if (m_api->post_character_assets_names(replyArr, ch->characterId(), ch->accessToken(), locations_ids_vec)) {
+                // qCDebug(logRefresher) << "locations_ids: " << replyArr;
+                // fill all resolved locations names
+                for (const QJsonValue &jval: replyArr) {
+                    const QJsonObject jobj = jval.toObject();
+                    const quint64 item_id = jobj.value(QLatin1String("item_id")).toVariant().toULongLong();
+                    const QString resolved_name = jobj.value(QLatin1String("name")).toString();
+                    // for each returned resolved location name set received name into container
+                    // very long loop, in my character case loops over 1700 asset items
+                    for (AssetEntry &entry: assets) {
+                        if (entry.location_id == item_id) {
+                            entry.location_name = resolved_name;
+                        }
+                    }
+                }
+            }
+        }
+
         ch->setAssetsModel(assetsModel);
         num_changes++;
     }
