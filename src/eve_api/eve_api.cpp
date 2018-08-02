@@ -302,6 +302,18 @@ static QString reqTypeToString(EveApi::EsiReqType r) {
 }
 
 
+static int parseXPages(const QMap<QByteArray, QByteArray> &headers)
+{
+    if (headers.contains(QByteArrayLiteral("X-Pages"))) {
+        const QByteArray &XPages = headers.value(QByteArrayLiteral("X-Pages"));
+        if (!XPages.isEmpty()) {
+            return XPages.toInt();
+        }
+    }
+    return 0;
+}
+
+
 bool EveApi::send_general_esi_request(
         // input arguments
         EsiReqType rtype,
@@ -526,10 +538,11 @@ bool EveApi::send_general_esi_request_json(
         const QByteArray &access_token,
         // output arguments
         int &reply_http_status,
-        QJsonDocument &replyJson)
+        QJsonDocument &replyJson,
+        QMap<QByteArray, QByteArray> *reply_headers)
 {
     QMap<QByteArray, QByteArray> req_headers;
-    QMap<QByteArray, QByteArray> reply_headers;
+    QMap<QByteArray, QByteArray> my_reply_headers;
     QByteArray replyBa;
 
     // if we're going to request JSON and receive JSON - set those headers
@@ -540,7 +553,7 @@ bool EveApi::send_general_esi_request_json(
                 rtype, api_url, get_params,
                 post_data, req_headers,
                 access_token, reply_http_status,
-                reply_headers, replyBa);
+                my_reply_headers, replyBa);
     if (!req_ok) {
         replyJson = QJsonDocument();
         qCWarning(logApi) << "ESI request failed: " << api_url
@@ -557,6 +570,9 @@ bool EveApi::send_general_esi_request_json(
                           << "; HTTP status:" << reply_http_status;
         qCWarning(logApi) << "Reply was:" << replyBa;
         return false;
+    }
+    if (reply_headers) {
+        (*reply_headers) = my_reply_headers;
     }
     return true;
 }
@@ -589,17 +605,26 @@ static QString convert_ids_to_string(const QVector<quint64> &ids) {
 }
 
 
-bool EveApi::get_character_assets(QJsonArray &replyArr, quint64 char_id, const QByteArray &access_token)
+bool EveApi::get_character_assets(QJsonArray &replyArr, quint64 char_id, const QByteArray &access_token, int page, int *total_pages)
 {
     QJsonDocument replyJson;
     int reply_http_status = 0;
     QString url = QString(QLatin1String("/characters/%1/assets/")).arg(char_id);
+    QUrlQuery query;
+    if (page > 0) {
+        query.addQueryItem(QLatin1String("page"), QString::number(page));
+    }
+    QMap<QByteArray, QByteArray> reply_headers;
     bool req_ok = this->send_general_esi_request_json(
                 EsiReqType::GET, url, QUrlQuery(), QByteArray(), access_token,
-                reply_http_status, replyJson);
+                reply_http_status, replyJson, &reply_headers);
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!replyJson.isArray()) return false;
     replyArr = replyJson.array();
+    // get X-Pages header
+    if (total_pages) {
+        *total_pages = parseXPages(reply_headers);
+    }
     return true;
 }
 
@@ -825,7 +850,7 @@ bool EveApi::get_character_wallet(float &reply, quint64 char_id, const QByteArra
     return ok;
 }
 
-bool EveApi::get_character_wallet_journal(QJsonArray &replyArr, quint64 char_id, const QByteArray &access_token, int page)
+bool EveApi::get_character_wallet_journal(QJsonArray &replyArr, quint64 char_id, const QByteArray &access_token, int page, int *total_pages)
 {
     QJsonDocument replyJson;
     int reply_http_status = 0;
@@ -834,13 +859,18 @@ bool EveApi::get_character_wallet_journal(QJsonArray &replyArr, quint64 char_id,
     if (page > 0) {
         query.addQueryItem(QLatin1String("page"), QString::number(page));
     }
+    QMap<QByteArray, QByteArray> reply_headers;
     bool req_ok = this->send_general_esi_request_json(
                 EsiReqType::GET, url, query, QByteArray(), access_token,
-                reply_http_status, replyJson);
+                reply_http_status, replyJson, &reply_headers);
     if (!req_ok || (reply_http_status != 200)) return false;
     if (replyJson.isArray()) {
         replyArr = replyJson.array();
         return true;
+    }
+    // get X-Pages header
+    if (total_pages) {
+        *total_pages = parseXPages(reply_headers);
     }
     return false;
 }

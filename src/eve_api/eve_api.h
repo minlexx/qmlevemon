@@ -62,7 +62,7 @@ Q_SIGNALS:
 
 public:
     // character
-    bool get_character_assets(QJsonArray &replyArr, quint64 char_id, const QByteArray &access_token);
+    bool get_character_assets(QJsonArray &replyArr, quint64 char_id, const QByteArray &access_token, int page = 0, int *total_pages = nullptr);
     bool get_character_attributes(QJsonObject &reply, quint64 char_id, const QByteArray &access_token);
     bool get_character_clones(QJsonObject &reply, quint64 char_id, const QByteArray &access_token);
     bool get_character_fatigue(QJsonObject &reply, quint64 char_id, const QByteArray &access_token);
@@ -78,7 +78,7 @@ public:
     bool get_character_skillqueue(QJsonArray &replyArr, quint64 char_id, const QByteArray &access_token);
     bool get_character_skills(QJsonObject &reply, quint64 char_id, const QByteArray &access_token);
     bool get_character_wallet(float &reply, quint64 char_id, const QByteArray &access_token);
-    bool get_character_wallet_journal(QJsonArray &replyArr, quint64 char_id, const QByteArray &access_token, int page = 0);
+    bool get_character_wallet_journal(QJsonArray &replyArr, quint64 char_id, const QByteArray &access_token, int page = 0, int *total_pages = nullptr);
     bool get_character_wallet_transactions(QJsonArray &replyArr, quint64 char_id, const QByteArray &access_token, quint64 from_id = 0);
     // corporation, alliance
     bool get_corporation_public_data(QJsonObject &reply, quint64 corp_id);
@@ -133,7 +133,8 @@ protected:
             const QByteArray &access_token,
             // output arguments
             int& reply_http_status,
-            QJsonDocument& replyJson);
+            QJsonDocument& replyJson,
+            QMap<QByteArray, QByteArray> *reply_headers = nullptr);
 
 protected:
     QNetworkAccessManager *m_nam = nullptr;
