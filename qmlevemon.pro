@@ -52,6 +52,7 @@ SOURCES += \
     ./src/models/update_timestamps.cpp \
     ./src/network/periodical_refresher.cpp \
     ./src/network/refresher/periodical_refresher_worker.cpp \
+    ./src/network/refresher/assets.cpp \
     ./src/network/refresher/clones.cpp \
     ./src/network/refresher/location.cpp \
     ./src/network/refresher/mail.cpp \
