@@ -628,6 +628,35 @@ bool EveApi::get_character_assets(QJsonArray &replyArr, quint64 char_id, const Q
     return true;
 }
 
+bool EveApi::post_character_assets_names(QJsonArray &replyArr, quint64 char_id, const QByteArray &access_token, const QVector<quint64> ids)
+{
+    if (ids.isEmpty()) {
+        return true;
+    }
+    // https://esi.evetech.net/ui/#/Assets/post_characters_character_id_assets_names
+    QJsonDocument jdoc;
+    QByteArray ids_str("["); // construct POST data
+    ids_str.append(convert_ids_to_string(ids).toUtf8());
+    ids_str.append("]");
+    int reply_http_status = 0;
+    QString url = QString(QLatin1String("/characters/%1/assets/names/")).arg(char_id);
+    bool req_ok = this->send_general_esi_request_json(
+                EsiReqType::POST, url, QUrlQuery(), ids_str, access_token,
+                reply_http_status, jdoc);
+    if (!req_ok || (reply_http_status != 200)) return false;
+    if (!jdoc.isArray()) return false;
+    replyArr = jdoc.array();
+    // return value example:
+    //  [
+    //    {
+    //      "item_id": 1010717963332,
+    //      "name": "Modules"
+    //    },
+    //    ...
+    //  ]
+    return true;
+}
+
 
 bool EveApi::get_character_attributes(QJsonObject &reply, quint64 char_id, const QByteArray &access_token)
 {

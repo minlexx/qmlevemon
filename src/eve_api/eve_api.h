@@ -63,6 +63,7 @@ Q_SIGNALS:
 public:
     // character
     bool get_character_assets(QJsonArray &replyArr, quint64 char_id, const QByteArray &access_token, int page = 0, int *total_pages = nullptr);
+    bool post_character_assets_names(QJsonArray &replyArr, quint64 char_id, const QByteArray &access_token, const QVector<quint64> ids);
     bool get_character_attributes(QJsonObject &reply, quint64 char_id, const QByteArray &access_token);
     bool get_character_clones(QJsonObject &reply, quint64 char_id, const QByteArray &access_token);
     bool get_character_fatigue(QJsonObject &reply, quint64 char_id, const QByteArray &access_token);
