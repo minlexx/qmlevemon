@@ -616,7 +616,7 @@ bool EveApi::get_character_assets(QJsonArray &replyArr, quint64 char_id, const Q
     }
     QMap<QByteArray, QByteArray> reply_headers;
     bool req_ok = this->send_general_esi_request_json(
-                EsiReqType::GET, url, QUrlQuery(), QByteArray(), access_token,
+                EsiReqType::GET, url, query, QByteArray(), access_token,
                 reply_http_status, replyJson, &reply_headers);
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!replyJson.isArray()) return false;
