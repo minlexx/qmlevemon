@@ -77,6 +77,12 @@ int PeriodicalRefresherWorker::refresh_assets(Character *ch)
                     // add its location id to list of ids to resolve
                     location_ids_to_resolve << entry.location_id;
                     // we will collect them and resolve later in one call
+                } else {
+                    // location_type == Other and location_flag == Hangar means item is in Citadel hangar
+                    EveLocation loc = resolve_location(entry.location_id, QLatin1String("structure"), ch->accessToken());
+                    if (!loc.isEmpty()) {
+                        entry.location_name = loc.name();
+                    }
                 }
             } else if (entry.location_type == AssetLocationType::SolarSystem) {
                 // TODO: I don't have items in assets labelled as located in "solarsystem"
@@ -96,14 +102,40 @@ int PeriodicalRefresherWorker::refresh_assets(Character *ch)
                     const QJsonObject jobj = jval.toObject();
                     const quint64 item_id = jobj.value(QLatin1String("item_id")).toVariant().toULongLong();
                     const QString resolved_name = jobj.value(QLatin1String("name")).toString();
-                    // for each returned resolved location name set received name into container
-                    // very long loop, in my character case loops over 1700 asset items
-                    for (AssetEntry &entry: assets) {
-                        if (entry.location_id == item_id) {
-                            entry.location_name = resolved_name;
+                    //
+                    if (!resolved_name.isEmpty()) {
+                        // for each returned resolved location name set received name into container
+                        // very long loop, in my character case loops over 1700 asset items
+                        for (AssetEntry &entry: assets) {
+                            if (entry.location_id == item_id) {
+                                entry.location_name = resolved_name;
+                            }
+                            if (entry.item_id == item_id) {
+                                // Tengu (Ship_name)
+                                entry.type_name.append(QStringLiteral(" ("));
+                                entry.type_name.append(resolved_name);
+                                entry.type_name.append(QStringLiteral(")"));
+                            }
                         }
                     }
                 }
+
+                // <debug - remove this>
+//                for (const AssetEntry &entry: qAsConst(assets)) {
+//                    if (entry.location_name.isEmpty()) {
+//                        qCDebug(logRefresher) << "    item " << entry.item_id << entry.type_name
+//                                              << " location not resolved; "
+//                                              << "location_id=" << entry.location_id
+//                                              << "location_type=" << static_cast<int>(entry.location_type)
+//                                              << "location_flag=" << static_cast<int>(entry.location_flag);
+//                        if (locations_ids_vec.contains(entry.location_id)) {
+//                            qCDebug(logRefresher) << "        but location_id is in locations_ids_vec to resolve! WTF?";
+//                        } else {
+//                            qCDebug(logRefresher) << "        location_id is not in locations_ids_vec to resolve";
+//                        }
+//                    }
+//                }
+                // end <debug - remove this>
             }
         }
 
