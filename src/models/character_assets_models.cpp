@@ -224,7 +224,7 @@ bool EM::isAssetFitted(EM::AssetLocationFlag fl)
 
 bool EM::isAssetInsideContainer(EM::AssetLocationFlag fl)
 {
-    if ((fl == Locked) || (fl == Unlocked)) return true;
+    if ((fl == Locked) || (fl == Unlocked) || (fl == AutoFit)) return true;
     // if ((fl == AssetSafety) || (fl == Deliveries)) return true;
     // if ((fl == Hangar) || (fl == HangarAll) || (fl == ShipHangar)) return true;
     return false;
