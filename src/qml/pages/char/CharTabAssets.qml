@@ -11,5 +11,37 @@ Rectangle {
     color: AppStyle.bgColor
     clip: true
 
-    Text { text: "Assets" }
+    ListView {
+        id: lvAssetsLocations
+        anchors {
+            fill: parent
+            margins: 2
+        }
+        model: curChar.assetsLocations
+        interactive: true
+        currentIndex: -1
+        clip: true
+
+        delegate: ItemDelegate {
+            width: lvAssetsLocations.width
+            height: lblLocName.height + AppStyle.marginSmall * 2
+            Label {
+                id: lblLocName
+                text: model.locationId + ": " + model.locationName
+                Rectangle {
+                    anchors.fill: parent
+                    border.color: "red"
+                    border.width: 1
+                }
+            }
+
+            Component.onCompleted: {
+                console.log("lvAssetsLocations delegate")
+            }
+        }
+
+        onModelChanged: {
+            console.log("lvAssetsLocations model changed: " + model.rowCount());
+        }
+    }
 }
