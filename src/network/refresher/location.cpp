@@ -52,12 +52,12 @@ int PeriodicalRefresherWorker::refresh_location(Character *ch) {
 
     if ((structure_id > 0) && (prev_structure_id != structure_id)) {
         // resolve structure name
-        if (m_api->get_universe_structure(reply, structure_id, ch->accessToken())) {
+        const EveLocation loc = resolve_location(structure_id, QLatin1String("structure"), ch->accessToken());
+        if (!loc.isEmpty()) {
             if (QThread::currentThread()->isInterruptionRequested()) return 0;
-            QString structure_name = reply.value(QLatin1String("name")).toString();
-            ch->setCurrentStructureName(structure_name);
+            ch->setCurrentStructureName(loc.name());
         } else {
-            qCWarning(logRefresher) << "Resolve structure name failed!";
+            qCWarning(logRefresher) << "Resolve structure name failed!" << structure_id;
         }
     } else if ((station_id > 0) && (prev_station_id != station_id)) {
         // resolve station name
