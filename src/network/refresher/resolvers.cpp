@@ -23,6 +23,17 @@ EveLocation PeriodicalRefresherWorker::send_location_request(quint64 locationId,
 {
     EveLocation loc;
     bool success = false;
+    bool is_forbidden = false;
+    static QSet<quint64> forbiddenStructures;
+    static EveLocation forbiddenStructure;
+    if (forbiddenStructure.locationId() == 0) {
+        // init static var once
+        forbiddenStructure.setLocationId(1);
+        forbiddenStructure.setName(QStringLiteral("Forbidden structure"));
+        forbiddenStructure.setType(locationType);
+        forbiddenStructure.setTypeId(35832); // 35832 = Astrahus
+    }
+
     if (locationType == QLatin1String("station")) {
         QJsonObject jstation;
         if (m_api->get_universe_station(jstation, locationId)) {
@@ -30,10 +41,22 @@ EveLocation PeriodicalRefresherWorker::send_location_request(quint64 locationId,
             success = true;
         }
     } else if (locationType == QLatin1String("structure")) {
+        // check maybe it is already known as forbidden
+        if (forbiddenStructures.contains(locationId)) {
+            qCDebug(logRefresher) << "   already forbidden citadel:" << locationId;
+            return forbiddenStructure;
+        }
         QJsonObject jstructure;
-        if (m_api->get_universe_structure(jstructure, locationId, accessToken)) {
+        if (m_api->get_universe_structure(jstructure, locationId, accessToken, &is_forbidden)) {
             loc = EveLocation::fromJson(jstructure);
             success = true;
+        } else {
+            if (is_forbidden) {
+                // add structure to the static list of forbidden structures
+                forbiddenStructures.insert(locationId);
+                qCDebug(logRefresher) << "   new forbidden citadel:" << locationId;
+                return forbiddenStructure;
+            }
         }
     }
     if (success) {
@@ -41,6 +64,12 @@ EveLocation PeriodicalRefresherWorker::send_location_request(quint64 locationId,
         loc.setLocationId(locationId);
         loc.setType(locationType);
     }
+
+//    if (!success && (locationType == QLatin1String("structure"))) {
+//        // forbidden structure?
+//        qCDebug(logRefresher) << "  forbidden citadel:" << locationId;
+//    }
+
     return loc;
 }
 
