@@ -93,7 +93,7 @@ public:
     bool get_universe_races(QJsonArray &replyArr);
     bool get_universe_region(QJsonObject &reply, quint64 region_id);
     bool get_universe_station(QJsonObject &reply, quint64 station_id);
-    bool get_universe_structure(QJsonObject &reply, quint64 structure_id, const QByteArray &access_token);
+    bool get_universe_structure(QJsonObject &reply, quint64 structure_id, const QByteArray &access_token, bool *is_forbidden = nullptr);
     bool get_universe_system(QJsonObject &reply, quint64 ss_id);
     bool get_universe_typeid(QJsonObject &reply, quint64 type_id);
 

@@ -1090,7 +1090,7 @@ bool EveApi::get_universe_station(QJsonObject &reply, quint64 station_id)
 }
 
 
-bool EveApi::get_universe_structure(QJsonObject &reply, quint64 structure_id, const QByteArray &access_token)
+bool EveApi::get_universe_structure(QJsonObject &reply, quint64 structure_id, const QByteArray &access_token, bool *is_forbidden)
 {
     QJsonDocument jdoc;
     int reply_http_status = 0; // √
@@ -1098,6 +1098,10 @@ bool EveApi::get_universe_structure(QJsonObject &reply, quint64 structure_id, co
     bool req_ok = this->send_general_esi_request_json(
                 EsiReqType::GET, url, QUrlQuery(), QByteArray(), access_token,
                 reply_http_status, jdoc);
+    // special check for forbidden structure
+    if (reply_http_status == 403) {
+        if (is_forbidden) *is_forbidden = true;
+    }
     if (!req_ok || (reply_http_status != 200)) return false;
     if (!jdoc.isObject()) return false;
     reply = jdoc.object();
@@ -1112,6 +1116,7 @@ bool EveApi::get_universe_structure(QJsonObject &reply, quint64 structure_id, co
      *      "z": 107567112590
      *    }
      * } */
+    if (is_forbidden) *is_forbidden = false;
     return true;
 }
 
