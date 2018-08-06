@@ -28,6 +28,7 @@ int PeriodicalRefresherWorker::refresh_assets(Character *ch)
     }
 
     CharacterAssetsModel assetsModel;
+    CharacterAssetsLocationsModel assetsLocationsModel;
     Db *db = globalAppDatabaseInstance();
 
     QJsonArray replyArr;
@@ -139,7 +140,11 @@ int PeriodicalRefresherWorker::refresh_assets(Character *ch)
             }
         }
 
+        assetsLocationsModel.fillLocationsFromAssets(assetsModel.internalData());
+
         ch->setAssetsModel(assetsModel);
+        ch->setAssetsLocations(assetsLocationsModel);
+
         num_changes++;
     }
 

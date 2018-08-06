@@ -212,7 +212,7 @@ QVariant EM::CharacterAssetsLocationsModel::data(const QModelIndex &index, int r
     return ret;
 }
 
-void EM::CharacterAssetsLocationsModel::autoFillModelFromAssets(const QVector<EM::AssetEntry> &assets)
+void EM::CharacterAssetsLocationsModel::fillLocationsFromAssets(const QVector<EM::AssetEntry> &assets)
 {
     beginResetModel();
     m_data.clear();

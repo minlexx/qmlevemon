@@ -111,7 +111,7 @@ class Character: public QObject
     Q_PROPERTY(QObject*   walletTransactions       READ walletTransactionsObj    NOTIFY walletTransactionsChanged)
     // assets
     Q_PROPERTY(QObject*   assets                   READ assetsModelObj           NOTIFY assetsModelChanged)
-    Q_PROPERTY(QObject*   assetsLocations          READ assetsLocationsObj       NOTIFY assetsModelChanged)
+    Q_PROPERTY(QObject*   assetsLocations          READ assetsLocationsObj       NOTIFY assetsLocationsChanged)
 
 public:
     Character(QObject *parent = nullptr);
@@ -329,6 +329,9 @@ public:
     const CharacterAssetsModel *assetsModel() const;
     void setAssetsModel(const CharacterAssetsModel &mdl);
     QObject *assetsLocationsObj();
+    CharacterAssetsLocationsModel *assetsLocations();
+    const CharacterAssetsLocationsModel *assetsLocations() const;
+    void setAssetsLocations(const CharacterAssetsLocationsModel &mdl);
 
     // auth info
     EveOAuthTokens getAuthTokens() const;
@@ -419,6 +422,7 @@ Q_SIGNALS:
     void walletTransactionsChanged();
     // assets
     void assetsModelChanged();
+    void assetsLocationsChanged();
 
     // for manual emitting, not for QML properties
 Q_SIGNALS:

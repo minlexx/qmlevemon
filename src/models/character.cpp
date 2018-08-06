@@ -107,6 +107,7 @@ Character& Character::operator=(const Character& other)
     setWalletTransactions(other.m_walletTransactions);
     // assets
     setAssetsModel(other.m_assetsModel);
+    setAssetsLocations(other.m_assetsLocations);
     // auth info
     m_tokens = other.m_tokens;
     // last update date-times
@@ -185,6 +186,7 @@ Character& Character::operator=(Character&& other)
     setWalletTransactions(std::move(other.m_walletTransactions));
     // assets
     setAssetsModel(std::move(other.m_assetsModel));
+    setAssetsLocations(std::move(other.m_assetsLocations));
     // auth info
     m_tokens = std::move(other.m_tokens);
     // last update date-times
@@ -841,17 +843,20 @@ void Character::setAssetsModel(const CharacterAssetsModel &mdl)
 {
     if (m_assetsModel != mdl) {
         m_assetsModel = mdl;
-        // auto-recalc assets locations
-        m_assetsLocations.autoFillModelFromAssets(m_assetsModel.internalData());
-        qCDebug(logCharacter) << Q_FUNC_INFO << " locations rowCount:" << m_assetsLocations.rowCount();
         Q_EMIT assetsModelChanged();
     }
 }
 
-QObject *Character::assetsLocationsObj() {
-    qCDebug(logCharacter) << "assetsLocationsObj() returning model with rowCount:"
-                          << m_assetsLocations.rowCount();
-    return &m_assetsLocations;
+QObject *Character::assetsLocationsObj() { return &m_assetsLocations; }
+CharacterAssetsLocationsModel *Character::assetsLocations() { return &m_assetsLocations; }
+const CharacterAssetsLocationsModel *Character::assetsLocations() const { return &m_assetsLocations; }
+
+void Character::setAssetsLocations(const CharacterAssetsLocationsModel &mdl)
+{
+    if (m_assetsLocations != mdl) {
+        m_assetsLocations = mdl;
+        Q_EMIT assetsLocationsChanged();
+    }
 }
 
 // auth info
@@ -1023,7 +1028,7 @@ void Character::calcSkillQueue()
 
 
 // increase version number when savedata format changes
-static const int SAVEDATA_VERSION = 29;
+static const int SAVEDATA_VERSION = 30;
 
 
 QDataStream& operator<<(QDataStream &stream, const EM::Character &character)
@@ -1102,6 +1107,8 @@ QDataStream& operator<<(QDataStream &stream, const EM::Character &character)
     stream << character.m_walletTransactions;
     // since savedata version 29
     stream << character.m_assetsModel;
+    // since v 30
+    stream << character.m_assetsLocations;
     return stream;
 }
 
@@ -1193,6 +1200,9 @@ QDataStream& operator>>(QDataStream &stream, EM::Character &character)
     // assets (since v29)
     if (savedata_version >= 29) {
         stream >> character.m_assetsModel;
+    }
+    if (savedata_version >= 30) {
+        stream >> character.m_assetsLocations;
     }
     //
     // end of reading, some final calculations

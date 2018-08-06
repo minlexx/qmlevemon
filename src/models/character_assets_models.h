@@ -112,7 +112,7 @@ public:
     QHash<int,QByteArray> roleNames() const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
-    void autoFillModelFromAssets(const QVector<AssetEntry> &assets);
+    void fillLocationsFromAssets(const QVector<AssetEntry> &assets);
 };
 
 
