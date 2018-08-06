@@ -27,21 +27,8 @@ Rectangle {
             height: lblLocName.height + AppStyle.marginSmall * 2
             Label {
                 id: lblLocName
-                text: model.locationId + ": " + model.locationName
-                Rectangle {
-                    anchors.fill: parent
-                    border.color: "red"
-                    border.width: 1
-                }
+                text: model.locationName + " - " + model.count + " item (s)"
             }
-
-            Component.onCompleted: {
-                console.log("lvAssetsLocations delegate")
-            }
-        }
-
-        onModelChanged: {
-            console.log("lvAssetsLocations model changed: " + model.rowCount());
         }
     }
 }
