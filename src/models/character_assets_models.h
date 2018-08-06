@@ -85,11 +85,45 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 };
 
+
+class AssetLocationEntry {
+public:
+    AssetLocationEntry() = default;
+    AssetLocationEntry(const AssetLocationEntry &) = default;
+    AssetLocationEntry(AssetLocationEntry &&) = default;
+    ~AssetLocationEntry() = default;
+    AssetLocationEntry &operator=(const AssetLocationEntry &) = default;
+    AssetLocationEntry &operator=(AssetLocationEntry &&) = default;
+    bool operator==(const AssetLocationEntry &o) const;
+    bool operator!=(const AssetLocationEntry &o) const;
+
+    quint64 locationId = 0;
+    QString locationName;
+    quint64 count = 0;
+};
+
+
+class CharacterAssetsLocationsModel: public CommonModelBase<AssetLocationEntry>
+{
+    Q_OBJECT
+    enum Roles { LocationId, LocationName, Count };
+public:
+    CharacterAssetsLocationsModel(QObject *parent = nullptr);
+    QHash<int,QByteArray> roleNames() const override;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+
+    void autoFillModelFromAssets(const QVector<AssetEntry> &assets);
+};
+
+
 } // namespace EM
 
 
 QDataStream &operator<<(QDataStream &stream, const EM::AssetEntry &o);
 QDataStream &operator>>(QDataStream &stream, EM::AssetEntry &o);
+
+QDataStream &operator<<(QDataStream &stream, const EM::AssetLocationEntry &o);
+QDataStream &operator>>(QDataStream &stream, EM::AssetLocationEntry &o);
 
 
 #endif // CHARACTER_ASSETS_MODELS_H

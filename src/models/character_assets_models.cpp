@@ -174,6 +174,68 @@ QVariant EM::CharacterAssetsModel::data(const QModelIndex &index, int role) cons
 }
 
 
+bool EM::AssetLocationEntry::operator==(const EM::AssetLocationEntry &o) const
+{
+    return locationId == o.locationId;
+}
+
+bool EM::AssetLocationEntry::operator!=(const EM::AssetLocationEntry &o) const
+{
+    return !((*this) == o);
+}
+
+EM::CharacterAssetsLocationsModel::CharacterAssetsLocationsModel(QObject *parent)
+    : CommonModelBase<AssetLocationEntry>(parent)
+{
+}
+
+QHash<int, QByteArray> EM::CharacterAssetsLocationsModel::roleNames() const
+{
+    static QHash<int, QByteArray> roles = {
+        {LocationId,   QByteArrayLiteral("locationId")},
+        {LocationName, QByteArrayLiteral("locationName")},
+        {Count,        QByteArrayLiteral("count")},
+    };
+    return roles;
+}
+
+QVariant EM::CharacterAssetsLocationsModel::data(const QModelIndex &index, int role) const
+{
+    QVariant ret;
+    const AssetLocationEntry *entry = validateIndexAndGetData(index);
+    if (!entry) return ret;
+    switch (role) {
+    case Roles::LocationId:   ret = entry->locationId; break;
+    case Roles::LocationName: ret = entry->locationName; break;
+    case Roles::Count:        ret = entry->count; break;
+    }
+    return ret;
+}
+
+void EM::CharacterAssetsLocationsModel::autoFillModelFromAssets(const QVector<EM::AssetEntry> &assets)
+{
+    beginResetModel();
+    m_data.clear();
+    for (const EM::AssetEntry &asset: assets) {
+        if (asset.location_type == AssetLocationType::Station) {
+            EM::AssetLocationEntry aloc;
+            aloc.locationId = asset.location_id;
+            int idx = m_data.indexOf(aloc);
+            if (idx == -1) {
+                // new item
+                aloc.locationName = asset.location_name;
+                aloc.count = 1;
+                m_data.push_back(std::move(aloc));
+            } else {
+                // existing item, increase count
+                m_data[idx].count++;
+            }
+        }
+    }
+    endResetModel();
+}
+
+
 QDataStream &operator<<(QDataStream &stream, const EM::AssetEntry &o)
 {
     stream << o.item_id;
@@ -206,6 +268,24 @@ QDataStream &operator>>(QDataStream &stream, EM::AssetEntry &o)
     stream >> o.location_name;
     return stream;
 }
+
+
+QDataStream &operator<<(QDataStream &stream, const EM::AssetLocationEntry &o)
+{
+    stream << o.locationId;
+    stream << o.locationName;
+    stream << o.count;
+    return stream;
+}
+
+QDataStream &operator>>(QDataStream &stream, EM::AssetLocationEntry &o)
+{
+    stream >> o.locationId;
+    stream >> o.locationName;
+    stream >> o.count;
+    return stream;
+}
+
 
 bool EM::isAssetFitted(EM::AssetLocationFlag fl)
 {
