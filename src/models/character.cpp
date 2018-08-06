@@ -841,8 +841,17 @@ void Character::setAssetsModel(const CharacterAssetsModel &mdl)
 {
     if (m_assetsModel != mdl) {
         m_assetsModel = mdl;
+        // auto-recalc assets locations
+        m_assetsLocations.autoFillModelFromAssets(m_assetsModel.internalData());
+        qCDebug(logCharacter) << Q_FUNC_INFO << " locations rowCount:" << m_assetsLocations.rowCount();
         Q_EMIT assetsModelChanged();
     }
+}
+
+QObject *Character::assetsLocationsObj() {
+    qCDebug(logCharacter) << "assetsLocationsObj() returning model with rowCount:"
+                          << m_assetsLocations.rowCount();
+    return &m_assetsLocations;
 }
 
 // auth info

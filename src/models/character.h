@@ -111,6 +111,7 @@ class Character: public QObject
     Q_PROPERTY(QObject*   walletTransactions       READ walletTransactionsObj    NOTIFY walletTransactionsChanged)
     // assets
     Q_PROPERTY(QObject*   assets                   READ assetsModelObj           NOTIFY assetsModelChanged)
+    Q_PROPERTY(QObject*   assetsLocations          READ assetsLocationsObj       NOTIFY assetsModelChanged)
 
 public:
     Character(QObject *parent = nullptr);
@@ -327,6 +328,7 @@ public:
     CharacterAssetsModel *assetsModel();
     const CharacterAssetsModel *assetsModel() const;
     void setAssetsModel(const CharacterAssetsModel &mdl);
+    QObject *assetsLocationsObj();
 
     // auth info
     EveOAuthTokens getAuthTokens() const;
@@ -506,6 +508,7 @@ protected:
 
     // assets
     CharacterAssetsModel m_assetsModel;
+    CharacterAssetsLocationsModel m_assetsLocations;
 
     // auth info
     EveOAuthTokens m_tokens;
