@@ -25,13 +25,14 @@ EveLocation PeriodicalRefresherWorker::send_location_request(quint64 locationId,
     bool success = false;
     bool is_forbidden = false;
     static QSet<quint64> forbiddenStructures;
+    // fake structure to return
     static EveLocation forbiddenStructure;
     if (forbiddenStructure.locationId() == 0) {
-        // init static var once
         forbiddenStructure.setLocationId(1);
-        forbiddenStructure.setName(QStringLiteral("Forbidden structure"));
+        forbiddenStructure.setName(QLatin1String("Forbidden citadel"));
         forbiddenStructure.setType(locationType);
         forbiddenStructure.setTypeId(35832); // 35832 = Astrahus
+        forbiddenStructure.setSolarSystemId(1); // should be non-zero for isEmpty() to return false
     }
 
     if (locationType == QLatin1String("station")) {
@@ -44,6 +45,8 @@ EveLocation PeriodicalRefresherWorker::send_location_request(quint64 locationId,
         // check maybe it is already known as forbidden
         if (forbiddenStructures.contains(locationId)) {
             qCDebug(logRefresher) << "   already forbidden citadel:" << locationId;
+            forbiddenStructure.setName(QLatin1String("Forbidden citadel ") + QString::number(locationId));
+            forbiddenStructure.setLocationId(locationId);
             return forbiddenStructure;
         }
         QJsonObject jstructure;
@@ -55,6 +58,8 @@ EveLocation PeriodicalRefresherWorker::send_location_request(quint64 locationId,
                 // add structure to the static list of forbidden structures
                 forbiddenStructures.insert(locationId);
                 qCDebug(logRefresher) << "   new forbidden citadel:" << locationId;
+                forbiddenStructure.setName(QLatin1String("Forbidden citadel ") + QString::number(locationId));
+                forbiddenStructure.setLocationId(locationId);
                 return forbiddenStructure;
             }
         }
