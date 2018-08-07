@@ -3,6 +3,7 @@
 #include <QJsonValue>
 #include <QVariant>
 #include <QDataStream>
+#include <algorithm>
 
 
 EM::AssetLocationType EM::parseLocationType(const QString &typ)
@@ -257,7 +258,12 @@ void EM::CharacterAssetsLocationsModel::fillLocationsFromAssets(const QVector<EM
     beginResetModel();
     m_data.clear();
     for (const EM::AssetEntry &asset: assets) {
-        if (asset.location_type == AssetLocationType::Station) {
+        bool is_in_station = false;
+        bool is_in_citadel = false;
+        is_in_station = (asset.location_type == AssetLocationType::Station);
+        is_in_citadel = (asset.location_type == AssetLocationType::Other
+                         && asset.location_flag == AssetLocationFlag::Hangar);
+        if (is_in_station || is_in_citadel) {
             EM::AssetLocationEntry aloc;
             aloc.locationId = asset.location_id;
             int idx = m_data.indexOf(aloc);
