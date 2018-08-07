@@ -136,7 +136,7 @@ Rectangle {
                 visible: skillListItem.ListView.isCurrentItem
                 width: listViewSkills.width
                 height: skillsInGroupColumn.height
-                anchors. top: skillListTitleRect.bottom
+                anchors.top: skillListTitleRect.bottom
                 color: AppStyle.bgColor
 
                 Column {
