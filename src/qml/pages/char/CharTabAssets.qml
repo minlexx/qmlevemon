@@ -23,11 +23,68 @@ Rectangle {
         clip: true
 
         delegate: ItemDelegate {
+            id: headerDelegate
             width: lvAssetsLocations.width
-            height: lblLocName.height + AppStyle.marginSmall * 2
-            Label {
-                id: lblLocName
-                text: model.locationName + " - " + model.count + " item (s)"
+            height: ListView.isCurrentItem ? delegateHeaderRect.height + delegateContentRect.height
+                                           : delegateHeaderRect.height
+
+            Rectangle {
+                id: delegateHeaderRect
+                width: parent.width
+                height: lblLocName.height
+                border {
+                    width: 1
+                    color: "white"
+                }
+                color: headerDelegate.ListView.isCurrentItem ? AppStyle.rectBgHighlightColor
+                                                             : AppStyle.textLightColor
+                Label {
+                    id: lblLocName
+                    // height is bigger on android
+                    height: evemonapp.isDesktopPlatform ? implicitHeight + 2*AppStyle.marginSmall
+                                                        : implicitHeight + 2*AppStyle.marginNormal
+                    anchors {
+                        top: parent.top
+                        left: parent.left
+                        leftMargin: AppStyle.marginNormal
+                    }
+                    text: model.locationName + " - " + model.count + " item (s)"
+                    maximumLineCount: 1
+                    font.pointSize: AppStyle.textSizeH3
+                    font.bold: true
+                    verticalAlignment: Text.AlignVCenter
+                    color: headerDelegate.ListView.isCurrentItem ? AppStyle.textDefaultColor
+                                                                 : AppStyle.textInvertedColor
+                }
+
+                MouseArea {
+                    id: delegateHeaderRectMa1
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: containsMouse ? Qt.PointingHandCursor : Qt.ArrowCursor
+
+                    onClicked: {
+                        var curIdx = lvAssetsLocations.currentIndex
+                        var clickedIndex = index;
+                        if (clickedIndex === curIdx) {
+                            // the same item is clicked twice, collapse all
+                            lvAssetsLocations.currentIndex = -1;
+                        } else {
+                            // activate different item
+                            //skillsInGroupRepeater.model = curChar.getSkillsForGroupId(model.groupId);
+                            lvAssetsLocations.currentIndex = clickedIndex;
+                        }
+                    }
+                }
+            }
+
+            Rectangle {
+                id: delegateContentRect
+                visible: headerDelegate.ListView.isCurrentItem
+                width: lvAssetsLocations.width
+                height: 100 // skillsInGroupColumn.height
+                anchors.top: delegateHeaderRect.bottom
+                color: AppStyle.bgColor
             }
         }
     }
