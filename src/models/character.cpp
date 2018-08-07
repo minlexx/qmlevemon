@@ -859,6 +859,16 @@ void Character::setAssetsLocations(const CharacterAssetsLocationsModel &mdl)
     }
 }
 
+QObject *Character::filterAssetsByLocation(quint64 locationId)
+{
+    if (!m_assetsFilteredModel) {
+        m_assetsFilteredModel = new CharacterAssetsFilteredModel(this);
+        m_assetsFilteredModel->setSourceModel(&m_assetsModel);
+    }
+    m_assetsFilteredModel->setFilterLocationId(locationId);
+    return m_assetsFilteredModel;
+}
+
 // auth info
 EveOAuthTokens Character::getAuthTokens() const { return m_tokens; }
 void Character::setAuthTokens(const EveOAuthTokens& tokens) { m_tokens = tokens; }

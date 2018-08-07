@@ -332,6 +332,7 @@ public:
     CharacterAssetsLocationsModel *assetsLocations();
     const CharacterAssetsLocationsModel *assetsLocations() const;
     void setAssetsLocations(const CharacterAssetsLocationsModel &mdl);
+    Q_INVOKABLE QObject *filterAssetsByLocation(quint64 locationId);
 
     // auth info
     EveOAuthTokens getAuthTokens() const;
@@ -513,6 +514,7 @@ protected:
     // assets
     CharacterAssetsModel m_assetsModel;
     CharacterAssetsLocationsModel m_assetsLocations;
+    CharacterAssetsFilteredModel *m_assetsFilteredModel = nullptr;
 
     // auth info
     EveOAuthTokens m_tokens;
