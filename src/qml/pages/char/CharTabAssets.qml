@@ -71,7 +71,7 @@ Rectangle {
                             lvAssetsLocations.currentIndex = -1;
                         } else {
                             // activate different item
-                            //skillsInGroupRepeater.model = curChar.getSkillsForGroupId(model.groupId);
+                            delegateContentRepeater.model = curChar.filterAssetsByLocation(model.locationId);
                             lvAssetsLocations.currentIndex = clickedIndex;
                         }
                     }
@@ -82,9 +82,40 @@ Rectangle {
                 id: delegateContentRect
                 visible: headerDelegate.ListView.isCurrentItem
                 width: lvAssetsLocations.width
-                height: 100 // skillsInGroupColumn.height
+                height: delegateContentColumn.height
                 anchors.top: delegateHeaderRect.bottom
                 color: AppStyle.bgColor
+
+                Column {
+                    id: delegateContentColumn
+                    width: parent.width
+
+                    Repeater {
+                        id: delegateContentRepeater
+                        model: null
+                        delegate: Rectangle {
+                            property int index
+                            width: delegateContentColumn.width
+                            height: txtAssetName.height
+                            color: index % 2 == 0 ? AppStyle.bgColor : AppStyle.bgLightColor
+
+                            Text {
+                                id: txtAssetName
+                                anchors {
+                                    top: parent.top
+                                    left: parent.left
+                                    leftMargin: AppStyle.marginNormal
+                                }
+                                height: implicitHeight + AppStyle.marginSmall * 2
+                                verticalAlignment: Text.AlignVCenter
+                                font.pointSize: AppStyle.textSizeH4
+                                font.family: AppStyle.fontFamily
+                                text: model.quantity + " x " + model.typeName
+                            }
+                        }
+                        onItemAdded: item.index = index;
+                    }
+                }
             }
         }
     }
