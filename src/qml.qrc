@@ -10,6 +10,7 @@
         <file>qml/custom_controls/EMPopupMenuItem.qml</file>
         <file>qml/custom_controls/HamburgerIcon.qml</file>
         <file>qml/custom_controls/HamburgerMenuBackIcon.qml</file>
+        <file>qml/custom_controls/HeaderToolbar.qml</file>
         <file>qml/custom_controls/InlineMessage.qml</file>
         <file>qml/custom_controls/MailLabelRect.qml</file>
         <file>qml/custom_controls/SkillLevelIndicatorRect.qml</file>
@@ -29,6 +30,5 @@
         <file>qml/pages/Settings.qml</file>
         <file>qml/pages/TestPage.qml</file>
         <file>qml/utils.js</file>
-        <file>qml/custom_controls/HeaderToolbar.qml</file>
     </qresource>
 </RCC>
