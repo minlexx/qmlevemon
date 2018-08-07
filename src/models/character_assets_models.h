@@ -2,6 +2,7 @@
 #define CHARACTER_ASSETS_MODELS_H
 
 #include <QObject>
+#include <QSortFilterProxyModel>
 #include "common_model_base.h"
 
 QT_FORWARD_DECLARE_CLASS(QJsonObject)
@@ -83,6 +84,23 @@ public:
     CharacterAssetsModel(QObject *parent = nullptr);
     QHash<int,QByteArray> roleNames() const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+};
+
+
+class CharacterAssetsFilteredModel: public QSortFilterProxyModel
+{
+    Q_OBJECT
+public:
+    explicit CharacterAssetsFilteredModel(QObject *parent = nullptr);
+
+    void setFilterLocationId(quint64 locationId);
+    quint64 setFilterLocationId() const;
+
+protected:
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+
+private:
+    quint64 m_filterLocationId = 0;
 };
 
 

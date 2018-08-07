@@ -174,6 +174,46 @@ QVariant EM::CharacterAssetsModel::data(const QModelIndex &index, int role) cons
 }
 
 
+
+EM::CharacterAssetsFilteredModel::CharacterAssetsFilteredModel(QObject *parent)
+    : QSortFilterProxyModel(parent)
+{
+}
+
+void EM::CharacterAssetsFilteredModel::setFilterLocationId(quint64 locationId)
+{
+    m_filterLocationId = locationId;
+    invalidateFilter();
+}
+
+quint64 EM::CharacterAssetsFilteredModel::setFilterLocationId() const
+{
+    return m_filterLocationId;
+}
+
+bool EM::CharacterAssetsFilteredModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+{
+    if (m_filterLocationId == 0) {
+        // no filter - return all
+        return true;
+    }
+    const CharacterAssetsModel *parentModel = qobject_cast<const CharacterAssetsModel *>(sourceModel());
+    if (Q_UNLIKELY(!parentModel)) {
+        // somehow our source model is not CharacterAssetsModel instance
+        return true; // blindly accept, should never happen
+    }
+    const QModelIndex sourceIndex = parentModel->index(sourceRow, 0, sourceParent);
+    const QVector<AssetEntry> &allAssets = parentModel->internalData();
+    const AssetEntry &sourceAsset = allAssets.at(sourceIndex.row());
+    // accept only specific location id
+    if (sourceAsset.location_id == m_filterLocationId) {
+        return true;
+    }
+    return false;
+}
+
+
+
 bool EM::AssetLocationEntry::operator==(const EM::AssetLocationEntry &o) const
 {
     return locationId == o.locationId;
