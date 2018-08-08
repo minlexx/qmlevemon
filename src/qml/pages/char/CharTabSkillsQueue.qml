@@ -13,11 +13,18 @@ Rectangle {
 
     ListView {
         id: lvSkillQueue
-        anchors.fill: parent
-        anchors.margins: 1
+        anchors {
+            top: parent.top
+            left: parent.left
+            right: parent.right
+            bottom: parent.bottom
+            bottomMargin: bottomStatusItem.height
+            margins: 1
+        }
         model: curChar.skillQueueModel
         currentIndex: -1
         interactive: true
+        clip: true
 
         delegate: SkillProgressBar {
             id: skillPB
@@ -53,5 +60,32 @@ Rectangle {
         }
 
         ScrollIndicator.vertical: ScrollIndicator { }
+    }
+
+    Item {
+        id: bottomStatusItem
+        anchors {
+            bottom: parent.bottom
+            left: parent.left
+            right: parent.right
+        }
+        height: lblTotalSkillQueueStats.implicitHeight + AppStyle.marginSmall*2
+        Label {
+            id: lblTotalSkillQueueStats
+            anchors {
+                bottom: parent.bottom
+                bottomMargin: AppStyle.marginSmall
+                left: parent.left
+                leftMargin: AppStyle.marginNormal
+            }
+            color: AppStyle.textLightColor
+            font.family: AppStyle.fontFamily
+            font.pointSize: AppStyle.textSizeH4
+            font.italic: true
+            text: qsTr("Total time: ") + curChar.skillQueueTimeLeft()
+                  + "  (" + Qt.formatDateTime(curChar.skillQueueFinishDateTime()) + ")"
+        }
+
+        Component.onCompleted: console.log("height = ", height)
     }
 }
