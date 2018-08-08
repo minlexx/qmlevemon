@@ -99,18 +99,29 @@ Rectangle {
                             height: txtAssetName.height
                             color: index % 2 == 0 ? AppStyle.bgColor : AppStyle.bgLightColor
 
-                            Text {
-                                id: txtAssetName
+                            Row {
                                 anchors {
                                     top: parent.top
                                     left: parent.left
                                     leftMargin: AppStyle.marginNormal
                                 }
-                                height: implicitHeight + AppStyle.marginSmall * 2
-                                verticalAlignment: Text.AlignVCenter
-                                font.pointSize: AppStyle.textSizeH4
-                                font.family: AppStyle.fontFamily
-                                text: model.quantity + " x " + model.typeName
+                                Image {
+                                    id: assetIcon
+                                    source: "image://typeid/" + model.typeId
+                                    sourceSize {
+                                        width: 24
+                                        height: 24
+                                    }
+                                }
+                                Item { width: AppStyle.marginNormal; height: 1 } // spacer item
+                                Text {
+                                    id: txtAssetName
+                                    height: implicitHeight + AppStyle.marginSmall * 2
+                                    verticalAlignment: Text.AlignVCenter
+                                    font.pointSize: AppStyle.textSizeH4
+                                    font.family: AppStyle.fontFamily
+                                    text: model.typeName + " x " + model.quantity
+                                }
                             }
                         }
                         onItemAdded: item.index = index;
