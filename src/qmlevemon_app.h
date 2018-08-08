@@ -40,6 +40,7 @@ class QmlEvemonApp:
     Q_PROPERTY(bool isPortrait         READ isPortrait         NOTIFY isPortraitChanged)
     Q_PROPERTY(bool isLandscape        READ isLandscape        NOTIFY isLandscapeChanged)
     Q_PROPERTY(QObject* settings       READ settingsO          CONSTANT)
+    Q_PROPERTY(int  lastCharacterTab   READ lastCharacterTab   WRITE setLastCharacterTab NOTIFY lastCharacterTabChanged)
 
 public:
     QmlEvemonApp(int& argc, char **argv);
@@ -92,11 +93,15 @@ public Q_SLOTS:
     // use in tests only. trigger displaying test notification
     void testErrorHandler(const QString &t, const QString &s);
 
+    int  lastCharacterTab() const;
+    void setLastCharacterTab(int t);
+
 Q_SIGNALS:
     void settingsChanged();
     void curCharIdChanged();
     void isPortraitChanged();
     void isLandscapeChanged();
+    void lastCharacterTabChanged();
     void mailReady();
     void messagePopup(const QString &type, const QString &message);
 
@@ -114,6 +119,7 @@ protected:
     PeriodicalRefresher *m_refresher = nullptr;
     quint64 m_curCharId = 0;
     bool m_isPortraitOrientation = true;
+    int m_lastCharacterTab = -1;
 
 };
 

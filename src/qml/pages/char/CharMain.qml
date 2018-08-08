@@ -304,7 +304,7 @@ Rectangle {
             bottomMargin: AppStyle.marginNormal
             rightMargin: AppStyle.marginNormal
         }
-        color: AppStyle.mainColor
+        color: AppStyle.bgLightColor
         clip: true
 
         state: "collapsed"
@@ -454,8 +454,13 @@ Rectangle {
                 if (subInfoTabBar.currentIndex != subInfoSwipeView.currentIndex) {
                     subInfoTabBar.currentIndex = subInfoSwipeView.currentIndex;
                 }
+                evemonapp.lastCharacterTab = subInfoSwipeView.currentIndex;
             }
         }
+    }
+
+    Component.onCompleted: {
+        subInfoSwipeView.currentIndex = evemonapp.lastCharacterTab;
     }
 
     Image {

@@ -333,6 +333,16 @@ void QmlEvemonApp::testErrorHandler(const QString &t, const QString &s)
     }
 }
 
+int QmlEvemonApp::lastCharacterTab() const { return m_lastCharacterTab; }
+
+void QmlEvemonApp::setLastCharacterTab(int t)
+{
+    if (m_lastCharacterTab != t) {
+        m_lastCharacterTab = t;
+        Q_EMIT lastCharacterTabChanged();
+    }
+}
+
 void QmlEvemonApp::onMailBodyDownloaded(quint64 charId, quint64 mailId, const QString &body)
 {
     Q_UNUSED(body)
