@@ -7,6 +7,14 @@
 #include <QDir>
 #include <QDebug>
 
+#ifndef Q_OS_ANDROID
+// classes from QtWidgets are used for tray popup menu
+#include <QMenu>
+#include <QAction>
+#include <QPoint>   // QtCore
+#include <QCursor>  // QtGui
+#endif
+
 #include "db/db_sqlite.h"
 #include "db/portrait_cache.h"
 #include "db/type_icons_provider.h"
@@ -255,6 +263,15 @@ void QmlEvemonApp::onTrayIconClicked()
 void QmlEvemonApp::onTrayIconRightClicked()
 {
     qCDebug(logApp) << Q_FUNC_INFO;
+#ifndef Q_OS_ANDROID
+    QMenu *menu = new QMenu(nullptr);
+    QAction *actShow = menu->addAction(tr("Show window"));
+    QAction *actQuit = menu->addAction(tr("Quit"));
+    QObject::connect(actShow, &QAction::triggered, this, &QmlEvemonApp::onTrayIconClicked);
+    QObject::connect(actQuit, &QAction::triggered, this, &QCoreApplication::quit);
+    menu->exec(QCursor::pos());
+    menu->deleteLater();
+#endif
 }
 
 
