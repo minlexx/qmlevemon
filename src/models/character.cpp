@@ -9,6 +9,7 @@
 
 #include "character.h"
 #include "formulas.h"
+#include "utils/str_utils.h"
 
 
 Q_LOGGING_CATEGORY(logCharacter, "evemon.character")
@@ -546,6 +547,25 @@ bool Character::isSkillQueueEmpty() const
 }
 
 QObject *Character::skillQueueModel() { return static_cast<QObject *>(&m_skillQueueModel); }
+
+QDateTime Character::skillQueueFinishDateTime() const
+{
+    if (isSkillQueueEmpty()) {
+        return QDateTime(); // empty invalid datetime
+    }
+    return m_skillQueue.queueFinishDate();
+}
+
+QString Character::skillQueueTimeLeft() const
+{
+    QString ret = QLatin1String("-");
+    if (!isSkillQueueEmpty()) {
+        const QDateTime finishDt = m_skillQueue.queueFinishDate();
+        const qint64 seconds_left = QDateTime::currentDateTime().secsTo(finishDt);
+        ret = Utils::numberOfSecondsToTimeLeftString(seconds_left);
+    }
+    return ret;
+}
 
 void Character::setAttributeCharisma(int a) {
     if (m_attributeCharisma != a) {

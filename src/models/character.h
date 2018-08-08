@@ -252,6 +252,9 @@ public:
     const CharacterSkillQueue& skillQueue() const;
     bool isSkillQueueEmpty() const;
     QObject *skillQueueModel();
+    // to call from QML
+    Q_INVOKABLE QDateTime skillQueueFinishDateTime() const;
+    Q_INVOKABLE QString skillQueueTimeLeft() const;
 
     // skills and related - setters
     void setAttributeCharisma(int a);
