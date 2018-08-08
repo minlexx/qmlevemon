@@ -85,7 +85,5 @@ Rectangle {
             text: qsTr("Total time: ") + curChar.skillQueueTimeLeft()
                   + "  (" + Qt.formatDateTime(curChar.skillQueueFinishDateTime()) + ")"
         }
-
-        Component.onCompleted: console.log("height = ", height)
     }
 }
