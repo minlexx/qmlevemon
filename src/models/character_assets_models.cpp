@@ -278,6 +278,9 @@ void EM::CharacterAssetsLocationsModel::fillLocationsFromAssets(const QVector<EM
             }
         }
     }
+    std::sort(m_data.begin(), m_data.end(), [](const AssetLocationEntry &a, const AssetLocationEntry &b) -> bool {
+        return a.locationName < b.locationName;
+    });
     endResetModel();
 }
 
