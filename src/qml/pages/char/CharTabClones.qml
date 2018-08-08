@@ -88,7 +88,7 @@ Rectangle {
             Text {
                 anchors.left: parent.left
                 anchors.leftMargin: AppStyle.marginNormal
-                text: qsTr("Other clones:")
+                text: qsTr("Jump clones:")
                 font.bold: true
                 font.pointSize: AppStyle.textSizeH2
             }
