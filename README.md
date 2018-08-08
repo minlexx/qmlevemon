@@ -1,6 +1,8 @@
 # qmlevemon
 Qt5/QML based EVE Online character monitor
 
+![QML EVEMon screenshot](https://eve-wh.space/static/img/qmlevemon_screen.png)
+
 Download last successful build from CI [lastSuccessfulBuild](https://jenkins.minlexx.ru/job/qmlevemon_github/job/master/lastSuccessfulBuild/artifact/) :
 - [Windows x64 build](https://jenkins.minlexx.ru/job/qmlevemon_github/job/master/lastSuccessfulBuild/artifact/build/out/*zip*/out.zip) 30 Mb
 - [Android APK](https://jenkins.minlexx.ru/job/qmlevemon_github/job/master/lastSuccessfulBuild/artifact/build_android/qmlevemon-debug.apk) 12.8 Mb
