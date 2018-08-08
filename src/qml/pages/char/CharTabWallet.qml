@@ -85,9 +85,10 @@ Rectangle {
                 anchors.top: parent.top
                 anchors.leftMargin: AppStyle.marginSmall
                 anchors.topMargin: AppStyle.marginSmall/2
-                width: 140
+                width: evemonapp.isDesktopPlatform ? 140 : 70
                 verticalAlignment: Text.AlignVCenter
                 font.family: "Courier"
+                font.pointSize: evemonapp.isDesktopPlatform ? AppStyle.textSizeH3 : AppStyle.textSizeH4
                 color: AppStyle.textLightColor
                 text: Qt.formatDateTime(model.date, "yyyy.dd.MM hh:mm")
             }
@@ -96,10 +97,11 @@ Rectangle {
                 anchors.left: lblDate.right
                 anchors.top: parent.top
                 anchors.topMargin: AppStyle.marginSmall/2
-                width: 130
+                width: evemonapp.isDesktopPlatform ? 130 : 60
                 height: lblDate.height
                 font.family: "Courier"
                 font.bold: true
+                font.pointSize: evemonapp.isDesktopPlatform ? AppStyle.textSizeH3 : AppStyle.textSizeH4
                 horizontalAlignment: Text.AlignRight
                 color: model.amount >= 0 ? AppStyle.iskPositiveChangeColor : AppStyle.iskNegativeChangeColor
                 text: (model.amount >= 0 ? "+" : "") + Number(model.amount).toLocaleString(Qt.locale(), 'f', 0)
@@ -109,10 +111,11 @@ Rectangle {
                 anchors.left: lblAmount.right
                 anchors.top: parent.top
                 anchors.topMargin: AppStyle.marginSmall/2
-                width: 140
+                width: evemonapp.isDesktopPlatform ? 140 : 70
                 height: lblDate.height
                 font.family: "Courier"
                 font.bold: true
+                font.pointSize: evemonapp.isDesktopPlatform ? AppStyle.textSizeH3 : AppStyle.textSizeH4
                 horizontalAlignment: Text.AlignRight
                 color: AppStyle.textHighlightColor
                 text: Number(model.balance).toLocaleString(Qt.locale(), 'f', 0)
@@ -165,6 +168,7 @@ Rectangle {
                 height: parent.height
                 verticalAlignment: Text.AlignVCenter
                 font.family: "Courier"
+                font.pointSize: evemonapp.isDesktopPlatform ? AppStyle.textSizeH3 : AppStyle.textSizeH4
                 color: AppStyle.textLightColor
                 text: Qt.formatDateTime(model.date, "yyyy.dd.MM hh:mm")
             }
@@ -173,11 +177,12 @@ Rectangle {
                 anchors.left: lblTDate.right
                 anchors.top: parent.top
                 anchors.topMargin: AppStyle.marginSmall/2
-                width: 110
+                width: evemonapp.isDesktopPlatform ? 110 : 60
                 height: parent.height
                 verticalAlignment: Text.AlignVCenter
                 font.family: "Courier"
                 font.bold: true
+                font.pointSize: evemonapp.isDesktopPlatform ? AppStyle.textSizeH3 : AppStyle.textSizeH4
                 horizontalAlignment: Text.AlignRight
                 color: model.isBuy ? AppStyle.iskNegativeChangeColor : AppStyle.iskPositiveChangeColor
                 text: (model.isBuy ? "-" : "+") + Number(model.quantity * model.unitPrice).toLocaleString(Qt.locale(), 'f', 0)
@@ -188,7 +193,7 @@ Rectangle {
                 anchors.top: parent.top
                 anchors.topMargin: AppStyle.marginSmall/2
                 anchors.leftMargin: AppStyle.marginSmall
-                width: 330
+                width: evemonapp.isDesktopPlatform ? 330 : 120
                 height: parent.height
                 verticalAlignment: Text.AlignVCenter
                 font.family: AppStyle.fontFamily

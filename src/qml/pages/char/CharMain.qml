@@ -385,6 +385,8 @@ Rectangle {
                 right: parent.right
                 margins: 2
             }
+            font.family: AppStyle.fontFamily
+            font.pointSize: evemonapp.isDesktopPlatform ? AppStyle.textSizeH3 : AppStyle.textSizeH2
             TabButton { text: qsTr("Skills"); }
             TabButton { text: qsTr("Skills queue"); }
             TabButton { text: qsTr("Clones"); }
