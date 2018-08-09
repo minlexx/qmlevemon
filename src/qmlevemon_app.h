@@ -76,6 +76,7 @@ public Q_SLOTS:
     void onMailBodyDownloaded(quint64 charId, quint64 mailId, const QString &body);
     void onNetworkError(const QString &desc);
     void onSkillCompletedMessage(const QString &msg);
+    void onNewMailsReceivedMessage(const QString &msg);
 
     // called from QML when selcting character page
     void setCurrentCharacter(quint64 char_id);

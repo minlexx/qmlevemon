@@ -392,6 +392,12 @@ void QmlEvemonApp::onSkillCompletedMessage(const QString &msg)
     showNotification(applicationDisplayName() + tr(": Skill completed"), msg);
 }
 
+void QmlEvemonApp::onNewMailsReceivedMessage(const QString &msg)
+{
+    Q_EMIT messagePopup(QStringLiteral("info"), msg);
+    showNotification(applicationDisplayName() + tr(": New mail"), msg);
+}
+
 
 QmlEvemonApp *globalAppInstance()
 {
