@@ -93,6 +93,8 @@ QmlEvemonApp::QmlEvemonApp(int& argc, char **argv):
     CharacterModel *charModel = ModelManager::instance()->characterModel();
     QObject::connect(charModel, &CharacterModel::skillCompletedNotification,
                      this, &QmlEvemonApp::onSkillCompletedMessage);
+    QObject::connect(charModel, &CharacterModel::newMailsReceivedNotification,
+                     this, &QmlEvemonApp::onNewMailsReceivedMessage);
 
     this->initStorageDirectory();
 }
