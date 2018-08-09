@@ -312,6 +312,7 @@ void CharacterModel::updateCharacter(const Character *updatedCharacter)
 
         // actually update character
         (*to_modify) = (*updatedCharacter);  // call lots of operator=()
+        to_modify->checkNewMails();
 
         // save in DB
         Db *db = globalAppDatabaseInstance();
