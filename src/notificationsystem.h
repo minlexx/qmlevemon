@@ -31,7 +31,7 @@ public:
 public Q_SLOTS:
     void setBackend(BackendType backendType);
     void setBackendType(int typ);
-    void notify(const QString &title, const QString &message);
+    void notify(const QString &title, const QString &message, bool forceDisplay = false);
 
 Q_SIGNALS:
     void backendTypeChanged();

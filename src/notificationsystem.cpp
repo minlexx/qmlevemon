@@ -1,5 +1,6 @@
 #include <QLoggingCategory>
 #include <QDebug>
+#include <QSet>
 #include "notificationsystem.h"
 
 Q_LOGGING_CATEGORY(logNotifications, "evemon.notifications")
@@ -104,9 +105,15 @@ public:
     void setBackend(NotificationSystem::BackendType t);
 
 public:
+    static const QString ntfkey(const QString &title, const QString &message);
+    bool wasAlreadyDisplayed(const QString &title, const QString &message);
+    void markAsDisplayed(const QString &title, const QString &message);
+
+public:
     NotificationSystem *owner = nullptr;
     NotificationSystem::BackendType backendType = NotificationSystem::TrayIcon;
     NotificationsBackend *backend = nullptr;
+    QSet<QString> *displayedNotifications = nullptr;
 };
 
 
@@ -114,6 +121,8 @@ NotificationSystemPrivate::~NotificationSystemPrivate()
 {
     delete backend;
     backend = nullptr;
+    delete displayedNotifications;
+    displayedNotifications = nullptr;
 }
 
 
@@ -153,6 +162,32 @@ void NotificationSystemPrivate::setBackend(NotificationSystem::BackendType t)
         QObject::connect(backend, &NotificationsBackend::notificationMessageClicked,
                          owner, &NotificationSystem::notificationMessageClicked);
     }
+}
+
+const QString NotificationSystemPrivate::ntfkey(const QString &title, const QString &message)
+{
+    return title + QLatin1String("///") + message;
+}
+
+
+bool NotificationSystemPrivate::wasAlreadyDisplayed(const QString &title, const QString &message)
+{
+    if (!displayedNotifications) {
+        displayedNotifications = new QSet<QString>();
+    }
+    const QString key = ntfkey(title, message);
+    if (displayedNotifications->contains(key)) {
+        return true;
+    }
+    return false;
+}
+
+void NotificationSystemPrivate::markAsDisplayed(const QString &title, const QString &message)
+{
+    if (!displayedNotifications) {
+        displayedNotifications = new QSet<QString>();
+    }
+    displayedNotifications->insert(ntfkey(title, message));
 }
 
 
@@ -200,11 +235,16 @@ void NotificationSystem::setBackendType(int typ)
 }
 
 
-void NotificationSystem::notify(const QString &title, const QString &message)
+void NotificationSystem::notify(const QString &title, const QString &message, bool forceDisplay)
 {
     Q_D(NotificationSystem);
     if (d->backend) {
+        if (!forceDisplay && d->wasAlreadyDisplayed(title, message)) {
+            // not forced display, and was already shown - skip
+            return;
+        }
         d->backend->notify(title, message);
+        d->markAsDisplayed(title, message);
     }
 }
 
