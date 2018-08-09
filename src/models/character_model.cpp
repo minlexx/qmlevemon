@@ -196,6 +196,8 @@ void CharacterModel::loadCharacters()
             for (Character *character: m_characters) {
                 QObject::connect(character, &Character::skillTrainingCompleted,
                                  this, &CharacterModel::onSkillTrainingCompleted);
+                QObject::connect(character, &Character::newMailReceived,
+                                 this, &CharacterModel::onNewMailReceived);
             }
         }
         // unlock mutex before emitting any signals
@@ -213,6 +215,8 @@ void CharacterModel::addNewCharacter(Character *character)
         m_characters.push_back(character);
         QObject::connect(character, &Character::skillTrainingCompleted,
                          this, &CharacterModel::onSkillTrainingCompleted);
+        QObject::connect(character, &Character::newMailReceived,
+                         this, &CharacterModel::onNewMailReceived);
         Db *db = globalAppDatabaseInstance();
         if (db) {
             db->saveCharacters(m_characters);
@@ -354,15 +358,29 @@ void CharacterModel::onSkillTrainingCompleted(Character *ch, const CharacterSkil
 {
     QMutexLocker lock(&m_mutex);
     const QString msg = QString(tr("%1 lv %2")).arg(skill.skillName()).arg(skill.trainedLevel());
-    if (m_collectedNotifications.contains(ch)) {
-        QString existingString = m_collectedNotifications.value(ch);
+    if (m_collectedNotificationsSkills.contains(ch)) {
+        QString existingString = m_collectedNotificationsSkills.value(ch);
         existingString.append(QLatin1String(", "));
         existingString.append(msg);
-        m_collectedNotifications.insert(ch, existingString);
+        m_collectedNotificationsSkills.insert(ch, existingString);
     } else {
-        m_collectedNotifications.insert(ch, msg);
+        m_collectedNotificationsSkills.insert(ch, msg);
     }
 
+    m_notificationSquashTimer.start();
+    // ^^ wll call squashNotifications() in 3 seconds
+}
+
+void CharacterModel::onNewMailReceived(Character *ch, const QString &mailSubject)
+{
+    Q_UNUSED(mailSubject)
+    QMutexLocker lock(&m_mutex);
+    int newMailsCount = 0;
+    if (m_collectedNotificationsMails.contains(ch)) {
+        newMailsCount = m_collectedNotificationsMails.value(ch);
+    }
+    newMailsCount++;
+    m_collectedNotificationsMails.insert(ch, newMailsCount);
     m_notificationSquashTimer.start();
     // ^^ wll call squashNotifications() in 3 seconds
 }
@@ -370,12 +388,12 @@ void CharacterModel::onSkillTrainingCompleted(Character *ch, const CharacterSkil
 void CharacterModel::squashNotifications()
 {
     QMutexLocker lock(&m_mutex);
-    if (m_collectedNotifications.isEmpty()) {
-        return;
-    }
+    m_notificationSquashTimer.stop();
+
+    // collect learned skills
     QString msg;
-    for (Character *ch: m_collectedNotifications.keys()) {
-        const QString valueSkills = m_collectedNotifications.value(ch);
+    for (Character *ch: m_collectedNotificationsSkills.keys()) {
+        const QString valueSkills = m_collectedNotificationsSkills.value(ch);
         if (!msg.isEmpty()) {
             msg.append(QLatin1String("\n"));
         }
@@ -383,9 +401,26 @@ void CharacterModel::squashNotifications()
         msg.append(tr(" learned "));
         msg.append(valueSkills);
     }
-    m_collectedNotifications.clear();
-    m_notificationSquashTimer.stop();
-    Q_EMIT skillCompletedNotification(msg);
+    m_collectedNotificationsSkills.clear();
+    if (!msg.isEmpty()) {
+        Q_EMIT skillCompletedNotification(msg);
+    }
+
+    // collect new mails
+    msg.clear();
+    for (Character *ch: m_collectedNotificationsMails.keys()) {
+        int newMailsCount = m_collectedNotificationsMails.value(ch);
+        if (!msg.isEmpty()) {
+            msg.append(QLatin1String("\n"));
+        }
+        msg.append(ch->characterName());
+        msg.append(tr(" new mails: "));
+        msg.append(QString::number(newMailsCount));
+    }
+    m_collectedNotificationsMails.clear();
+    if (!msg.isEmpty()) {
+        Q_EMIT newMailsReceivedNotification(msg);
+    }
 }
 
 

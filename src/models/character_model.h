@@ -71,18 +71,21 @@ public Q_SLOTS:
     void updateCharacter(const Character *character);
     void calcCharactersSkillQueue();
     void onSkillTrainingCompleted(Character *ch, const CharacterSkill &skill);
+    void onNewMailReceived(Character *ch, const QString &mailSubject);
     void squashNotifications();
 
 Q_SIGNALS:
     void newCharacterAdded();
     void characterRemoved(quint64 char_id);
     void skillCompletedNotification(const QString &msg);
+    void newMailsReceivedNotification(const QString &msg);
 
 private:
     QHash<int, QByteArray> m_roles;
     QVector<Character *> m_characters;
     QTimer m_notificationSquashTimer;
-    QMap<Character *, QString> m_collectedNotifications;
+    QMap<Character *, QString> m_collectedNotificationsSkills;
+    QMap<Character *, int> m_collectedNotificationsMails;
     mutable QMutex m_mutex;
 };
 
