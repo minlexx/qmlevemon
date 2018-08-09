@@ -431,6 +431,7 @@ Q_SIGNALS:
     // for manual emitting, not for QML properties
 Q_SIGNALS:
     void skillTrainingCompleted(Character *ch, const CharacterSkill &skill);
+    void newMailReceived(Character *ch, const QString &mailSubject);
 
 protected:
     // general info

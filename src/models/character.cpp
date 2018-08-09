@@ -781,6 +781,13 @@ void Character::setMails(const CharacterMails &newMails)
     if (m_mails != newMails) {
         m_mails = newMails;
         Q_EMIT mailsChanged();
+
+        // check for presence of unread mails
+        for (const Mail &m : m_mails.internalData()) {
+            if (!m.is_read) {
+                Q_EMIT newMailReceived(this, m.subject);
+            }
+        }
     }
 }
 
