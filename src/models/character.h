@@ -363,6 +363,7 @@ public Q_SLOTS:
     QList<QObject *> getSkillsForGroupId(quint64 groupId) const;
     void clearSkillQueue();
     void calcSkillQueue();
+    void checkNewMails();
 
 protected:
     void updateSkillGroupsModel();

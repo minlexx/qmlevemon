@@ -781,13 +781,6 @@ void Character::setMails(const CharacterMails &newMails)
     if (m_mails != newMails) {
         m_mails = newMails;
         Q_EMIT mailsChanged();
-
-        // check for presence of unread mails
-        for (const Mail &m : m_mails.internalData()) {
-            if (!m.is_read) {
-                Q_EMIT newMailReceived(this, m.subject);
-            }
-        }
     }
 }
 
@@ -1058,6 +1051,16 @@ void Character::calcSkillQueue()
     Q_EMIT skillQueueChanged(); // NOTE: this needs to be kept here probably,
     // because this is called from setSkillQueue() and it needs to
     // emit a signal
+}
+
+void Character::checkNewMails()
+{
+    // check for presence of unread mails
+    for (const Mail &mail : qAsConst(m_mails).internalData()) {
+        if (!mail.is_read) {
+            Q_EMIT newMailReceived(this, mail.subject);
+        }
+    }
 }
 
 
