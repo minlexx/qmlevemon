@@ -106,6 +106,7 @@ class Character: public QObject
     Q_PROPERTY(QObject*   mailLabels               READ mailLabelsObj            NOTIFY mailLabelsChanged)
     Q_PROPERTY(QObject*   mails                    READ mailsObj                 NOTIFY mailsChanged)
     Q_PROPERTY(QObject*   mailNotifications        READ mailsNotificationsObj    NOTIFY mailNotificationsChanged)
+    Q_PROPERTY(int        unreadNotificationsCount READ unreadNotificationsCount NOTIFY unreadNotificationsCountChanged)
     // wallet history
     Q_PROPERTY(QObject*   walletJournal            READ walletJournalObj         NOTIFY walletJournalChanged)
     Q_PROPERTY(QObject*   walletTransactions       READ walletTransactionsObj    NOTIFY walletTransactionsChanged)
@@ -309,6 +310,7 @@ public:
     CharacterNotifications *mailNotifications();
     const CharacterNotifications *mailNotifications() const;
     void setMailNotifications(const CharacterNotifications &ntfs);
+    int unreadNotificationsCount() const;
 
     const QVector<MailRecipient> &mailingLists() const;
     void setMailingLists(const QVector<MailRecipient> &lists);
@@ -422,6 +424,7 @@ Q_SIGNALS:
     void mailLabelsChanged();
     void mailsChanged();
     void mailNotificationsChanged();
+    void unreadNotificationsCountChanged();
     // wallet history
     void walletJournalChanged();
     void walletTransactionsChanged();

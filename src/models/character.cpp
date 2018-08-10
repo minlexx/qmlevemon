@@ -805,7 +805,19 @@ void Character::setMailNotifications(const CharacterNotifications &ntfs)
     if (m_mailNotifications != ntfs) {
         m_mailNotifications = ntfs;
         Q_EMIT mailNotificationsChanged();
+        Q_EMIT unreadNotificationsCountChanged();
     }
+}
+
+int Character::unreadNotificationsCount() const
+{
+    int cnt = 0;
+    for (const Notification &ntf: m_mailNotifications.internalData()) {
+        if (!ntf.is_read) {
+            cnt++;
+        }
+    }
+    return cnt;
 }
 
 const QVector<MailRecipient> &Character::mailingLists() const { return m_mailingLists; }
