@@ -92,7 +92,9 @@ Rectangle {
                     MailLabelRect {
                         width: parent.width - AppStyle.marginSmall
                         labelId: 0
-                        labelName: " " + qsTr("Notifications")
+                        labelName: " " + qsTr("Notifications") + (curChar.unreadNotificationsCount > 0
+                                                                  ? (" (" + curChar.unreadNotificationsCount + ")")
+                                                                  : "")
                         fontBold: isCurrent
                         fontPointSize: AppStyle.textSizeH2
                         itemIndex: 1000
@@ -205,7 +207,7 @@ Rectangle {
 
                             Label {
                                 text: model.type
-                                font.bold: true
+                                font.bold: !model.isRead
                                 color: AppStyle.textHighlightColor
                             }
 
