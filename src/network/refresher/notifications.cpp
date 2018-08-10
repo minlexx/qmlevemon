@@ -67,7 +67,25 @@ void PeriodicalRefresherWorker::postprocess_notification_text(QString &text, con
         if (!newText.isEmpty()) {
             text = newText;
         }
-    }
+    //} else if (type == QStringLiteral("")) {
+        // allianceID: null
+        // armorPercentage: 100.0
+        // charID: 2113387544
+        // corpLinkData:
+        // - showinfo
+        // - 2
+        // - 98547434
+        // corpName: TitanSaurus
+        // hullPercentage: 100.0
+        // shieldPercentage: 99.99681833350898
+        // solarsystemID: 31001668
+        // structureID: &id001 1022536113035
+        // structureShowInfoData:
+        // - showinfo
+        // - 35832
+        // - *id001
+        // structureTypeID: 35832
+    } //else if () {
 }
 
 
@@ -110,6 +128,7 @@ int PeriodicalRefresherWorker::refresh_notifications(Character *ch)
         ntf.senderType = jobj.value(QLatin1String("sender_type")).toString();
         ntf.timestamp = jobj.value(QLatin1String("timestamp")).toVariant().toDateTime();
         ntf.text = jobj.value(QLatin1String("text")).toString();
+        ntf.is_read = jobj.value(QLatin1String("is_read")).toBool();
 
         // resolve sender
         ntf.senderDisplayName = QString(QLatin1String("%1 / %2")).arg(ntf.senderType).arg(ntf.senderId);
