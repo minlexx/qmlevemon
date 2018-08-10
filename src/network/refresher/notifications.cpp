@@ -130,6 +130,13 @@ int PeriodicalRefresherWorker::refresh_notifications(Character *ch)
         ntf.text = jobj.value(QLatin1String("text")).toString();
         ntf.is_read = jobj.value(QLatin1String("is_read")).toBool();
 
+        // introduce a hack to fix a strange behaviour: somehow kill reports notifications are always
+        // counted as unread in API, so forcefully mark kill reports as read.
+        if ((ntf.notificationType == QStringLiteral("KillReportFinalBlow"))
+                || (ntf.notificationType == QStringLiteral("KillReportVictim"))) {
+            ntf.is_read = true;
+        }
+
         // resolve sender
         ntf.senderDisplayName = QString(QLatin1String("%1 / %2")).arg(ntf.senderType).arg(ntf.senderId);
         if (ntf.senderType == QStringLiteral("corporation")) {
