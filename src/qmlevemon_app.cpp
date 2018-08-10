@@ -264,7 +264,6 @@ void QmlEvemonApp::onTrayIconClicked()
 
 void QmlEvemonApp::onTrayIconRightClicked()
 {
-    qCDebug(logApp) << Q_FUNC_INFO;
 #ifndef Q_OS_ANDROID
     QMenu *menu = new QMenu(nullptr);
     QAction *actShow = menu->addAction(tr("Show window"));
