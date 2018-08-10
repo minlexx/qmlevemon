@@ -45,6 +45,7 @@ class NotificationsTrayIconBackend: public NotificationsBackend
 public:
     NotificationsTrayIconBackend() {
         qCDebug(logNotifications) << "System tray is available:" << QSystemTrayIcon::isSystemTrayAvailable();
+        qCDebug(logNotifications) << "System tray supports messages:" << QSystemTrayIcon::supportsMessages();
         m_icon = QIcon(QLatin1String(":/img/app_icon/64.png"));
         m_trayIcon = new QSystemTrayIcon(m_icon, this);
         m_trayIcon->show();
@@ -55,6 +56,7 @@ public:
     }
 
     void notify(const QString &title, const QString &message) override {
+        qCDebug(logNotifications) << "  tray icon notification:" << title << message;
         m_trayIcon->showMessage(title, message, m_icon);
     }
 
@@ -239,12 +241,12 @@ void NotificationSystem::notify(const QString &title, const QString &message, bo
 {
     Q_D(NotificationSystem);
     if (d->backend) {
-        if (!forceDisplay && d->wasAlreadyDisplayed(title, message)) {
-            // not forced display, and was already shown - skip
-            return;
-        }
+        //if (!forceDisplay && d->wasAlreadyDisplayed(title, message)) {
+        //    // not forced display, and was already shown - skip
+        //    return;
+        //}
         d->backend->notify(title, message);
-        d->markAsDisplayed(title, message);
+        //d->markAsDisplayed(title, message);
     }
 }
 
