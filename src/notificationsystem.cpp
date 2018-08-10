@@ -56,7 +56,7 @@ public:
     }
 
     void notify(const QString &title, const QString &message) override {
-        qCDebug(logNotifications) << "  tray icon notification:" << title << message;
+        // qCDebug(logNotifications) << "  tray icon notification:" << title << message;
         m_trayIcon->showMessage(title, message, m_icon);
     }
 
