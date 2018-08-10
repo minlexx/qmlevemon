@@ -15,6 +15,7 @@ bool Notification::operator==(const Notification &o) const
             && (timestamp == o.timestamp)
             && (text == o.text)
             && (senderDisplayName == o.senderDisplayName)
+            && (is_read == o.is_read)
         )
     {
         return true;
@@ -44,6 +45,7 @@ QHash<int, QByteArray> CharacterNotifications::roleNames() const
         {Role::Timestamp,         QByteArrayLiteral("timestamp")},
         {Role::Text,              QByteArrayLiteral("text")},
         {Role::SenderDisplayName, QByteArrayLiteral("senderDisplayName")},
+        {Role::IsRead,            QByteArrayLiteral("isRead")},
     };
     return roles;
 }
@@ -76,6 +78,9 @@ QVariant CharacterNotifications::data(const QModelIndex &index, int role) const
     case Role::SenderDisplayName:
         ret = ntf->senderDisplayName;
         break;
+    case Role::IsRead:
+        ret = ntf->is_read;
+        break;
     }
     return ret;
 }
@@ -93,6 +98,7 @@ QDataStream &operator<<(QDataStream &stream, const EM::Notification &ntf)
     stream << ntf.timestamp;
     stream << ntf.text;
     stream << ntf.senderDisplayName;
+    stream << ntf.is_read;
     return stream;
 }
 
@@ -105,5 +111,6 @@ QDataStream &operator>>(QDataStream &stream, EM::Notification &ntf)
     stream >> ntf.timestamp;
     stream >> ntf.text;
     stream >> ntf.senderDisplayName;
+    stream >> ntf.is_read;
     return stream;
 }

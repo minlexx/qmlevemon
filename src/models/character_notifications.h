@@ -41,6 +41,7 @@ public:
     QDateTime timestamp;
     QString text;
     QString senderDisplayName;
+    bool is_read = false;
 };
 
 
@@ -49,7 +50,7 @@ class CharacterNotifications: public CommonModelBase<Notification>
     Q_OBJECT
     enum Role {
         Id = Qt::UserRole + 1, Type, SenderId, SenderType, Timestamp, Text,
-        SenderDisplayName
+        SenderDisplayName, IsRead
     };
 public:
     CharacterNotifications(QObject *parent = nullptr);
