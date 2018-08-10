@@ -1061,6 +1061,7 @@ void Character::checkNewMails()
             Q_EMIT newMailReceived(this, mail.subject);
         }
     }
+    // TODO: check for notifications?
 }
 
 
