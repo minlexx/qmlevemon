@@ -241,12 +241,12 @@ void NotificationSystem::notify(const QString &title, const QString &message, bo
 {
     Q_D(NotificationSystem);
     if (d->backend) {
-        //if (!forceDisplay && d->wasAlreadyDisplayed(title, message)) {
-        //    // not forced display, and was already shown - skip
-        //    return;
-        //}
+        if (!forceDisplay && d->wasAlreadyDisplayed(title, message)) {
+            // not forced display, and was already shown - skip
+            return;
+        }
         d->backend->notify(title, message);
-        //d->markAsDisplayed(title, message);
+        d->markAsDisplayed(title, message);
     }
 }
 
