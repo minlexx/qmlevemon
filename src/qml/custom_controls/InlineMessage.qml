@@ -10,8 +10,8 @@ Rectangle {
             width: 1
         }
         color: AppStyle.errorPopupBgColor
-        radius: AppStyle.marginSmall / 2
-        height: messageText.height + AppStyle.marginSmall
+        radius: AppStyle.marginSmall
+        height: (_textSize > closeButtonSize) ? _textSize : (closeButtonSize + AppStyle.marginSmall)
 
         // public properties
         /**
@@ -20,11 +20,16 @@ Rectangle {
          * The default is false.
          */
         property bool showCloseButton: false
+        property int maximumMessagesToShow: 5
+        property int messageFontPointSize: AppStyle.textSizeH4
+        property int closeButtonSize: 17
 
         // private variables
         property int _numMessages: 0
         property string _colorType: "error"
         property string _accumulatedMessage
+
+        property int _textSize: messageText.height + AppStyle.marginSmall
 
         Text {
             id: messageText
@@ -35,7 +40,7 @@ Rectangle {
             color: AppStyle.errorPopupTextColor
             text: "Error text"
             font.family: AppStyle.fontFamily
-            font.pointSize: AppStyle.textSizeH4
+            font.pointSize: messageFontPointSize
         }
 
         Rectangle {
@@ -45,8 +50,8 @@ Rectangle {
             anchors.topMargin: AppStyle.marginSmall / 2
             anchors.rightMargin: AppStyle.marginSmall
 
-            width: 15
-            height: 15
+            width: closeButtonSize
+            height: closeButtonSize
 
             color: "red"
 
@@ -54,6 +59,7 @@ Rectangle {
                 anchors.centerIn: parent
                 color: "white"
                 text: "X"
+                font.bold: true
             }
 
             MouseArea {
@@ -88,14 +94,16 @@ Rectangle {
             _numMessages++;
             if (container.visible) {
                 // already visible and has a message text
-                if (_numMessages <= 5) {
-                    // show only first 5 messages
+                if (_numMessages <= maximumMessagesToShow) {
+                    // show only first N messages
                     _accumulatedMessage += "\n";
                     _accumulatedMessage += msg;
                     messageText.text = _accumulatedMessage;
                 } else {
-                    // more than 5 messages? show messages + " (N more)"
-                    messageText.text = _accumulatedMessage + " (" + _numMessages + " " + qsTr("more") + ")";
+                    // more than N messages? show messages + " (N more)"
+                    messageText.text = _accumulatedMessage + " ("
+                            + (_numMessages - maximumMessagesToShow) + " "
+                            + qsTr("more") + ")";
                 }
 
                 // override rect color for worst case

@@ -40,6 +40,8 @@ ApplicationWindow {
         id: footerMessage
         visible: false
         showCloseButton: true
+        messageFontPointSize: evemonapp.isDesktopPlatform ? AppStyle.textSizeH3 : AppStyle.textSizeH2
+        closeButtonSize: evemonapp.isDesktopPlatform ? 17 : 20
     }
 
     Drawer {
