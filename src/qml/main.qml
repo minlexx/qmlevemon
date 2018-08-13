@@ -69,7 +69,7 @@ ApplicationWindow {
             delegate: ItemDelegate {
                 width: parent.width
                 text: model.title
-                font.pointSize: AppStyle.textSizeH3
+                font.pointSize: evemonapp.isDesktopPlatform ? AppStyle.textSizeH3 : AppStyle.textSizeH2
                 highlighted: ListView.isCurrentItem
                 onClicked: {
                     ListView.currentIndex = index
