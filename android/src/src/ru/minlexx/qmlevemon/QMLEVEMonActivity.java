@@ -21,9 +21,9 @@ public class QMLEVEMonActivity extends org.qtproject.qt5.android.bindings.QtActi
             m_notificationManager = (NotificationManager)m_instance.getSystemService(Context.NOTIFICATION_SERVICE);
             m_builder = new Notification.Builder(m_instance);
             m_builder.setSmallIcon(R.drawable.icon);
-            m_builder.setContentTitle(title);
         }
 
+        m_builder.setContentTitle(title);
         m_builder.setContentText(text);
         m_notificationManager.notify(1, m_builder.build());
     }
