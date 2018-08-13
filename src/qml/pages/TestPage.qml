@@ -81,24 +81,28 @@ Rectangle {
             Button {
                 id: testNotifyButton
                 text: "Test notification"
+                font.pointSize: AppStyle.textSizeH3
                 onClicked: evemonapp.showNotification("QML EVEMon", "Hello from QML!")
             }
 
             Button {
                 id: testErrorPopupButton
                 text: "Test error popup"
+                font.pointSize: AppStyle.textSizeH3
                 onClicked: evemonapp.testErrorHandler("error", "Test error")
             }
 
             Button {
                 id: testInfoPopupButton
                 text: "Test info popup"
+                font.pointSize: AppStyle.textSizeH3
                 onClicked: evemonapp.testErrorHandler("info", "Test info")
             }
 
             Button {
                 id: testWarningPopupButton
                 text: "Test warning popup"
+                font.pointSize: AppStyle.textSizeH3
                 onClicked: evemonapp.testErrorHandler("warning", "Test warning")
             }
         }
