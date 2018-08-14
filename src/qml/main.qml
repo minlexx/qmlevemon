@@ -288,22 +288,16 @@ ApplicationWindow {
         }
     }
 
-    onClosing: {
-        console.log("Application window is closing! close.accepted = ", close.accepted)
-    }
-
-//    onDestroyed: {
-//        console.log("Application window is destroyed!")
+//    onClosing: {
+//        console.log("Application window is closing! close.accepted = ", close.accepted)
 //    }
 
-    onVisibleChanged: {
-        console.log("Application window is visible:", visible)
-    }
-
     onVisibilityChanged: {
-        console.log("Application window onVisibilityChanged:", visibility);
+        // console.log("Application window onVisibilityChanged:", visibility);
         if (evemonapp.isFlatpak) {
-            // when window is closed under flatpak - it is like hidden. But we need to quit
+            // Flatpak specific hack: when window is closed under flatpak - it is like only hidden,
+            // not really destroyed. Event loop continued. But we need to quit app...
+            // Force quit application when its window is hidden under Flatpak.
             if (visibility === Window.Hidden) {
                 Qt.quit();
             }
