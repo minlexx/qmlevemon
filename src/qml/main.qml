@@ -289,7 +289,7 @@ ApplicationWindow {
     }
 
     onClosing: {
-        console.log("Application window is closing!")
+        console.log("Application window is closing! close.accepted = ", close.accepted)
     }
 
 //    onDestroyed: {
