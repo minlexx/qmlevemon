@@ -21,8 +21,8 @@ int main(int argc, char *argv[])
     EM::QmlEvemonApp app(argc, argv);
 #if defined(FLATPAK_BUILD)
     QIcon::setThemeName(QStringLiteral("breeze")); // after qApp is constructed only
+    app.setQuitOnLastWindowClosed(true); // this does not help anyway
 #endif
-    app.setQuitOnLastWindowClosed(true);
     if (!app.initQmlEngine()) {
         return -1;
     }

@@ -1,5 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
+import QtQuick.Window 2.2
 import QtQuick.Layouts 1.3
 import "."
 import "./custom_controls"
@@ -300,6 +301,12 @@ ApplicationWindow {
     }
 
     onVisibilityChanged: {
-        console.log("Application window onVisibilityChanged:", visibility)
+        console.log("Application window onVisibilityChanged:", visibility);
+        if (evemonapp.isFlatpak) {
+            // when window is closed under flatpak - it is like hidden. But we need to quit
+            if (visibility === Window.Hidden) {
+                Qt.quit();
+            }
+        }
     }
 }
