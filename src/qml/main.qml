@@ -286,4 +286,20 @@ ApplicationWindow {
             footerMessage.addMessage(type, message);
         }
     }
+
+    onClosing: {
+        console.log("Application window is closing!")
+    }
+
+//    onDestroyed: {
+//        console.log("Application window is destroyed!")
+//    }
+
+    onVisibleChanged: {
+        console.log("Application window is visible:", visible)
+    }
+
+    onVisibilityChanged: {
+        console.log("Application window onVisibilityChanged:", visibility)
+    }
 }

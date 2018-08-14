@@ -22,6 +22,7 @@ int main(int argc, char *argv[])
 #if defined(FLATPAK_BUILD)
     QIcon::setThemeName(QStringLiteral("breeze")); // after qApp is constructed only
 #endif
+    app.setQuitOnLastWindowClosed(true);
     if (!app.initQmlEngine()) {
         return -1;
     }
