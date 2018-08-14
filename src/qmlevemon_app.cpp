@@ -361,6 +361,15 @@ void QmlEvemonApp::setLastCharacterTab(int t)
     }
 }
 
+bool QmlEvemonApp::isFlatpak() const
+{
+#if defined(FLATPAK_BUILD)
+    return true;
+#else
+    return false;
+#endif
+}
+
 void QmlEvemonApp::onMailBodyDownloaded(quint64 charId, quint64 mailId, const QString &body)
 {
     Q_UNUSED(body)

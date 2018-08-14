@@ -41,6 +41,7 @@ class QmlEvemonApp:
     Q_PROPERTY(bool isLandscape        READ isLandscape        NOTIFY isLandscapeChanged)
     Q_PROPERTY(QObject* settings       READ settingsO          CONSTANT)
     Q_PROPERTY(int  lastCharacterTab   READ lastCharacterTab   WRITE setLastCharacterTab NOTIFY lastCharacterTabChanged)
+    Q_PROPERTY(bool isFlatpak          READ isFlatpak          CONSTANT)
 
 public:
     QmlEvemonApp(int& argc, char **argv);
@@ -96,6 +97,8 @@ public Q_SLOTS:
 
     int  lastCharacterTab() const;
     void setLastCharacterTab(int t);
+
+    bool isFlatpak() const;
 
 Q_SIGNALS:
     void settingsChanged();
