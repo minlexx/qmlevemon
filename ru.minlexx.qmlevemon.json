@@ -36,6 +36,7 @@
         "--socket=pulseaudio",
         "--talk-name=org.fredesktop.DBus",
         "--talk-name=org.kde.StatusNotifierWatcher",
-        "--talk-name=org.freedesktop.Notifications"
+        "--talk-name=org.freedesktop.Notifications",
+        "--talk-name=com.canonical.dbusmenu"
     ]
 }
