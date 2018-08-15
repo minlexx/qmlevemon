@@ -436,6 +436,7 @@ Q_SIGNALS:
 Q_SIGNALS:
     void skillTrainingCompleted(Character *ch, const CharacterSkill &skill);
     void newMailReceived(Character *ch, const QString &mailSubject);
+    void newNotificationReceived(Character *ch);
 
 protected:
     // general info

@@ -1060,9 +1060,8 @@ void Character::calcSkillQueue()
     updateSkillQueueModel();
 
     Q_EMIT skillsChanged();
-    Q_EMIT skillQueueChanged(); // NOTE: this needs to be kept here probably,
-    // because this is called from setSkillQueue() and it needs to
-    // emit a signal
+    Q_EMIT skillQueueChanged(); // NOTE: this needs to be kept here, because
+    // this is called from setSkillQueue() and it needs to emit a signal
 }
 
 void Character::checkNewMails()
@@ -1073,7 +1072,12 @@ void Character::checkNewMails()
             Q_EMIT newMailReceived(this, mail.subject);
         }
     }
-    // TODO: check for notifications?
+    // check for notifications
+    for (const Notification &ntf : qAsConst(m_mailNotifications).internalData()) {
+        if (!ntf.is_read) {
+            Q_EMIT newNotificationReceived(this);
+        }
+    }
 }
 
 
