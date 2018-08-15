@@ -95,6 +95,8 @@ QmlEvemonApp::QmlEvemonApp(int& argc, char **argv):
                      this, &QmlEvemonApp::onSkillCompletedMessage);
     QObject::connect(charModel, &CharacterModel::newMailsReceivedNotification,
                      this, &QmlEvemonApp::onNewMailsReceivedMessage);
+    QObject::connect(charModel, &CharacterModel::newNotificationsReceivedNotification,
+                     this, &QmlEvemonApp::onNewNotificationReceivedMessage);
 
     this->initStorageDirectory();
 }
@@ -396,16 +398,38 @@ void QmlEvemonApp::onNetworkError(const QString &desc)
     Q_EMIT messagePopup(QStringLiteral("error"), msg);
 }
 
+/**
+ * @brief QmlEvemonApp::messagePopupNotification
+ * Pops up notification in the bottom part of the window (not from system tray),
+ * but only if it was not already displayed (spam protect)
+ * @param msg - notification text to display
+ */
+void QmlEvemonApp::messagePopupNotification(const QString &msg)
+{
+    if (m_displayedNotificationsCache.contains(msg)) {
+        // we have already shown that notification
+        return;
+    }
+    m_displayedNotificationsCache << msg;
+    Q_EMIT messagePopup(QStringLiteral("info"), msg);
+}
+
 void QmlEvemonApp::onSkillCompletedMessage(const QString &msg)
 {
-    Q_EMIT messagePopup(QStringLiteral("info"), msg);
+    messagePopupNotification(msg);
     showNotification(applicationDisplayName() + tr(": Skill completed"), msg);
 }
 
 void QmlEvemonApp::onNewMailsReceivedMessage(const QString &msg)
 {
-    Q_EMIT messagePopup(QStringLiteral("info"), msg);
+    messagePopupNotification(msg);
     showNotification(applicationDisplayName() + tr(": New mail"), msg);
+}
+
+void QmlEvemonApp::onNewNotificationReceivedMessage(const QString &msg)
+{
+    messagePopupNotification(msg);
+    showNotification(applicationDisplayName() + tr(": New notification"), msg);
 }
 
 

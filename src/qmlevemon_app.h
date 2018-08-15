@@ -7,6 +7,7 @@
 #else
 #include <QApplication>
 #endif
+#include <QSet>
 #include <QQmlApplicationEngine>
 #include <QLoggingCategory>
 #include "settings.h"
@@ -78,6 +79,7 @@ public Q_SLOTS:
     void onNetworkError(const QString &desc);
     void onSkillCompletedMessage(const QString &msg);
     void onNewMailsReceivedMessage(const QString &msg);
+    void onNewNotificationReceivedMessage(const QString &msg);
 
     // called from QML when selcting character page
     void setCurrentCharacter(quint64 char_id);
@@ -111,6 +113,7 @@ Q_SIGNALS:
 
 private:
     void initStorageDirectory();
+    void messagePopupNotification(const QString &msg);
 
 protected:
     AppSettings *m_settings = nullptr;
@@ -124,6 +127,7 @@ protected:
     quint64 m_curCharId = 0;
     bool m_isPortraitOrientation = true;
     int m_lastCharacterTab = -1;
+    QSet<QString> m_displayedNotificationsCache;
 
 };
 
