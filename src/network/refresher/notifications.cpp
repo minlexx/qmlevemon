@@ -131,9 +131,13 @@ int PeriodicalRefresherWorker::refresh_notifications(Character *ch)
         ntf.is_read = jobj.value(QLatin1String("is_read")).toBool();
 
         // introduce a hack to fix a strange behaviour: somehow kill reports notifications are always
-        // counted as unread in API, so forcefully mark kill reports as read.
+        // counted as unread in API, so forcefully mark kill reports as read. (client displayes separate UI for that)
         if ((ntf.notificationType == QStringLiteral("KillReportFinalBlow"))
                 || (ntf.notificationType == QStringLiteral("KillReportVictim"))) {
+            ntf.is_read = true;
+        }
+        // treat NPCStandingsLost as always read too (client displayes separate UI for that)
+        if (ntf.notificationType == QStringLiteral("NPCStandingsLost")) {
             ntf.is_read = true;
         }
 
