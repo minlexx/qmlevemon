@@ -198,6 +198,8 @@ void CharacterModel::loadCharacters()
                                  this, &CharacterModel::onSkillTrainingCompleted);
                 QObject::connect(character, &Character::newMailReceived,
                                  this, &CharacterModel::onNewMailReceived);
+                QObject::connect(character, &Character::newNotificationReceived,
+                                 this, &CharacterModel::onNewNotificationReceived);
             }
         }
         // unlock mutex before emitting any signals
@@ -386,6 +388,19 @@ void CharacterModel::onNewMailReceived(Character *ch, const QString &mailSubject
     // ^^ wll call squashNotifications() in 3 seconds
 }
 
+void CharacterModel::onNewNotificationReceived(Character *ch)
+{
+    QMutexLocker lock(&m_mutex);
+    int newNtfsCount = 0;
+    if (m_collectedNotificationsNotifications.contains(ch)) {
+        newNtfsCount = m_collectedNotificationsNotifications.value(ch);
+    }
+    newNtfsCount++;
+    m_collectedNotificationsNotifications.insert(ch, newNtfsCount);
+    m_notificationSquashTimer.start();
+    // ^^ wll call squashNotifications() in 3 seconds
+}
+
 void CharacterModel::squashNotifications()
 {
     QMutexLocker lock(&m_mutex);
@@ -396,7 +411,9 @@ void CharacterModel::squashNotifications()
     for (Character *ch: m_collectedNotificationsSkills.keys()) {
         const QString valueSkills = m_collectedNotificationsSkills.value(ch);
         if (!msg.isEmpty()) {
-            msg.append(QLatin1String("\n"));
+            Q_EMIT skillCompletedNotification(msg);
+            msg.clear();
+            // msg.append(QLatin1String("\n"));
         }
         msg.append(ch->characterName());
         msg.append(tr(" learned "));
@@ -412,7 +429,9 @@ void CharacterModel::squashNotifications()
     for (Character *ch: m_collectedNotificationsMails.keys()) {
         int newMailsCount = m_collectedNotificationsMails.value(ch);
         if (!msg.isEmpty()) {
-            msg.append(QLatin1String("\n"));
+            Q_EMIT newMailsReceivedNotification(msg);
+            msg.clear();
+            // msg.append(QLatin1String("\n"));
         }
         msg.append(ch->characterName());
         msg.append(tr(" new mails: "));
@@ -421,6 +440,24 @@ void CharacterModel::squashNotifications()
     m_collectedNotificationsMails.clear();
     if (!msg.isEmpty()) {
         Q_EMIT newMailsReceivedNotification(msg);
+    }
+
+    // collect new notifications
+    msg.clear();
+    for (Character *ch : m_collectedNotificationsNotifications.keys()) {
+        int newNtfsCount = m_collectedNotificationsNotifications.value(ch);
+        if (!msg.isEmpty()) {
+            Q_EMIT newNotificationsReceivedNotification(msg);
+            msg.clear();
+            // msg.append(QLatin1String("\n"));
+        }
+        msg.append(ch->characterName());
+        msg.append(tr(" new notifications: "));
+        msg.append(QString::number(newNtfsCount));
+    }
+    m_collectedNotificationsNotifications.clear();
+    if (!msg.isEmpty()) {
+        Q_EMIT newNotificationsReceivedNotification(msg);
     }
 }
 
