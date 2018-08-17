@@ -288,18 +288,24 @@ ApplicationWindow {
         }
     }
 
-//    onClosing: {
-//        console.log("Application window is closing! close.accepted = ", close.accepted)
-//    }
-
     onVisibilityChanged: {
-        // console.log("Application window onVisibilityChanged:", visibility);
         if (evemonapp.isFlatpak) {
             // Flatpak specific hack: when window is closed under flatpak - it is like only hidden,
             // not really destroyed. Event loop continued. But we need to quit app...
             // Force quit application when its window is hidden under Flatpak.
             if (visibility === Window.Hidden) {
                 Qt.quit();
+            }
+        }
+    }
+
+    onClosing: {
+        // special handling for Android back button:
+        //    navigate back if possible, do not close app.
+        if (!evemonapp.isDesktopPlatform) {
+            if (headerToolbar.iconState == "back") {
+                close.accepted = false; // do not close
+                nav_back();
             }
         }
     }
