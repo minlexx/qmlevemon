@@ -3,12 +3,14 @@ package ru.minlexx.qmlevemon;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
+//import android.util.Log;
 
 public class QMLEVEMonActivity extends org.qtproject.qt5.android.bindings.QtActivity
 {
     private static NotificationManager m_notificationManager;
     private static Notification.Builder m_builder;
     private static QMLEVEMonActivity m_instance;
+    private static final String TAG = "qmlevemon";
 
     public QMLEVEMonActivity()
     {
@@ -26,5 +28,7 @@ public class QMLEVEMonActivity extends org.qtproject.qt5.android.bindings.QtActi
         m_builder.setContentTitle(title);
         m_builder.setContentText(text);
         m_notificationManager.notify(1, m_builder.build());
+
+        //Log.d(TAG, "notify()");
     }
 }
