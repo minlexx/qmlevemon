@@ -129,6 +129,10 @@ void PeriodicalRefresherWorker::initialDelayedRefresh()
 void PeriodicalRefresherWorker::requestCharacterMailBody(Character *ch, quint64 mailId)
 {
     setMailDownloadInProgress(true);
+    // check if tokens needs refresing
+    if (!this->check_refresh_token(ch)) {
+        return; // failed to renew token
+    }
     quint64 charId = ch->characterId();
     Mail mail = this->requestMailBody(ch, mailId);
     if (mail.id > 0) {
