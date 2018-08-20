@@ -11,7 +11,9 @@ Rectangle {
         }
         color: AppStyle.errorPopupBgColor
         radius: AppStyle.marginSmall
-        height: (_textSize > closeButtonSize) ? _textSize : (closeButtonSize + AppStyle.marginSmall)
+        height: (_textSize > (closeButtonSize +  + AppStyle.marginSmall))
+                ? _textSize
+                : (closeButtonSize + AppStyle.marginSmall)
 
         // public properties
         /**
