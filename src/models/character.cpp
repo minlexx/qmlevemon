@@ -381,11 +381,11 @@ void Character::setCurrentSolarSystemName(const QString& name) {
 float Character::currentSolarSystemSecurity() const { return m_currentSolarSystemSecurity; }
 
 QString Character::currentSolarSystemSecurityStr() const {
-    if (m_currentSolarSystemSecurity > 0.0f && m_currentSolarSystemSecurity < 0.5f) {
-        // for some reason all systems in (0.0, 0.5) range are lowsecs with ss 0.1
+    if (m_currentSolarSystemSecurity > 0.00f && m_currentSolarSystemSecurity < 0.05f) {
+        // for some reason all systems in (0.00, 0.05) range are lowsecs with ss 0.1
         return QStringLiteral("0.1");
     }
-    if (m_currentSolarSystemSecurity > -0.5f && m_currentSolarSystemSecurity < 0.0f) {
+    if (m_currentSolarSystemSecurity > -0.05f && m_currentSolarSystemSecurity < 0.00f) {
         // QString::number will end up with "-0.0" for this range
         return QStringLiteral("0.0");
     }
