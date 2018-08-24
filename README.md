@@ -27,7 +27,7 @@ cmake --build . --target install  (or make -j8 && sudo make install)
 Windows + MSVC:
 ```
 cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -DCMAKE_PREFIX_PATH=C:\path\to\qt\5.11.1\msvc2017_x64 ..\qmlevemon
-cmake --build . -- target all
+cmake --build . --target all
 ```
 
 ### Build for Android platform using qmake
