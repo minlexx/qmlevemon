@@ -137,6 +137,7 @@ protected:
 
 
 QmlEvemonApp *globalAppInstance();
+QString globalAppStorageDirectory();
 Db *globalAppDatabaseInstance();
 AppSettings *globalAppSettings();
 

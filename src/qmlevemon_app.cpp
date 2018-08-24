@@ -17,6 +17,7 @@
 // requires QtAndroidExtras
 #include <QtAndroid>
 #include <QtAndroidExtras/QAndroidJniObject>
+#include "./android/service/android_service.h"
 #endif
 
 #include "db/db_sqlite.h"
@@ -451,7 +452,30 @@ Db *globalAppDatabaseInstance()
     if (g_globalAppInstance) {
         ret = g_globalAppInstance->database();
     }
+#ifdef Q_OS_ANDROID
+    if (!ret) {
+        // running from bg service process, no app
+        ret = DbSqlite::instance();
+    }
+#endif
     return ret;
+}
+
+QString globalAppStorageDirectory()
+{
+    if (g_globalAppInstance) {
+        return g_globalAppInstance->storageDirectory();
+    }
+#ifdef Q_OS_ANDROID
+    // under android this method may also be called from background service
+    // process, and applciation instance is not constructed
+    // try to get settings from service process instead
+    QmlEvemonService *serviceApp = globalServiceAppInstance();
+    if (serviceApp) {
+        return serviceApp->storageDirectory();
+    }
+#endif
+    return QString();
 }
 
 AppSettings *globalAppSettings()
@@ -460,6 +484,17 @@ AppSettings *globalAppSettings()
     if (g_globalAppInstance) {
         ret = g_globalAppInstance->settings();
     }
+#ifdef Q_OS_ANDROID
+    if (!ret) {
+        // under android this method may also be called from background service
+        // process, and applciation instance is not constructed
+        // try to get settings from service process instead
+        QmlEvemonService *serviceApp = globalServiceAppInstance();
+        if (serviceApp) {
+            ret = serviceApp->settings();
+        }
+    }
+#endif
     return ret;
 }
 
