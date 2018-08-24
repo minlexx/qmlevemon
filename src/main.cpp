@@ -9,6 +9,16 @@
 
 int main(int argc, char *argv[])
 {
+#ifdef Q_OS_ANDROID
+    // check if we are running as android background service
+    if (argc > 1) {
+        if (strcmp(argv[1], "-service") == 0) {
+            qDebug() << "Hello from service!";
+            return 0;
+        }
+    }
+#endif
+
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     // QQuickStyle::setStyle(QLatin1String("Material"));
