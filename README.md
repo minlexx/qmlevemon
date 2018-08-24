@@ -11,7 +11,8 @@ Download last successful build from CI [lastSuccessfulBuild](https://jenkins.min
 ## Building from source
 
 ### Build for desktop (Windows / Linux)
-You need only Qt5 >= 5.9 installed.
+You need only Qt5 >= 5.9 installed for desktop (Windows/Linux/Flatpak) builds;
+Android build requires Qt >= 5.10, because of QAndroidService usage.
 
 For any build questions look  at CI script (Jenkinsfile in repo root) and [build logs](https://jenkins.minlexx.ru/job/qmlevemon_github/job/master/).
 
