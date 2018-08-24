@@ -1,3 +1,4 @@
+#include <QCoreApplication>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
@@ -40,14 +41,12 @@ QByteArray evesso_client_secret_key() {
 QByteArray evesso_user_agent() {
     QByteArray ret;
 #ifndef INSIDE_TEST
-    QmlEvemonApp *gApp = globalAppInstance();
-    if (!gApp) return ret;
-    ret.append(gApp->applicationName().toUtf8());
+    ret.append(QCoreApplication::applicationName().toUtf8());
     ret.append("/");
-    ret.append(gApp->applicationVersion().toUtf8());
+    ret.append(QCoreApplication::applicationVersion().toUtf8());
     ret.append(", alexey.min@gmail.com");
 #else
-    ret = "qmlevemon/0.2.0, alexey.min@gmail.com";
+    ret = "qmlevemon, alexey.min@gmail.com";
 #endif
     return ret;
 }
