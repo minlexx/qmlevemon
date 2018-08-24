@@ -6,9 +6,22 @@
 #include <QIcon>
 #endif
 
+#ifdef Q_OS_ANDROID
+#include "./android/service/android_service.h"  // for service_main()
+#endif
+
 
 int main(int argc, char *argv[])
 {
+#ifdef Q_OS_ANDROID
+    // check if we are running as android background service
+    if (argc > 1) {
+        if (strcmp(argv[1], "-service") == 0) {
+            return EM::service_main(argc, argv);
+        }
+    }
+#endif
+
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     // QQuickStyle::setStyle(QLatin1String("Material"));

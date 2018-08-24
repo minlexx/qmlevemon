@@ -13,6 +13,10 @@
 #include <QAction>
 #include <QPoint>   // QtCore
 #include <QCursor>  // QtGui
+#else
+// requires QtAndroidExtras
+#include <QtAndroid>
+#include <QtAndroidExtras/QAndroidJniObject>
 #endif
 
 #include "db/db_sqlite.h"
@@ -46,6 +50,7 @@ QmlEvemonApp::QmlEvemonApp(int& argc, char **argv):
 #endif
 {
     g_globalAppInstance = this;
+    setObjectName(QStringLiteral("QmlEvemonApp"));
     setApplicationName(QLatin1String("qmlevemon"));
     setApplicationDisplayName(QLatin1String("QML EVEMon"));
     setApplicationVersion(QLatin1String(QMLEVEMON_VERSION));
@@ -456,6 +461,31 @@ AppSettings *globalAppSettings()
         ret = g_globalAppInstance->settings();
     }
     return ret;
+}
+
+
+void QmlEvemonApp::startAndroidService()
+{
+#ifdef Q_OS_ANDROID
+    QAndroidJniObject::callStaticMethod<void>(
+                "ru/minlexx/qmlevemon/QMLEVEMonService",
+                "startMyService",
+                "(Landroid/content/Context;)V",
+                QtAndroid::androidActivity().object()
+    );
+#endif
+}
+
+void QmlEvemonApp::stopAndroidService()
+{
+#ifdef Q_OS_ANDROID
+    QAndroidJniObject::callStaticMethod<void>(
+                "ru/minlexx/qmlevemon/QMLEVEMonService",
+                "stopMyService",
+                "(Landroid/content/Context;)V",
+                QtAndroid::androidActivity().object()
+    );
+#endif
 }
 
 } // namespace

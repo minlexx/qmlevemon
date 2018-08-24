@@ -102,6 +102,10 @@ public Q_SLOTS:
 
     bool isFlatpak() const;
 
+    // Android service management
+    void startAndroidService();
+    void stopAndroidService();
+
 Q_SIGNALS:
     void settingsChanged();
     void curCharIdChanged();
