@@ -25,12 +25,11 @@ Q_GLOBAL_STATIC(DbSqlite, g_em_db_sqlite)
 
 DbSqlite::DbSqlite()
 {
-    QmlEvemonApp *gApp = globalAppInstance(); // can return nullptr
-    if (!gApp) {
-        qCWarning(logDb) << "Failed to construct DbSqlite instance - application instance missing.";
+    const QString appdata_dirname = globalAppStorageDirectory();
+    if (appdata_dirname.isEmpty()) {
+        qCWarning(logDb) << "Failed to construct DbSqlite instance - unknown application data directory!";
         return;
     }
-    const QString appdata_dirname = gApp->storageDirectory();
     const QString db_filename = appdata_dirname + QLatin1String("/characters.db");
     const QString sde_db_filename = appdata_dirname + QLatin1String("/eve_sde.db");
     const QString cache_db_filename = appdata_dirname + QLatin1String("/cache.db");
@@ -137,10 +136,9 @@ bool DbSqlite::open_sde(const QString &db_filename)
     bool sde_forced_reinstall = false;
     QString installedVersionFileName;
     int resourcesVersion = 0;
-    QmlEvemonApp *gApp = globalAppInstance();
-    if (gApp) {
+    const QString appdataDirname = globalAppStorageDirectory();
+    if (!appdataDirname.isEmpty()) {
         // qCDebug(logDb) << "Checking for forced SDE update...";
-        const QString appdataDirname = gApp->storageDirectory();
         installedVersionFileName = appdataDirname + QLatin1String("/sde_version.txt");
         int installedVersion = read_version_from_file(installedVersionFileName);
         resourcesVersion = read_version_from_file(QLatin1String(":/sql/sde_version.txt"));
