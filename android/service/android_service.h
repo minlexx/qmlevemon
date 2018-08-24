@@ -23,7 +23,7 @@ public:
 };
 
 
-int service_main(int &argc, char **argv);
+int android_service_main(int &argc, char **argv);
 
 
 } // namespace EM

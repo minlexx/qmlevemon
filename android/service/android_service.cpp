@@ -33,7 +33,7 @@ QAndroidBinder *QmlEvemonService::onBind(const QAndroidIntent &intent)
 }
 
 
-int service_main(int &argc, char **argv)
+int android_service_main(int &argc, char **argv)
 {
     qCDebug(logService) << "Hello from QMLEVEMon service!";
 

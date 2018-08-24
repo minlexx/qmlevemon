@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     // check if we are running as android background service
     if (argc > 1) {
         if (strcmp(argv[1], "-service") == 0) {
-            return EM::service_main(argc, argv);
+            return EM::android_service_main(argc, argv);
         }
     }
 #endif
