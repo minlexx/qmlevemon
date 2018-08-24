@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 //import android.util.Log;
 
+
 public class QMLEVEMonActivity extends org.qtproject.qt5.android.bindings.QtActivity
 {
     private static NotificationManager m_notificationManager;

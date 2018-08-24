@@ -50,6 +50,7 @@ QmlEvemonApp::QmlEvemonApp(int& argc, char **argv):
 #endif
 {
     g_globalAppInstance = this;
+    setObjectName(QStringLiteral("QmlEvemonApp"));
     setApplicationName(QLatin1String("qmlevemon"));
     setApplicationDisplayName(QLatin1String("QML EVEMon"));
     setApplicationVersion(QLatin1String(QMLEVEMON_VERSION));

@@ -160,9 +160,16 @@ OTHER_FILES += \
 win32: OTHER_FILES += ./win32/windows_resources.rc
 
 android: {
+    HEADERS += \
+        ./android/service/android_service.h
+
+    SOURCES += \
+        ./android/service/android_service.cpp
+
     OTHER_FILES += \
         ./android/src/AndroidManifest.xml \
-        ./android/src/src/ru/minlexx/qmlevemon/QMLEVEMonActivity.java
+        ./android/src/src/ru/minlexx/qmlevemon/QMLEVEMonActivity.java \
+        ./android/src/src/ru/minlexx/qmlevemon/QMLEVEMonService.java
 }
 
 # Additional import path used to resolve QML modules in Qt Creator's code model

@@ -6,6 +6,10 @@
 #include <QIcon>
 #endif
 
+#ifdef Q_OS_ANDROID
+#include "./android/service/android_service.h"  // for service_main()
+#endif
+
 
 int main(int argc, char *argv[])
 {
@@ -13,8 +17,7 @@ int main(int argc, char *argv[])
     // check if we are running as android background service
     if (argc > 1) {
         if (strcmp(argv[1], "-service") == 0) {
-            qDebug() << "Hello from service!";
-            return 0;
+            return EM::service_main(argc, argv);
         }
     }
 #endif
