@@ -254,7 +254,7 @@ EveApi::EveApi(QObject *parent):
 
     // check for proxy settings
 #ifndef INSIDE_TEST
-    QmlEvemonApp *gApp = globalAppInstance();
+    QmlEvemonApp *gApp = globalAppInstance(); // to connect to settingsChanged()
     if (gApp) {
         QObject::connect(gApp, &QmlEvemonApp::settingsChanged,
                          this, &EveApi::onProxySettingsChanged);
