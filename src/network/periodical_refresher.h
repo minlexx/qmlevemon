@@ -27,6 +27,7 @@ public:
     ~PeriodicalRefresher() override;
 
 public Q_SLOTS:
+    void setRefreshIterval(int msec);
     void stopGracefully();
     bool networkActivity() const;
     int serverPlayersOnline() const;

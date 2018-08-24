@@ -75,6 +75,13 @@ PeriodicalRefresher::~PeriodicalRefresher()
     stopGracefully();
 }
 
+void PeriodicalRefresher::setRefreshIterval(int msec)
+{
+    m_refreshTimer.stop();
+    m_refreshTimer.setInterval(msec);
+    m_refreshTimer.start();
+}
+
 void PeriodicalRefresher::stopGracefully()
 {
     m_refreshTimer.stop();
