@@ -343,11 +343,13 @@ Rectangle {
         function doExpand() {
             state = "expanded";
             isExpanded = true;
+            evemonapp.isCharacterSubInfoCollapsed = false;
         }
 
         function doCollapse() {
             state = "collapsed";
             isExpanded = false;
+            evemonapp.isCharacterSubInfoCollapsed = true;
         }
 
         MouseArea {
@@ -462,7 +464,11 @@ Rectangle {
     }
 
     Component.onCompleted: {
+        // select last used character tab
         subInfoSwipeView.currentIndex = evemonapp.lastCharacterTab;
+        // restore last used view mode - expanded or collapsed
+        subInfoTabRect.state = evemonapp.isCharacterSubInfoCollapsed ? "collapsed" : "expanded";
+        subInfoTabRect.isExpanded = (subInfoTabRect.state === "expanded");
     }
 
     Image {

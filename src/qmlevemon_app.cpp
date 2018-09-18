@@ -378,6 +378,16 @@ void QmlEvemonApp::setLastCharacterTab(int t)
     }
 }
 
+bool QmlEvemonApp::isCharacterSubInfoCollapsed() const { return m_isCharacterSubInfoCollapsed; }
+
+void QmlEvemonApp::setIsCharacterSubInfoCollapsed(bool b)
+{
+    if (m_isCharacterSubInfoCollapsed != b) {
+        m_isCharacterSubInfoCollapsed = b;
+        Q_EMIT isCharacterSubInfoCollapsedChanged();
+    }
+}
+
 void QmlEvemonApp::onMailBodyDownloaded(quint64 charId, quint64 mailId, const QString &body)
 {
     Q_UNUSED(body)

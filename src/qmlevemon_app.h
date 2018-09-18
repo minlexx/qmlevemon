@@ -43,6 +43,7 @@ class QmlEvemonApp:
     Q_PROPERTY(bool isLandscape        READ isLandscape        NOTIFY isLandscapeChanged)
     Q_PROPERTY(QObject* settings       READ settingsO          CONSTANT)
     Q_PROPERTY(int  lastCharacterTab   READ lastCharacterTab   WRITE setLastCharacterTab NOTIFY lastCharacterTabChanged)
+    Q_PROPERTY(bool isCharacterSubInfoCollapsed READ isCharacterSubInfoCollapsed WRITE setIsCharacterSubInfoCollapsed NOTIFY isCharacterSubInfoCollapsedChanged)
 
 public:
     QmlEvemonApp(int& argc, char **argv);
@@ -102,6 +103,8 @@ public Q_SLOTS:
 
     int  lastCharacterTab() const;
     void setLastCharacterTab(int t);
+    bool isCharacterSubInfoCollapsed() const;
+    void setIsCharacterSubInfoCollapsed(bool b);
 
     // Android service management
     void startAndroidService();
@@ -113,6 +116,7 @@ Q_SIGNALS:
     void isPortraitChanged();
     void isLandscapeChanged();
     void lastCharacterTabChanged();
+    void isCharacterSubInfoCollapsedChanged();
     void mailReady();
     void messagePopup(const QString &type, const QString &message);
 
@@ -132,6 +136,7 @@ protected:
     quint64 m_curCharId = 0;
     bool m_isPortraitOrientation = true;
     int m_lastCharacterTab = -1;
+    bool m_isCharacterSubInfoCollapsed = false;
     QSet<QString> m_displayedNotificationsCache;
 
 };
