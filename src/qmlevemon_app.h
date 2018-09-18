@@ -51,7 +51,7 @@ public:
 public:
     // returns false for Android platform
     bool isDesktopPlatform() const;
-    // returns true for Flatpak build (configure with cmake -BBUILD_FOR_FLATPAK=ON,
+    // returns true for Flatpak build (configure with cmake -DBUILD_FOR_FLATPAK=ON,
     //         which sets -DFLATPAK_BUILD)
     bool isFlatpakPlatform() const;
     // returns true when mobile device is in portrait orientation
