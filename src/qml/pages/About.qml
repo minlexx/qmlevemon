@@ -36,7 +36,7 @@ Rectangle {
             wrapMode: Text.WordWrap
             textFormat: Text.StyledText
             clip: true
-            text: qsTr("QML EVEMon version: ") + Qt.application.version + (evemonapp.isFlatpak ? " (Flatpak)" : "")
+            text: qsTr("QML EVEMon version: ") + Qt.application.version + (evemonapp.isFlatpakPlatform ? " (Flatpak)" : "")
         }
     }
 }

@@ -38,11 +38,11 @@ class QmlEvemonApp:
     Q_OBJECT
     Q_PROPERTY(quint64 curCharId       READ curCharId          NOTIFY curCharIdChanged)
     Q_PROPERTY(bool isDesktopPlatform  READ isDesktopPlatform  CONSTANT)
+    Q_PROPERTY(bool isFlatpakPlatform  READ isFlatpakPlatform  CONSTANT)
     Q_PROPERTY(bool isPortrait         READ isPortrait         NOTIFY isPortraitChanged)
     Q_PROPERTY(bool isLandscape        READ isLandscape        NOTIFY isLandscapeChanged)
     Q_PROPERTY(QObject* settings       READ settingsO          CONSTANT)
     Q_PROPERTY(int  lastCharacterTab   READ lastCharacterTab   WRITE setLastCharacterTab NOTIFY lastCharacterTabChanged)
-    Q_PROPERTY(bool isFlatpak          READ isFlatpak          CONSTANT)
 
 public:
     QmlEvemonApp(int& argc, char **argv);
@@ -51,6 +51,9 @@ public:
 public:
     // returns false for Android platform
     bool isDesktopPlatform() const;
+    // returns true for Flatpak build (configure with cmake -BBUILD_FOR_FLATPAK=ON,
+    //         which sets -DFLATPAK_BUILD)
+    bool isFlatpakPlatform() const;
     // returns true when mobile device is in portrait orientation
     bool isPortrait() const;
     // returns true when mobile device is in landscape orientation
@@ -99,8 +102,6 @@ public Q_SLOTS:
 
     int  lastCharacterTab() const;
     void setLastCharacterTab(int t);
-
-    bool isFlatpak() const;
 
     // Android service management
     void startAndroidService();

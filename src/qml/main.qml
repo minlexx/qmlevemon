@@ -289,7 +289,7 @@ ApplicationWindow {
     }
 
     onVisibilityChanged: {
-        if (evemonapp.isFlatpak) {
+        if (evemonapp.isFlatpakPlatform) {
             // Flatpak specific hack: when window is closed under flatpak - it is like only hidden,
             // not really destroyed. Event loop continued. But we need to quit app...
             // Force quit application when its window is hidden under Flatpak.

@@ -129,6 +129,15 @@ bool QmlEvemonApp::isDesktopPlatform() const
     return true;
 }
 
+bool QmlEvemonApp::isFlatpakPlatform() const
+{
+#if defined(FLATPAK_BUILD)
+    return true;
+#else
+    return false;
+#endif
+}
+
 bool QmlEvemonApp::isPortrait() const { return m_isPortraitOrientation; }
 
 bool QmlEvemonApp::isLandscape() const { return !m_isPortraitOrientation; }
@@ -367,15 +376,6 @@ void QmlEvemonApp::setLastCharacterTab(int t)
         m_lastCharacterTab = t;
         Q_EMIT lastCharacterTabChanged();
     }
-}
-
-bool QmlEvemonApp::isFlatpak() const
-{
-#if defined(FLATPAK_BUILD)
-    return true;
-#else
-    return false;
-#endif
 }
 
 void QmlEvemonApp::onMailBodyDownloaded(quint64 charId, quint64 mailId, const QString &body)
