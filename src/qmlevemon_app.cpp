@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQuickWindow>
+#include <QWindow>
 #include <QStandardPaths>
 #include <QScreen>
 #include <QDir>
@@ -191,6 +192,7 @@ bool QmlEvemonApp::initQmlEngine()
         const QIcon icon(QLatin1String(":/img/app_icon/128.png"));
         m_mainWindow->setIcon(icon);
     }
+    loadWindowSize();
 
     return true;
 }
@@ -245,6 +247,63 @@ void QmlEvemonApp::initStorageDirectory()
             }
         }
     }
+}
+
+void QmlEvemonApp::loadWindowSize()
+{
+    if (!isDesktopPlatform() || !m_mainWindow) {
+        return;  // ignore on mobile platforms
+    }
+    int x = m_settings->winX();
+    int y = m_settings->winY();
+    int w = m_settings->winW();
+    int h = m_settings->winH();
+
+    // no prev settings?
+    if ((x == 0) && (y == 0) && (w == 0) && (h==0)) {
+        return;  // use default size
+    }
+
+    // do not allow window to be positioned off-screen
+    if (x < 0) x = 0;
+    if (y < 0) y = 0;
+    // do not allow too small size
+    if (w < 300) w = 300;
+    if (h < 300) h = 300;
+    // check depending on sceen
+    const QScreen *screen = this->primaryScreen();
+    if (Q_LIKELY(screen)) {
+        const int screen_w = screen->size().width();
+        const int screen_h = screen->size().height();
+        // do not allow window size more than a screen
+        if (w > screen_w) w = screen_w - 1;
+        if (h > screen_h) h = screen_h - 1;
+        if ((x + w) > screen_w) x = screen_w - w;
+        if ((y + h) > screen_h) y = screen_h - h;
+    }
+    //
+    qCDebug(logApp) << "loaded window pos/size" << x << y << w << h;
+    // apply
+    m_mainWindow->setX(x);
+    m_mainWindow->setY(y);
+    m_mainWindow->setWidth(w);
+    m_mainWindow->setHeight(h);
+}
+
+void QmlEvemonApp::saveWindowSize()
+{
+    if (!isDesktopPlatform() || !m_mainWindow) {
+        return;  // ignore on mobile platforms
+    }
+    const int x = m_mainWindow->x();
+    const int y = m_mainWindow->y();
+    const int w = m_mainWindow->width();
+    const int h = m_mainWindow->height();
+    qCDebug(logApp) << "saving window pos/size" << x << y << w << h;
+    m_settings->setWinX(x);
+    m_settings->setWinY(y);
+    m_settings->setWinW(w);
+    m_settings->setWinH(h);
 }
 
 

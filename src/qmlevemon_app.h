@@ -97,6 +97,8 @@ public Q_SLOTS:
     void requestOpenMail(quint64 mailId);
     // call from QML to show notification
     void showNotification(const QString &title, const QString &message);
+    // call from QML to trigger saving window size and position
+    void saveWindowSize();
 
     // use in tests only. trigger displaying test notification
     void testErrorHandler(const QString &t, const QString &s);
@@ -122,6 +124,7 @@ Q_SIGNALS:
 
 private:
     void initStorageDirectory();
+    void loadWindowSize();
     void messagePopupNotification(const QString &msg);
 
 protected:

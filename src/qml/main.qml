@@ -196,6 +196,7 @@ ApplicationWindow {
     function menuAction(action) {
         // console.log("Menu action clicked: " + action);
         if (action === "quit") {
+            evemonapp.saveWindowSize();
             Qt.quit();
         } else {
             nav_to(action);
@@ -289,6 +290,7 @@ ApplicationWindow {
     }
 
     onVisibilityChanged: {
+        evemonapp.saveWindowSize();
         if (evemonapp.isFlatpakPlatform) {
             // Flatpak specific hack: when window is closed under flatpak - it is like only hidden,
             // not really destroyed. Event loop continued. But we need to quit app...
@@ -300,6 +302,7 @@ ApplicationWindow {
     }
 
     onClosing: {
+        evemonapp.saveWindowSize();
         // special handling for Android back button:
         //    navigate back if possible, do not close app.
         if (!evemonapp.isDesktopPlatform) {
