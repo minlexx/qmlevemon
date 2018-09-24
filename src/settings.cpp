@@ -56,6 +56,26 @@ QString EM::AppSettings::proxyPassword() const
     return value(QLatin1String("proxyPassword")).toString();
 }
 
+int EM::AppSettings::winX() const
+{
+    return value(QLatin1String("win_x")).toInt();
+}
+
+int EM::AppSettings::winY() const
+{
+    return value(QLatin1String("win_y")).toInt();
+}
+
+int EM::AppSettings::winW() const
+{
+    return value(QLatin1String("win_w")).toInt();
+}
+
+int EM::AppSettings::winH() const
+{
+    return value(QLatin1String("win_h")).toInt();
+}
+
 void EM::AppSettings::setProxySettings(const QNetworkProxy &p)
 {
     setValue(QLatin1String("proxyType"), static_cast<int>(p.type()));
@@ -100,4 +120,28 @@ void EM::AppSettings::setProxyPassword(const QString &password)
     setValue(QLatin1String("proxyPassword"), password);
     Q_EMIT proxyConfigChanged();
     Q_EMIT settingsChanged();
+}
+
+void EM::AppSettings::setWinX(int d)
+{
+    setValue(QLatin1String("win_x"), d);
+    Q_EMIT winXChanged();
+}
+
+void EM::AppSettings::setWinY(int d)
+{
+    setValue(QLatin1String("win_y"), d);
+    Q_EMIT winYChanged();
+}
+
+void EM::AppSettings::setWinW(int d)
+{
+    setValue(QLatin1String("win_w"), d);
+    Q_EMIT winWChanged();
+}
+
+void EM::AppSettings::setWinH(int d)
+{
+    setValue(QLatin1String("win_h"), d);
+    Q_EMIT winHChanged();
 }
