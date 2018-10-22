@@ -139,7 +139,7 @@ protected:
     quint64 m_curCharId = 0;
     bool m_isPortraitOrientation = true;
     int m_lastCharacterTab = -1;
-    bool m_isCharacterSubInfoCollapsed = false;
+    bool m_isCharacterSubInfoCollapsed = true;
     QSet<QString> m_displayedNotificationsCache;
 
 };
