@@ -8,7 +8,7 @@
 namespace EM {
 
 
-static QString ntfline_value(const QString &line)
+static QString parse_notification_line_value(const QString &line)
 {
     QString ret;
     const QStringList lst = line.split(QLatin1String(": "));
@@ -33,10 +33,10 @@ void PeriodicalRefresherWorker::postprocess_notification_text(QString &text, con
         quint64 shipTypeId = 0;
         for (const QString &line: lines) {
             if (line.startsWith(QLatin1String("victimID: "))) {
-                victimId = ntfline_value(line).toULongLong();
+                victimId = parse_notification_line_value(line).toULongLong();
             }
             if (line.startsWith(QLatin1String("victimShipTypeID: "))) {
-                shipTypeId = ntfline_value(line).toULongLong();
+                shipTypeId = parse_notification_line_value(line).toULongLong();
             }
         }
         if ((victimId > 0) && (shipTypeId > 0) && db) {
@@ -56,7 +56,7 @@ void PeriodicalRefresherWorker::postprocess_notification_text(QString &text, con
         quint64 shipTypeId = 0;
         for (const QString &line: lines) {
             if (line.startsWith(QLatin1String("victimShipTypeID: "))) {
-                shipTypeId = ntfline_value(line).toULongLong();
+                shipTypeId = parse_notification_line_value(line).toULongLong();
             }
         }
         if ((shipTypeId > 0) && db) {
@@ -116,6 +116,9 @@ int PeriodicalRefresherWorker::refresh_notifications(Character *ch)
     //      "timestamp": "2018-03-29T18:07:00Z",
     //      "type": "SeasonalChallengeCompleted"
     //    },
+    //  for alliance:
+    //      "sender_id": 1614483120,
+    //      "sender_type": "alliance",
 
     CharacterNotifications notifications;
     for (const QJsonValue &jv: replyArr) {
@@ -152,6 +155,11 @@ int PeriodicalRefresherWorker::refresh_notifications(Character *ch)
             QString charName = this->resolve_character_name(ntf.senderId);
             if (!charName.isEmpty()) {
                 ntf.senderDisplayName = charName;
+            }
+        } else if (ntf.senderType == QStringLiteral("alliance")) {
+            QString allianceName = this->resolve_alliance_name(ntf.senderId);
+            if (!allianceName.isEmpty()) {
+                ntf.senderDisplayName = allianceName;
             }
         }
 
