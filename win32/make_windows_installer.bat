@@ -19,8 +19,8 @@ copy /y "%BUILD_DIR%\\QMLEVEMon.exe" .
 
 %WINDEPLOYQT% --release --qmldir "%SOURCE_DIR%/src/qml" --compiler-runtime QMLEVEMon.exe
 
-copy /y %windir%\\system32\\libeay32.dll .
-copy /y %windir%\\system32\\ssleay32.dll .
+copy /y "%SOURCE_DIR%\\win32\\libeay32.dll" .
+copy /y "%SOURCE_DIR%\\win32\\ssleay32.dll" .
 
 %MAKENSIS% .\qmlevemon_installer.nsi
 
