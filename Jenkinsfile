@@ -27,23 +27,35 @@ pipeline {
                 '''
             }
         }
-        stage('windeployqt') {
+        stage('windows-installer') {
             agent {
                 label 'windows && qt5'
             }
             steps {
                 bat '''
-                    if exist build\\out rmdir /s /q build\\out
-                    mkdir build\\out
-                    cd build\\out
-                    copy /y ..\\QMLEVEMon.exe .
-                    %QT_PREFIX%\\bin\\windeployqt.exe --release --qmldir ..\\..\\src\\qml --compiler-runtime QMLEVEMon.exe
-                    copy /y %windir%\\system32\\libeay32.dll .
-                    copy /y %windir%\\system32\\ssleay32.dll .
+                    cd build
+                    cmake --build . --target windows-installer
                 '''
-                archiveArtifacts 'build/out/'
+                archiveArtifacts 'build/qmlevemon-setup.exe'
             }
         }
+        //stage('windeployqt') {
+        //    agent {
+        //        label 'windows && qt5'
+        //    }
+        //    steps {
+        //        bat '''
+        //            if exist build\\out rmdir /s /q build\\out
+        //            mkdir build\\out
+        //            cd build\\out
+        //            copy /y ..\\QMLEVEMon.exe .
+        //            %QT_PREFIX%\\bin\\windeployqt.exe --release --qmldir ..\\..\\src\\qml --compiler-runtime QMLEVEMon.exe
+        //            copy /y %windir%\\system32\\libeay32.dll .
+        //            copy /y %windir%\\system32\\ssleay32.dll .
+        //        '''
+        //        archiveArtifacts 'build/out/'
+        //    }
+        //}
         stage('Build (Android)') {
             agent {
                 label 'android && qt5'
