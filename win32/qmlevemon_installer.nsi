@@ -1,15 +1,9 @@
-!if ${NSIS_PTR_SIZE} > 4
-  !define BITS 64
-  !define NAMESUFFIX " (64 bit)"
-!else
-  !define BITS 32
-  !define NAMESUFFIX ""
-!endif
+!define VERSION "0.3"
 
 OutFile "qmlevemon-setup.exe"
 Unicode true
 SetCompressor /SOLID lzma
-InstallDir $PROGRAMFILES${BITS}\QMLEVEMon
+InstallDir $PROGRAMFILES64\QMLEVEMon
 ; Registry key to check for directory (so if you install again, it will overwrite the old one automatically)
 InstallDirRegKey HKLM "Software\QMLEVEMon" "Install_Dir"
 RequestExecutionLevel admin
@@ -18,15 +12,16 @@ RequestExecutionLevel admin
 
 ; Names
 Name "QMLEVEMon"
-Caption "QMLEVEMon ${VERSION}${NAMESUFFIX} Setup"
+Caption "QMLEVEMon ${VERSION} 64-bit Setup"
 
 !define REG_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\QMLEVEMon"
 
 ; Interface Settings
 !define MUI_ABORTWARNING
 
-;!define MUI_ICON "..\img\app_icon\app_icon.ico"
-;!define MUI_UNICON "..\img\app_icon\app_icon.ico"
+; does not work: Error while loading icon from ".\app_icon.ico": invalid icon file size
+;!define MUI_ICON ".\app_icon.ico"
+;!define MUI_UNICON ".\app_icon.ico"
 
 ;!define MUI_HEADERIMAGE
 ;!define MUI_HEADERIMAGE_BITMAP "${NSISDIR}\Contrib\Graphics\Header\nsis3-branding.bmp"
@@ -34,10 +29,10 @@ Caption "QMLEVEMon ${VERSION}${NAMESUFFIX} Setup"
 
 ; Pages
 !define MUI_WELCOMEPAGE_TITLE "Welcome to the QMLEVEMon Setup Wizard"
-!define MUI_WELCOMEPAGE_TEXT "This wizard will guide you through the installation of QML EVEMon, EVE Online Character Monitor.$\r$\n$\r$\nWindows version, {BITS}-bit.$\r$\n$\r$\n$_CLICK"
+!define MUI_WELCOMEPAGE_TEXT "This wizard will guide you through the installation of QML EVEMon, EVE Online Character Monitor.$\r$\n$\r$\nWindows version, 64-bit.$\r$\n$\r$\n$_CLICK"
 
 !insertmacro MUI_PAGE_WELCOME
-!insertmacro MUI_PAGE_LICENSE "..\LICENSE"
+!insertmacro MUI_PAGE_LICENSE "LICENSE.txt"
 !insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
@@ -61,8 +56,8 @@ Caption "QMLEVEMon ${VERSION}${NAMESUFFIX} Setup"
 ; Installer version information
 ;!ifdef VER_MAJOR & VER_MINOR & VER_REVISION & VER_BUILD
 ;VIProductVersion ${VER_MAJOR}.${VER_MINOR}.${VER_REVISION}.${VER_BUILD}
-VIProductVersion 0.2.0.0
-VIAddVersionKey "FileVersion" "0.2"
+VIProductVersion 0.3.0.0
+VIAddVersionKey "FileVersion" "0.3"
 VIAddVersionKey "FileDescription" "qmlevemon setup"
 VIAddVersionKey "LegalCopyright" "https://qmlevemon.eve-wh.space/License"
 ;!endif
@@ -73,7 +68,10 @@ Section "QMLEVEMon"
     ; Set output path to the installation directory.
     SetOutPath $INSTDIR
     ; Add all output directory to installed files list
-    File /r "..\build\out\*.*"
+    File /r /x *.nsi ".\*.*"
+    
+    ; install vc redist
+    ExecWait '"${INSTDIR}\vc_redist.x64.exe" /install /passive /norestart'
     
     WriteRegExpandStr HKLM "${REG_UNINST_KEY}" "UninstallString" "$INSTDIR\uninstall.exe"
     WriteRegExpandStr HKLM "${REG_UNINST_KEY}" "InstallLocation" "$INSTDIR"
@@ -90,7 +88,7 @@ SectionEnd
 ; Optional section (can be disabled by the user)
 Section "Start Menu Shortcuts"
     CreateDirectory "$SMPROGRAMS\QMLEVEMon"
-    CreateShortcut "$SMPROGRAMS\QMLEVEMon\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
+    CreateShortcut "$SMPROGRAMS\QMLEVEMon\Uninstall QMLEVEMon.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
     CreateShortcut "$SMPROGRAMS\QMLEVEMon\QMLEVEMon.lnk" "$INSTDIR\QMLEVEMon.exe" "" "$INSTDIR\QMLEVEMon.exe" 0
 SectionEnd
 
