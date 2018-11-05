@@ -71,7 +71,7 @@ Section "QMLEVEMon"
     File /r /x *.nsi ".\*.*"
     
     ; install vc redist
-    ExecWait '"${INSTDIR}\vc_redist.x64.exe" /install /passive /norestart'
+    ExecWait '"$INSTDIR\vc_redist.x64.exe" /install /passive /norestart'
     
     WriteRegExpandStr HKLM "${REG_UNINST_KEY}" "UninstallString" "$INSTDIR\uninstall.exe"
     WriteRegExpandStr HKLM "${REG_UNINST_KEY}" "InstallLocation" "$INSTDIR"
@@ -107,6 +107,6 @@ Section "Uninstall"
     Delete "$SMPROGRAMS\QMLEVEMon\*.*"
 
     ; Remove directories used
-    RMDir "$SMPROGRAMS\QMLEVEMon"
-    RMDir "$INSTDIR"
+    RMDir /r "$SMPROGRAMS\QMLEVEMon"
+    RMDir /r "$INSTDIR"
 SectionEnd
