@@ -5,8 +5,10 @@ Qt5/QML based EVE Online character monitor
 
 Download last successful build from CI [lastSuccessfulBuild](https://jenkins.minlexx.ru/job/qmlevemon_github/job/master/lastSuccessfulBuild/artifact/) :
 - [Windows x64 installer](https://jenkins.minlexx.ru/job/qmlevemon_github/job/master/lastSuccessfulBuild/artifact/build/qmlevemon-setup.exe) 24 Mb
-- [Android APK](https://jenkins.minlexx.ru/job/qmlevemon_github/job/master/lastSuccessfulBuild/artifact/build_android/qmlevemon-debug.apk) 12.8 Mb
-- [Linux Flatpak single-file bundle](https://jenkins.minlexx.ru/job/qmlevemon_github/job/master/lastSuccessfulBuild/artifact/build_linux/qmlevemon.flatpak) 1.9 Mb (Needs flatpak's runtime `org.kde.Platform//5.9` from [FlatHub](https://flathub.org))
+- [Android APK](https://jenkins.minlexx.ru/job/qmlevemon_github/job/master/lastSuccessfulBuild/artifact/build_android/qmlevemon-debug.apk) 16 Mb
+- [Linux Flatpak single-file bundle](https://jenkins.minlexx.ru/job/qmlevemon_github/job/master/lastSuccessfulBuild/artifact/build_linux/qmlevemon.flatpak) 2 Mb (Needs flatpak's runtime `org.kde.Platform//5.9` from [FlatHub](https://flathub.org))
+
+Changelog: [CI master/changes](https://jenkins.minlexx.ru/job/qmlevemon_github/job/master/changes)
 
 ## Building from source
 
