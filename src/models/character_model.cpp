@@ -51,7 +51,8 @@ CharacterModel::CharacterModel(QObject *parent):
         {Roles::TrainingSkillEndDateTime, "trainingSkillEndDateTime"},
         {Roles::QueueTimeLeft,            "queueTimeLeft"},
         {Roles::QueueFinishDateTime,      "queueFinishDateTime"},
-        {Roles::IsQueueEmpty,             "isQueueEmpty"}
+        {Roles::IsQueueEmpty,             "isQueueEmpty"},
+        {Roles::IsAlphaClone,             "isAlphaClone"},
     };
 
     // model init
@@ -178,6 +179,7 @@ QVariant CharacterModel::data(const QModelIndex &index, int role) const
             }
         } break;
     case IsQueueEmpty: ret = ch->isSkillQueueEmpty(); break;
+    case IsAlphaClone: ret = ch->isAlphaClone(); break;
     }
     return ret;
 }

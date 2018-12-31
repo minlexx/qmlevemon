@@ -121,18 +121,21 @@ Rectangle {
                 // Training skill
                 Text {
                     text: model.isQueueEmpty ? qsTr("Training queue is empty!") : model.trainingSkill
-                    color: AppStyle.textLightColor
+                    color: model.isQueueEmpty ? AppStyle.textHighlightColor : AppStyle.textLightColor
                     font.pointSize: AppStyle.textSizeH3
                     font.family: AppStyle.fontFamily
                 }
 
                 // time left for current skill
                 Text {
-                    text: model.isQueueEmpty ? "" : (qsTr("Left: ") + model.trainingSkillTimeLeft
-                                                     + " (" + Qt.formatDateTime(model.trainingSkillEndDateTime) + ")")
-                    color: AppStyle.textLightColor
+                    text: model.isQueueEmpty
+                          ? (model.isAlphaClone ? qsTr("Alpha clone!") : "")
+                          : (qsTr("Left: ") + model.trainingSkillTimeLeft
+                             + " (" + Qt.formatDateTime(model.trainingSkillEndDateTime) + ")")
+                    color: model.isAlphaClone ? AppStyle.errorPopupTextColor : AppStyle.textLightColor
                     font.pointSize: AppStyle.textSizeH3
                     font.family: AppStyle.fontFamily
+                    font.bold: model.isAlphaClone
                 }
 
                 // whole queue time left and finish date
