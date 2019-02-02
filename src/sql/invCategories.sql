@@ -45,5 +45,5 @@ INSERT INTO invCategories VALUES(63, 'Special Edition Assets', NULL);
 INSERT INTO invCategories VALUES(65, 'Structure', NULL);
 INSERT INTO invCategories VALUES(66, 'Structure Module', NULL);
 INSERT INTO invCategories VALUES(87, 'Fighter', NULL);
-INSERT INTO invCategories VALUES(91, 'Super Kerr-Induced Nanocoatings', NULL);
+INSERT INTO invCategories VALUES(91, 'SKINs', NULL);
 INSERT INTO invCategories VALUES(350001, 'Infantry', NULL);
