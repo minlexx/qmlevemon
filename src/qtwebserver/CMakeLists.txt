@@ -1,23 +1,6 @@
-cmake_minimum_required(VERSION 3.7)
+find_package(Qt5 CONFIG REQUIRED COMPONENTS Core Network Xml Sql Gui)
 
-set(QTWEBSERVER_VERSION 0.1.0)
-
-project(QtWebServer LANGUAGES CXX VERSION ${QMLEVEMON_VERSION})
-
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-
-find_package(Qt5 COMPONENTS
-    Core
-    Network
-    Xml
-    Sql
-    Gui
-    REQUIRED
-)
-
-add_library(${PROJECT_NAME}
+set(QTWEBSERVER_SRCS
     "tcp/tcpmultithreadedserver.cpp"
     "tcp/tcpserverthread.cpp"
     "http/httprequest.cpp"
@@ -38,7 +21,20 @@ add_library(${PROJECT_NAME}
     "css/cssruleset.cpp"
     "weblayout.cpp")
 
-target_link_libraries(${PROJECT_NAME}
+add_library(QtWebServer STATIC ${QTWEBSERVER_SRCS})
+
+target_compile_definitions(QtWebServer PRIVATE
+    QT_DEPRECATED_WARNINGS
+    QT_NO_CAST_FROM_ASCII
+    QT_NO_CAST_TO_ASCII
+    QT_NO_URL_CAST_FROM_STRING
+    QT_NO_CAST_FROM_BYTEARRAY
+    QT_STRICT_ITERATORS
+    QT_NO_SIGNALS_SLOTS_KEYWORDS
+    QT_USE_QSTRINGBUILDER
+)
+
+target_link_libraries(QtWebServer PUBLIC
     Qt5::Core
     Qt5::Network
     Qt5::Xml
