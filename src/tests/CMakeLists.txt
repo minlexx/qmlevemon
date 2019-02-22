@@ -1,27 +1,6 @@
-find_package(Qt5 5.9 CONFIG REQUIRED COMPONENTS
+find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS
     Test
 )
-
-set(test_qtwebserver_srcs
-    "../qtwebserver/tcp/tcpmultithreadedserver.cpp"
-    "../qtwebserver/tcp/tcpserverthread.cpp"
-    "../qtwebserver/http/httprequest.cpp"
-    "../qtwebserver/http/httpstatuscodes.cpp"
-    "../qtwebserver/http/httpwebengine.cpp"
-    "../qtwebserver/http/httpresource.cpp"
-    "../qtwebserver/http/httpiodeviceresource.cpp"
-    "../qtwebserver/misc/log.cpp"
-    "../qtwebserver/misc/logger.cpp"
-    "../qtwebserver/sql/sqlconnectionpool.cpp"
-    "../qtwebserver/html/htmldocument.cpp"
-    "../qtwebserver/util/utilassetsresource.cpp"
-    "../qtwebserver/http/httpresponse.cpp"
-    "../qtwebserver/http/httpheaders.cpp"
-    "../qtwebserver/util/utildataurlcodec.cpp"
-    "../qtwebserver/util/utilformurlcodec.cpp"
-    "../qtwebserver/css/cssdocument.cpp"
-    "../qtwebserver/css/cssruleset.cpp"
-    "../qtwebserver/weblayout.cpp")
 
 add_executable(test_qtwebserver "test_qtwebserver.cpp" ${test_qtwebserver_srcs})
 target_include_directories(test_qtwebserver PRIVATE "../qtwebserver")
@@ -32,6 +11,7 @@ target_link_libraries(test_qtwebserver
     Qt5::Sql
     Qt5::Xml
     Qt5::Test
+    QtWebServer
 )
 add_test(NAME test_qtwebserver COMMAND test_qtwebserver)
 

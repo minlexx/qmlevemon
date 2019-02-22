@@ -48,7 +48,7 @@ else()
     find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS AndroidExtras)
 endif()
 
-set(qmlevemon_srcs
+set(QMLEVEMON_SRCS
     "src/main.cpp"
     "src/settings.cpp"
     "src/qmlevemon_app.cpp"
@@ -103,41 +103,18 @@ set(qmlevemon_srcs
 )
 
 if (WIN32)
-    list(APPEND qmlevemon_srcs
+    list(APPEND QMLEVEMON_SRCS
         "win32/windows_resources.rc")
 endif()
 
-set(qtwebserver_srcs
-    "src/qtwebserver/tcp/tcpmultithreadedserver.cpp"
-    "src/qtwebserver/tcp/tcpserverthread.cpp"
-    "src/qtwebserver/http/httprequest.cpp"
-    "src/qtwebserver/http/httpstatuscodes.cpp"
-    "src/qtwebserver/http/httpwebengine.cpp"
-    "src/qtwebserver/http/httpresource.cpp"
-    "src/qtwebserver/http/httpiodeviceresource.cpp"
-    "src/qtwebserver/misc/log.cpp"
-    "src/qtwebserver/misc/logger.cpp"
-    "src/qtwebserver/sql/sqlconnectionpool.cpp"
-    "src/qtwebserver/html/htmldocument.cpp"
-    "src/qtwebserver/util/utilassetsresource.cpp"
-    "src/qtwebserver/http/httpresponse.cpp"
-    "src/qtwebserver/http/httpheaders.cpp"
-    "src/qtwebserver/util/utildataurlcodec.cpp"
-    "src/qtwebserver/util/utilformurlcodec.cpp"
-    "src/qtwebserver/css/cssdocument.cpp"
-    "src/qtwebserver/css/cssruleset.cpp"
-    "src/qtwebserver/weblayout.cpp")
+
+add_subdirectory("src/qtwebserver")
+
 
 if (BUILD_FOR_ANDROID)
-    add_library(${PROJECT_NAME} SHARED
-        ${qmlevemon_srcs}
-        ${qtwebserver_srcs}
-    )
+    add_library(${PROJECT_NAME} SHARED ${QMLEVEMON_SRCS})
 else()
-    add_executable(${PROJECT_NAME} WIN32
-        ${qmlevemon_srcs}
-        ${qtwebserver_srcs}
-    )
+    add_executable(${PROJECT_NAME} WIN32 ${QMLEVEMON_SRCS})
 endif()
 
 target_include_directories(${PROJECT_NAME} PRIVATE
@@ -180,6 +157,7 @@ target_link_libraries(${PROJECT_NAME}
     Qt5::Qml
     Qt5::Quick
     Qt5::QuickControls2
+    QtWebServer
 )
 
 # Link Qt5Widgets only for desktop
