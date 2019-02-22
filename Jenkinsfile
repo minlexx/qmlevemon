@@ -18,6 +18,9 @@ pipeline {
                     rem echo INCLUDE: %INCLUDE%
                     rem echo QT_PREFIX: %QT_PREFIX%
                     where cl
+                    where jom
+                    where cmake
+                    where git
                     if exist build rmdir /s /q build
                     mkdir build
                     cd build
