@@ -41,13 +41,17 @@ void PeriodicalRefresherWorker::refresh()
     // update server status
     this->refresh_server_status();
 
-    // update characters
     // get a copied list of characters and do all modifications to copies
     // after all data was updated, return modified copy to model
     CharacterModel *cmodel = ModelManager::instance()->characterModel();
     QList<Character *> clist = cmodel->getCharacters();
+
+    // update characters
     for (Character *ch: clist) {
         int num_updates = 0;
+
+        // notify UI about which char is updating
+        setRefreshingCharacterId(ch->characterId());
 
         // public data
         num_updates += this->refresh_public_data(ch);
@@ -117,7 +121,9 @@ void PeriodicalRefresherWorker::refresh()
     }
 
     qCDebug(logRefresher) << "BG Refresh stopped";
+
     setNetworkActive(false);
+    setRefreshingCharacterId(0);
 }
 
 void PeriodicalRefresherWorker::initialDelayedRefresh()
@@ -145,7 +151,7 @@ void PeriodicalRefresherWorker::requestCharacterMailBody(Character *ch, quint64 
 
 
 bool PeriodicalRefresherWorker::isNetworkActive() const {
-    int ret = m_active;
+    const int ret = m_active;
     return (ret != 0);
 }
 
@@ -156,10 +162,14 @@ int PeriodicalRefresherWorker::serverPlayersOnline() const {
 
 bool PeriodicalRefresherWorker::isMailDownloadInProgress() const
 {
-    int ret = m_mailDownloadInProgress;
+    const int ret = m_mailDownloadInProgress;
     return (ret != 0);
 }
 
+quint64 PeriodicalRefresherWorker::refreshingCharacterId() const
+{
+    return m_refreshingCharacterId;
+}
 
 void PeriodicalRefresherWorker::setNetworkActive(bool active)
 {
@@ -173,6 +183,14 @@ void PeriodicalRefresherWorker::setMailDownloadInProgress(bool active)
     if (active) m_mailDownloadInProgress = 1;
     else m_mailDownloadInProgress = 0;
     Q_EMIT m_owner->isMailDownloadInProgressChanged();
+}
+
+void PeriodicalRefresherWorker::setRefreshingCharacterId(quint64 id)
+{
+    if (m_refreshingCharacterId != id) {
+        m_refreshingCharacterId = id;
+        Q_EMIT m_owner->refreshingCharacterIdChanged(id);
+    }
 }
 
 /**

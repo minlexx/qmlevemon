@@ -21,6 +21,7 @@ class PeriodicalRefresher: public QObject
     Q_PROPERTY(bool networkActivity READ networkActivity NOTIFY networkActivityChanged)
     Q_PROPERTY(int serverPlayersOnline READ serverPlayersOnline NOTIFY serverPlayersOnlineChanged)
     Q_PROPERTY(bool isMailDownloadInProgress READ isMailDownloadInProgress NOTIFY isMailDownloadInProgressChanged)
+    Q_PROPERTY(quint64 refreshingCharacterId READ refreshingCharacterId NOTIFY refreshingCharacterIdChanged)
 
 public:
     explicit PeriodicalRefresher(QObject *parent = Q_NULLPTR);
@@ -34,11 +35,13 @@ public Q_SLOTS:
     void forceRefreshNow();
     void requestMailBody(Character *ch, quint64 mailId);
     bool isMailDownloadInProgress() const;
+    quint64 refreshingCharacterId() const;
 
 Q_SIGNALS:
     void networkActivityChanged();
     void serverPlayersOnlineChanged();
     void isMailDownloadInProgressChanged();
+    void refreshingCharacterIdChanged(quint64 id);
 
     void refresh();
 

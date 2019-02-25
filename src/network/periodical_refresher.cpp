@@ -122,5 +122,10 @@ bool PeriodicalRefresher::isMailDownloadInProgress() const
     return m_worker->isMailDownloadInProgress();
 }
 
+quint64 PeriodicalRefresher::refreshingCharacterId() const
+{
+    return m_worker->refreshingCharacterId();
+}
+
 
 } // namespace

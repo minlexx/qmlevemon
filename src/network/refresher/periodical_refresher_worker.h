@@ -25,6 +25,7 @@ public Q_SLOTS:
     bool isNetworkActive() const;
     int  serverPlayersOnline() const;
     bool isMailDownloadInProgress() const;
+    quint64 refreshingCharacterId() const;
 
 Q_SIGNALS:
     void characterUpdated(Character *character);
@@ -35,6 +36,7 @@ Q_SIGNALS:
 protected:
     void setNetworkActive(bool active);
     void setMailDownloadInProgress(bool active);
+    void setRefreshingCharacterId(quint64 id);
 
     /**
      * @brief check_refresh_token - check if EVE OAuth tokens need refresh, refresh if needed
@@ -76,6 +78,7 @@ protected:
     QAtomicInt m_active = 0;
     QAtomicInt m_server_players = 0;
     QAtomicInt m_mailDownloadInProgress = 0;
+    QAtomicInteger<quint64> m_refreshingCharacterId = 0;
     //
     EveApi *m_api = nullptr;
 };
