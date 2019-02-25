@@ -13,6 +13,8 @@ Rectangle {
     border.color: "blue"
     border.width: 0
 
+    property bool isCurrentlyRefreshing: (refresher.refreshingCharacterId === curChar.characterId)
+
     signal selectCharacterRequest(int characterId)
     signal removeCharacterRequest(int characterId)
     signal requestOpenMail(int mailId)
@@ -478,7 +480,7 @@ Rectangle {
         anchors.margins: 2
         sourceSize.width: 48
         sourceSize.height: 48
-        visible: !subInfoTabRect.isExpanded
+        visible: (!subInfoTabRect.isExpanded) && (!isCurrentlyRefreshing)
         source: "qrc:///img/refresh_48.png"
 
         MouseArea {
@@ -562,6 +564,13 @@ Rectangle {
         spread: 0.5
         color: AppStyle.rectBgHighlightColor
         cached: true
-        visible: maRefresh.containsMouse
+        visible: maRefresh.containsMouse && (!isCurrentlyRefreshing)
+    }
+
+    BusyIndicator {
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.margins: 2
+        running: isCurrentlyRefreshing
     }
 }

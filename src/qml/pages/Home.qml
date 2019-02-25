@@ -191,6 +191,12 @@ Rectangle {
                     }
                 }
             }
+
+            BusyIndicator {
+                anchors.top: parent.top
+                anchors.right: parent.right
+                running: refresher.refreshingCharacterId === model.characterId
+            }
         }
 
         Popup {
