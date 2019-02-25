@@ -16,3 +16,4 @@ CMakeLists.txt.user
 build/
 build511/
 .directory
+.kdev4/
