@@ -112,6 +112,7 @@ add_subdirectory("src/qtwebserver")
 
 
 if (BUILD_FOR_ANDROID)
+    list(APPEND QMLEVEMON_SRCS "android/service/android_service.cpp")
     add_library(${PROJECT_NAME} SHARED ${QMLEVEMON_SRCS})
 else()
     add_executable(${PROJECT_NAME} WIN32 ${QMLEVEMON_SRCS})
