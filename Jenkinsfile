@@ -104,5 +104,38 @@ pipeline {
                 archiveArtifacts 'build_linux/qmlevemon.flatpak'
             }
         }
+        stage('Build (Android-cmake)') {
+            agent {
+                label 'android && qt5'
+            }
+            steps {
+                bat '''
+                    echo ======================== ANDROID-CMAKE ===============================
+                    rem echo PATH: %PATH%
+                    echo QT_ANDROID_PREFIX: %QT_ANDROID_PREFIX%
+                    where cmake
+                    set MAKE_PROGRAM=%ANDROID_NDK_ROOT%/prebuilt/%ANDROID_NDK_HOST%/bin/make.exe
+                    set TOOLCHAIN_FILE=%ANDROID_NDK_ROOT%/build/cmake/android.toolchain.cmake
+                    if exist build_android_cmake rmdir /s /q build_android_cmake
+                    mkdir build_android_cmake
+                    cd build_android_cmake
+                    cmake ^
+                      -G "Unix Makefiles" ^
+                      -DCMAKE_MAKE_PROGRAM=%MAKE_PROGRAM% ^
+                      -DCMAKE_TOOLCHAIN_FILE=%TOOLCHAIN_FILE% ^
+                      -DANDROID_PLATFORM=%ANDROID_NDK_PLATFORM% ^
+                      -DCMAKE_PREFIX_PATH=%QT_ANDROID_PREFIX% ^
+                      -DCMAKE_FIND_ROOT_PATH=%QT_ANDROID_PREFIX% ^
+                      -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=BOTH ^
+                      -DCMAKE_BUILD_TYPE=Release ^
+                      -DBUILD_TESTING=OFF ^
+                      -DBUILD_FOR_ANDROID=ON ^
+                      -DCMAKE_VERBOSE_MAKEFILE=ON ^
+                      ../
+                    cmake --build . --target all
+                '''
+                //archiveArtifacts 'build_android_cmake/qmlevemon.flatpak'
+            }
+        }
     }
 }
