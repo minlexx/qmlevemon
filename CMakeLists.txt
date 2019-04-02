@@ -191,13 +191,11 @@ if (WIN32)
         message(STATUS "Found makensis: ${MAKENSIS}")
         message(STATUS "Found windeployqt: ${WINDEPLOYQT}")
         add_custom_target(windows-installer
-#            COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}\\win32\\qmlevemon_installer.nsi ${CMAKE_CURRENT_BINARY_DIR}
-#            COMMAND ${MAKENSIS} ${CMAKE_CURRENT_SOURCE_DIR}\\win32\\qmlevemon_installer.nsi
             COMMAND ${CMAKE_CURRENT_SOURCE_DIR}\\win32\\make_windows_installer.bat "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_CURRENT_BINARY_DIR}" "${MAKENSIS}" "${WINDEPLOYQT}"
             COMMENT "Build Windows installer using NSIS"
             SOURCES "win32/qmlevemon_installer.nsi" "win32/make_windows_installer.bat"
             VERBATIM)
-        # make installer depend on main project beig built first
+        # make installer depend on main project being built first
         add_dependencies(windows-installer ${PROJECT_NAME})
     endif()
 endif()
