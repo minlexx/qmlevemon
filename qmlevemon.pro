@@ -1,5 +1,5 @@
 TEMPLATE = app
-VERSION = 0.3
+VERSION = 0.4
 CONFIG += C++11
 QT += core network xml sql gui qml quick quickcontrols2
 win32: QT += widgets
@@ -185,4 +185,9 @@ contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
     ANDROID_EXTRA_LIBS = \
         $$PWD/android/arm-linux-androideabi-4.9/libcrypto.so \
         $$PWD/android/arm-linux-androideabi-4.9/libssl.so
+}
+contains(ANDROID_TARGET_ARCH,aarch64) {
+    ANDROID_EXTRA_LIBS = \
+        $$PWD/android/aarch64-linux-android-4.9/libcrypto.so \
+        $$PWD/android/aarch64-linux-android-4.9/libssl.so
 }
