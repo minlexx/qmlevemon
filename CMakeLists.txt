@@ -10,6 +10,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+cmake_policy(SET CMP0071 NEW)
+
 include(FeatureSummary)
 
 option(BUILD_TESTING "Build tests (for developers)" OFF)
@@ -36,6 +38,9 @@ find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS
     Quick
     QuickControls2
 )
+
+# Make use of Qt quick compiler
+find_package(Qt5QuickCompiler)
 
 # Use Qt5Widgets only for desktop
 if (NOT BUILD_FOR_ANDROID)
@@ -97,10 +102,22 @@ set(QMLEVEMON_SRCS
     "src/network/refresher/wallet.cpp"
     "src/network/refresher/wallet_history.cpp"
     "src/utils/str_utils.cpp"
-    "src/qml.qrc"
-    "src/img.qrc"
-    "src/sql.qrc"
 )
+
+if (Qt5QuickCompiler_FOUND)
+    message(STATUS "Using Qt5 Quick Compiler to precompile QML")
+    qtquick_compiler_add_resources(QMLEVEMON_QRCS
+        "src/qml.qrc"
+        "src/img.qrc"
+        "src/sql.qrc"
+    )
+else()
+    set(QMLEVEMON_QRCS
+        "src/qml.qrc"
+        "src/img.qrc"
+        "src/sql.qrc"
+    )
+endif()
 
 if (WIN32)
     list(APPEND QMLEVEMON_SRCS
@@ -113,9 +130,9 @@ add_subdirectory("src/qtwebserver")
 
 if (BUILD_FOR_ANDROID)
     list(APPEND QMLEVEMON_SRCS "android/service/android_service.cpp")
-    add_library(${PROJECT_NAME} SHARED ${QMLEVEMON_SRCS})
+    add_library(${PROJECT_NAME} SHARED ${QMLEVEMON_SRCS} ${QMLEVEMON_QRCS})
 else()
-    add_executable(${PROJECT_NAME} WIN32 ${QMLEVEMON_SRCS})
+    add_executable(${PROJECT_NAME} WIN32 ${QMLEVEMON_SRCS} ${QMLEVEMON_QRCS})
 endif()
 
 target_include_directories(${PROJECT_NAME} PRIVATE
