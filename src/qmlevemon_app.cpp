@@ -152,6 +152,8 @@ bool QmlEvemonApp::initQmlEngine()
     ModelManager::instance()->initModels();
 
     // set context properties
+    rootContext->setContextProperty(QLatin1String("QT_VERSION_STR"), QString::fromUtf8(QT_VERSION_STR));
+    rootContext->setContextProperty(QLatin1String("qVersion"), QString::fromUtf8(qVersion()));
     rootContext->setContextProperty(QLatin1String("evemonapp"), this);
     rootContext->setContextProperty(QLatin1String("characterModel"),
                                     ModelManager::instance()->characterModel());

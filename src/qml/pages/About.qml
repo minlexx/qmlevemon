@@ -33,10 +33,10 @@ Rectangle {
             color: AppStyle.infoPopupTextColor
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
-            wrapMode: Text.WordWrap
-            textFormat: Text.StyledText
             clip: true
-            text: qsTr("QML EVEMon version: ") + Qt.application.version + (evemonapp.isFlatpakPlatform ? " (Flatpak)" : "")
+            text: qsTr("QML EVEMon version: ") + Qt.application.version
+                  + (evemonapp.isFlatpakPlatform ? " (Flatpak)" : "") + "\n"
+                  + qsTr("Qt version: ") + qVersion + qsTr(" (compiled with ") + QT_VERSION_STR + ")"
         }
     }
 }
