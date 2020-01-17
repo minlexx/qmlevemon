@@ -94,7 +94,12 @@ int PeriodicalRefresherWorker::refresh_assets(Character *ch)
 
         // resolve locations names
         if (!location_ids_to_resolve.isEmpty()) {
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
             const QVector<quint64> locations_ids_vec = location_ids_to_resolve.toList().toVector();
+#else
+            // since Qt 5.14 we can use more efficient range constructors
+            const QVector<quint64> locations_ids_vec{location_ids_to_resolve.begin(), location_ids_to_resolve.end()};
+#endif
             qCDebug(logRefresher) << "   Need to resolve" << locations_ids_vec.size() << " loc names";
             if (m_api->post_character_assets_names(replyArr, ch->characterId(), ch->accessToken(), locations_ids_vec)) {
                 // qCDebug(logRefresher) << "locations_ids: " << replyArr;
