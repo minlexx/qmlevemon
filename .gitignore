@@ -17,3 +17,6 @@ build/
 build511/
 .directory
 .kdev4/
+
+*.qmlc
+.cmake
