@@ -3,12 +3,15 @@ Qt5/QML based EVE Online character monitor
 
 ![QML EVEMon screenshot](https://eve-wh.space/static/img/qmlevemon_screen.png)
 
-Download last successful build from CI [lastSuccessfulBuild](https://jenkins.minlexx.ru/job/qmlevemon_github/job/master/lastSuccessfulBuild/artifact/) :
-- [Windows x64 installer](https://jenkins.minlexx.ru/job/qmlevemon_github/job/master/lastSuccessfulBuild/artifact/build/qmlevemon-setup.exe) 24 Mb
-- [Android APK](https://jenkins.minlexx.ru/job/qmlevemon_github/job/master/lastSuccessfulBuild/artifact/build_android/qmlevemon-debug.apk) 16 Mb
-- [Linux Flatpak single-file bundle](https://jenkins.minlexx.ru/job/qmlevemon_github/job/master/lastSuccessfulBuild/artifact/build_linux/qmlevemon.flatpak) 2 Mb (Needs flatpak's runtime `org.kde.Platform//5.9` from [FlatHub](https://flathub.org))
+## Downloads
+Downloads are available from [GitHub Releases page](https://github.com/minlexx/qmlevemon/releases).
 
-Changelog: [CI master/changes](https://jenkins.minlexx.ru/job/qmlevemon_github/job/master/changes)
+For Linux you can either build from source (instructions below), or use flatpak single-file bundle from releases. To install using flatpak bundle, you have to:
+* have `flatpak` installed
+* have `flathub` remote set up (guide: https://flatpak.org/setup/)
+* install org.kde.Platform 5.12 `flatpak install --user flathub org.kde.Platform//5.12`
+* download and install bundle file `flatpak install --user ./qmlevemon.flatpak`
+* run with: `flatpak run ru.minlexx.qmlevemon`
 
 ## Building from source
 
