@@ -1,7 +1,7 @@
 {
     "app-id": "ru.minlexx.qmlevemon",
     "runtime": "org.kde.Platform",
-    "runtime-version": "5.9",
+    "runtime-version": "5.12",
     "branch": "master",
     "sdk": "org.kde.Sdk",
     "command": "QMLEVEMon",
@@ -21,7 +21,7 @@
                 {
                     "type": "git",
                     "url": "https://github.com/minlexx/qmlevemon.git",
-                    "branch": "master"
+                    "tag": "0.4.1"
                 }
             ]
         }
