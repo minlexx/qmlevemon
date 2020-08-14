@@ -140,7 +140,11 @@ QList<QDomElement> Document::elementsByAttribute(QDomElement domElement,
         QString elementAttributeValue = domElement.attribute(attributeName, QLatin1String(""));
 
         if(allowMultipleValues) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+            QStringList elementAttributeValues = elementAttributeValue.split(QLatin1String("\\s+"), Qt::SkipEmptyParts);
+#else
             QStringList elementAttributeValues = elementAttributeValue.split(QLatin1String("\\s+"), QString::SkipEmptyParts);
+#endif
             if(elementAttributeValues.contains(attributeValue)) {
                 elementList.append(domElement);
             }

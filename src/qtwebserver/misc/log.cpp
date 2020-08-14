@@ -100,7 +100,11 @@ void Log::log(QString name, QString message, EntryType entryType) {
         if(logFile.open(QIODevice::ReadWrite))
         {
             QTextStream stream(&logFile);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+            stream << QDateTime::currentDateTime().toString() << " " << logMessage << Qt::endl;
+#else
             stream << QDateTime::currentDateTime().toString() << " " << logMessage << endl;
+#endif
             logFile.close();
         }
         else

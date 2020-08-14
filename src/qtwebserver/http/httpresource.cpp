@@ -40,8 +40,13 @@ Resource::Resource(QString uniqueIdentifier,
 bool Resource::match(QString uniqueIdentifier) {
     // Split both the unique identifier of this resource the one in question,
     // so we can compare those.
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    QStringList splittedReferenceUri = this->uniqueIdentifier().split(QLatin1String("/"), Qt::SkipEmptyParts);
+    QStringList splittedRequestedUri = uniqueIdentifier.split(QLatin1String("/"), Qt::SkipEmptyParts);
+#else
     QStringList splittedReferenceUri = this->uniqueIdentifier().split(QLatin1String("/"), QString::SkipEmptyParts);
     QStringList splittedRequestedUri = uniqueIdentifier.split(QLatin1String("/"), QString::SkipEmptyParts);
+#endif
 
     int count = splittedRequestedUri.count();
 
@@ -70,8 +75,13 @@ bool Resource::match(QString uniqueIdentifier) {
 QMap<QString, QString> Resource::uriParameters(QString uniqueIdentifier) {
     // Split both the unique identifier of this resource the one in question,
     // so we can compare those.
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    QStringList splittedReferenceUri = this->uniqueIdentifier().split(QLatin1String("/"), Qt::SkipEmptyParts);
+    QStringList splittedRequestedUri = uniqueIdentifier.split(QLatin1String("/"), Qt::SkipEmptyParts);
+#else
     QStringList splittedReferenceUri = this->uniqueIdentifier().split(QLatin1String("/"), QString::SkipEmptyParts);
     QStringList splittedRequestedUri = uniqueIdentifier.split(QLatin1String("/"), QString::SkipEmptyParts);
+#endif
 
     // Create a parameter map.
     QMap<QString, QString> uriParameterMap;

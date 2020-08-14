@@ -155,7 +155,11 @@ void Request::deserialize(QByteArray rawRequest) {
 
     _method = requestLine.at(0).toLower();
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    QStringList splittedURI = requestLine.at(1).split(QLatin1Char('?'), Qt::SkipEmptyParts);
+#else
     QStringList splittedURI = requestLine.at(1).split(QLatin1Char('?'), QString::SkipEmptyParts);
+#endif
     if(splittedURI.count() > 1) {
         _urlParameters = Util::FormUrlCodec::decodeFormUrl(splittedURI.at(1).toUtf8());
     }

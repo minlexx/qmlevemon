@@ -86,7 +86,11 @@ void RuleSet::addDeclaration(QString property,
 }
 
 void RuleSet::addDeclarations(QString declarations) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    QStringList splitDeclarations = declarations.split(QLatin1String(";"), Qt::SkipEmptyParts);
+#else
     QStringList splitDeclarations = declarations.split(QLatin1String(";"), QString::SkipEmptyParts);
+#endif
     foreach(QString declaration, splitDeclarations) {
         if(declaration.contains(QLatin1Char(':'))) {
             declaration = declaration.trimmed();
