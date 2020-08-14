@@ -8,6 +8,9 @@
 #include <QDateTime>
 #include <QLoggingCategory>
 #include <QDebug>
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+#include <QRandomGenerator>
+#endif
 
 // QtWebServer includes
 #include "tcp/tcpmultithreadedserver.h"
@@ -80,7 +83,11 @@ public:
         m_webengine.addResource(&m_callback);
         m_server.setResponder(&m_webengine);
         QTime tmCur = QTime::currentTime();
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+        m_gen.seed(tmCur.msecsSinceStartOfDay());
+#else
         qsrand(static_cast<uint>(tmCur.msecsSinceStartOfDay()));
+#endif
         //
         QObject::connect(&m_callback, &HttpSsoCallbackResource::codeReceived,
                          this, &EveSsoLoginManagerPrivate::onCodeReceived,
@@ -100,7 +107,11 @@ public:
             // generate random state hash
             m_sso_state = QStringLiteral("st");
             QCryptographicHash hasher(QCryptographicHash::Sha256);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+            quint32 rnd = m_gen.generate();
+#else
             int rnd = qrand();
+#endif
             hasher.addData(reinterpret_cast<const char *>(&rnd), sizeof(rnd));
             m_sso_state.append(QString::fromUtf8(hasher.result().toHex()));
             qCDebug(logSso) << "Started handler webserver";
@@ -161,6 +172,9 @@ protected:
     HttpSsoCallbackResource m_callback;
     QString m_sso_state;
     int m_listenPort;
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    QRandomGenerator m_gen;
+#endif
 };
 
 
